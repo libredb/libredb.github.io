@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://libredb.github.io/sitemap-index.xml

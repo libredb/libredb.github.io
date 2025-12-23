@@ -1,43 +1,41 @@
-# Astro Starter Kit: Minimal
+# LibreDB Studio Website
 
-```sh
-bun create astro@latest -- --template minimal
+Official website for LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE.
+
+## Tech Stack
+
+- [Astro](https://astro.build) - Static Site Generator
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type Safety
+
+## Development
+
+```bash
+# Install dependencies
+bun install
+
+# Start dev server
+bun dev
+
+# Build for production
+bun run build
+
+# Preview production build
+bun preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Deployment
 
-## 🚀 Project Structure
+This site is deployed to GitHub Pages via GitHub Actions.
 
-Inside of your Astro project, you'll see the following folders and files:
+Any push to the `main` branch will trigger an automatic build and deployment.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Links
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- **Live Site**: https://libredb.github.io
+- **Main Project**: https://github.com/libredb/libredb-studio
+- **Live Demo**: https://demo.libredb.studio
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## License
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT License

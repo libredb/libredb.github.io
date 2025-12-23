@@ -1,0 +1,71 @@
+---
+const techStack = [
+  {
+    category: "Frontend",
+    items: [
+      { name: "Next.js 15", description: "App Router" },
+      { name: "React 19", description: "Server Components" },
+      { name: "TypeScript", description: "Type Safety" },
+      { name: "Tailwind CSS 4", description: "Styling" },
+    ]
+  },
+  {
+    category: "Editor",
+    items: [
+      { name: "Monaco Editor", description: "VS Code Engine" },
+      { name: "TanStack Table", description: "Data Grid" },
+      { name: "react-virtual", description: "Virtualization" },
+    ]
+  },
+  {
+    category: "AI & Auth",
+    items: [
+      { name: "Gemini 2.5", description: "Default LLM" },
+      { name: "OpenAI / Ollama", description: "Alternatives" },
+      { name: "JWT / RBAC", description: "Security" },
+    ]
+  },
+  {
+    category: "DevOps",
+    items: [
+      { name: "Docker", description: "Container" },
+      { name: "Kubernetes", description: "Orchestration" },
+      { name: "Bun", description: "Runtime" },
+    ]
+  },
+];
+---
+
+<section id="tech-stack" class="py-16 md:py-24 relative bg-slate-900/30">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-10 md:mb-16 px-2">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+        Built with <span class="gradient-text">Modern Tech</span>
+      </h2>
+      <p class="text-sm md:text-lg text-slate-400 max-w-2xl mx-auto">
+        Production-ready stack for performance and scalability.
+      </p>
+    </div>
+
+    <!-- Tech Stack Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+      {techStack.map((stack) => (
+        <div class="space-y-3 md:space-y-4">
+          <h3 class="text-xs md:text-sm font-semibold text-primary-400 uppercase tracking-wider">{stack.category}</h3>
+          <div class="space-y-2 md:space-y-3">
+            {stack.items.map((item) => (
+              <div class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                <div class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary-500 flex-shrink-0"></div>
+                <div class="min-w-0">
+                  <div class="text-xs md:text-sm font-medium text-white truncate">{item.name}</div>
+                  <div class="text-[10px] md:text-xs text-slate-500 truncate">{item.description}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

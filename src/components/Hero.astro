@@ -1,0 +1,97 @@
+---
+
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-14 md:pt-16 pb-20 md:pb-0">
+  <!-- Background Effects -->
+  <div class="absolute inset-0 overflow-hidden">
+    <!-- Gradient orbs - smaller on mobile -->
+    <div class="absolute top-1/4 left-1/4 w-48 md:w-96 h-48 md:h-96 bg-primary-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-48 md:w-96 h-48 md:h-96 bg-accent-600/20 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:32px_32px] md:bg-[size:64px_64px]"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-primary-950/50 border border-primary-800/50 text-primary-300 text-xs md:text-sm font-medium mb-6 md:mb-8">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+      </span>
+      Open Source & Free Forever
+    </div>
+
+    <!-- Logo -->
+    <div class="mb-6 md:mb-8 animate-float">
+      <img src="/logo.svg" alt="LibreDB Studio Logo" class="w-20 h-20 md:w-32 md:h-32 mx-auto glow" />
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight mb-4 md:mb-6 px-2">
+      <span class="text-white">The Modern</span>
+      <br />
+      <span class="gradient-text">AI-Powered SQL IDE</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="max-w-2xl mx-auto text-base md:text-lg lg:text-xl text-slate-400 mb-8 md:mb-10 px-4">
+      A lightweight, high-performance, and secure web-based SQL editor for cloud-native teams.
+      Connect to <strong class="text-white">PostgreSQL</strong>, <strong class="text-white">MySQL</strong>,
+      <strong class="text-white">SQLite</strong>, or <strong class="text-white">MongoDB</strong> from anywhere.
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-10 md:mb-16 px-4">
+      <a
+        href="https://demo.libredb.studio"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold rounded-xl transition-all hover:shadow-2xl hover:shadow-primary-600/30 hover:scale-105"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Try Live Demo
+      </a>
+      <a
+        href="#get-started"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all border border-slate-700"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+        Documentation
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto px-2">
+      <div class="text-center">
+        <div class="text-xl md:text-3xl font-bold text-white mb-0.5 md:mb-1">4+</div>
+        <div class="text-[10px] md:text-sm text-slate-500">Databases</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xl md:text-3xl font-bold text-white mb-0.5 md:mb-1">100%</div>
+        <div class="text-[10px] md:text-sm text-slate-500">Open Source</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xl md:text-3xl font-bold text-white mb-0.5 md:mb-1">AI</div>
+        <div class="text-[10px] md:text-sm text-slate-500">Powered</div>
+      </div>
+      <div class="text-center">
+        <div class="text-xl md:text-3xl font-bold text-white mb-0.5 md:mb-1">MIT</div>
+        <div class="text-[10px] md:text-sm text-slate-500">License</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator - hidden on mobile -->
+  <div class="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>
