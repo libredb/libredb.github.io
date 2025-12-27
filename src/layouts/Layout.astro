@@ -5,6 +5,31 @@ interface Props {
 }
 
 const { title, description = "LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams" } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteURL = "https://libredb.org";
+
+// Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LibreDB Studio",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "description": description,
+  "url": siteURL,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "LibreDB",
+    "url": siteURL
+  },
+  "license": "https://opensource.org/licenses/MIT",
+  "keywords": "SQL IDE, database editor, PostgreSQL, MySQL, SQLite, MongoDB, AI SQL, open source"
+};
 ---
 
 <!doctype html>
@@ -13,21 +38,41 @@ const { title, description = "LibreDB Studio - The Modern, AI-Powered Open-Sourc
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="SQL IDE, database editor, PostgreSQL, MySQL, SQLite, MongoDB, AI SQL, open source" />
+    <meta name="keywords" content="SQL IDE, database editor, PostgreSQL, MySQL, SQLite, MongoDB, AI SQL, open source, web-based database tool, AI query assistant" />
+    <meta name="author" content="LibreDB" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#4f46e5" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://libredb.org" />
-    <meta property="og:image" content="https://libredb.org/og-image.png" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={`${siteURL}/og-image.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="LibreDB Studio - AI-Powered SQL IDE" />
+    <meta property="og:site_name" content="LibreDB Studio" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteURL}/og-image.png`} />
+    <meta name="twitter:image:alt" content="LibreDB Studio - AI-Powered SQL IDE" />
 
+    <!-- Structured Data (JSON-LD) -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />

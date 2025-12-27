@@ -35,6 +35,7 @@ Any push to the `main` branch will trigger an automatic build and deployment.
 - **Live Site**: https://libredb.github.io
 - **Main Project**: https://github.com/libredb/libredb-studio
 - **Live Demo**: https://demo.libredb.studio
+- **LinkedIn**: https://www.linkedin.com/company/libredb
 
 ## License
 
