@@ -1,0 +1,199 @@
+---
+const testimonials = [
+  {
+    quote: "Finally, an SQL IDE that doesn't feel like it was built in 2005. The AI assistant saved me hours of writing complex JOINs.",
+    author: "Sarah Chen",
+    role: "Senior Backend Developer",
+    company: "TechStartup",
+    avatar: "SC",
+    gradient: "from-violet-500 to-purple-500",
+  },
+  {
+    quote: "We switched from pgAdmin and never looked back. The Monaco editor + AI combo is unbeatable for our team's productivity.",
+    author: "Marcus Johnson",
+    role: "Lead DBA",
+    company: "DataScale Inc",
+    avatar: "MJ",
+    gradient: "from-blue-500 to-cyan-500",
+  },
+  {
+    quote: "Self-hosted, MIT licensed, and actually looks good? This is what open source should be. Deployed it on our k8s cluster in minutes.",
+    author: "Elena Rodriguez",
+    role: "DevOps Engineer",
+    company: "CloudNative Co",
+    avatar: "ER",
+    gradient: "from-emerald-500 to-teal-500",
+  },
+  {
+    quote: "The visual EXPLAIN feature helped our junior devs understand query optimization. Now everyone writes better SQL.",
+    author: "David Kim",
+    role: "Engineering Manager",
+    company: "FinTech Labs",
+    avatar: "DK",
+    gradient: "from-orange-500 to-amber-500",
+  },
+];
+---
+
+<section id="testimonials" class="py-16 md:py-24 relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-600/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <!-- Section Header -->
+    <div class="text-center mb-10 md:mb-16 px-2">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+        Loved by <span class="gradient-text">Developers</span>
+      </h2>
+      <p class="text-sm md:text-lg text-slate-400 max-w-2xl mx-auto">
+        Join the growing community of teams using LibreDB Studio.
+      </p>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-10 md:mb-16 p-4 md:p-6 rounded-2xl bg-slate-900/50 border border-slate-800">
+      <div class="text-center">
+        <div class="text-2xl md:text-3xl font-bold gradient-text mb-1" id="github-stars">-</div>
+        <div class="text-xs md:text-sm text-slate-400">GitHub Stars</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl md:text-3xl font-bold gradient-text mb-1" id="github-forks">-</div>
+        <div class="text-xs md:text-sm text-slate-400">Forks</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl md:text-3xl font-bold gradient-text mb-1" id="github-contributors">-</div>
+        <div class="text-xs md:text-sm text-slate-400">Contributors</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl md:text-3xl font-bold gradient-text mb-1">MIT</div>
+        <div class="text-xs md:text-sm text-slate-400">License</div>
+      </div>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+      {testimonials.map((item) => (
+        <div class="group relative p-5 md:p-6 rounded-xl md:rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-primary-500/30 transition-all duration-300">
+          <!-- Quote Icon -->
+          <svg class="absolute top-4 right-4 w-8 h-8 md:w-10 md:h-10 text-slate-800 group-hover:text-primary-900/50 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+          </svg>
+
+          <!-- Quote -->
+          <p class="text-sm md:text-base text-slate-300 mb-5 md:mb-6 leading-relaxed pr-8">
+            "{item.quote}"
+          </p>
+
+          <!-- Author -->
+          <div class="flex items-center gap-3">
+            <div class={`w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white font-semibold text-sm md:text-base`}>
+              {item.avatar}
+            </div>
+            <div>
+              <div class="text-sm md:text-base font-medium text-white">{item.author}</div>
+              <div class="text-xs md:text-sm text-slate-400">{item.role} · {item.company}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-10 md:mt-16 text-center">
+      <p class="text-sm md:text-base text-slate-400 mb-4 md:mb-6">
+        Ready to transform your database workflow?
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
+        <a
+          href="https://app.libredb.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-primary-600/25 hover:scale-105"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Try Live Demo
+        </a>
+        <a
+          href="https://github.com/libredb/libredb-studio"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl transition-all border border-slate-700"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const REPO = 'libredb/libredb-studio';
+  let fetched = false;
+
+  async function fetchGitHubStats() {
+    if (fetched) return;
+    fetched = true;
+
+    try {
+      // Fetch repo data (stars, forks)
+      const repoResponse = await fetch(`https://api.github.com/repos/${REPO}`);
+      if (repoResponse.ok) {
+        const repoData = await repoResponse.json();
+        const starsEl = document.getElementById('github-stars');
+        const forksEl = document.getElementById('github-forks');
+
+        if (starsEl) starsEl.textContent = formatNumber(repoData.stargazers_count);
+        if (forksEl) forksEl.textContent = formatNumber(repoData.forks_count);
+      }
+
+      // Fetch contributors count
+      const contributorsResponse = await fetch(`https://api.github.com/repos/${REPO}/contributors?per_page=1`);
+      if (contributorsResponse.ok) {
+        const linkHeader = contributorsResponse.headers.get('Link');
+        let contributorCount = 1;
+
+        if (linkHeader) {
+          const match = linkHeader.match(/page=(\d+)>; rel="last"/);
+          if (match) {
+            contributorCount = parseInt(match[1], 10);
+          }
+        } else {
+          const contributors = await contributorsResponse.json();
+          contributorCount = Array.isArray(contributors) ? contributors.length : 1;
+        }
+
+        const contributorsEl = document.getElementById('github-contributors');
+        if (contributorsEl) contributorsEl.textContent = formatNumber(contributorCount);
+      }
+    } catch (error) {
+      console.error('Failed to fetch GitHub stats:', error);
+    }
+  }
+
+  function formatNumber(num: number): string {
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return num.toString();
+  }
+
+  // Lazy load: fetch only when section is visible
+  const section = document.getElementById('testimonials');
+  if (section) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        fetchGitHubStats();
+        observer.disconnect();
+      }
+    }, { rootMargin: '100px' });
+    observer.observe(section);
+  }
+</script>

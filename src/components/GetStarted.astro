@@ -45,7 +45,21 @@ JWT_SECRET=your_32_char_secret`,
           </div>
           <div class="p-4 md:p-6 pt-6 md:pt-8 rounded-xl md:rounded-2xl bg-slate-900/50 border border-slate-800">
             <h3 class="text-sm md:text-lg font-semibold text-white mb-3 md:mb-4">{item.title}</h3>
-            <pre class="p-3 md:p-4 rounded-lg bg-slate-950 text-[10px] md:text-sm text-slate-300 overflow-x-auto font-mono"><code>{item.code}</code></pre>
+            <div class="relative group overflow-hidden">
+              <pre class="p-3 md:p-4 pr-10 rounded-lg bg-slate-950 text-[10px] md:text-sm text-slate-300 overflow-x-auto font-mono max-w-full"><code class="break-all whitespace-pre-wrap">{item.code}</code></pre>
+              <button
+                class="copy-btn absolute top-2 right-2 p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
+                data-code={item.code}
+                aria-label="Copy to clipboard"
+              >
+                <svg class="w-4 h-4 copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                <svg class="w-4 h-4 check-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       ))}
@@ -65,7 +79,21 @@ JWT_SECRET=your_32_char_secret`,
             <p class="text-xs md:text-base text-slate-400">One command to run anywhere.</p>
           </div>
         </div>
-        <pre class="w-full md:w-auto px-4 md:px-6 py-3 md:py-4 rounded-lg bg-slate-950 text-xs md:text-sm text-slate-300 font-mono overflow-x-auto text-center md:text-left"><code>docker-compose up -d</code></pre>
+        <div class="relative group w-full md:w-auto">
+          <pre class="w-full md:w-auto px-4 md:px-6 pr-12 py-3 md:py-4 rounded-lg bg-slate-950 text-xs md:text-sm text-slate-300 font-mono overflow-x-auto text-center md:text-left"><code>docker-compose up -d</code></pre>
+          <button
+            class="copy-btn absolute top-1/2 -translate-y-1/2 right-2 p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
+            data-code="docker-compose up -d"
+            aria-label="Copy to clipboard"
+          >
+            <svg class="w-4 h-4 copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <svg class="w-4 h-4 check-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -99,3 +127,31 @@ JWT_SECRET=your_32_char_secret`,
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const code = button.getAttribute('data-code');
+      const copyIcon = button.querySelector('.copy-icon');
+      const checkIcon = button.querySelector('.check-icon');
+
+      try {
+        await navigator.clipboard.writeText(code || '');
+
+        // Show check icon
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+        button.classList.add('text-green-400');
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+          button.classList.remove('text-green-400');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
+</script>
