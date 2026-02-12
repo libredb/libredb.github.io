@@ -10,15 +10,15 @@ const faqs = [
   },
   {
     question: "Which AI providers are supported?",
-    answer: "We support multiple AI providers out of the box: Google Gemini (default), OpenAI (GPT-4, GPT-3.5), and local LLMs via Ollama or LM Studio. You can switch providers anytime or even run completely offline with local models."
+    answer: "We support multiple AI providers out of the box: Google Gemini (default), OpenAI (GPT-4o, GPT-4), Claude, and local LLMs via Ollama or LM Studio. You can also configure any OpenAI-compatible endpoint. Switch providers anytime or run completely offline with local models."
   },
   {
     question: "Is my database connection secure?",
-    answer: "Security is our top priority. All connections use TLS/SSL encryption. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We also support JWT authentication and role-based access control (RBAC)."
+    answer: "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We also support JWT authentication, role-based access control (RBAC), and transaction control (BEGIN/COMMIT/ROLLBACK)."
   },
   {
     question: "Which databases are supported?",
-    answer: "Currently we support PostgreSQL, MySQL, SQLite, and MongoDB. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, and maintenance tools. More databases coming soon!"
+    answer: "We support PostgreSQL, MySQL, SQLite, MongoDB, and Redis. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, maintenance tools, and data profiling. The provider architecture makes it easy to add new databases."
   },
   {
     question: "Can I use it on my phone or tablet?",
@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     question: "How does it compare to pgAdmin or DBeaver?",
-    answer: "Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and AI-powered. Zero installation, works on any device, and includes an AI assistant that understands your schema. Plus, it's lighter and faster."
+    answer: "Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and deeply AI-powered. Beyond NL2SQL, we offer AI Query Safety Analysis, AI Query Explainer, AI Query Autopilot, AI Data Profiler, ORM Code Generator, Test Data Generator, Interactive Pivot Tables, ER Diagrams, and Database Documentation - features no desktop IDE provides. Zero installation, works on any device."
   },
 ];
 ---
@@ -141,7 +141,7 @@ const faqs = [
       "name": "Which AI providers are supported?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We support Google Gemini (default), OpenAI (GPT-4, GPT-3.5), and local LLMs via Ollama or LM Studio."
+        "text": "We support Google Gemini (default), OpenAI (GPT-4o), Claude, and local LLMs via Ollama or LM Studio."
       }
     },
     {
@@ -149,7 +149,7 @@ const faqs = [
       "name": "Is my database connection secure?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Security is our top priority. All connections use TLS/SSL encryption. Credentials are never stored in plain text."
+        "text": "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel. Credentials are never stored in plain text."
       }
     },
     {
@@ -157,7 +157,7 @@ const faqs = [
       "name": "Which databases are supported?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Currently we support PostgreSQL, MySQL, SQLite, and MongoDB with full feature support."
+        "text": "We support PostgreSQL, MySQL, SQLite, MongoDB, and Redis with full feature support."
       }
     },
     {
@@ -181,7 +181,7 @@ const faqs = [
       "name": "How does it compare to pgAdmin or DBeaver?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Unlike pgAdmin or DBeaver, LibreDB Studio is web-based, mobile-ready, and AI-powered with zero installation required."
+        "text": "Unlike pgAdmin or DBeaver, LibreDB Studio is web-based, mobile-ready, and deeply AI-powered with NL2SQL, Query Safety Analysis, Data Profiler, Code Generator, and more."
       }
     }
   ]
