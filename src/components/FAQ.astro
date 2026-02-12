@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     question: "Is my database connection secure?",
-    answer: "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We also support JWT authentication, role-based access control (RBAC), and transaction control (BEGIN/COMMIT/ROLLBACK)."
+    answer: "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We also support JWT authentication, role-based access control (RBAC), transaction control (BEGIN/COMMIT/ROLLBACK), and automatic data masking — sensitive columns like email, phone, SSN, and financial data are detected and masked across the grid, exports, and clipboard with configurable RBAC enforcement."
   },
   {
     question: "Which databases are supported?",
@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     question: "How does it compare to pgAdmin or DBeaver?",
-    answer: "Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and deeply AI-powered. Beyond NL2SQL, we offer AI Query Safety Analysis, AI Query Explainer, AI Query Autopilot, AI Data Profiler, ORM Code Generator, Test Data Generator, Interactive Pivot Tables, ER Diagrams, and Database Documentation - features no desktop IDE provides. Zero installation, works on any device."
+    answer: "Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and deeply AI-powered. Beyond NL2SQL, we offer AI Query Safety Analysis, AI Query Explainer, AI Query Autopilot, AI Data Profiler, ORM Code Generator, Test Data Generator, Interactive Pivot Tables, ER Diagrams, Database Documentation, and automatic Data Masking with RBAC enforcement - features no desktop IDE provides. Zero installation, works on any device."
   },
 ];
 ---
@@ -149,7 +149,7 @@ const faqs = [
       "name": "Is my database connection secure?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel. Credentials are never stored in plain text."
+        "text": "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel. Credentials are never stored in plain text. Built-in data masking auto-detects and protects sensitive columns across the UI and exports."
       }
     },
     {
