@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     question: "Which databases are supported?",
-    answer: "We support PostgreSQL, MySQL, SQLite, MongoDB, and Redis. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, maintenance tools, and data profiling. The provider architecture makes it easy to add new databases."
+    answer: "We support PostgreSQL, MySQL, Oracle Database, Microsoft SQL Server, SQLite, MongoDB, and Redis. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, maintenance tools, and monitoring. Oracle uses oracledb Thin mode (pure JavaScript, no Instant Client needed) and SQL Server uses the mssql/tedious driver with Azure SQL auto-detection."
   },
   {
     question: "Can I use it on my phone or tablet?",
@@ -157,7 +157,7 @@ const faqs = [
       "name": "Which databases are supported?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We support PostgreSQL, MySQL, SQLite, MongoDB, and Redis with full feature support."
+        "text": "We support PostgreSQL, MySQL, Oracle Database, Microsoft SQL Server, SQLite, MongoDB, and Redis with full feature support."
       }
     },
     {
