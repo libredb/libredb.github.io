@@ -10,10 +10,17 @@ bun install`,
   {
     step: "2",
     title: "Configure",
-    code: `# .env.local
-ADMIN_PASSWORD=admin123
-USER_PASSWORD=user123
-JWT_SECRET=your_32_char_secret`,
+    code: `cp .env.example .env.local
+# Required auth (JWT_SECRET min 32 chars):
+ADMIN_EMAIL=admin@libredb.org
+ADMIN_PASSWORD=<your-password>
+USER_EMAIL=user@libredb.org
+USER_PASSWORD=<your-password>
+JWT_SECRET=<openssl rand -base64 32>
+# LLM (Ollama):
+LLM_PROVIDER=ollama
+LLM_MODEL=llama3.2
+LLM_API_URL=http://localhost:11434/v1`,
   },
   {
     step: "3",
@@ -23,6 +30,17 @@ JWT_SECRET=your_32_char_secret`,
   },
 ];
 ---
+
+<style>
+  .get-started-code {
+    white-space: pre;
+    word-break: normal;
+  }
+  .get-started-code code {
+    display: block;
+    min-width: min-content;
+  }
+</style>
 
 <section id="get-started" class="py-16 md:py-24 relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,16 +55,16 @@ JWT_SECRET=your_32_char_secret`,
     </div>
 
     <!-- Installation Steps -->
-    <div class="grid md:grid-cols-3 gap-4 md:gap-8 mb-10 md:mb-16">
+    <div class="grid md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-16 items-stretch">
       {steps.map((item) => (
-        <div class="relative">
-          <div class="absolute -top-2 -left-2 md:-top-4 md:-left-4 w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold text-sm md:text-lg z-10">
+        <div class="relative flex flex-col">
+          <div class="absolute -top-2 -left-2 md:-top-3 md:-left-3 w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold text-sm z-10 shadow-lg">
             {item.step}
           </div>
-          <div class="p-4 md:p-6 pt-6 md:pt-8 rounded-xl md:rounded-2xl bg-slate-900/50 border border-slate-800">
-            <h3 class="text-sm md:text-lg font-semibold text-white mb-3 md:mb-4">{item.title}</h3>
-            <div class="relative group overflow-hidden">
-              <pre class="p-3 md:p-4 pr-10 rounded-lg bg-slate-950 text-[10px] md:text-sm text-slate-300 overflow-x-auto font-mono max-w-full"><code class="break-all whitespace-pre-wrap">{item.code}</code></pre>
+          <div class="flex flex-col flex-1 p-4 md:p-5 pt-6 md:pt-7 rounded-xl md:rounded-2xl bg-slate-900/60 border border-slate-700/80 shadow-xl shadow-black/20">
+            <h3 class="text-sm md:text-base font-semibold text-white mb-3">{item.title}</h3>
+            <div class="relative group flex-1 min-h-0">
+              <pre class="get-started-code p-3 md:p-4 pr-10 rounded-lg bg-slate-950/90 text-[11px] md:text-xs text-slate-300 font-mono overflow-auto max-h-40 md:max-h-44"><code>{item.code}</code></pre>
               <button
                 class="copy-btn absolute top-2 right-2 p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
                 data-code={item.code}
@@ -66,7 +84,7 @@ JWT_SECRET=your_32_char_secret`,
     </div>
 
     <!-- Docker Alternative -->
-    <div class="p-4 md:p-8 rounded-xl md:rounded-2xl bg-linear-to-r from-slate-900 to-slate-800 border border-slate-700">
+    <div class="p-4 md:p-6 rounded-xl md:rounded-2xl bg-slate-900/60 border border-slate-700/80 shadow-xl shadow-black/20">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8">
         <div class="flex items-center gap-3 md:gap-4">
           <div class="p-3 md:p-4 rounded-lg md:rounded-xl bg-blue-500/10">
