@@ -14,7 +14,11 @@ const faqs = [
   },
   {
     question: "Is my database connection secure?",
-    answer: "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We also support JWT authentication, role-based access control (RBAC), transaction control (BEGIN/COMMIT/ROLLBACK), and automatic data masking — sensitive columns like email, phone, SSN, and financial data are detected and masked across the grid, exports, and clipboard with configurable RBAC enforcement."
+    answer: "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We support JWT authentication, OIDC Single Sign-On (Auth0, Keycloak, Okta, Azure AD), role-based access control (RBAC), transaction control (BEGIN/COMMIT/ROLLBACK), and automatic data masking — sensitive columns like email, phone, SSN, and financial data are detected and masked across the grid, exports, and clipboard with configurable RBAC enforcement."
+  },
+  {
+    question: "Does it support SSO / Single Sign-On?",
+    answer: "Yes! LibreDB Studio supports vendor-agnostic OpenID Connect (OIDC) authentication out of the box. Connect with Auth0, Keycloak, Okta, Azure AD, Google, or any OIDC-compliant identity provider. The integration uses Authorization Code Flow with PKCE for maximum security, supports configurable role mapping from provider claims, and handles both login and logout at the provider level. Just set three environment variables (issuer, client ID, client secret) and you're ready to go."
   },
   {
     question: "Which databases are supported?",
@@ -149,7 +153,15 @@ const faqs = [
       "name": "Is my database connection secure?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel. Credentials are never stored in plain text. Built-in data masking auto-detects and protects sensitive columns across the UI and exports."
+        "text": "Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel. We support OIDC SSO (Auth0, Keycloak, Okta, Azure AD), JWT auth, RBAC, and automatic data masking across the UI and exports."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it support SSO / Single Sign-On?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! LibreDB Studio supports vendor-agnostic OpenID Connect (OIDC) authentication with Auth0, Keycloak, Okta, Azure AD, Google, or any OIDC-compliant provider. Uses PKCE for security with configurable role mapping."
       }
     },
     {
