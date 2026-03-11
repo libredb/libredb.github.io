@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "LibreDB Studio",
+  "short_name": "LibreDB",
+  "description": "The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

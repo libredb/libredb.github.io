@@ -1,0 +1,35 @@
+# LibreDB Studio
+
+> LibreDB Studio is a modern, AI-powered, open-source web-based SQL IDE for cloud-native teams. It supports PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with features like NL2SQL, visual EXPLAIN plans, ER diagrams, data masking, and OIDC SSO.
+
+## Product Overview
+- [Homepage](https://libredb.org)
+- [Live Demo JWT](https://app.libredb.org)
+- [Live Demo OIDC](https://demo.libredb.org)
+- [GitHub Repository](https://github.com/libredb/libredb-studio)
+- [Privacy Policy](https://libredb.org/privacy-policy)
+
+## Key Features
+- Multi-Model AI Copilot (Gemini, OpenAI, Claude, Ollama)
+- Natural Language to SQL (NL2SQL)
+- Monaco-based SQL Editor (VS Code engine)
+- Visual EXPLAIN Plans
+- Interactive ER Diagrams
+- Data Masking & Privacy
+- OIDC SSO (Auth0, Keycloak, Okta, Azure AD)
+- DBA Monitoring Dashboard
+- ORM Code Generator
+- Test Data Generator
+
+## Supported Databases
+- PostgreSQL, MySQL, SQLite
+- Oracle Database, Microsoft SQL Server
+- MongoDB, Redis
+
+## Deployment
+- Docker & Kubernetes ready
+- One-click deploy: Koyeb, Render
+- Self-hosted or cloud
+
+## License
+MIT License - 100% free and open source

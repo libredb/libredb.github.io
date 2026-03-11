@@ -1,0 +1,5 @@
+Contact: https://github.com/libredb/libredb-studio/security/advisories
+Expires: 2027-03-11T00:00:00.000Z
+Preferred-Languages: en, tr
+Canonical: https://libredb.org/.well-known/security.txt
+Policy: https://github.com/libredb/libredb-studio/security/policy

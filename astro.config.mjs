@@ -6,7 +6,9 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://libredb.org',
-  integrations: [sitemap()],
+  integrations: [sitemap({
+    lastmod: new Date(),
+  })],
   vite: {
     plugins: [tailwindcss()],
   },
