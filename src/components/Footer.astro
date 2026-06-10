@@ -17,6 +17,7 @@ const sections = [
     title: "Resources",
     links: [
       { label: "Documentation", href: "https://github.com/libredb/libredb-studio#readme", external: true },
+      { label: "Docker Compose Example", href: "/docker-compose-example" },
       { label: "API Reference", href: "https://github.com/libredb/libredb-studio/blob/main/docs/API_DOCS.md", external: true },
       { label: "Architecture", href: "https://github.com/libredb/libredb-studio/blob/main/docs/ARCHITECTURE.md", external: true },
       { label: "Releases", href: "https://github.com/libredb/libredb-studio/releases", external: true },
@@ -109,8 +110,8 @@ const sections = [
               <a
                 href={link.href}
                 class="text-sm text-slate-400 hover:text-white transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener noreferrer' : undefined}
               >
                 {link.label}
               </a>
