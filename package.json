@@ -4,7 +4,7 @@
   "version": "0.2.11",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/sync-docker-compose.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
