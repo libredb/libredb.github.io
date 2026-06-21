@@ -1,0 +1,50 @@
+---
+import { deployTargets } from '../data/deploy-targets';
+
+// Curated, widely-recognized brands (must have a vendored logo) for the trust
+// strip directly under the hero. Order = recognition, not category.
+const STRIP_SLUGS = [
+  'docker', 'kubernetes', 'helm', 'railway', 'caprover', 'render',
+  'koyeb', 'netlify', 'fly', 'digitalocean', 'gcp', 'coolify',
+];
+
+const bySlug = new Map(deployTargets.map((t) => [t.slug, t]));
+const logos = STRIP_SLUGS
+  .map((slug) => bySlug.get(slug))
+  .filter((t) => t?.logo)
+  .map((t) => ({ name: t!.name, logo: t!.logo! }));
+
+const moreCount = deployTargets.length - logos.length;
+---
+
+<section aria-label="Deploy anywhere" class="relative border-y border-slate-800/60 bg-slate-950/40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-7">
+    <div class="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-10">
+      <a href="/deploy" class="group shrink-0 inline-flex items-center gap-2 text-sm md:text-base font-semibold">
+        <span class="gradient-text">Deploy anywhere</span>
+        <span class="text-primary-300 group-hover:translate-x-0.5 transition-transform" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <ul class="flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-3" role="list">
+        {logos.map((logo) => (
+          <li>
+            <img
+              src={logo.logo}
+              alt={logo.name}
+              title={logo.name}
+              width="28"
+              height="28"
+              loading="lazy"
+              class="h-6 md:h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-200"
+            />
+          </li>
+        ))}
+        <li>
+          <a href="/deploy" class="text-xs md:text-sm font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">
+            +{moreCount} more
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
