@@ -18,6 +18,16 @@ export interface DeployTarget {
 const RAILWAY_DEPLOY_URL =
   'https://railway.com/deploy/libredb-studio?referralCode=bGijnc&utm_medium=integration&utm_source=template&utm_campaign=generic';
 
+// Koyeb one-click deploy: full service definition encoded in the query string
+// (Docker image, port 3000, free instance, local storage). Mirrors the button
+// in the libredb-studio README — not an official Koyeb catalog listing.
+const KOYEB_DEPLOY_URL =
+  'https://app.koyeb.com/deploy?name=libredb-studio&type=docker&image=ghcr.io%2Flibredb%2Flibredb-studio%3Alatest&instance_type=free&regions=fra&instances_min=0&autoscaling_sleep_idle_delay=3900&env%5BADMIN_EMAIL%5D=admin%40libredb.org&env%5BADMIN_PASSWORD%5D=LibreDB.2026&env%5BJWT_SECRET%5D=your_secure_pass%3D&env%5BLLM_API_KEY%5D=your_GEMINI_API_KEY&env%5BLLM_MODEL%5D=gemini-2.5-flash&env%5BLLM_PROVIDER%5D=gemini&env%5BNEXT_PUBLIC_AUTH_PROVIDER%5D=local&env%5BSTORAGE_PROVIDER%5D=local&env%5BUSER_EMAIL%5D=user%40libredb.org&env%5BUSER_PASSWORD%5D=LibreDB.2026&ports=3000%3Bhttp%3B%2F&hc_protocol%5B3000%5D=tcp&hc_grace_period%5B3000%5D=5&hc_interval%5B3000%5D=30&hc_restart_limit%5B3000%5D=3&hc_timeout%5B3000%5D=5&hc_path%5B3000%5D=%2F&hc_method%5B3000%5D=get';
+
+// Render one-click deploy via the repo's render.yaml Blueprint. Works today,
+// not an official Render catalog listing.
+const RENDER_DEPLOY_URL = 'https://render.com/deploy?repo=https://github.com/libredb/libredb-studio';
+
 export const deployTargets: DeployTarget[] = [
   // ① Install primitives / registries — all available
   { name: 'GitHub Container Registry', slug: 'ghcr', category: 'registry', status: 'available',
@@ -85,11 +95,13 @@ export const deployTargets: DeployTarget[] = [
     docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/railway',
     logo: '/logos/deploy/railway.svg', blurb: 'Official template — one-click deploy' },
   { name: 'Koyeb', slug: 'koyeb', category: 'managed-paas', status: 'available',
-    url: 'https://www.koyeb.com',
+    url: 'https://www.koyeb.com', deployUrl: KOYEB_DEPLOY_URL,
     docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/koyeb',
     logo: '/logos/deploy/koyeb.svg', blurb: 'Deploy button — serverless, scale-to-zero' },
-  { name: 'Render', slug: 'render', category: 'managed-paas', status: 'planned',
-    url: 'https://render.com', logo: '/logos/deploy/render.svg', blurb: 'Unified cloud for apps' },
+  { name: 'Render', slug: 'render', category: 'managed-paas', status: 'available',
+    url: 'https://render.com', deployUrl: RENDER_DEPLOY_URL,
+    docsUrl: 'https://github.com/libredb/libredb-studio/tree/main#-one-click-deploy',
+    logo: '/logos/deploy/render.svg', blurb: 'One-click deploy via render.yaml Blueprint' },
   { name: 'Fly.io', slug: 'fly', category: 'managed-paas', status: 'planned',
     url: 'https://fly.io', logo: '/logos/deploy/fly.svg', blurb: 'Run containers near users' },
   { name: 'Netlify', slug: 'netlify', category: 'managed-paas', status: 'planned',
