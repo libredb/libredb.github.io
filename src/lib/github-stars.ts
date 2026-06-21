@@ -17,6 +17,8 @@ export const FALLBACK_STARS: Record<string, number> = {
   'rancher/rancher': 26000,
   'okd-project/okd': 2100,
   'kubernetes/kubernetes': 123000,
+  'kubesphere/kubesphere': 17000,
+  'k0rdent/k0rdent': 630,
   'appwrite/appwrite': 56000,
   'nhost/nhost': 9200,
   'azukaar/Cosmos-Server': 6000,
