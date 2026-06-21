@@ -1,22 +1,25 @@
 /**
  * Approximate star counts baked in as a fallback so a build that is offline or
  * rate-limited still renders a number (and the client refresh can update it).
- * Snapshot these from the live repos when editing the data file.
+ * Note: production builds (GitHub Pages CI) frequently hit the unauthenticated
+ * GitHub API rate limit, so these fallbacks are what most visitors actually see
+ * — keep them current. Snapshot from the live repos when editing the data file.
+ * Last snapshot: 2026-06-22.
  */
 export const FALLBACK_STARS: Record<string, number> = {
-  'caprover/caprover': 13700,
-  'coollabsio/coolify': 42000,
-  'Dokploy/dokploy': 19000,
-  'portainer/portainer': 32000,
-  'dokku/dokku': 30000,
-  'kubero-dev/kubero': 1700,
-  'basecamp/kamal': 13000,
-  'rancher/rancher': 24000,
-  'okd-project/okd': 1700,
-  'kubernetes/kubernetes': 116000,
-  'appwrite/appwrite': 51000,
-  'nhost/nhost': 8000,
-  'azukaar/Cosmos-Server': 4000,
+  'caprover/caprover': 15000,
+  'coollabsio/coolify': 57000,
+  'Dokploy/dokploy': 35000,
+  'portainer/portainer': 38000,
+  'dokku/dokku': 32000,
+  'kubero-dev/kubero': 4300,
+  'basecamp/kamal': 14000,
+  'rancher/rancher': 26000,
+  'okd-project/okd': 2100,
+  'kubernetes/kubernetes': 123000,
+  'appwrite/appwrite': 56000,
+  'nhost/nhost': 9200,
+  'azukaar/Cosmos-Server': 6000,
 };
 
 /** 41200 -> "41.2k", 132000 -> "132k", 980 -> "980". */
