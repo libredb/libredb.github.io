@@ -1,0 +1,190 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PlatformCard from '../components/deploy/PlatformCard.astro';
+import { deployTargets } from '../data/deploy-targets';
+import { deployCategories } from '../data/deploy-categories';
+import { starRepos } from '../data/deploy-targets';
+import { getStars, formatStars } from '../lib/github-stars';
+
+const stars = await getStars(starRepos);
+
+const STATUS_ORDER = { official: 0, available: 1, planned: 2 };
+const sortedCategories = [...deployCategories].sort((a, b) => a.order - b.order);
+const targetsByCategory = (id: string) =>
+  deployTargets
+    .filter((t) => t.category === id)
+    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+
+const official = deployTargets.filter((t) => t.status === 'official');
+const totalStars = Object.values(stars).reduce((sum, n) => sum + n, 0);
+
+const platformCount = deployTargets.length;
+const categoryCount = deployCategories.length;
+const installMethodCount = deployTargets.filter((t) => t.category === 'registry').length;
+const plannedNames = deployTargets
+  .filter((t) => t.status === 'planned')
+  .map((t) => t.name);
+
+const stats = [
+  { value: String(categoryCount), label: 'Deploy categories' },
+  { value: `${platformCount}+`, label: 'Platforms & registries' },
+  { value: String(installMethodCount), label: 'Install methods' },
+  { value: 'MIT', label: 'Open-source license' },
+];
+
+const title = 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud';
+const description =
+  'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway and CapRover one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.';
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'LibreDB Studio deployment targets',
+  about: { '@id': 'https://libredb.org/#application' },
+  itemListElement: deployTargets.map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: t.name,
+    url: t.deployUrl ?? t.docsUrl ?? t.url,
+  })),
+};
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <main class="pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="text-xs text-slate-500 mb-4" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-slate-300 transition-colors">Home</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-slate-400">Deploy</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center max-w-3xl mx-auto mb-12">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+          Deploy LibreDB Studio <span class="gradient-text">anywhere</span>
+        </h1>
+        <p class="text-base md:text-lg text-slate-300 leading-relaxed">
+          One open-source container image — so LibreDB Studio runs on every layer of the
+          modern deploy stack. Pick a one-click app, a package registry, your self-hosted
+          PaaS, or your cloud. We meet your team where it already deploys.
+        </p>
+      </section>
+
+      <!-- Stat band -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-16">
+        {stats.map((s) => (
+          <div class="text-center p-4 rounded-xl bg-slate-900/60 border border-slate-700/80">
+            <div class="text-2xl md:text-3xl font-bold gradient-text">{s.value}</div>
+            <div class="text-xs md:text-sm text-slate-400 mt-1">{s.label}</div>
+          </div>
+        ))}
+      </section>
+
+      <!-- Official spotlight -->
+      <section class="mb-16">
+        <h2 class="text-xl md:text-2xl font-bold text-white mb-1">Official one-click integrations</h2>
+        <p class="text-sm text-slate-400 mb-6">Listed in their marketplaces — deploy in a click, today.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          {official.map((t) => (
+            <div class="flex flex-col p-6 rounded-2xl bg-slate-900/60 border border-primary-500/30 glow-sm">
+              <div class="flex items-center gap-3 mb-3">
+                {t.logo
+                  ? <img src={t.logo} alt={`${t.name} logo`} width="40" height="40" class="w-10 h-10 object-contain" />
+                  : <span class="w-10 h-10 rounded-lg bg-primary-600/20 text-primary-300 text-lg font-bold grid place-items-center">{t.name.charAt(0)}</span>}
+                <h3 class="text-lg font-semibold text-white">{t.name}</h3>
+              </div>
+              <p class="text-sm text-slate-400 mb-5">{t.blurb}</p>
+              <div class="mt-auto flex flex-wrap gap-3">
+                <a href={t.deployUrl ?? t.docsUrl ?? t.url} target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">
+                  {t.deployUrl ? 'Deploy now' : 'View install guide'}
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+                {t.docsUrl && (
+                  <a href={t.docsUrl} target="_blank" rel="noopener noreferrer"
+                     class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg border border-slate-700 transition-colors">
+                    Docs
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Classification grids -->
+      {sortedCategories.map((cat) => (
+        <section class="mb-14">
+          <h2 class="text-xl md:text-2xl font-bold text-white mb-1">{cat.title}</h2>
+          <p class="text-sm text-slate-400 mb-6 max-w-2xl">{cat.tagline}</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+            {targetsByCategory(cat.id).map((t) => (
+              <PlatformCard target={t} stars={t.github ? stars[t.github] : undefined} />
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <!-- Investor depth band -->
+      <section class="mt-4 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-primary-900/30 to-slate-900/60 border border-primary-500/20 text-center">
+        <p class="text-sm text-slate-400 mb-2">Embedded across open-source ecosystems totaling</p>
+        <div class="text-3xl md:text-4xl font-bold gradient-text mb-3">
+          <span data-stars-total>{formatStars(totalStars)}</span>+ GitHub stars
+        </div>
+        <p class="text-sm text-slate-400 max-w-2xl mx-auto">
+          LibreDB Studio doesn't just support these platforms — it ships inside communities
+          that millions of developers already trust. More on the roadmap:
+          {' '}{plannedNames.slice(0, 8).join(', ')}, and more.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="mt-12 flex flex-wrap justify-center gap-3">
+        <a href="/docker-compose-example" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg border border-slate-700 transition-colors">Docker Compose example</a>
+        <a href="https://github.com/libredb/libredb-studio" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg border border-slate-700 transition-colors">View on GitHub</a>
+        <a href="https://app.libredb.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors">Try the live demo</a>
+      </section>
+    </div>
+  </main>
+  <Footer />
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+</Layout>
+
+<script>
+  import { formatStars } from '../lib/github-stars';
+
+  async function refreshStars() {
+    const spans = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-repo]'));
+    await Promise.all(
+      spans.map(async (span) => {
+        const repo = span.getAttribute('data-stars-repo');
+        if (!repo) return;
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}`, {
+            headers: { Accept: 'application/vnd.github+json' },
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (typeof data.stargazers_count !== 'number') return;
+          span.setAttribute('data-stars-count', String(data.stargazers_count));
+          span.textContent = formatStars(data.stargazers_count);
+        } catch {
+          /* keep the baked-in number */
+        }
+      }),
+    );
+
+    const total = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-count]'))
+      .reduce((sum, el) => sum + (Number(el.getAttribute('data-stars-count')) || 0), 0);
+    const totalEl = document.querySelector<HTMLElement>('[data-stars-total]');
+    if (totalEl && total > 0) totalEl.textContent = formatStars(total);
+  }
+
+  refreshStars();
+</script>
