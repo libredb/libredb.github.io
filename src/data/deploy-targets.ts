@@ -11,7 +11,7 @@ export interface DeployTarget {
   logo?: string;       // '/logos/deploy/<slug>.svg' — omit for lettermark fallback
   deployUrl?: string;  // one-click deploy link
   docsUrl?: string;    // our deploy docs / repo instructions
-  github?: string;     // 'owner/repo' — live star count (oss-paas only)
+  github?: string;     // 'owner/repo' — live star count (open-source platforms: oss-paas + kubernetes)
   blurb?: string;      // one short line
 }
 

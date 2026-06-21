@@ -4,6 +4,19 @@
 **Status:** Approved design, ready for implementation plan
 **Repo:** `libredb-website` (Astro 6, Tailwind v4, static output)
 
+> **Amendment (2026-06-22, post-implementation).** This spec captures the
+> original design. The shipped feature evolved during the PR; where the text
+> below says otherwise, the implementation is authoritative:
+> - **5 categories, not 4.** A `kubernetes` ("Kubernetes & orchestration")
+>   category was added between `oss-paas` and `managed-paas`. So `CategoryId` is
+>   `'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas' | 'cloud'`, the stat
+>   strip reads "5 categories", and the classification grids span ①–⑤.
+> - **Stars show on all open-source platforms**, i.e. targets with a `github`
+>   repo in *either* `oss-paas` or `kubernetes` — not "OSS PaaS only". The
+>   aggregate sums those.
+> - Koyeb and Render gained one-click `deployUrl`s (Render moved `planned →
+>   available`); the Koyeb URL ships no default credentials.
+
 ## 1. Purpose & audience
 
 LibreDB Studio is now distributed as one-click apps / marketplace listings and as

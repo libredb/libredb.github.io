@@ -2,6 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Amendment (2026-06-22, post-implementation).** This plan describes the
+> original 4-category build. The shipped feature added a 5th category afterward;
+> where this plan and the code differ, the code is authoritative:
+> - `CategoryId` is `'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas' | 'cloud'`
+>   (a `kubernetes` "Kubernetes & orchestration" category was added).
+> - GitHub star counts show on open-source platforms in **both** `oss-paas` and
+>   `kubernetes` (the global constraint "ONLY on `oss-paas`" is superseded);
+>   `starRepos` derives from both, and `FALLBACK_STARS` covers both.
+> - Koyeb/Render gained one-click `deployUrl`s (Render `planned → available`).
+
 **Goal:** Build a `/deploy` page plus a condensed homepage section that present LibreDB Studio's "one open-source image → every layer of the deploy stack" distribution story, with live GitHub star counts on open-source platform cards.
 
 **Architecture:** A typed data layer (`src/data/`) is the single source of truth for every platform/registry. A build-time helper (`src/lib/github-stars.ts`) fetches star counts (with a baked fallback) and a client script refreshes them live. Astro components (`PlatformCard`, `StatusBadge`) render the data on a full `/deploy` page and a condensed homepage `DeployAnywhere` section.
