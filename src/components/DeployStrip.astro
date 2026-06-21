@@ -14,7 +14,7 @@ const logos = STRIP_SLUGS
   .filter((t) => t?.logo)
   .map((t) => ({ name: t!.name, logo: t!.logo! }));
 
-const moreCount = deployTargets.length - logos.length;
+const moreCount = Math.max(0, deployTargets.length - logos.length);
 ---
 
 <section aria-label="Deploy anywhere" class="relative border-y border-slate-800/60 bg-slate-950/40">
@@ -28,22 +28,26 @@ const moreCount = deployTargets.length - logos.length;
       <ul class="flex flex-wrap items-center justify-center gap-x-6 md:gap-x-8 gap-y-3" role="list">
         {logos.map((logo) => (
           <li>
-            <img
-              src={logo.logo}
-              alt={logo.name}
-              title={logo.name}
-              width="28"
-              height="28"
-              loading="lazy"
-              class="h-6 md:h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-200"
-            />
+            <a href="/deploy" aria-label={`Deploy LibreDB Studio — see all options including ${logo.name}`} class="block">
+              <img
+                src={logo.logo}
+                alt={logo.name}
+                title={logo.name}
+                width="28"
+                height="28"
+                loading="lazy"
+                class="h-6 md:h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-200"
+              />
+            </a>
           </li>
         ))}
-        <li>
-          <a href="/deploy" class="text-xs md:text-sm font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">
-            +{moreCount} more
-          </a>
-        </li>
+        {moreCount > 0 && (
+          <li>
+            <a href="/deploy" class="text-xs md:text-sm font-medium text-slate-400 hover:text-white transition-colors whitespace-nowrap">
+              +{moreCount} more
+            </a>
+          </li>
+        )}
       </ul>
     </div>
   </div>
