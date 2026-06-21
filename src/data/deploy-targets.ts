@@ -72,18 +72,9 @@ export const deployTargets: DeployTarget[] = [
     blurb: 'Docker-powered mini-Heroku' },
   { name: 'Easypanel', slug: 'easypanel', category: 'oss-paas', status: 'planned',
     url: 'https://easypanel.io', blurb: 'Modern server control panel' },
-  { name: 'Kubero', slug: 'kubero', category: 'oss-paas', status: 'planned',
-    url: 'https://www.kubero.dev', github: 'kubero-dev/kubero',
-    blurb: 'Heroku-like PaaS on Kubernetes' },
   { name: 'Kamal', slug: 'kamal', category: 'oss-paas', status: 'planned',
     url: 'https://kamal-deploy.org', github: 'basecamp/kamal',
     blurb: 'Deploy containers to any host' },
-  { name: 'Rancher', slug: 'rancher', category: 'oss-paas', status: 'planned',
-    url: 'https://www.rancher.com', github: 'rancher/rancher',
-    logo: '/logos/deploy/rancher.svg', blurb: 'Enterprise Kubernetes management' },
-  { name: 'OpenShift / OKD', slug: 'openshift', category: 'oss-paas', status: 'planned',
-    url: 'https://www.openshift.com', github: 'okd-project/okd',
-    logo: '/logos/deploy/openshift.svg', blurb: 'Red Hat Kubernetes platform' },
   { name: 'Appwrite', slug: 'appwrite', category: 'oss-paas', status: 'planned',
     url: 'https://appwrite.io', github: 'appwrite/appwrite',
     logo: '/logos/deploy/appwrite.svg', blurb: 'Open-source backend platform' },
@@ -96,7 +87,22 @@ export const deployTargets: DeployTarget[] = [
     url: 'https://cosmos-cloud.io', github: 'azukaar/Cosmos-Server',
     blurb: 'Self-hosted server with reverse proxy' },
 
-  // ③ Managed / commercial PaaS — no stars
+  // ③ Kubernetes & orchestration — Helm chart install; stars shown (open-source)
+  { name: 'Kubernetes', slug: 'kubernetes', category: 'kubernetes', status: 'available',
+    url: 'https://kubernetes.io', github: 'kubernetes/kubernetes',
+    docsUrl: 'https://artifacthub.io/packages/helm/libredb-studio/libredb-studio',
+    logo: '/logos/deploy/kubernetes.svg', blurb: 'helm install from the published OCI chart' },
+  { name: 'Rancher', slug: 'rancher', category: 'kubernetes', status: 'planned',
+    url: 'https://www.rancher.com', github: 'rancher/rancher',
+    logo: '/logos/deploy/rancher.svg', blurb: 'Enterprise Kubernetes management (SUSE)' },
+  { name: 'OpenShift / OKD', slug: 'openshift', category: 'kubernetes', status: 'planned',
+    url: 'https://www.openshift.com', github: 'okd-project/okd',
+    logo: '/logos/deploy/openshift.svg', blurb: 'Red Hat Kubernetes platform' },
+  { name: 'Kubero', slug: 'kubero', category: 'kubernetes', status: 'planned',
+    url: 'https://www.kubero.dev', github: 'kubero-dev/kubero',
+    blurb: 'Heroku-like PaaS on Kubernetes' },
+
+  // ④ Managed / commercial PaaS — no stars
   { name: 'Railway', slug: 'railway', category: 'managed-paas', status: 'official',
     url: 'https://railway.com', deployUrl: RAILWAY_DEPLOY_URL,
     docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/railway',
@@ -122,7 +128,7 @@ export const deployTargets: DeployTarget[] = [
   { name: 'Platform.sh', slug: 'platformsh', category: 'managed-paas', status: 'planned',
     url: 'https://platform.sh', blurb: 'End-to-end PaaS' },
 
-  // ④ Cloud hyperscalers — no stars
+  // ⑤ Cloud hyperscalers — no stars
   { name: 'AWS', slug: 'aws', category: 'cloud', status: 'planned',
     url: 'https://aws.amazon.com', blurb: 'ECS / Fargate / App Runner' },
   { name: 'Google Cloud', slug: 'gcp', category: 'cloud', status: 'planned',
@@ -135,7 +141,10 @@ export const deployTargets: DeployTarget[] = [
     url: 'https://www.alibabacloud.com', blurb: 'ECS / Container Service' },
 ];
 
-/** Repos whose live star counts we display (oss-paas with a public repo). */
+/** Categories whose targets are open-source platforms — we show live star counts there. */
+const STAR_CATEGORIES: CategoryId[] = ['oss-paas', 'kubernetes'];
+
+/** Repos whose live star counts we display (open-source platforms with a public repo). */
 export const starRepos: string[] = deployTargets
-  .filter((t) => t.category === 'oss-paas' && t.github)
+  .filter((t) => STAR_CATEGORIES.includes(t.category) && t.github)
   .map((t) => t.github as string);

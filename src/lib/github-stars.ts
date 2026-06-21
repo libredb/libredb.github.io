@@ -13,6 +13,7 @@ export const FALLBACK_STARS: Record<string, number> = {
   'basecamp/kamal': 13000,
   'rancher/rancher': 24000,
   'okd-project/okd': 1700,
+  'kubernetes/kubernetes': 116000,
   'appwrite/appwrite': 51000,
   'nhost/nhost': 8000,
   'azukaar/Cosmos-Server': 4000,

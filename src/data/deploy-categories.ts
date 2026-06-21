@@ -1,4 +1,4 @@
-export type CategoryId = 'registry' | 'oss-paas' | 'managed-paas' | 'cloud';
+export type CategoryId = 'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas' | 'cloud';
 
 export interface DeployCategory {
   id: CategoryId;
@@ -21,15 +21,21 @@ export const deployCategories: DeployCategory[] = [
     order: 2,
   },
   {
+    id: 'kubernetes',
+    title: 'Kubernetes & orchestration',
+    tagline: 'Install the published Helm chart on any cluster — including enterprise distributions.',
+    order: 3,
+  },
+  {
     id: 'managed-paas',
     title: 'Managed & commercial PaaS',
     tagline: 'One-click deploys on hosted platforms — no servers to manage.',
-    order: 3,
+    order: 4,
   },
   {
     id: 'cloud',
     title: 'Cloud hyperscalers',
     tagline: 'Runs as a container on any "run a container" service (ECS/Fargate, Cloud Run, ACI, App Platform).',
-    order: 4,
+    order: 5,
   },
 ];

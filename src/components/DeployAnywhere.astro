@@ -23,7 +23,7 @@ const categories = [...deployCategories].sort((a, b) => a.order - b.order);
     </div>
 
     <!-- Category overview -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-8">
       {categories.map((cat) => (
         <a href="/deploy" class="block p-4 rounded-xl bg-slate-900/60 border border-slate-700/80 hover:border-primary-500/50 transition-colors">
           <div class="text-2xl font-bold gradient-text">{countFor(cat.id)}</div>

@@ -23,9 +23,10 @@ test('all registries are available', () => {
   expect(registries.every((t) => t.status === 'available')).toBe(true);
 });
 
-test('only oss-paas targets declare a github repo (stars constraint)', () => {
+test('only open-source platforms declare a github repo (stars constraint)', () => {
+  const starCategories = ['oss-paas', 'kubernetes'];
   const withGithub = deployTargets.filter((t) => t.github);
-  expect(withGithub.every((t) => t.category === 'oss-paas')).toBe(true);
+  expect(withGithub.every((t) => starCategories.includes(t.category))).toBe(true);
   expect(starRepos.length).toBeGreaterThan(0);
 });
 
