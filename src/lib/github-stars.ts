@@ -28,8 +28,10 @@ export function formatStars(n: number): string {
 }
 
 /**
- * Fetch star counts for each repo. Runs at build time (Node) and is safe to
- * call from a browser too. Any failure falls back to FALLBACK_STARS (or 0).
+ * Fetch star counts for each repo. Build-time only (Node): it sets a
+ * `User-Agent` header, which browsers forbid — the client refresh script in
+ * deploy.astro does its own header-free fetch instead. Any failure falls back
+ * to FALLBACK_STARS (or 0).
  */
 export async function getStars(repos: string[]): Promise<Record<string, number>> {
   const entries = await Promise.all(

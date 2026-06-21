@@ -2,8 +2,12 @@ import { test, expect, mock, afterEach } from 'bun:test';
 import { formatStars, getStars, FALLBACK_STARS } from './github-stars';
 import { starRepos } from '../data/deploy-targets';
 
+// Tests assign globalThis.fetch directly (not spyOn), which mock.restore()
+// does not revert — capture and restore the original to keep tests isolated.
+const originalFetch = globalThis.fetch;
 afterEach(() => {
   mock.restore();
+  globalThis.fetch = originalFetch;
 });
 
 test('formatStars renders compact counts', () => {
