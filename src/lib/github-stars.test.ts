@@ -1,5 +1,6 @@
 import { test, expect, mock, afterEach } from 'bun:test';
 import { formatStars, getStars, FALLBACK_STARS } from './github-stars';
+import { starRepos } from '../data/deploy-targets';
 
 afterEach(() => {
   mock.restore();
@@ -37,4 +38,10 @@ test('getStars falls back when fetch throws', async () => {
 
   const result = await getStars(['coollabsio/coolify']);
   expect(result['coollabsio/coolify']).toBe(FALLBACK_STARS['coollabsio/coolify']);
+});
+
+test('every starRepo has a baked fallback (build/client total coherence)', () => {
+  for (const repo of starRepos) {
+    expect(FALLBACK_STARS).toHaveProperty(repo);
+  }
 });

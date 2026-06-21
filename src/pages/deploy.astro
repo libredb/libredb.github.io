@@ -34,7 +34,6 @@ const stats = [
   { value: 'MIT', label: 'Open-source license' },
 ];
 
-const siteURL = 'https://libredb.org';
 const title = 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud';
 const description =
   'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway and CapRover one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.';
@@ -43,6 +42,7 @@ const itemListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'LibreDB Studio deployment targets',
+  about: { '@id': 'https://libredb.org/#application' },
   itemListElement: deployTargets.map((t, i) => ({
     '@type': 'ListItem',
     position: i + 1,
