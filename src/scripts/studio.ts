@@ -375,6 +375,16 @@ function wireOnce() {
   document.addEventListener('click', onActionClick);
   window.addEventListener('keydown', onKeydown);
 
+  document.addEventListener('astro:before-swap', () => {
+    // force-close the persisted drawer so it doesn't carry over to the next page
+    const root = document.querySelector('[data-drawer-root]');
+    const panel = document.querySelector('[data-drawer-panel]');
+    panel?.classList.add('-translate-x-full');
+    root?.classList.add('hidden');
+    document.body.style.overflow = '';
+    document.querySelector('[data-drawer-open]')?.setAttribute('aria-expanded', 'false');
+  });
+
   // Delegated input: explorer search filter + palette input
   document.addEventListener('input', (e) => {
     const target = e.target;
