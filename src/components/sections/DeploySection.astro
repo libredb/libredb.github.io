@@ -15,6 +15,8 @@ const cats = [...deployCategories]
     color: catColors[i % catColors.length],
   }));
 
+const exportRows = deployTargets.map((t) => ({ platform: t.name, slug: t.slug, category: t.category, status: t.status }));
+
 // Featured chips (display labels); the rest live on /deploy
 const featured = [
   'Docker', 'Kubernetes', 'Helm', 'npm', 'Railway', 'CapRover', 'Render', 'Koyeb',
@@ -49,3 +51,4 @@ const moreCount = Math.max(0, platformCount - featured.length);
     )}
   </div>
 </div>
+<script type="application/json" data-export-payload="deploy" data-export-filename="deploy.csv" data-export-format="csv" set:html={JSON.stringify(exportRows)} />

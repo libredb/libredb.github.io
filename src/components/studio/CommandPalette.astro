@@ -1,0 +1,25 @@
+---
+// src/components/studio/CommandPalette.astro
+---
+<div data-palette-root hidden class="fixed inset-0 z-50">
+  <div class="absolute inset-0 bg-black/60" data-palette-close></div>
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-label="Command palette"
+    class="absolute left-1/2 top-24 w-[min(92vw,560px)] -translate-x-1/2 border border-edge-strong bg-panel shadow-2xl"
+  >
+    <input
+      data-palette-input
+      type="text"
+      placeholder="Type a command or search sections…"
+      class="w-full border-b border-edge bg-canvas px-4 py-3 text-[14px] text-fg placeholder:text-faint focus:outline-none"
+      aria-label="Command palette input"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="palette-listbox"
+      aria-autocomplete="list"
+    />
+    <ul id="palette-listbox" data-palette-list role="listbox" aria-label="Command palette results" class="max-h-[50vh] overflow-y-auto py-1 text-[13px]"></ul>
+  </div>
+</div>

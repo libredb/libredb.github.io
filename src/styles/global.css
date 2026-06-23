@@ -111,6 +111,13 @@
   box-shadow: inset 2px 0 0 var(--color-primary);
 }
 
+/* RUN re-run shimmer on the active result pane */
+@keyframes studio-rerun-fade { 0% { opacity: 0.35; } 100% { opacity: 1; } }
+.studio-results.is-rerunning { animation: studio-rerun-fade 0.5s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .studio-results.is-rerunning { animation: none; }
+}
+
 /* Accordion (native <details>) */
 summary { list-style: none; cursor: pointer; }
 summary::-webkit-details-marker { display: none; }

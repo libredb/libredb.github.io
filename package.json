@@ -1,7 +1,7 @@
 {
   "name": "libredb-studio-website",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/sync-docker-compose.mjs && astro build",
@@ -13,5 +13,8 @@
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.5",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14"
   }
 }

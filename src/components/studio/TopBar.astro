@@ -9,15 +9,15 @@ const DEMO = 'https://app.libredb.org';
       <img src="/logo.svg" alt="LibreDB Studio" class="h-5 w-5" />
       <span>LibreDB Studio</span>
     </a>
-    <span class="flex items-center gap-2 text-faint" aria-hidden="true">
-      <span class="hover:text-fg">▤</span>
-      <span class="hover:text-fg">＋</span>
+    <span class="flex items-center gap-2 text-faint cursor-default select-none" aria-hidden="true">
+      <span>▤</span>
+      <span>＋</span>
     </span>
     <span class="mx-1 h-5 w-px bg-edge-strong" aria-hidden="true"></span>
     <span class="flex items-center gap-2">
       <span class="text-primary" aria-hidden="true">▦</span>
       <span class="text-fg">libredb.org</span>
-      <span class="text-[11px] tracking-wider text-faint">PRODUCTION • ONLINE</span>
+      <span class="text-[11px] tracking-wider text-faint cursor-default select-none" aria-hidden="true">PRODUCTION • ONLINE</span>
     </span>
   </div>
 
@@ -26,10 +26,11 @@ const DEMO = 'https://app.libredb.org';
     <a href={GITHUB} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-muted hover:text-fg">
       <span class="text-warn" aria-hidden="true">★</span> GitHub
     </a>
-    <span class="flex items-center gap-1.5 text-ok">
+    <span class="flex items-center gap-1.5 text-ok cursor-default select-none">
       <span class="h-2 w-2 rounded-full bg-ok animate-pulse-dot" aria-hidden="true"></span> Online
     </span>
-    <span class="flex items-center gap-1.5 text-muted" aria-hidden="true">◷ Monitoring</span>
+    <button type="button" class="flex items-center gap-1.5 text-muted hover:text-fg" data-action="notice" data-notice="monitoring"><span aria-hidden="true">◷</span> Monitoring</button>
+    <button type="button" class="hidden items-center gap-1.5 rounded-md border border-edge-strong px-2 py-1 text-[11.5px] text-faint hover:text-fg xl:flex" data-action="palette" aria-label="Open command palette">⌘K</button>
     <a
       href={DEMO}
       target="_blank"
@@ -38,6 +39,6 @@ const DEMO = 'https://app.libredb.org';
     >
       <span aria-hidden="true">▶</span> Live Demo <span aria-hidden="true">→</span>
     </a>
-    <span class="text-faint" aria-hidden="true">v0.9.29</span>
+    <span class="text-faint cursor-default select-none" aria-hidden="true">v0.9.29</span>
   </div>
 </header>

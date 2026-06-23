@@ -4,6 +4,8 @@ import TopBar from '../components/studio/TopBar.astro';
 import MobileTopBar from '../components/studio/MobileTopBar.astro';
 import Explorer from '../components/studio/Explorer.astro';
 import StatusBar from '../components/studio/StatusBar.astro';
+import Console from '../components/studio/Console.astro';
+import CommandPalette from '../components/studio/CommandPalette.astro';
 import SectionShell from '../components/studio/SectionShell.astro';
 import { sectionById } from '../data/sections';
 
@@ -41,6 +43,8 @@ const s = sectionById;
     </div>
 
     <div class="hidden lg:block"><StatusBar /></div>
+    <Console />
+    <CommandPalette />
   </div>
 
   <script>
