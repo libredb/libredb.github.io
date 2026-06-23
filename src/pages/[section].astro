@@ -1,0 +1,47 @@
+---
+// src/pages/[section].astro
+import Layout from '../layouts/Layout.astro';
+import StudioShell from '../components/studio/StudioShell.astro';
+import SectionShell from '../components/studio/SectionShell.astro';
+import { sections, sectionById } from '../data/sections';
+import { sectionSeo } from '../data/section-seo';
+
+import FeaturesSection from '../components/sections/FeaturesSection.astro';
+import DatabasesSection from '../components/sections/DatabasesSection.astro';
+import CompareSection from '../components/sections/CompareSection.astro';
+import TechStackSection from '../components/sections/TechStackSection.astro';
+import GetStartedSection from '../components/sections/GetStartedSection.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
+import DeploySection from '../components/sections/DeploySection.astro';
+import DockerComposeSection from '../components/sections/DockerComposeSection.astro';
+
+export function getStaticPaths() {
+  return sections
+    .filter((s) => s.id !== 'home')
+    .map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
+}
+
+const COMPONENTS: Record<string, any> = {
+  features: FeaturesSection,
+  databases: DatabasesSection,
+  compare: CompareSection,
+  tech_stack: TechStackSection,
+  get_started: GetStartedSection,
+  faq: FaqSection,
+  deploy: DeploySection,
+  docker_compose: DockerComposeSection,
+};
+
+const { id } = Astro.props as { id: string };
+const meta = sectionById[id];
+const Body = COMPONENTS[id];
+const jsonLd = sectionSeo[id] ?? [];
+---
+<Layout title={meta.pageTitle} description={meta.pageDescription}>
+  {jsonLd.map((schema) => (
+    <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
+  <StudioShell active={id} standalone>
+    <SectionShell section={meta} active><Body /></SectionShell>
+  </StudioShell>
+</Layout>
