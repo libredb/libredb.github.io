@@ -17,7 +17,7 @@ const { section, class: className = '' } = Astro.props;
     <span class="select-none text-faint" aria-hidden="true">1</span>
     <div><Sql query={section.query} /></div>
   </div>
-  <div class="flex items-center justify-between border-t border-edge px-3 py-2 text-[11.5px] text-faint">
+  <div class="flex items-center justify-between border-t border-edge px-3 py-2 text-[11.5px] text-faint cursor-default select-none">
     <span class="flex items-center gap-2">
       <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
       {section.rows} rows <span class="text-edge-strong">|</span> {section.cols} cols
