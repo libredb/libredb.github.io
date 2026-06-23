@@ -2,6 +2,7 @@ import { sections, sectionById } from '../data/sections';
 import type { ConsoleMessage, ConsoleKind } from './lib/console-copy';
 import { NOTICES } from './lib/console-copy';
 import { serialize, type Row } from './lib/export';
+import { filterItems } from './lib/filter';
 
 /**
  * Studio interaction layer (progressive enhancement).
@@ -241,6 +242,71 @@ function exportSection() {
   studioConsole.ok(`exported ${filename} (${rows.length} rows)`);
 }
 
+/* ---- Command palette ---- */
+interface PaletteItem { label: string; hint: string; run: () => void; }
+
+function paletteItems(): PaletteItem[] {
+  const jumps: PaletteItem[] = sections.map((s) => ({
+    label: `Jump to ${s.table}`,
+    hint: `${s.rows} rows`,
+    run: () => { location.hash = `#${s.id}`; },
+  }));
+  const actions: PaletteItem[] = [
+    { label: 'Copy link to current section', hint: 'clipboard', run: () => copyLink() },
+    { label: 'Export current section', hint: 'download', run: () => exportSection() },
+    { label: 'Open live demo', hint: 'app.libredb.org', run: () => window.open('https://app.libredb.org', '_blank') },
+    { label: 'Open GitHub', hint: 'repo', run: () => window.open('https://github.com/libredb/libredb-studio', '_blank') },
+    { label: 'View README / docs', hint: 'github', run: () => window.open('https://github.com/libredb/libredb-studio#readme', '_blank') },
+  ];
+  return [...jumps, ...actions];
+}
+
+let paletteHighlight = 0;
+let paletteFiltered: PaletteItem[] = [];
+let paletteLastFocus: HTMLElement | null = null;
+
+function renderPalette(query: string) {
+  const list = document.querySelector<HTMLElement>('[data-palette-list]');
+  if (!list) return;
+  paletteFiltered = filterItems(query, paletteItems(), (it) => it.label + ' ' + it.hint);
+  paletteHighlight = 0;
+  list.innerHTML = '';
+  paletteFiltered.forEach((it, i) => {
+    const li = document.createElement('li');
+    li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${i === 0 ? 'bg-raised text-bright' : 'text-fg'}`;
+    li.innerHTML = `<span>${it.label}</span><span class="text-[11px] text-faint">${it.hint}</span>`;
+    li.addEventListener('mousemove', () => setHighlight(i));
+    li.addEventListener('click', () => { it.run(); closePalette(); });
+    list.appendChild(li);
+  });
+}
+
+function setHighlight(i: number) {
+  paletteHighlight = i;
+  const list = document.querySelector('[data-palette-list]');
+  if (!list) return;
+  [...list.children].forEach((li, idx) => {
+    li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${idx === i ? 'bg-raised text-bright' : 'text-fg'}`;
+  });
+}
+
+function openPalette() {
+  const root = document.querySelector<HTMLElement>('[data-palette-root]');
+  const input = document.querySelector<HTMLInputElement>('[data-palette-input]');
+  if (!root || !input) return;
+  paletteLastFocus = document.activeElement as HTMLElement;
+  root.removeAttribute('hidden');
+  input.value = '';
+  renderPalette('');
+  input.focus();
+}
+
+function closePalette() {
+  const root = document.querySelector<HTMLElement>('[data-palette-root]');
+  root?.setAttribute('hidden', '');
+  paletteLastFocus?.focus();
+}
+
 function init() {
   if (studio) studio.classList.add('js');
 
@@ -272,6 +338,7 @@ function init() {
     if (action === 'run') { e.preventDefault(); runQuery(); }
     if (action === 'copy-link') { e.preventDefault(); copyLink(); }
     if (action === 'export') { e.preventDefault(); exportSection(); }
+    if (action === 'palette') { e.preventDefault(); openPalette(); }
   });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
@@ -281,6 +348,20 @@ function init() {
 
   window.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runQuery(); }
+  });
+
+  // Palette open/close + keyboard
+  document.querySelector('[data-palette-close]')?.addEventListener('click', closePalette);
+  const paletteInput = document.querySelector<HTMLInputElement>('[data-palette-input]');
+  paletteInput?.addEventListener('input', () => renderPalette(paletteInput.value));
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openPalette(); return; }
+    const root = document.querySelector('[data-palette-root]');
+    if (!root || root.hasAttribute('hidden')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
+    else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
   });
 
   setActive(currentHash());
