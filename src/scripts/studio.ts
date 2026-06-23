@@ -13,11 +13,16 @@ import { filterItems, fuzzyMatch } from './lib/filter';
  */
 
 const studio = document.querySelector<HTMLElement>('[data-studio]');
+const standalone = !!studio && studio.hasAttribute('data-standalone');
+const initialActive = studio?.dataset.initialActive || 'home';
 const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
 const ids = new Set(sections.map((s) => s.id));
 
 function setActive(id: string, opts: { scroll?: boolean } = {}) {
-  if (!ids.has(id)) id = 'home';
+  if (!ids.has(id)) id = initialActive;
+  // Focused/standalone pages render a single section; if the requested one
+  // isn't in the DOM, keep the current view instead of blanking it.
+  if (!document.querySelector(`[data-section="${id}"]`)) return;
   const meta = sectionById[id];
 
   // Toggle sections (desktop locked mode uses .is-active; CSS ignores it on mobile)
@@ -50,10 +55,11 @@ function setActive(id: string, opts: { scroll?: boolean } = {}) {
 }
 
 function currentHash(): string {
-  return (location.hash || '#home').slice(1);
+  return (location.hash || `#${initialActive}`).slice(1);
 }
 
 function onLinkClick(e: Event, id: string) {
+  if (standalone) { closeDrawer(); return; } // links are /#id → let the browser navigate home
   if (isDesktop()) {
     e.preventDefault();
     if (location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
@@ -273,7 +279,10 @@ function paletteItems(): PaletteItem[] {
   const jumps: PaletteItem[] = sections.map((s) => ({
     label: `Jump to ${s.table}`,
     hint: `${s.rows} rows`,
-    run: () => { location.hash = `#${s.id}`; },
+    run: () => {
+      if (standalone) location.href = `/#${s.id}`;
+      else location.hash = `#${s.id}`;
+    },
   }));
   const actions: PaletteItem[] = [
     { label: 'Copy link to current section', hint: 'clipboard', run: () => copyLink() },

@@ -1,0 +1,44 @@
+---
+// src/components/studio/StudioShell.astro
+// The shared IDE chrome. index.astro and deploy.astro both render through this.
+import TopBar from './TopBar.astro';
+import MobileTopBar from './MobileTopBar.astro';
+import Explorer from './Explorer.astro';
+import StatusBar from './StatusBar.astro';
+import Console from './Console.astro';
+import CommandPalette from './CommandPalette.astro';
+
+interface Props {
+  active?: string;
+  standalone?: boolean;
+}
+const { active = 'home', standalone = false } = Astro.props;
+---
+<div
+  class="studio flex min-h-screen flex-col"
+  data-studio
+  data-initial-active={active}
+  data-standalone={standalone ? '' : undefined}
+>
+  <div class="hidden lg:block"><TopBar /></div>
+  <MobileTopBar active={active} standalone={standalone} />
+
+  <div class="studio-workbench flex min-h-0 flex-1">
+    <aside class="hidden w-64 shrink-0 overflow-y-auto border-r border-edge lg:block">
+      <Explorer active={active} idPrefix="side" standalone={standalone} />
+    </aside>
+
+    <main class="studio-pane min-w-0 flex-1 lg:flex lg:flex-col">
+      <slot />
+    </main>
+  </div>
+
+  <div class="hidden lg:block"><StatusBar active={active} /></div>
+  <Console />
+</div>
+
+<CommandPalette />
+
+<script>
+  import '../../scripts/studio.ts';
+</script>
