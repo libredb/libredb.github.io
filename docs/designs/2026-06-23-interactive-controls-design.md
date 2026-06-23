@@ -34,14 +34,14 @@ explain). Max-tier items are explicitly out of scope (see §7).
 | `README.md` tab | Open the GitHub README in a new tab. |
 
 ### 🟡 Playful redirect (console toast + CTA)
-`▾ Query`, `▤ Save`, `BEGIN`, `⬡ SANDBOX`, `✎ EDIT`, `↑ IMPORT`, `≡ Format`,
-`✕ Clear`, `# Lines`, and result tabs `↺ History`, `⭐ Saved`, `◔ Charts`,
-`✈ Autopilot`, `▥ Pivot`, `⇄ Diff`, `▦ Dashboard`, plus the tab-bar `+` (new tab)
-and `✕` (close tab). Each prints a tailored message (see §4) and most carry an
-`→ Open demo` / `→ View docs` CTA.
+`◷ Monitoring`, `▾ Query`, `▤ Save`, `BEGIN`, `⬡ SANDBOX`, `✎ EDIT`, `↑ IMPORT`,
+`≡ Format`, `✕ Clear`, `# Lines`, and result tabs `↺ History`, `⭐ Saved`,
+`◔ Charts`, `✈ Autopilot`, `▥ Pivot`, `⇄ Diff`, `▦ Dashboard`, plus the tab-bar
+`+` (new tab) and `✕` (close tab). Each prints a tailored message (see §4) and
+most carry an `→ Open demo` / `→ View docs` CTA.
 
 ### ⚪ Honestly inert (no pointer, status only)
-TopBar `PRODUCTION • ONLINE`, `● Online`, `◷ Monitoring`, version label, the
+TopBar `PRODUCTION • ONLINE`, `● Online`, version label, the
 `▤ ＋` brand-adjacent glyphs; the result-meta strip (`● N rows | C columns |
 EXEC TIME`); the entire StatusBar; traffic-light dots in tab bar & mobile query
 card. Apply `cursor: default`, no hover affordance, `aria-hidden="true"` where
@@ -113,6 +113,7 @@ Generic, attribute-driven so markup stays declarative and DRY:
 
 ## 4. Console copy map (bold & playful) — initial draft
 ```
+monitoring -- nothing's on fire here. live monitoring runs in the app → Open demo
 save       ERROR 42501: permission denied — must be superuser
            HINT: superusers hang out in the live demo            → Open demo
 query      NOTICE: visual query builder lives in the app          → Open demo
@@ -173,3 +174,53 @@ charts (redirect for now); Saved/History as real bookmark/log (redirect);
 - `⌘K`, Explorer search, Copy, Export, RUN animation, Explain all function.
 - Keyboard + screen-reader usable (palette, toasts, buttons).
 - `bunx astro build` passes; no regressions to the existing routing/swap.
+
+## 9. Complete control coverage (every button has an action)
+Grouped by toolbar region. 🟢 real · 🟡 playful redirect (console) · 🔵 active/selected.
+
+**Top bar**
+| Button | Type | Action |
+|---|---|---|
+| Monitoring | 🟡 | `-- nothing's on fire here. live monitoring runs in the app → Open demo` |
+| README.md (tab) | 🟢 | Open GitHub README in a new tab |
+
+**Query toolbar — Query · Save · RUN · BEGIN · SANDBOX · EDIT · IMPORT**
+| Button | Type | Action |
+|---|---|---|
+| Query ▾ | 🟡 | `NOTICE: the visual query builder is a live-app superpower → Open demo` |
+| Save | 🟡 | `ERROR 42501: permission denied — must be superuser` · `HINT: superusers save queries in the live demo → Become one` |
+| RUN (⌘+Enter) | 🟢 | Re-run: ~500ms shimmer over results → `✓ {rows} rows ({execMs}ms)` |
+| BEGIN | 🟡 | `NOTICE: BEGIN…COMMIT — real transactions, real database. In the app → Open demo` |
+| SANDBOX | 🟡 | `NOTICE: SANDBOX runs scary queries safely. Try it in the app → Open demo` |
+| EDIT | 🟡 | `-- this query is read-only out here; full edit mode lives in the app → Open demo` |
+| IMPORT | 🟡 | `NOTICE: drop a .sql/.csv and IMPORT it — in the live app → Open demo` |
+
+**Sub-toolbar — Format · Copy · Clear · Lines · AI · Explain**
+| Button | Type | Action |
+|---|---|---|
+| Format | 🟡 | `NOTICE: one-keystroke SQL formatting ships in the app → Open demo` |
+| Copy | 🟢 | Copy deep link to current section → `✓ copied link to #{id}` |
+| Clear | 🟡 | `-- nothing to clear on a landing page ;)` (no CTA) |
+| Lines | 🟡 | `# line numbers are bolted on around here` (no CTA) |
+| AI ✦ | 🟢 | Open the command palette (the "ask anything" entry) |
+| Explain ✦ | 🟢 | Toggle the AI-styled Explain panel for the section |
+
+**Result tabs — Results · Explain · History · Saved · Charts · NL2SQL · Autopilot · Pivot · Docs · Diff · Dashboard · Export**
+| Button | Type | Action |
+|---|---|---|
+| Results | 🔵 | Active/selected tab — clicking scrolls the result pane to top |
+| Explain ⚡ | 🟢 | Toggle the Explain panel (same as sub-toolbar Explain) |
+| History | 🟡 | `↺ every query you run is logged per-workspace — in the app → Open demo` |
+| Saved | 🟡 | `⭐ star a query to save it — saved queries live in the app → Open demo` |
+| Charts | 🟡 | `◔ turn any result set into a chart, one click — in the app → Open demo` |
+| NL2SQL | 🟢 | Open the command palette (natural-language entry) |
+| Autopilot | 🟡 | `NOTICE: Autopilot hunts slow queries and writes the fix. In the app → Open demo` |
+| Pivot | 🟡 | `▥ pivot any result like a spreadsheet — only works in production → Open demo` |
+| Docs | 🟢 | Open GitHub docs in a new tab |
+| Diff | 🟡 | `⇄ diff two schemas or result sets side-by-side — in the app → Open demo` |
+| Dashboard | 🟡 | `▦ pin queries into a live dashboard — build yours in the app → Open demo` |
+| Export | 🟢 | Download section dataset (`features.json`, `deploy.csv`…) → `✓ exported {file}` |
+
+Coverage: **0 dead clicks.** 12 real · most-of-the-rest playful redirect · only
+ambient status text stays inert (PRODUCTION•ONLINE, ●Online, version, result-meta,
+status bar, traffic dots).
