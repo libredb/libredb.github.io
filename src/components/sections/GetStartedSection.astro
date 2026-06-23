@@ -7,7 +7,7 @@ interface Step { n: number; title: string; lines: Line[]; }
 const steps: Step[] = [
   {
     n: 1, title: 'Clone & Install', lines: [
-      { kind: 'cmd', text: 'git clone github.com/libredb/libredb-studio.git' },
+      { kind: 'cmd', text: 'git clone https://github.com/libredb/libredb-studio.git' },
       { kind: 'cmd', text: 'cd libredb-studio' },
       { kind: 'cmd', text: 'bun install' },
     ],

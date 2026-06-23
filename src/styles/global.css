@@ -117,7 +117,8 @@ details[open] > summary .faq-sign::before { content: '−'; }
   .studio.js .studio-results { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 }
 
-/* Reduced motion: stop decorative blink/pulse */
+/* Reduced motion: stop decorative blink/pulse and forced smooth scrolling */
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   .caret, .animate-pulse-dot { animation: none !important; }
 }

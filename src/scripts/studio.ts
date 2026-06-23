@@ -116,8 +116,10 @@ function init() {
     el.addEventListener('click', closeDrawer),
   );
 
-  // Hash routing
+  // Hash routing — hashchange covers in-page link nav; popstate covers
+  // browser back/forward after our pushState() desktop swaps.
   window.addEventListener('hashchange', () => setActive(currentHash()));
+  window.addEventListener('popstate', () => setActive(currentHash()));
   window.addEventListener('resize', () => setActive(currentHash()));
 
   setActive(currentHash());

@@ -114,7 +114,7 @@ export const sections: SectionMeta[] = [
   {
     id: 'deploy',
     table: 'deploy',
-    query: 'SELECT platform, category FROM deploy_targets ORDER BY category;',
+    query: 'SELECT platform, category, method FROM deploy_targets ORDER BY category;',
     rows: deployTargets.length,
     cols: 3,
     execMs: 8,
