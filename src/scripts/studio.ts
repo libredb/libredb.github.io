@@ -1,4 +1,5 @@
 import { sections, sectionById } from '../data/sections';
+import type { ConsoleMessage, ConsoleKind } from './lib/console-copy';
 
 /**
  * Studio interaction layer (progressive enhancement).
@@ -93,6 +94,82 @@ function toggleColumns(id: string, btn: HTMLElement) {
     if (caret) caret.classList.toggle('rotate-90', !expanded);
   });
 }
+
+/* ---- Console toast output ---- */
+const prefixClass: Record<ConsoleKind, string> = {
+  notice: 'text-primary',
+  error: 'text-bad',
+  ok: 'text-ok',
+  comment: 'text-faint',
+};
+const prefixLabel: Record<ConsoleKind, string> = {
+  notice: 'NOTICE',
+  error: 'ERROR',
+  ok: '✓',
+  comment: '--',
+};
+
+function renderToast(msg: ConsoleMessage): HTMLElement {
+  const el = document.createElement('div');
+  el.className =
+    'pointer-events-auto flex w-[min(92vw,440px)] items-start gap-2 border border-edge bg-panel px-3 py-2 text-[12.5px] leading-relaxed shadow-lg';
+  el.setAttribute('role', 'status');
+
+  const body = document.createElement('div');
+  body.className = 'flex-1';
+  const line = document.createElement('div');
+  const prefix = document.createElement('span');
+  prefix.className = `${prefixClass[msg.kind]} font-semibold`;
+  prefix.textContent = prefixLabel[msg.kind];
+  const msgSpan = document.createElement('span');
+  msgSpan.className = 'text-fg';
+  msgSpan.textContent = msg.text;
+  line.appendChild(prefix);
+  line.append(' ');
+  line.appendChild(msgSpan);
+  body.appendChild(line);
+  if (msg.hint) {
+    const hint = document.createElement('div');
+    hint.className = 'text-faint';
+    hint.textContent = `HINT: ${msg.hint}`;
+    body.appendChild(hint);
+  }
+  if (msg.cta) {
+    const cta = document.createElement('a');
+    cta.href = msg.cta.href;
+    cta.target = '_blank';
+    cta.rel = 'noopener noreferrer';
+    cta.className = 'mt-1 inline-block border border-edge-strong px-2 py-0.5 text-primary hover:bg-raised';
+    cta.textContent = `${msg.cta.label} →`;
+    body.appendChild(cta);
+  }
+  el.appendChild(body);
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.setAttribute('aria-label', 'Dismiss');
+  close.className = 'shrink-0 text-faint hover:text-fg';
+  close.textContent = '✕';
+  close.addEventListener('click', () => el.remove());
+  el.appendChild(close);
+  return el;
+}
+
+const studioConsole = {
+  push(msg: ConsoleMessage) {
+    const root = document.querySelector('[data-console]');
+    if (!root) return;
+    const el = renderToast(msg);
+    root.appendChild(el);
+    while (root.children.length > 3) root.firstElementChild?.remove();
+    const t = window.setTimeout(() => el.remove(), 6000);
+    el.addEventListener('mouseenter', () => clearTimeout(t));
+  },
+  notice(text: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'notice', text, cta }); },
+  error(text: string, hint?: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'error', text, hint, cta }); },
+  ok(text: string) { this.push({ kind: 'ok', text }); },
+  comment(text: string) { this.push({ kind: 'comment', text }); },
+};
 
 function init() {
   if (studio) studio.classList.add('js');
