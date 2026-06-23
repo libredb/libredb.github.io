@@ -274,7 +274,13 @@ function renderPalette(query: string) {
   paletteFiltered.forEach((it, i) => {
     const li = document.createElement('li');
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${i === 0 ? 'bg-raised text-bright' : 'text-fg'}`;
-    li.innerHTML = `<span>${it.label}</span><span class="text-[11px] text-faint">${it.hint}</span>`;
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = it.label;
+    const hintSpan = document.createElement('span');
+    hintSpan.className = 'text-[11px] text-faint';
+    hintSpan.textContent = it.hint;
+    li.appendChild(labelSpan);
+    li.appendChild(hintSpan);
     li.addEventListener('mousemove', () => setHighlight(i));
     li.addEventListener('click', () => { it.run(); closePalette(); });
     list.appendChild(li);
