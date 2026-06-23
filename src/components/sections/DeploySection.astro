@@ -1,29 +1,32 @@
 ---
 import SectionHeader from './SectionHeader.astro';
-import { deployTargets } from '../../data/deploy-targets';
+import PlatformCard from '../deploy/PlatformCard.astro';
+import { deployTargets, starRepos } from '../../data/deploy-targets';
 import { deployCategories } from '../../data/deploy-categories';
+import { getStars, formatStars } from '../../lib/github-stars';
+
+const stars = await getStars(starRepos);
+
+const STATUS_ORDER = { official: 0, available: 1, planned: 2 } as const;
+const sortedCategories = [...deployCategories].sort((a, b) => a.order - b.order);
+const targetsByCategory = (id: string) =>
+  deployTargets
+    .filter((t) => t.category === id)
+    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+
+const official = deployTargets.filter((t) => t.status === 'official');
+const totalStars = Object.values(stars).reduce((sum, n) => sum + n, 0);
 
 const platformCount = deployTargets.length;
 const installMethodCount = deployTargets.filter((t) => t.category === 'registry').length;
+const plannedNames = deployTargets.filter((t) => t.status === 'planned').map((t) => t.name);
 
 const catColors = ['text-primary', 'text-ok', 'text-ai', 'text-warn', 'text-bad'];
-const cats = [...deployCategories]
-  .sort((a, b) => a.order - b.order)
-  .map((c, i) => ({
-    title: c.title,
-    count: deployTargets.filter((t) => t.category === c.id).length,
-    color: catColors[i % catColors.length],
-  }));
-
-const exportRows = deployTargets.map((t) => ({ platform: t.name, slug: t.slug, category: t.category, status: t.status }));
-
-// Featured chips (display labels); the rest live on /deploy
-const featured = [
-  'Docker', 'Kubernetes', 'Helm', 'npm', 'Railway', 'CapRover', 'Render', 'Koyeb',
-  'Netlify', 'Fly.io', 'DigitalOcean', 'Google Cloud', 'Coolify', 'Dokku', 'AWS',
-  'Azure', 'Heroku', 'Northflank', 'Rancher', 'Portainer', 'OpenShift', 'Artifact Hub',
-];
-const moreCount = Math.max(0, platformCount - featured.length);
+const summary = sortedCategories.map((c, i) => ({
+  title: c.title,
+  count: deployTargets.filter((t) => t.category === c.id).length,
+  color: catColors[i % catColors.length],
+}));
 ---
 <div class="mx-auto max-w-6xl">
   <SectionHeader
@@ -31,9 +34,9 @@ const moreCount = Math.max(0, platformCount - featured.length);
     subtitle={`One open-source image, every layer of the deploy stack — ${platformCount}+ platforms and ${installMethodCount} install methods.`}
   />
 
-  <!-- Category count cards -->
+  <!-- Category summary strip -->
   <div class="grid grid-cols-2 gap-px overflow-hidden border border-edge bg-edge md:grid-cols-3 lg:grid-cols-5">
-    {cats.map((c) => (
+    {summary.map((c) => (
       <div class="bg-panel p-5">
         <div class={`text-3xl font-bold ${c.color}`}>{c.count}</div>
         <div class="mt-2 text-[12.5px] leading-snug text-dim">{c.title}</div>
@@ -41,14 +44,97 @@ const moreCount = Math.max(0, platformCount - featured.length);
     ))}
   </div>
 
-  <!-- Platform chips -->
-  <div class="mt-6 flex flex-wrap gap-2.5">
-    {featured.map((p) => (
-      <a href="/deploy" class="border border-edge bg-panel px-3.5 py-2 text-[13px] text-fg transition-colors hover:border-line hover:bg-raised">{p}</a>
-    ))}
-    {moreCount > 0 && (
-      <a href="/deploy" class="border border-edge-strong bg-canvas px-3.5 py-2 text-[13px] font-medium text-primary transition-colors hover:bg-raised">+{moreCount} more →</a>
-    )}
-  </div>
+  <!-- Official one-click integrations -->
+  <section class="mt-10">
+    <h3 class="text-[15px] font-semibold text-bright">Official one-click integrations</h3>
+    <p class="mt-1 text-[13px] text-dim">Listed in their marketplaces — deploy in a click, today.</p>
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
+      {official.map((t) => (
+        <div class="flex flex-col border border-edge-strong bg-panel p-6">
+          <div class="mb-3 flex items-center gap-3">
+            {t.logo
+              ? <img src={t.logo} alt={`${t.name} logo`} width="40" height="40" class="h-10 w-10 object-contain" />
+              : <span class="grid h-10 w-10 place-items-center rounded-md bg-primary/20 text-lg font-bold text-primary">{t.name.charAt(0)}</span>}
+            <h4 class="text-lg font-semibold text-bright">{t.name}</h4>
+          </div>
+          <p class="mb-5 text-sm text-muted">{t.blurb}</p>
+          <div class="mt-auto flex flex-wrap gap-3">
+            <a href={t.deployUrl ?? t.docsUrl ?? t.url} target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-bright">
+              {t.deployUrl ? 'Deploy now' : 'View install guide'} <span aria-hidden="true">→</span>
+            </a>
+            {t.docsUrl && (
+              <a href={t.docsUrl} target="_blank" rel="noopener noreferrer"
+                 class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-raised">
+                Docs
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Category grids -->
+  {sortedCategories.map((cat) => (
+    <section class="mt-10">
+      <h3 class="text-[15px] font-semibold text-bright">{cat.title}</h3>
+      <p class="mt-1 max-w-2xl text-[13px] text-dim">{cat.tagline}</p>
+      <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {targetsByCategory(cat.id).map((t) => (
+          <PlatformCard target={t} stars={t.github ? stars[t.github] : undefined} />
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <!-- Investor depth band -->
+  <section class="mt-10 border border-edge-strong bg-panel p-6 text-center md:p-8">
+    <p class="mb-2 text-sm text-muted">Embedded across open-source ecosystems totaling</p>
+    <div class="mb-3 text-3xl font-bold text-primary md:text-4xl">
+      <span data-stars-total>{formatStars(totalStars)}</span>+ GitHub stars
+    </div>
+    <p class="mx-auto max-w-2xl text-sm text-muted">
+      LibreDB Studio doesn't just support these platforms — it ships inside communities that
+      millions of developers already trust. More on the roadmap: {plannedNames.slice(0, 8).join(', ')}, and more.
+    </p>
+  </section>
+
+  <!-- CTA -->
+  <section class="mt-8 flex flex-wrap gap-3">
+    <a href="/docker-compose-example" class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-5 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-raised">Docker Compose example</a>
+    <a href="https://github.com/libredb/libredb-studio" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-5 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-raised">View on GitHub</a>
+    <a href="https://app.libredb.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-bright">Try the live demo</a>
+  </section>
 </div>
-<script type="application/json" data-export-payload="deploy" data-export-filename="deploy.csv" data-export-format="csv" set:html={JSON.stringify(exportRows)} />
+
+<script>
+  import { formatStars } from '../../lib/github-stars';
+
+  async function refreshStars() {
+    const spans = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-repo]'));
+    await Promise.all(
+      spans.map(async (span) => {
+        const repo = span.getAttribute('data-stars-repo');
+        if (!repo) return;
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}`, {
+            headers: { Accept: 'application/vnd.github+json' },
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (typeof data.stargazers_count !== 'number') return;
+          span.setAttribute('data-stars-count', String(data.stargazers_count));
+          span.textContent = formatStars(data.stargazers_count);
+        } catch {
+          /* keep the baked-in number */
+        }
+      }),
+    );
+    const total = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-count]'))
+      .reduce((sum, el) => sum + (Number(el.getAttribute('data-stars-count')) || 0), 0);
+    const totalEl = document.querySelector<HTMLElement>('[data-stars-total]');
+    if (totalEl && total > 0) totalEl.textContent = formatStars(total);
+  }
+  refreshStars();
+</script>
