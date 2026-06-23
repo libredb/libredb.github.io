@@ -38,21 +38,21 @@ function syncActive() {
 }
 
 /* ---- Mobile drawer ---- */
-const drawerRoot = document.querySelector<HTMLElement>('[data-drawer-root]');
-const drawerPanel = document.querySelector<HTMLElement>('[data-drawer-panel]');
-const drawerOpenBtn = document.querySelector<HTMLElement>('[data-drawer-open]');
-
 function openDrawer() {
+  const drawerRoot = document.querySelector<HTMLElement>('[data-drawer-root]');
+  const drawerPanel = document.querySelector<HTMLElement>('[data-drawer-panel]');
   if (!drawerRoot || !drawerPanel) return;
   drawerRoot.classList.remove('hidden');
   requestAnimationFrame(() => drawerPanel.classList.remove('-translate-x-full'));
-  drawerOpenBtn?.setAttribute('aria-expanded', 'true');
+  document.querySelector<HTMLElement>('[data-drawer-open]')?.setAttribute('aria-expanded', 'true');
   document.body.style.overflow = 'hidden';
 }
 function closeDrawer() {
+  const drawerRoot = document.querySelector<HTMLElement>('[data-drawer-root]');
+  const drawerPanel = document.querySelector<HTMLElement>('[data-drawer-panel]');
   if (!drawerRoot || !drawerPanel) return;
   drawerPanel.classList.add('-translate-x-full');
-  drawerOpenBtn?.setAttribute('aria-expanded', 'false');
+  document.querySelector<HTMLElement>('[data-drawer-open]')?.setAttribute('aria-expanded', 'false');
   document.body.style.overflow = '';
   setTimeout(() => drawerRoot.classList.add('hidden'), 200);
 }
@@ -303,7 +303,21 @@ function closePalette() {
 
 /* ---- Delegated action click handler ---- */
 function onActionClick(e: Event) {
-  const el = (e.target as HTMLElement).closest<HTMLElement>('[data-action]');
+  const target = e.target as HTMLElement;
+
+  // Chrome delegations: palette-close, drawer open/close, explorer column toggles
+  if (target.closest('[data-palette-close]')) { e.preventDefault(); closePalette(); return; }
+  if (target.closest('[data-drawer-open]')) { e.preventDefault(); openDrawer(); return; }
+  if (target.closest('[data-drawer-close]')) { e.preventDefault(); closeDrawer(); return; }
+  const toggleBtn = target.closest<HTMLElement>('[data-explorer-toggle]');
+  if (toggleBtn) {
+    e.preventDefault();
+    const id = toggleBtn.dataset.explorerToggle!;
+    toggleColumns(id, toggleBtn);
+    return;
+  }
+
+  const el = target.closest<HTMLElement>('[data-action]');
   if (!el) return;
   const action = el.dataset.action;
   if (action === 'notice') {
@@ -339,45 +353,14 @@ function onKeydown(e: KeyboardEvent) {
   else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
 }
 
-/* ---- Chrome bindings (persisted across navigations) ---- */
-function bindChrome() {
-  // Column toggles
-  document.querySelectorAll<HTMLElement>('[data-explorer-toggle]').forEach((btn) => {
-    btn.addEventListener('click', () => toggleColumns(btn.dataset.explorerToggle!, btn));
-  });
-  // Drawer
-  drawerOpenBtn?.addEventListener('click', openDrawer);
-  document.querySelectorAll<HTMLElement>('[data-drawer-close]').forEach((el) =>
-    el.addEventListener('click', closeDrawer),
-  );
-  // Palette close + input
-  document.querySelector('[data-palette-close]')?.addEventListener('click', closePalette);
-  const paletteInput = document.querySelector<HTMLInputElement>('[data-palette-input]');
-  paletteInput?.addEventListener('input', () => renderPalette(paletteInput.value));
-  // Explorer search
-  document.querySelectorAll<HTMLInputElement>('[data-explorer-search]').forEach((input) => {
-    const scope = input.closest<HTMLElement>('[data-explorer-root]');
-    if (!scope) return;
-    const items = [...scope.querySelectorAll<HTMLElement>('[data-explorer-item]')];
-    const apply = () => {
-      const q = input.value;
-      items.forEach((li) => {
-        const name = li.dataset.explorerItem ?? '';
-        li.hidden = fuzzyMatch(q, name) === null;
-      });
-    };
-    input.addEventListener('input', apply);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const first = items.find((li) => !li.hidden);
-        const id = first?.dataset.explorerItem;
-        if (id) {
-          const slug = sectionById[id]?.slug ?? id;
-          location.href = href(slug);
-          input.blur();
-        }
-      }
-    });
+/* ---- Explorer search filter helper ---- */
+function filterExplorer(input: HTMLInputElement) {
+  const scope = input.closest<HTMLElement>('[data-explorer-root]');
+  if (!scope) return;
+  const q = input.value;
+  scope.querySelectorAll<HTMLElement>('[data-explorer-item]').forEach((li) => {
+    const name = li.dataset.explorerItem ?? '';
+    li.hidden = fuzzyMatch(q, name) === null;
   });
 }
 
@@ -390,7 +373,31 @@ function wireOnce() {
   studio?.classList.add('js');
   document.addEventListener('click', onActionClick);
   window.addEventListener('keydown', onKeydown);
-  bindChrome();
+
+  // Delegated input: explorer search filter + palette input
+  document.addEventListener('input', (e) => {
+    const target = e.target as HTMLElement;
+    const searchInput = target.closest<HTMLInputElement>('[data-explorer-search]');
+    if (searchInput) { filterExplorer(searchInput); return; }
+    const paletteInput = target.closest<HTMLInputElement>('[data-palette-input]');
+    if (paletteInput) { renderPalette(paletteInput.value); }
+  });
+
+  // Delegated keydown: explorer search Enter-to-jump
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const searchInput = (e.target as HTMLElement).closest<HTMLInputElement>('[data-explorer-search]');
+    if (!searchInput) return;
+    const scope = searchInput.closest<HTMLElement>('[data-explorer-root]');
+    if (!scope) return;
+    const first = scope.querySelector<HTMLElement>('[data-explorer-item]:not([hidden])');
+    const id = first?.dataset.explorerItem;
+    if (id) {
+      const slug = sectionById[id]?.slug ?? id;
+      location.href = href(slug);
+      searchInput.blur();
+    }
+  });
 }
 
 function onPage() {
