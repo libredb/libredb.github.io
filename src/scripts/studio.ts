@@ -297,6 +297,7 @@ function renderPalette(query: string) {
   list.innerHTML = '';
   paletteFiltered.forEach((it, i) => {
     const li = document.createElement('li');
+    li.setAttribute('role', 'option');
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${i === 0 ? 'bg-raised text-bright' : 'text-fg'}`;
     const labelSpan = document.createElement('span');
     labelSpan.textContent = it.label;
