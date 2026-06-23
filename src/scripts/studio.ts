@@ -1,5 +1,6 @@
 import { sections, sectionById } from '../data/sections';
 import type { ConsoleMessage, ConsoleKind } from './lib/console-copy';
+import { NOTICES } from './lib/console-copy';
 
 /**
  * Studio interaction layer (progressive enhancement).
@@ -188,6 +189,18 @@ function init() {
   document.querySelectorAll<HTMLElement>('[data-drawer-close]').forEach((el) =>
     el.addEventListener('click', closeDrawer),
   );
+
+  // Single delegated handler for all chrome controls.
+  document.addEventListener('click', (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-action]');
+    if (!el) return;
+    const action = el.dataset.action;
+    if (action === 'notice') {
+      e.preventDefault();
+      const msg = NOTICES[el.dataset.notice ?? ''];
+      if (msg) studioConsole.push(msg);
+    }
+  });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
   // browser back/forward after our pushState() desktop swaps.
