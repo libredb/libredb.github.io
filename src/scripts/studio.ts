@@ -370,6 +370,10 @@ function init() {
     if (action === 'copy-link') { e.preventDefault(); copyLink(); }
     if (action === 'export') { e.preventDefault(); exportSection(); }
     if (action === 'palette') { e.preventDefault(); openPalette(); }
+    if (action === 'results') {
+      e.preventDefault();
+      document.querySelector(`[data-section="${currentHash()}"] .studio-results`)?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
@@ -390,6 +394,7 @@ function init() {
     const root = document.querySelector('[data-palette-root]');
     if (!root || root.hasAttribute('hidden')) return;
     if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
+    else if (e.key === 'Tab') { e.preventDefault(); (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus(); }
     else if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
     else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }

@@ -112,8 +112,8 @@
 }
 
 /* RUN re-run shimmer on the active result pane */
-@keyframes rerun-fade { 0% { opacity: 0.35; } 100% { opacity: 1; } }
-.studio-results.is-rerunning { animation: rerun-fade 0.5s ease; }
+@keyframes studio-rerun-fade { 0% { opacity: 0.35; } 100% { opacity: 1; } }
+.studio-results.is-rerunning { animation: studio-rerun-fade 0.5s ease; }
 @media (prefers-reduced-motion: reduce) {
   .studio-results.is-rerunning { animation: none; }
 }

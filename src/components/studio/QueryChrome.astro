@@ -60,7 +60,7 @@ const { section, class: className = '' } = Astro.props;
   <!-- Results tabs -->
   <div class="flex items-center justify-between gap-3 border-t border-edge px-4 text-[12px]">
     <div class="flex items-center gap-4 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <span class="whitespace-nowrap font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-primary)] pb-0.5">▦ Results</span>
+      <button type="button" class="whitespace-nowrap font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-primary)] pb-0.5" data-action="results"><span aria-hidden="true">▦</span> Results</button>
       <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="explain" aria-expanded="false" aria-controls={`explain-${section.id}`}><span aria-hidden="true">⚡</span> Explain</button>
       <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="history"><span aria-hidden="true">↺</span> History</button>
       <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="saved"><span aria-hidden="true">⭐</span> Saved</button>
