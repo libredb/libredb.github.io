@@ -14,7 +14,7 @@ const demo = (label = 'Open demo'): ConsoleCta => ({ label, href: DEMO });
 export const NOTICES: Record<string, ConsoleMessage> = {
   monitoring: { kind: 'comment', text: "nothing's on fire here. live monitoring runs in the app", cta: demo() },
   query:      { kind: 'notice',  text: 'the visual query builder is a live-app superpower', cta: demo() },
-  save:       { kind: 'error',   text: 'ERROR 42501: permission denied — must be superuser', hint: 'superusers save queries in the live demo', cta: demo('Become one') },
+  save:       { kind: 'error',   text: '42501: permission denied — must be superuser', hint: 'superusers save queries in the live demo', cta: demo('Become one') },
   begin:      { kind: 'notice',  text: 'BEGIN…COMMIT — real transactions, real database. In the app', cta: demo() },
   sandbox:    { kind: 'notice',  text: 'SANDBOX runs scary queries safely. Try it in the app', cta: demo() },
   edit:       { kind: 'comment', text: 'read-only out here; full edit mode lives in the app', cta: demo() },
