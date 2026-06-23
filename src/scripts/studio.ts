@@ -129,7 +129,6 @@ function renderToast(msg: ConsoleMessage): HTMLElement {
   const el = document.createElement('div');
   el.className =
     'pointer-events-auto flex w-[min(92vw,440px)] items-start gap-2 border border-edge bg-panel px-3 py-2 text-[12.5px] leading-relaxed shadow-lg';
-  el.setAttribute('role', 'status');
 
   const body = document.createElement('div');
   body.className = 'flex-1';
@@ -192,7 +191,8 @@ function runQuery() {
   const id = currentHash();
   const meta = sectionById[id] ?? sectionById['home'];
   const pane = document.querySelector<HTMLElement>(`[data-section="${id}"] .studio-results`);
-  if (pane) {
+  const allowMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (pane && allowMotion) {
     pane.classList.remove('is-rerunning');
     void pane.offsetWidth; // restart animation
     pane.classList.add('is-rerunning');
@@ -291,12 +291,14 @@ let paletteLastFocus: HTMLElement | null = null;
 
 function renderPalette(query: string) {
   const list = document.querySelector<HTMLElement>('[data-palette-list]');
+  const input = document.querySelector<HTMLElement>('[data-palette-input]');
   if (!list) return;
   paletteFiltered = filterItems(query, paletteItems(), (it) => it.label + ' ' + it.hint);
   paletteHighlight = 0;
   list.innerHTML = '';
   paletteFiltered.forEach((it, i) => {
     const li = document.createElement('li');
+    li.id = `palette-opt-${i}`;
     li.setAttribute('role', 'option');
     li.setAttribute('aria-selected', String(i === 0));
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${i === 0 ? 'bg-raised text-bright' : 'text-fg'}`;
@@ -311,6 +313,11 @@ function renderPalette(query: string) {
     li.addEventListener('click', () => { it.run(); closePalette(); });
     list.appendChild(li);
   });
+  if (paletteFiltered.length > 0) {
+    input?.setAttribute('aria-activedescendant', 'palette-opt-0');
+  } else {
+    input?.removeAttribute('aria-activedescendant');
+  }
 }
 
 function setHighlight(i: number) {
@@ -321,6 +328,8 @@ function setHighlight(i: number) {
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${idx === i ? 'bg-raised text-bright' : 'text-fg'}`;
     (li as HTMLElement).setAttribute('aria-selected', String(idx === i));
   });
+  const input = document.querySelector<HTMLElement>('[data-palette-input]');
+  input?.setAttribute('aria-activedescendant', `palette-opt-${i}`);
 }
 
 function openPalette() {
@@ -330,13 +339,17 @@ function openPalette() {
   paletteLastFocus = document.activeElement as HTMLElement;
   root.removeAttribute('hidden');
   input.value = '';
+  input.setAttribute('aria-expanded', 'true');
   renderPalette('');
   input.focus();
 }
 
 function closePalette() {
   const root = document.querySelector<HTMLElement>('[data-palette-root]');
+  const input = document.querySelector<HTMLElement>('[data-palette-input]');
   root?.setAttribute('hidden', '');
+  input?.setAttribute('aria-expanded', 'false');
+  input?.removeAttribute('aria-activedescendant');
   paletteLastFocus?.focus();
 }
 

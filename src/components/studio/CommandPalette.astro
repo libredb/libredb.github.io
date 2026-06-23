@@ -15,7 +15,11 @@
       placeholder="Type a command or search sections…"
       class="w-full border-b border-edge bg-canvas px-4 py-3 text-[14px] text-fg placeholder:text-faint focus:outline-none"
       aria-label="Command palette input"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="palette-listbox"
+      aria-autocomplete="list"
     />
-    <ul data-palette-list role="listbox" aria-label="Command palette results" class="max-h-[50vh] overflow-y-auto py-1 text-[13px]"></ul>
+    <ul id="palette-listbox" data-palette-list role="listbox" aria-label="Command palette results" class="max-h-[50vh] overflow-y-auto py-1 text-[13px]"></ul>
   </div>
 </div>
