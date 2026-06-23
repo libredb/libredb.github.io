@@ -2,7 +2,7 @@ import { sections, sectionById } from '../data/sections';
 import type { ConsoleMessage, ConsoleKind } from './lib/console-copy';
 import { NOTICES } from './lib/console-copy';
 import { serialize, type Row } from './lib/export';
-import { filterItems } from './lib/filter';
+import { filterItems, fuzzyMatch } from './lib/filter';
 
 /**
  * Studio interaction layer (progressive enhancement).
@@ -242,6 +242,30 @@ function exportSection() {
   studioConsole.ok(`exported ${filename} (${rows.length} rows)`);
 }
 
+/* ---- Explorer search live-filter ---- */
+function wireExplorerSearch() {
+  document.querySelectorAll<HTMLInputElement>('[data-explorer-search]').forEach((input) => {
+    const scope = input.closest<HTMLElement>('[data-explorer-root]');
+    if (!scope) return;
+    const items = [...scope.querySelectorAll<HTMLElement>('[data-explorer-item]')];
+    const apply = () => {
+      const q = input.value;
+      items.forEach((li) => {
+        const name = li.dataset.explorerItem ?? '';
+        li.hidden = fuzzyMatch(q, name) === null;
+      });
+    };
+    input.addEventListener('input', apply);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const first = items.find((li) => !li.hidden);
+        const id = first?.dataset.explorerItem;
+        if (id) { location.hash = `#${id}`; input.blur(); }
+      }
+    });
+  });
+}
+
 /* ---- Command palette ---- */
 interface PaletteItem { label: string; hint: string; run: () => void; }
 
@@ -369,6 +393,8 @@ function init() {
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
     else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
   });
+
+  wireExplorerSearch();
 
   setActive(currentHash());
 }

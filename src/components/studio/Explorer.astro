@@ -8,7 +8,7 @@ interface Props {
 }
 const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro.props;
 ---
-<div class="flex h-full flex-col text-[13px]">
+<div data-explorer-root class="flex h-full flex-col text-[13px]">
   <!-- Connections -->
   <div class="px-3 pt-3 pb-2">
     {showConnectionsLabel && <p class="px-1 pb-2 text-[11px] uppercase tracking-wider text-faint">Connections</p>}
