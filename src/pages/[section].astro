@@ -35,6 +35,7 @@ const COMPONENTS: Record<string, any> = {
 const { id } = Astro.props as { id: string };
 const meta = sectionById[id];
 const Body = COMPONENTS[id];
+if (!Body) throw new Error(`[section].astro: no component mapped for section id "${id}"`);
 const jsonLd = sectionSeo[id] ?? [];
 ---
 <Layout title={meta.pageTitle} description={meta.pageDescription}>

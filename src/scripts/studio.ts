@@ -303,7 +303,8 @@ function closePalette() {
 
 /* ---- Delegated action click handler ---- */
 function onActionClick(e: Event) {
-  const target = e.target as HTMLElement;
+  const target = e.target;
+  if (!(target instanceof Element)) return;
 
   // Chrome delegations: palette-close, drawer open/close, explorer column toggles
   if (target.closest('[data-palette-close]')) { e.preventDefault(); closePalette(); return; }
@@ -376,7 +377,8 @@ function wireOnce() {
 
   // Delegated input: explorer search filter + palette input
   document.addEventListener('input', (e) => {
-    const target = e.target as HTMLElement;
+    const target = e.target;
+    if (!(target instanceof Element)) return;
     const searchInput = target.closest<HTMLInputElement>('[data-explorer-search]');
     if (searchInput) { filterExplorer(searchInput); return; }
     const paletteInput = target.closest<HTMLInputElement>('[data-palette-input]');
@@ -386,7 +388,9 @@ function wireOnce() {
   // Delegated keydown: explorer search Enter-to-jump
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
-    const searchInput = (e.target as HTMLElement).closest<HTMLInputElement>('[data-explorer-search]');
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    const searchInput = target.closest<HTMLInputElement>('[data-explorer-search]');
     if (!searchInput) return;
     const scope = searchInput.closest<HTMLElement>('[data-explorer-root]');
     if (!scope) return;
@@ -401,6 +405,7 @@ function wireOnce() {
 }
 
 function onPage() {
+  document.querySelector('[data-studio]')?.classList.add('js');
   syncActive();
 }
 

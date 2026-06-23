@@ -5,9 +5,8 @@ interface Props {
   active?: string;
   idPrefix?: string; // to keep ids unique between desktop sidebar & mobile drawer
   showConnectionsLabel?: boolean;
-  standalone?: boolean;
 }
-const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true, standalone = false } = Astro.props;
+const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro.props;
 ---
 <div data-explorer-root class="flex h-full flex-col text-[13px]">
   <!-- Connections -->
