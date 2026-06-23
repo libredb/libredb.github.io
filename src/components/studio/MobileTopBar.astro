@@ -1,0 +1,53 @@
+---
+import Explorer from './Explorer.astro';
+
+interface Props {
+  active?: string;
+}
+const { active = 'home' } = Astro.props;
+const DEMO = 'https://app.libredb.org';
+---
+<header class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-canvas/95 px-3 backdrop-blur lg:hidden">
+  <div class="flex items-center gap-3">
+    <button
+      type="button"
+      class="flex h-9 w-9 items-center justify-center border border-edge-strong text-fg"
+      aria-label="Open explorer"
+      aria-expanded="false"
+      data-drawer-open
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+    <span class="flex items-center gap-2">
+      <img src="/logo.svg" alt="LibreDB Studio" class="h-5 w-5" />
+      <span class="flex flex-col leading-tight">
+        <span class="font-semibold text-bright">libredb.org</span>
+        <span class="flex items-center gap-1 text-[10.5px] text-ok">
+          <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> ONLINE • PostgreSQL
+        </span>
+      </span>
+    </span>
+  </div>
+  <a
+    href={DEMO}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-white"
+  >
+    <span aria-hidden="true">▶</span> RUN
+  </a>
+</header>
+
+<!-- Drawer -->
+<div class="fixed inset-0 z-40 hidden lg:hidden" data-drawer-root>
+  <div class="absolute inset-0 bg-black/60" data-drawer-close></div>
+  <aside class="absolute left-0 top-0 h-full w-[84%] max-w-xs -translate-x-full border-r border-edge bg-canvas transition-transform duration-200 ease-out" data-drawer-panel>
+    <div class="flex items-center justify-between border-b border-edge px-4 py-3">
+      <span class="text-[11px] uppercase tracking-wider text-faint">Connections</span>
+      <button type="button" class="text-faint hover:text-fg" aria-label="Close explorer" data-drawer-close>✕</button>
+    </div>
+    <div class="h-[calc(100%-49px)]">
+      <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} />
+    </div>
+  </aside>
+</div>

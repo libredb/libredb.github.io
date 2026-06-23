@@ -83,7 +83,7 @@ const webSiteSchema = {
     <meta name="description" content={description} />
     <meta name="author" content="LibreDB" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="theme-color" content="#4f46e5" />
+    <meta name="theme-color" content="#0a0a0c" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
@@ -137,61 +137,12 @@ const webSiteSchema = {
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
 
     <title>{title}</title>
   </head>
-  <body class="bg-slate-950 text-slate-100 font-sans antialiased">
+  <body class="bg-canvas text-fg font-sans antialiased">
     <slot />
     <CookieConsent />
   </body>
 </html>
-
-<style is:global>
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
-
-  body {
-    background: linear-gradient(to bottom, #020617, #0f172a, #020617);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #1e293b;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #4f46e5;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #6366f1;
-  }
-
-  /* Gradient text utility */
-  .gradient-text {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Glow effect */
-  .glow {
-    box-shadow: 0 0 60px rgba(99, 102, 241, 0.3);
-  }
-
-  .glow-sm {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
-  }
-</style>

@@ -1,34 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import DeployStrip from '../components/DeployStrip.astro';
-import Features from '../components/Features.astro';
-import WhyLibreDB from '../components/WhyLibreDB.astro';
-import Databases from '../components/Databases.astro';
-import TechStack from '../components/TechStack.astro';
-import Testimonials from '../components/Testimonials.astro';
-import FAQ from '../components/FAQ.astro';
-import GetStarted from '../components/GetStarted.astro';
-import DeployAnywhere from '../components/DeployAnywhere.astro';
-import Footer from '../components/Footer.astro';
-import BottomNav from '../components/BottomNav.astro';
----
+import TopBar from '../components/studio/TopBar.astro';
+import MobileTopBar from '../components/studio/MobileTopBar.astro';
+import Explorer from '../components/studio/Explorer.astro';
+import StatusBar from '../components/studio/StatusBar.astro';
+import SectionShell from '../components/studio/SectionShell.astro';
+import { sectionById } from '../data/sections';
 
+import HomeSection from '../components/sections/HomeSection.astro';
+import FeaturesSection from '../components/sections/FeaturesSection.astro';
+import DatabasesSection from '../components/sections/DatabasesSection.astro';
+import CompareSection from '../components/sections/CompareSection.astro';
+import TechStackSection from '../components/sections/TechStackSection.astro';
+import GetStartedSection from '../components/sections/GetStartedSection.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
+import DeploySection from '../components/sections/DeploySection.astro';
+
+const s = sectionById;
+---
 <Layout title="LibreDB Studio - AI-Powered Open-Source SQL IDE">
-  <Header />
-  <main>
-    <Hero />
-    <DeployStrip />
-    <Features />
-    <WhyLibreDB />
-    <Databases />
-    <TechStack />
-    <Testimonials />
-    <FAQ />
-    <DeployAnywhere />
-    <GetStarted />
-  </main>
-  <Footer />
-  <BottomNav />
+  <div class="studio flex min-h-screen flex-col" data-studio>
+    <div class="hidden lg:block"><TopBar /></div>
+    <MobileTopBar active="home" />
+
+    <div class="studio-workbench flex min-h-0 flex-1">
+      <aside class="hidden w-64 shrink-0 overflow-y-auto border-r border-edge lg:block">
+        <Explorer active="home" idPrefix="side" />
+      </aside>
+
+      <main class="studio-pane min-w-0 flex-1 lg:flex lg:flex-col">
+        <SectionShell section={s.home} active><HomeSection /></SectionShell>
+        <SectionShell section={s.features}><FeaturesSection /></SectionShell>
+        <SectionShell section={s.databases}><DatabasesSection /></SectionShell>
+        <SectionShell section={s.compare}><CompareSection /></SectionShell>
+        <SectionShell section={s.tech_stack}><TechStackSection /></SectionShell>
+        <SectionShell section={s.get_started}><GetStartedSection /></SectionShell>
+        <SectionShell section={s.faq}><FaqSection /></SectionShell>
+        <SectionShell section={s.deploy}><DeploySection /></SectionShell>
+      </main>
+    </div>
+
+    <div class="hidden lg:block"><StatusBar /></div>
+  </div>
+
+  <script>
+    import '../scripts/studio.ts';
+  </script>
 </Layout>

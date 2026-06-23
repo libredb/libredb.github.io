@@ -1,0 +1,72 @@
+---
+const DEMO = 'https://app.libredb.org';
+
+const stats = [
+  { n: '7+', l: 'Databases', cls: 'text-primary' },
+  { n: '100%', l: 'Open Source', cls: 'text-ok' },
+  { n: 'AI', l: 'Native', cls: 'text-ai' },
+  { n: 'MIT', l: 'License', cls: 'text-warn' },
+];
+---
+<div class="mx-auto max-w-5xl px-1">
+  <!-- Badge -->
+  <span class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12.5px] text-ok">
+    <span class="h-1.5 w-1.5 rounded-full bg-ok animate-pulse-dot" aria-hidden="true"></span>
+    Open Source &amp; Free Forever · MIT
+  </span>
+
+  <!-- Headline -->
+  <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-bright sm:text-5xl lg:text-6xl">
+    The Modern, <span class="text-primary">AI-Powered</span><br class="hidden sm:block" /> SQL IDE
+  </h1>
+
+  <!-- Subtitle -->
+  <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
+    A lightweight, high-performance, and enterprise-secure web-based SQL editor with SSO
+    for cloud-native teams. Connect to <strong class="font-semibold text-primary">PostgreSQL</strong>,
+    <strong class="font-semibold text-ok">MySQL</strong>, <strong class="font-semibold text-warn">Oracle</strong>,
+    <strong class="font-semibold text-primary">SQL Server</strong>, <strong class="font-semibold text-ai">SQLite</strong>,
+    <strong class="font-semibold text-ok">MongoDB</strong>, or <strong class="font-semibold text-bad">Redis</strong>
+    &mdash; from anywhere.
+  </p>
+
+  <!-- CTAs -->
+  <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+    <a
+      href={DEMO}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-primary-bright"
+    >
+      <span aria-hidden="true">▶</span> Try Live Demo
+    </a>
+    <a
+      href="/deploy"
+      class="inline-flex items-center justify-center gap-2 rounded-md border border-edge-strong bg-panel px-6 py-3 text-[15px] font-semibold text-fg transition-colors hover:border-line hover:bg-raised"
+    >
+      Deploy in one click <span aria-hidden="true">→</span>
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="mt-10 grid grid-cols-2 border border-edge sm:grid-cols-4">
+    {stats.map((s, i) => (
+      <div class:list={[
+        'px-5 py-6',
+        i % 2 === 0 ? 'border-r border-edge' : '',
+        i < 2 ? 'border-b border-edge sm:border-b-0' : '',
+        'sm:border-b-0',
+        i === 3 ? 'sm:border-r-0' : 'sm:border-r',
+      ]}>
+        <div class={`text-3xl font-bold ${s.cls}`}>{s.n}</div>
+        <div class="mt-1 text-[13px] text-dim">{s.l}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Hint (only meaningful on desktop where the explorer drives navigation) -->
+  <p class="mt-8 hidden text-[13px] leading-relaxed text-faint lg:block">
+    <span class="sql-com">-- tip: pick a page from the explorer on the left.</span><br />
+    <span class="sql-com">-- each menu item runs a query and returns its content below.</span>
+  </p>
+</div>

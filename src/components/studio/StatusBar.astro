@@ -1,0 +1,21 @@
+---
+import { sectionById } from '../../data/sections';
+const home = sectionById['home'];
+---
+<footer class="flex h-7 shrink-0 items-center justify-between border-t border-edge bg-panel px-4 text-[11.5px] text-dim">
+  <div class="flex items-center gap-4">
+    <span class="flex items-center gap-1.5 text-ok">
+      <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> Connected
+    </span>
+    <span class="text-faint">PostgreSQL 16.2</span>
+    <span class="text-faint">public</span>
+    <span class="text-muted"><span data-statusbar-table>{home.table}</span>.sql</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <span><span data-statusbar-rows>{home.rows}</span> rows</span>
+    <span class="text-faint">Ln 1, Col 1</span>
+    <span class="text-faint">UTF-8</span>
+    <span class="text-faint">SQL</span>
+    <span class="flex items-center gap-1.5 text-muted"><span class="text-primary" aria-hidden="true">◆</span> LibreDB Studio v0.9.29</span>
+  </div>
+</footer>

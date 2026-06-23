@@ -1,0 +1,25 @@
+---
+import type { SectionMeta } from '../../data/sections';
+import QueryChrome from './QueryChrome.astro';
+import MobileQueryCard from './MobileQueryCard.astro';
+
+interface Props {
+  section: SectionMeta;
+  active?: boolean;
+}
+const { section, active = false } = Astro.props;
+---
+<section
+  id={section.id}
+  data-section={section.id}
+  class:list={['studio-section', active && 'is-active']}
+  aria-label={`${section.table} result`}
+>
+  <QueryChrome section={section} class="hidden lg:block" />
+  <div class="studio-results">
+    <MobileQueryCard section={section} class="mx-4 mt-4 lg:hidden" />
+    <div class="px-4 pb-16 pt-6 lg:px-8 lg:pt-8">
+      <slot />
+    </div>
+  </div>
+</section>
