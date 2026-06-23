@@ -162,8 +162,9 @@ const studioConsole = {
     const el = renderToast(msg);
     root.appendChild(el);
     while (root.children.length > 3) root.firstElementChild?.remove();
-    const t = window.setTimeout(() => el.remove(), 6000);
+    let t = window.setTimeout(() => el.remove(), 6000);
     el.addEventListener('mouseenter', () => clearTimeout(t));
+    el.addEventListener('mouseleave', () => { t = window.setTimeout(() => el.remove(), 2500); });
   },
   notice(text: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'notice', text, cta }); },
   error(text: string, hint?: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'error', text, hint, cta }); },
