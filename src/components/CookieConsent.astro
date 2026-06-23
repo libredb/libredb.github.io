@@ -8,27 +8,27 @@
   role="dialog"
   aria-label="Cookie consent"
 >
-  <div class="bg-slate-900 border-t border-slate-700 shadow-2xl shadow-black/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p class="text-sm text-slate-300">
-          We use cookies to analyze site traffic and improve your experience. See our
-          <a href="/privacy-policy" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">
+  <div class="border-t border-edge bg-panel shadow-2xl shadow-black/50">
+    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <p class="text-[13.5px] text-dim">
+          <span class="sql-com">--</span> We use cookies to analyze site traffic and improve your experience. See our
+          <a href="/privacy-policy" class="text-primary underline underline-offset-2 hover:text-primary-bright">
             Privacy Policy
           </a> for details.
         </p>
-        <div class="flex items-center gap-3 shrink-0">
+        <div class="flex shrink-0 items-center gap-3">
           <button
             id="cookie-decline"
             type="button"
-            class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white border border-slate-600 hover:border-slate-500 rounded-lg transition-colors"
+            class="rounded-md border border-edge-strong px-4 py-2 text-[13.5px] font-medium text-muted transition-colors hover:border-line hover:text-fg"
           >
             Decline
           </button>
           <button
             id="cookie-accept"
             type="button"
-            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors"
+            class="rounded-md bg-primary px-4 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-primary-bright"
           >
             Accept
           </button>

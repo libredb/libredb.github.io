@@ -44,16 +44,16 @@ const sections = [
 ];
 ---
 
-<footer class="border-t border-slate-800 bg-slate-950 pb-20 md:pb-0">
+<footer class="border-t border-edge bg-canvas pb-20 md:pb-0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
     <!-- Brand Section -->
     <div class="mb-8 md:mb-0 md:grid md:grid-cols-2 lg:grid-cols-6 md:gap-8">
       <div class="lg:col-span-2 mb-6 md:mb-0">
         <a href="/" class="flex items-center gap-3 mb-4">
           <img src="/logo.svg" alt="LibreDB Studio" class="w-8 h-8 md:w-10 md:h-10" />
-          <span class="text-lg md:text-xl font-bold text-white">LibreDB Studio</span>
+          <span class="text-lg md:text-xl font-bold text-bright">LibreDB Studio</span>
         </a>
-        <p class="text-slate-400 text-sm mb-4 md:mb-6 max-w-md">
+        <p class="text-muted text-sm mb-4 md:mb-6 max-w-md">
           The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams.
         </p>
         <div class="flex items-center gap-4">
@@ -61,7 +61,7 @@ const sections = [
             href="https://github.com/libredb/libredb-studio"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+            class="inline-flex items-center gap-2 text-dim hover:text-fg transition-colors"
             aria-label="GitHub"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ const sections = [
             href="https://www.linkedin.com/company/libredb"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+            class="inline-flex items-center gap-2 text-dim hover:text-fg transition-colors"
             aria-label="LinkedIn"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -86,13 +86,13 @@ const sections = [
 
       <!-- Desktop Links (hidden on mobile) -->
       <div class="hidden md:block">
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</h4>
+        <h4 class="text-xs font-semibold text-faint uppercase tracking-wider mb-4">Product</h4>
         <ul class="space-y-3">
           {sections[0].links.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-sm text-slate-400 hover:text-white transition-colors"
+                class="text-sm text-dim hover:text-fg transition-colors"
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noopener noreferrer' : undefined}
               >
@@ -104,13 +104,13 @@ const sections = [
       </div>
 
       <div class="hidden md:block">
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h4>
+        <h4 class="text-xs font-semibold text-faint uppercase tracking-wider mb-4">Resources</h4>
         <ul class="space-y-3">
           {sections[1].links.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-sm text-slate-400 hover:text-white transition-colors"
+                class="text-sm text-dim hover:text-fg transition-colors"
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noopener noreferrer' : undefined}
               >
@@ -122,13 +122,13 @@ const sections = [
       </div>
 
       <div class="hidden md:block">
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Community</h4>
+        <h4 class="text-xs font-semibold text-faint uppercase tracking-wider mb-4">Community</h4>
         <ul class="space-y-3">
           {sections[2].links.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-sm text-slate-400 hover:text-white transition-colors"
+                class="text-sm text-dim hover:text-fg transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -140,13 +140,13 @@ const sections = [
       </div>
 
       <div class="hidden md:block">
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Legal</h4>
+        <h4 class="text-xs font-semibold text-faint uppercase tracking-wider mb-4">Legal</h4>
         <ul class="space-y-3">
           {sections[3].links.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-sm text-slate-400 hover:text-white transition-colors"
+                class="text-sm text-dim hover:text-fg transition-colors"
               >
                 {link.label}
               </a>
@@ -157,27 +157,27 @@ const sections = [
     </div>
 
     <!-- Mobile Accordion (visible only on mobile) -->
-    <div class="md:hidden space-y-2 border-t border-slate-800 pt-6">
+    <div class="md:hidden space-y-2 border-t border-edge pt-6">
       {sections.map((section) => (
-        <div class="accordion-item border border-slate-800 rounded-lg overflow-hidden">
+        <div class="accordion-item border border-edge overflow-hidden">
           <button
             type="button"
-            class="accordion-trigger w-full flex items-center justify-between px-4 py-3 text-left bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
+            class="accordion-trigger w-full flex items-center justify-between px-4 py-3 text-left bg-panel hover:bg-raised transition-colors"
             data-accordion={section.id}
             aria-expanded="false"
           >
-            <span class="text-sm font-semibold text-white uppercase tracking-wider">{section.title}</span>
-            <svg class="accordion-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="text-xs font-semibold text-faint uppercase tracking-wider">{section.title}</span>
+            <svg class="accordion-icon w-4 h-4 text-dim transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
           <div class="accordion-content hidden" data-content={section.id}>
-            <ul class="px-4 py-3 space-y-3 bg-slate-900/30">
+            <ul class="px-4 py-3 space-y-3 bg-panel">
               {section.links.map((link) => (
                 <li>
                   <a
                     href={link.href}
-                    class="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                    class="flex items-center gap-2 text-sm text-dim hover:text-fg transition-colors"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -197,13 +197,13 @@ const sections = [
     </div>
 
     <!-- Bottom Bar -->
-    <div class="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
-      <p class="text-xs md:text-sm text-slate-500 text-center md:text-left">
+    <div class="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-edge flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
+      <p class="text-xs md:text-sm text-faint text-center md:text-left">
         &copy; {currentYear} LibreDB Studio. MIT License.
       </p>
-      <div class="flex items-center gap-2 text-xs md:text-sm text-slate-500">
+      <div class="flex items-center gap-2 text-xs md:text-sm text-faint">
         <span>Built with</span>
-        <svg class="w-3.5 h-3.5 md:w-4 md:h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="w-3.5 h-3.5 md:w-4 md:h-4 text-bad" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
         </svg>
         <span>for the Community</span>

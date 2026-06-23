@@ -1,0 +1,27 @@
+---
+import type { SectionMeta } from '../../data/sections';
+import Sql from './Sql.astro';
+
+interface Props {
+  section: SectionMeta;
+  class?: string;
+}
+const { section, class: className = '' } = Astro.props;
+---
+<div class:list={['border border-edge bg-panel text-[13px]', className]}>
+  <div class="flex items-center justify-between border-b border-edge px-3 py-2">
+    <span class="flex items-center gap-1.5 text-fg"><span class="text-primary" aria-hidden="true">#</span> {section.table}.sql</span>
+    <span class="text-ai" aria-hidden="true">✦ Explain</span>
+  </div>
+  <div class="flex items-start gap-3 px-3 py-3 text-[13.5px] leading-relaxed">
+    <span class="select-none text-faint" aria-hidden="true">1</span>
+    <div><Sql query={section.query} /></div>
+  </div>
+  <div class="flex items-center justify-between border-t border-edge px-3 py-2 text-[11.5px] text-faint">
+    <span class="flex items-center gap-2">
+      <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+      {section.rows} rows <span class="text-edge-strong">|</span> {section.cols} cols
+    </span>
+    <span class="rounded border border-edge-strong px-2 py-0.5">{section.execMs}ms</span>
+  </div>
+</div>

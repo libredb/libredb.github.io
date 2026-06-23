@@ -122,29 +122,29 @@ const sourceCodeSchema = {
   <main class="pt-24 pb-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <nav class="text-xs text-slate-500 mb-4" aria-label="Breadcrumb">
-        <a href="/" class="hover:text-slate-300 transition-colors">Home</a>
+      <nav class="text-xs text-faint mb-4" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-muted transition-colors">Home</a>
         <span class="mx-1.5">/</span>
-        <span class="text-slate-400">Docker Compose Example</span>
+        <span class="text-muted">Docker Compose Example</span>
       </nav>
-      <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-        LibreDB Studio <span class="gradient-text">Docker Compose</span> Example
+      <h1 class="text-3xl sm:text-4xl font-bold text-bright mb-4">
+        LibreDB Studio <span class="text-primary">Docker Compose</span> Example
       </h1>
-      <p class="text-base md:text-lg text-slate-300 leading-relaxed mb-4">
-        A ready-to-use <code class="text-indigo-300">docker-compose.yml</code> for self-hosting
-        <a href={repoURL} target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">LibreDB Studio</a>,
+      <p class="text-base md:text-lg text-fg leading-relaxed mb-4">
+        A ready-to-use <code class="text-primary">docker-compose.yml</code> for self-hosting
+        <a href={repoURL} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-bright underline underline-offset-2">LibreDB Studio</a>,
         the open-source, AI-powered SQL IDE. It pulls the published image
-        <code class="text-indigo-300">ghcr.io/libredb/libredb-studio:latest</code> — no source build required — and runs
+        <code class="text-primary">ghcr.io/libredb/libredb-studio:latest</code> — no source build required — and runs
         on any Docker host or PaaS that consumes a plain compose file (Dokploy, Coolify, Portainer, and more).
       </p>
 
       <!-- Quick start -->
       <section class="mb-10 mt-8">
-        <h2 class="text-xl font-semibold text-white mb-4">Quick start</h2>
+        <h2 class="text-xl font-semibold text-bright mb-4">Quick start</h2>
         <div class="relative group">
-          <pre class="p-4 pr-12 rounded-xl bg-slate-950/90 border border-slate-800 text-xs md:text-sm text-slate-300 font-mono overflow-x-auto"><code>{quickStart}</code></pre>
+          <pre class="p-4 pr-12 bg-canvas border border-edge text-xs md:text-sm text-fg font-mono overflow-x-auto"><code>{quickStart}</code></pre>
           <button
-            class="copy-btn absolute top-3 right-3 p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
+            class="copy-btn absolute top-3 right-3 p-1.5 rounded-md bg-raised hover:bg-edge-strong text-dim hover:text-fg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
             data-code={quickStart}
             aria-label="Copy quick start commands"
           >
@@ -152,28 +152,28 @@ const sourceCodeSchema = {
             <svg class="w-4 h-4 check-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
           </button>
         </div>
-        <p class="text-sm text-slate-400 mt-3">
+        <p class="text-sm text-muted mt-3">
           That's it — LibreDB Studio is now running at
-          <code class="text-indigo-300">http://localhost:3000</code>. Log in with the admin credentials from your
-          <code class="text-indigo-300">.env</code> file.
+          <code class="text-primary">http://localhost:3000</code>. Log in with the admin credentials from your
+          <code class="text-primary">.env</code> file.
         </p>
       </section>
 
       <!-- Full file -->
       <section class="mb-10">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <h2 class="text-xl font-semibold text-white">The full <code class="text-indigo-300">docker-compose.example.yml</code></h2>
+          <h2 class="text-xl font-semibold text-bright">The full <code class="text-primary">docker-compose.example.yml</code></h2>
           <div class="flex items-center gap-2">
             <a
               href="/docker-compose.example.yml"
               download="docker-compose.yml"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-md border border-edge-strong text-fg hover:bg-raised transition-colors"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
               Download raw
             </a>
             <button
-              class="copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+              class="copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-md border border-edge-strong text-fg hover:bg-raised transition-colors"
               data-code={composeYaml}
               aria-label="Copy the full docker-compose file"
             >
@@ -183,37 +183,37 @@ const sourceCodeSchema = {
             </button>
           </div>
         </div>
-        <div class="compose-code rounded-xl border border-slate-800 overflow-hidden text-xs md:text-sm">
+        <div class="compose-code border border-edge overflow-hidden text-xs md:text-sm">
           <Code code={composeYaml} lang="yaml" theme="github-dark" />
         </div>
       </section>
 
       <!-- Environment variable reference -->
       <section class="mb-10">
-        <h2 class="text-xl font-semibold text-white mb-2">Environment variable reference</h2>
-        <p class="text-sm text-slate-400 mb-6">
+        <h2 class="text-xl font-semibold text-bright mb-2">Environment variable reference</h2>
+        <p class="text-sm text-muted mb-6">
           Every supported variable, grouped as in the file. Secrets are read from your
-          <code class="text-indigo-300">.env</code> file via <code class="text-indigo-300">${'{VAR}'}</code> interpolation —
+          <code class="text-primary">.env</code> file via <code class="text-primary">${'{VAR}'}</code> interpolation —
           never hardcoded in the compose file.
         </p>
         {envGroups.map((group) => (
           <div class="mb-8">
-            <h3 class="text-base font-medium text-white mb-3">{group.title}</h3>
-            <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <h3 class="text-base font-medium text-bright mb-3">{group.title}</h3>
+            <div class="overflow-x-auto border border-edge">
               <table class="w-full text-left text-sm">
-                <thead class="bg-slate-900/60 text-slate-300">
+                <thead class="bg-panel text-fg">
                   <tr>
                     <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Variable</th>
                     <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Default</th>
                     <th class="px-4 py-2.5 font-semibold">Description</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800">
+                <tbody class="divide-y divide-edge">
                   {group.vars.map((v) => (
                     <tr class="align-top">
-                      <td class="px-4 py-2.5"><code class="text-indigo-300 whitespace-nowrap">{v.name}</code></td>
-                      <td class="px-4 py-2.5 text-slate-400 font-mono text-xs whitespace-nowrap">{v.def}</td>
-                      <td class="px-4 py-2.5 text-slate-300">{v.desc}</td>
+                      <td class="px-4 py-2.5"><code class="text-primary whitespace-nowrap">{v.name}</code></td>
+                      <td class="px-4 py-2.5 text-muted font-mono text-xs whitespace-nowrap">{v.def}</td>
+                      <td class="px-4 py-2.5 text-fg">{v.desc}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -224,15 +224,15 @@ const sourceCodeSchema = {
       </section>
 
       <!-- Links -->
-      <section class="border-t border-slate-800 pt-8">
+      <section class="border-t border-edge pt-8">
         <div class="flex flex-wrap gap-3">
-          <a href={exampleFileURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg transition-colors border border-slate-700">
+          <a href={exampleFileURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
             View on GitHub
           </a>
-          <a href={issueURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg transition-colors border border-slate-700">
+          <a href={issueURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
             Related issue #54
           </a>
-          <a href="/#get-started" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-lg transition-colors border border-slate-700">
+          <a href="/#get-started" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
             All install options
           </a>
         </div>
@@ -268,13 +268,13 @@ const sourceCodeSchema = {
         await navigator.clipboard.writeText(code || '');
         copyIcon?.classList.add('hidden');
         checkIcon?.classList.remove('hidden');
-        button.classList.add('text-green-400');
+        button.classList.add('text-ok');
         if (label) label.textContent = 'Copied';
 
         setTimeout(() => {
           copyIcon?.classList.remove('hidden');
           checkIcon?.classList.add('hidden');
-          button.classList.remove('text-green-400');
+          button.classList.remove('text-ok');
           if (label) label.textContent = 'Copy';
         }, 2000);
       } catch (err) {

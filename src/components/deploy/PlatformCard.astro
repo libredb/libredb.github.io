@@ -23,39 +23,39 @@ const initial = target.name.charAt(0).toUpperCase();
 const showStars = typeof stars === 'number' && Boolean(target.github);
 ---
 
-<div class="group flex flex-col h-full p-4 rounded-xl bg-slate-900/60 border border-slate-700/80 hover:border-primary-500/50 transition-colors shadow-lg shadow-black/10">
+<div class="group flex flex-col h-full p-4 border border-edge bg-panel hover:border-line hover:bg-raised transition-colors">
   <div class="flex items-start justify-between gap-2 mb-3">
     <div class="flex items-center gap-2.5 min-w-0">
       {target.logo ? (
         <img src={target.logo} alt={`${target.name} logo`} width="28" height="28" class="w-7 h-7 object-contain shrink-0" loading="lazy" />
       ) : (
-        <span class="w-7 h-7 shrink-0 rounded-md bg-primary-600/20 text-primary-300 text-sm font-bold grid place-items-center">{initial}</span>
+        <span class="w-7 h-7 shrink-0 rounded-md bg-primary/20 text-primary text-sm font-bold grid place-items-center">{initial}</span>
       )}
-      <h4 class="text-sm font-semibold text-white truncate">{target.name}</h4>
+      <h4 class="text-sm font-semibold text-bright truncate">{target.name}</h4>
     </div>
     <StatusBadge status={target.status} />
   </div>
 
-  {target.blurb && <p class="text-xs text-slate-400 mb-3 line-clamp-2">{target.blurb}</p>}
+  {target.blurb && <p class="text-xs text-muted mb-3 line-clamp-2">{target.blurb}</p>}
 
   <div class="mt-auto flex items-center justify-between gap-2 pt-1">
     {showStars ? (
       <a href={`https://github.com/${target.github}`} target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-amber-300 transition-colors">
-        <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 15l-5.3 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z"></path></svg>
+         class="inline-flex items-center gap-1 text-xs text-muted hover:text-warn transition-colors">
+        <svg class="w-3.5 h-3.5 text-warn" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 15l-5.3 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z"></path></svg>
         <span data-stars-repo={target.github} data-stars-count={stars}>{formatStars(stars as number)}</span>
       </a>
     ) : <span></span>}
 
     {action ? (
       <a href={action.href} target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-xs font-medium text-primary-300 hover:text-primary-200 transition-colors">
+         class="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-bright transition-colors">
         {action.label}
         <span aria-hidden="true">&rarr;</span>
       </a>
     ) : (
       <a href={target.url} target="_blank" rel="noopener noreferrer"
-         class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Learn more</a>
+         class="text-xs text-faint hover:text-muted transition-colors">Learn more</a>
     )}
   </div>
 </div>

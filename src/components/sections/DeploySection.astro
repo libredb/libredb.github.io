@@ -1,0 +1,51 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import { deployTargets } from '../../data/deploy-targets';
+import { deployCategories } from '../../data/deploy-categories';
+
+const platformCount = deployTargets.length;
+const installMethodCount = deployTargets.filter((t) => t.category === 'registry').length;
+
+const catColors = ['text-primary', 'text-ok', 'text-ai', 'text-warn', 'text-bad'];
+const cats = [...deployCategories]
+  .sort((a, b) => a.order - b.order)
+  .map((c, i) => ({
+    title: c.title,
+    count: deployTargets.filter((t) => t.category === c.id).length,
+    color: catColors[i % catColors.length],
+  }));
+
+// Featured chips (display labels); the rest live on /deploy
+const featured = [
+  'Docker', 'Kubernetes', 'Helm', 'npm', 'Railway', 'CapRover', 'Render', 'Koyeb',
+  'Netlify', 'Fly.io', 'DigitalOcean', 'Google Cloud', 'Coolify', 'Dokku', 'AWS',
+  'Azure', 'Heroku', 'Northflank', 'Rancher', 'Portainer', 'OpenShift', 'Artifact Hub',
+];
+const moreCount = Math.max(0, platformCount - featured.length);
+---
+<div class="mx-auto max-w-6xl">
+  <SectionHeader
+    title="Deploy anywhere"
+    subtitle={`One open-source image, every layer of the deploy stack — ${platformCount}+ platforms and ${installMethodCount} install methods.`}
+  />
+
+  <!-- Category count cards -->
+  <div class="grid grid-cols-2 gap-px overflow-hidden border border-edge bg-edge md:grid-cols-3 lg:grid-cols-5">
+    {cats.map((c) => (
+      <div class="bg-panel p-5">
+        <div class={`text-3xl font-bold ${c.color}`}>{c.count}</div>
+        <div class="mt-2 text-[12.5px] leading-snug text-dim">{c.title}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Platform chips -->
+  <div class="mt-6 flex flex-wrap gap-2.5">
+    {featured.map((p) => (
+      <a href="/deploy" class="border border-edge bg-panel px-3.5 py-2 text-[13px] text-fg transition-colors hover:border-line hover:bg-raised">{p}</a>
+    ))}
+    {moreCount > 0 && (
+      <a href="/deploy" class="border border-edge-strong bg-canvas px-3.5 py-2 text-[13px] font-medium text-primary transition-colors hover:bg-raised">+{moreCount} more →</a>
+    )}
+  </div>
+</div>

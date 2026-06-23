@@ -1,0 +1,43 @@
+---
+const GITHUB = 'https://github.com/libredb/libredb-studio';
+const DEMO = 'https://app.libredb.org';
+---
+<header class="flex h-12 shrink-0 items-center justify-between border-b border-edge bg-canvas pl-3 pr-4 text-[13px]">
+  <!-- Brand + connection -->
+  <div class="flex items-center gap-3">
+    <a href="/" class="flex items-center gap-2 font-semibold text-bright">
+      <img src="/logo.svg" alt="LibreDB Studio" class="h-5 w-5" />
+      <span>LibreDB Studio</span>
+    </a>
+    <span class="flex items-center gap-2 text-faint" aria-hidden="true">
+      <span class="hover:text-fg">▤</span>
+      <span class="hover:text-fg">＋</span>
+    </span>
+    <span class="mx-1 h-5 w-px bg-edge-strong" aria-hidden="true"></span>
+    <span class="flex items-center gap-2">
+      <span class="text-primary" aria-hidden="true">▦</span>
+      <span class="text-fg">libredb.org</span>
+      <span class="text-[11px] tracking-wider text-faint">PRODUCTION • ONLINE</span>
+    </span>
+  </div>
+
+  <!-- Status + actions -->
+  <div class="flex items-center gap-4 text-[12.5px]">
+    <a href={GITHUB} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-muted hover:text-fg">
+      <span class="text-warn" aria-hidden="true">★</span> GitHub
+    </a>
+    <span class="flex items-center gap-1.5 text-ok">
+      <span class="h-2 w-2 rounded-full bg-ok animate-pulse-dot" aria-hidden="true"></span> Online
+    </span>
+    <span class="flex items-center gap-1.5 text-muted" aria-hidden="true">◷ Monitoring</span>
+    <a
+      href={DEMO}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 font-semibold text-white transition-colors hover:bg-primary-bright"
+    >
+      <span aria-hidden="true">▶</span> Live Demo <span aria-hidden="true">→</span>
+    </a>
+    <span class="text-faint" aria-hidden="true">v0.9.29</span>
+  </div>
+</header>

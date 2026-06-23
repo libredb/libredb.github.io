@@ -1,0 +1,85 @@
+---
+import type { SectionMeta } from '../../data/sections';
+import Sql from './Sql.astro';
+
+interface Props {
+  section: SectionMeta;
+  class?: string;
+}
+const { section, class: className = '' } = Astro.props;
+
+const resultTabs = [
+  '▦ Results', '⚡ Explain', '↺ History', '⭐ Saved', '◔ Charts', '✦ NL2SQL',
+  '✈ Autopilot', '▥ Pivot', '▤ Docs', '⇄ Diff', '▦ Dashboard',
+];
+---
+<div class:list={['shrink-0 border-b border-edge bg-canvas', className]}>
+  <!-- Tab bar -->
+  <div class="flex items-center gap-0 border-b border-edge text-[12.5px]">
+    <span class="flex items-center gap-1.5 border-r border-edge px-4 py-2.5 text-faint">
+      <span aria-hidden="true">▤</span> README.md
+    </span>
+    <span class="flex items-center gap-2 border-r border-edge bg-panel px-4 py-2.5 text-fg shadow-[inset_0_-2px_0_var(--color-primary)]">
+      <span class="text-primary" aria-hidden="true">#</span> {section.table}.sql
+      <span class="text-faint hover:text-fg" aria-hidden="true">✕</span>
+    </span>
+    <span class="px-3 py-2.5 text-faint" aria-hidden="true">＋</span>
+  </div>
+
+  <!-- Query toolbar -->
+  <div class="flex items-center justify-between gap-3 px-4 py-2 text-[12.5px]">
+    <div class="flex items-center gap-4">
+      <span class="flex items-center gap-1.5 text-muted" aria-hidden="true">▾ Query</span>
+      <span class="flex items-center gap-1.5 text-muted" aria-hidden="true">▤ Save</span>
+    </div>
+    <button type="button" class="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 font-semibold text-white hover:bg-primary-bright" data-run>
+      <span aria-hidden="true">▶</span> RUN
+    </button>
+    <div class="flex items-center gap-4 text-faint" aria-hidden="true">
+      <span>BEGIN</span><span>⬡ SANDBOX</span><span>✎ EDIT</span><span>↑ IMPORT</span>
+    </div>
+  </div>
+
+  <!-- Sub-toolbar -->
+  <div class="flex items-center justify-between gap-3 border-y border-edge px-4 py-1.5 text-[12px] text-faint">
+    <div class="flex items-center gap-4" aria-hidden="true">
+      <span>≡ Format</span><span>⧉ Copy</span><span>✕ Clear</span><span>＃ Lines</span>
+      <span class="text-ai">✦ AI</span>
+    </div>
+    <div class="flex items-center gap-3" aria-hidden="true">
+      <span class="text-primary">✦ Explain</span>
+      <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px]">⌘+Enter</span>
+    </div>
+  </div>
+
+  <!-- Editor -->
+  <div class="flex items-start gap-4 px-4 py-4 text-[15px] leading-relaxed">
+    <span class="select-none text-faint" aria-hidden="true">1</span>
+    <div><Sql query={section.query} /><span class="caret"></span></div>
+  </div>
+
+  <!-- Results tabs -->
+  <div class="flex items-center justify-between gap-3 border-t border-edge px-4 text-[12px]">
+    <div class="flex items-center gap-4 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-hidden="true">
+      {resultTabs.map((t, i) => (
+        <span class:list={['whitespace-nowrap', i === 0 ? 'font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-primary)] pb-0.5' : 'text-faint']}>{t}</span>
+      ))}
+    </div>
+    <div class="flex shrink-0 items-center gap-3 py-2.5 text-faint">
+      <span>{section.rows} rows • {section.execMs}ms</span>
+      <span class="text-muted">↑ Export</span>
+    </div>
+  </div>
+
+  <!-- Result meta -->
+  <div class="flex items-center justify-between border-t border-edge bg-panel px-4 py-1.5 text-[11.5px] text-faint">
+    <div class="flex items-center gap-3">
+      <span class="flex items-center gap-1.5 text-ok"><span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> {section.rows} rows</span>
+      <span class="text-edge-strong" aria-hidden="true">|</span>
+      <span>{section.cols} columns</span>
+      <span class="text-edge-strong" aria-hidden="true">|</span>
+      <span>{section.table}.sql</span>
+    </div>
+    <span class="rounded border border-edge-strong px-2 py-0.5 tracking-wide">EXEC TIME: {section.execMs}</span>
+  </div>
+</div>

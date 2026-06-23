@@ -8,9 +8,9 @@ interface Props {
 const { status } = Astro.props;
 
 const styles: Record<DeployStatus, { label: string; cls: string }> = {
-  official: { label: 'Official', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
-  available: { label: 'Available', cls: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-  planned: { label: 'Planned', cls: 'bg-slate-500/15 text-slate-400 border-slate-500/30' },
+  official: { label: 'Official', cls: 'bg-ok/15 text-ok border-ok/30' },
+  available: { label: 'Available', cls: 'bg-warn/15 text-warn border-warn/30' },
+  planned: { label: 'Planned', cls: 'bg-faint/15 text-faint border-faint/30' },
 };
 
 const { label, cls } = styles[status];
