@@ -214,7 +214,13 @@ function exportSection() {
   const id = currentHash();
   const payloadEl = document.querySelector<HTMLElement>(`[data-export-payload="${id}"]`);
   if (!payloadEl?.textContent) { studioConsole.notice('nothing to export from this view'); return; }
-  const rows = JSON.parse(payloadEl.textContent) as Row[];
+  let rows: Row[];
+  try {
+    rows = JSON.parse(payloadEl.textContent) as Row[];
+  } catch {
+    studioConsole.notice('export payload is malformed');
+    return;
+  }
   const format = (payloadEl.dataset.exportFormat as 'json' | 'csv') ?? 'json';
   const filename = payloadEl.dataset.exportFilename ?? `${id}.${format}`;
   const content = serialize(rows, format);
