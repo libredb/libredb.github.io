@@ -102,6 +102,15 @@
 .studio-section { display: block; }
 .caret-icon { display: inline-block; transition: transform 0.15s ease; }
 
+/* Explorer row — active state driven by a single class so SSR + JS stay in sync */
+.exp-row { color: var(--color-fg); transition: background-color 0.15s ease, color 0.15s ease; }
+.exp-row:hover { background: color-mix(in srgb, var(--color-raised) 60%, transparent); }
+.exp-row.active {
+  background: var(--color-raised);
+  color: var(--color-bright);
+  box-shadow: inset 2px 0 0 var(--color-primary);
+}
+
 /* Accordion (native <details>) */
 summary { list-style: none; cursor: pointer; }
 summary::-webkit-details-marker { display: none; }

@@ -44,19 +44,13 @@ const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro
     <ul class="mt-0.5">
       {sections.map((s) => (
         <li data-explorer-item={s.id}>
-          <div
-            class:list={[
-              'group flex items-center gap-1 pr-2 transition-colors',
-              active === s.id
-                ? 'bg-raised text-bright shadow-[inset_2px_0_0_var(--color-primary)]'
-                : 'text-fg hover:bg-raised/60',
-            ]}
-          >
+          <div class:list={['exp-row group flex items-center gap-1 pr-2', active === s.id && 'active']}>
             <button
               type="button"
               class="flex h-7 w-5 shrink-0 items-center justify-center text-faint hover:text-fg"
               aria-expanded="false"
               aria-label={`Toggle ${s.table} columns`}
+              aria-controls={`${idPrefix}-cols-${s.id}`}
               data-explorer-toggle={s.id}
             >
               <span class="caret-icon" aria-hidden="true">▸</span>
@@ -74,7 +68,7 @@ const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro
             </a>
           </div>
           <!-- Columns (schema), collapsed by default; revealed by toggle -->
-          <ul class="hidden pl-9 pb-1" data-explorer-cols={s.id}>
+          <ul class="hidden pl-9 pb-1" id={`${idPrefix}-cols-${s.id}`} data-explorer-cols={s.id}>
             {s.columns.map((c) => (
               <li class="flex items-center justify-between py-1 pr-3 text-[12px]">
                 <span class="flex items-center gap-2 text-muted">

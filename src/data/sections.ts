@@ -126,4 +126,6 @@ export const sections: SectionMeta[] = [
   },
 ];
 
-export const sectionById = Object.fromEntries(sections.map((s) => [s.id, s]));
+export const sectionById: Record<string, SectionMeta> = Object.fromEntries(
+  sections.map((s) => [s.id, s]),
+);

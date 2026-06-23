@@ -27,15 +27,10 @@ function setActive(id: string, opts: { scroll?: boolean } = {}) {
     pane?.scrollTo({ top: 0 });
   }
 
-  // Explorer active highlight (side + drawer)
+  // Explorer active highlight (side + drawer) — single .active class, styled in CSS
   document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => {
     const on = a.dataset.sectionLink === id;
-    const row = a.closest<HTMLElement>('div');
-    if (row) {
-      row.classList.toggle('bg-raised', on);
-      row.classList.toggle('text-bright', on);
-      row.classList.toggle('shadow-[inset_2px_0_0_var(--color-primary)]', on);
-    }
+    a.closest<HTMLElement>('.exp-row')?.classList.toggle('active', on);
     a.setAttribute('aria-current', on ? 'true' : 'false');
   });
 
@@ -120,7 +115,6 @@ function init() {
   // browser back/forward after our pushState() desktop swaps.
   window.addEventListener('hashchange', () => setActive(currentHash()));
   window.addEventListener('popstate', () => setActive(currentHash()));
-  window.addEventListener('resize', () => setActive(currentHash()));
 
   setActive(currentHash());
 }

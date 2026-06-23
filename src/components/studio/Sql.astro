@@ -9,11 +9,12 @@ interface Props {
 }
 const { query, class: className = '' } = Astro.props;
 
+// Pre-sorted longest-first (once) so highlight() neither sorts nor mutates per call.
 const KEYWORDS = [
   'SELECT', 'FROM', 'WHERE', 'ORDER BY', 'GROUP BY', 'DESC', 'ASC', 'LIMIT',
   'AND', 'OR', 'NOT', 'NULL', 'AS', 'IN', 'ON', 'JOIN', 'LEFT', 'INNER',
   'BEGIN', 'COMMIT', 'ROLLBACK', 'INSERT', 'UPDATE', 'DELETE',
-];
+].sort((a, b) => b.length - a.length);
 
 const escapeHtml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -23,7 +24,7 @@ function highlight(sql: string): string {
   // strings
   out = out.replace(/'([^']*)'/g, `<span class="sql-str">'$1'</span>`);
   // keywords (longest first, word boundaries)
-  for (const kw of KEYWORDS.sort((a, b) => b.length - a.length)) {
+  for (const kw of KEYWORDS) {
     const re = new RegExp(`\\b(${kw.replace(/ /g, '\\s+')})\\b`, 'gi');
     out = out.replace(re, '<span class="sql-kw">$1</span>');
   }
