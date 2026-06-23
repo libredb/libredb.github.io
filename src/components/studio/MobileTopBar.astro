@@ -1,10 +1,8 @@
 ---
 import Explorer from './Explorer.astro';
 
-interface Props {
-  active?: string;
-}
-const { active = 'home' } = Astro.props;
+interface Props { active?: string; standalone?: boolean; }
+const { active = 'home', standalone = false } = Astro.props;
 const DEMO = 'https://app.libredb.org';
 ---
 <header class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-canvas/95 px-3 backdrop-blur lg:hidden">
@@ -47,7 +45,7 @@ const DEMO = 'https://app.libredb.org';
       <button type="button" class="text-faint hover:text-fg" aria-label="Close explorer" data-drawer-close>✕</button>
     </div>
     <div class="h-[calc(100%-49px)]">
-      <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} />
+      <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} standalone={standalone} />
     </div>
   </aside>
 </div>
