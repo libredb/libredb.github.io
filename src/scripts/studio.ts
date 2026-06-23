@@ -186,6 +186,17 @@ function runQuery() {
   studioConsole.ok(`${meta.rows} rows (${meta.execMs}ms)`);
 }
 
+async function copyLink() {
+  const id = currentHash();
+  const url = `${location.origin}/#${id}`;
+  try {
+    await navigator.clipboard.writeText(url);
+    studioConsole.ok(`copied link to #${id}`);
+  } catch {
+    studioConsole.notice(`copy this: ${url}`);
+  }
+}
+
 function init() {
   if (studio) studio.classList.add('js');
 
@@ -214,6 +225,7 @@ function init() {
       if (msg) studioConsole.push(msg);
     }
     if (action === 'run') { e.preventDefault(); runQuery(); }
+    if (action === 'copy-link') { e.preventDefault(); copyLink(); }
   });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
