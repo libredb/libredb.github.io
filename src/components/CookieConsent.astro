@@ -47,9 +47,13 @@
 
 <script is:inline>
   (function () {
+    if (window.__libredbConsentWired) return;
+    window.__libredbConsentWired = true;
+
     var GA_ID = 'G-Q59L35YFPW';
     var META_PIXEL_ID = '25949277121347381';
     var STORAGE_KEY = 'libredb-cookie-consent';
+    var analyticsLoaded = false;
 
     function loadGA() {
       if (document.querySelector('script[src*="googletagmanager.com/gtag"]')) return;
@@ -58,7 +62,7 @@
       s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
       document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
+      window.gtag = window.gtag || function () { dataLayer.push(arguments); };
       gtag('js', new Date());
       gtag('config', GA_ID);
     }
@@ -74,7 +78,19 @@
       s.parentNode.insertBefore(t,s)}(window,document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', META_PIXEL_ID);
-      fbq('track', 'PageView');
+    }
+
+    function trackPageView() {
+      if (window.gtag) gtag('event', 'page_view', { page_path: location.pathname, page_location: location.href, page_title: document.title });
+      if (window.fbq) fbq('track', 'PageView');
+    }
+
+    function enableAnalytics() {
+      loadGA();
+      loadMetaPixel();
+      analyticsLoaded = true;
+      // GA `config` records this page; fire the single Meta PageView for it too
+      if (window.fbq) fbq('track', 'PageView');
     }
 
     function hideBanner() {
@@ -85,37 +101,40 @@
       }
     }
 
-    var consent = localStorage.getItem(STORAGE_KEY);
-
-    if (consent === 'accepted') {
-      loadGA();
-      loadMetaPixel();
-      return;
-    }
-
-    if (consent === 'declined') {
-      return;
-    }
-
-    // First visit: show banner after 1s delay
-    setTimeout(function () {
+    function showBanner() {
       var banner = document.getElementById('cookie-consent-banner');
       if (banner) {
         banner.classList.remove('translate-y-full');
         banner.classList.add('translate-y-0');
       }
-    }, 1000);
+    }
 
-    document.getElementById('cookie-accept')?.addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'accepted');
-      hideBanner();
-      loadGA();
-      loadMetaPixel();
-    });
+    function wire() {
+      var consent = localStorage.getItem(STORAGE_KEY);
 
-    document.getElementById('cookie-decline')?.addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'declined');
-      hideBanner();
-    });
+      if (consent === 'accepted') {
+        if (!analyticsLoaded) enableAnalytics();
+        else trackPageView();
+        return;
+      }
+      if (consent === 'declined') return;
+
+      // Not yet decided: show banner after 1s and (re)bind buttons on the freshly-rendered DOM
+      setTimeout(showBanner, 1000);
+
+      var accept = document.getElementById('cookie-accept');
+      var decline = document.getElementById('cookie-decline');
+      if (accept) accept.addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'accepted');
+        hideBanner();
+        enableAnalytics();
+      });
+      if (decline) decline.addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'declined');
+        hideBanner();
+      });
+    }
+
+    document.addEventListener('astro:page-load', wire);
   })();
 </script>
