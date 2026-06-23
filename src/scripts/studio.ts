@@ -203,7 +203,7 @@ function runQuery() {
 
 async function copyLink() {
   const id = currentHash();
-  const url = `${location.origin}/#${id}`;
+  const url = `${location.origin}${location.pathname}#${id}`;
   try {
     await navigator.clipboard.writeText(url);
     studioConsole.ok(`copied link to #${id}`);
@@ -221,7 +221,7 @@ function downloadBlob(content: string, filename: string, mime: string) {
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function exportSection() {
@@ -298,6 +298,7 @@ function renderPalette(query: string) {
   paletteFiltered.forEach((it, i) => {
     const li = document.createElement('li');
     li.setAttribute('role', 'option');
+    li.setAttribute('aria-selected', String(i === 0));
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${i === 0 ? 'bg-raised text-bright' : 'text-fg'}`;
     const labelSpan = document.createElement('span');
     labelSpan.textContent = it.label;
@@ -318,6 +319,7 @@ function setHighlight(i: number) {
   if (!list) return;
   [...list.children].forEach((li, idx) => {
     li.className = `flex cursor-pointer items-center justify-between px-4 py-2 ${idx === i ? 'bg-raised text-bright' : 'text-fg'}`;
+    (li as HTMLElement).setAttribute('aria-selected', String(idx === i));
   });
 }
 
@@ -372,7 +374,8 @@ function init() {
     if (action === 'palette') { e.preventDefault(); openPalette(); }
     if (action === 'results') {
       e.preventDefault();
-      document.querySelector(`[data-section="${currentHash()}"] .studio-results`)?.scrollTo({ top: 0, behavior: 'smooth' });
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelector(`[data-section="${currentHash()}"] .studio-results`)?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
     }
   });
 
@@ -395,8 +398,11 @@ function init() {
     if (!root || root.hasAttribute('hidden')) return;
     if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
     else if (e.key === 'Tab') { e.preventDefault(); (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus(); }
-    else if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (paletteFiltered.length === 0) { e.preventDefault(); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
+      else { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
+    }
     else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
   });
 
