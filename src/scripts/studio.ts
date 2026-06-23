@@ -84,6 +84,19 @@ function closeDrawer() {
   setTimeout(() => drawerRoot.classList.add('hidden'), 200);
 }
 
+/* ---- Explain panel toggle ---- */
+function toggleExplain(trigger: HTMLElement) {
+  const section = trigger.closest<HTMLElement>('[data-section]');
+  const id = section?.dataset.section ?? currentHash();
+  const panel = document.querySelector<HTMLElement>(`[data-explain="${id}"]`);
+  if (!panel) return;
+  const open = panel.hasAttribute('hidden');
+  panel.toggleAttribute('hidden', !open);
+  document.querySelectorAll<HTMLElement>(`[data-section="${id}"] [data-action="explain"]`).forEach((b) =>
+    b.setAttribute('aria-expanded', String(open)),
+  );
+}
+
 /* ---- Explorer schema (column) expand/collapse ---- */
 function toggleColumns(id: string, btn: HTMLElement) {
   const cols = document.querySelectorAll<HTMLElement>(`[data-explorer-cols="${id}"]`);
@@ -255,6 +268,7 @@ function init() {
       const msg = NOTICES[el.dataset.notice ?? ''];
       if (msg) studioConsole.push(msg);
     }
+    if (action === 'explain') { e.preventDefault(); toggleExplain(el); }
     if (action === 'run') { e.preventDefault(); runQuery(); }
     if (action === 'copy-link') { e.preventDefault(); copyLink(); }
     if (action === 'export') { e.preventDefault(); exportSection(); }

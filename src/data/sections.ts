@@ -19,6 +19,7 @@ export interface SectionMeta {
   cols: number;        // result column count
   execMs: number;      // fake exec time badge
   columns: SectionColumn[];
+  explain: string;     // AI-generated explanation shown in the Explain panel
 }
 
 export const sections: SectionMeta[] = [
@@ -34,6 +35,7 @@ export const sections: SectionMeta[] = [
       { name: 'tagline', type: 'TEXT' },
       { name: 'stats', type: 'JSONB' },
     ],
+    explain: 'Returns the LibreDB Studio overview: a modern, AI-powered, browser-based SQL IDE with SSO across 7+ engines — free and open source under MIT.',
   },
   {
     id: 'features',
@@ -47,6 +49,7 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'ENUM' },
       { name: 'summary', type: 'TEXT' },
     ],
+    explain: 'Lists 17 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking and the DBA toolkit.',
   },
   {
     id: 'databases',
@@ -60,6 +63,7 @@ export const sections: SectionMeta[] = [
       { name: 'type', type: 'VARCHAR' },
       { name: 'driver', type: 'VARCHAR' },
     ],
+    explain: 'The 7 supported engines and their drivers — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface.',
   },
   {
     id: 'compare',
@@ -73,6 +77,7 @@ export const sections: SectionMeta[] = [
       { name: 'scores', type: 'BOOL[]' },
       { name: 'price', type: 'VARCHAR' },
     ],
+    explain: 'Scores LibreDB Studio against DataGrip, DBeaver, pgAdmin and TablePlus on zero-install, mobile, AI, SSO and price — ordered by how free and open each is.',
   },
   {
     id: 'tech_stack',
@@ -85,6 +90,7 @@ export const sections: SectionMeta[] = [
       { name: 'layer', type: 'VARCHAR' },
       { name: 'tools', type: 'TEXT[]' },
     ],
+    explain: 'The production stack in four layers: frontend (Next.js 16, React 19), editor & data (Monaco, TanStack, ReactFlow), AI & auth (Gemini, OIDC), and devops (Docker, Bun).',
   },
   {
     id: 'get_started',
@@ -98,6 +104,7 @@ export const sections: SectionMeta[] = [
       { name: 'title', type: 'VARCHAR' },
       { name: 'command', type: 'TEXT' },
     ],
+    explain: 'Three steps to run locally — clone & install, configure env, launch — plus a one-command Docker alternative.',
   },
   {
     id: 'faq',
@@ -110,6 +117,7 @@ export const sections: SectionMeta[] = [
       { name: 'question', type: 'TEXT' },
       { name: 'answer', type: 'TEXT' },
     ],
+    explain: 'The nine most common questions: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
   },
   {
     id: 'deploy',
@@ -123,6 +131,7 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'VARCHAR' },
       { name: 'method', type: 'VARCHAR' },
     ],
+    explain: 'Every place LibreDB Studio runs — 39 targets across registries, self-hosted PaaS, Kubernetes, managed PaaS and cloud — from one open-source image.',
   },
 ];
 

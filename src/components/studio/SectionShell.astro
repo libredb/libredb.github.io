@@ -16,6 +16,12 @@ const { section, active = false } = Astro.props;
   aria-label={`${section.table} result`}
 >
   <QueryChrome section={section} class="hidden lg:block" />
+  <div id={`explain-${section.id}`} data-explain={section.id} hidden class="border-b border-edge bg-panel/60 px-4 py-3 lg:px-8">
+    <div class="mx-auto max-w-5xl text-[13px] leading-relaxed">
+      <span class="font-semibold text-ai">✦ AI · Query explanation</span>
+      <p class="mt-1 text-muted">{section.explain}</p>
+    </div>
+  </div>
   <div class="studio-results">
     <MobileQueryCard section={section} class="mx-4 mt-4 lg:hidden" />
     <div class="px-4 pb-16 pt-6 lg:px-8 lg:pt-8">
