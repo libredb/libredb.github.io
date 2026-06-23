@@ -1,6 +1,6 @@
 ---
 // src/components/studio/StudioShell.astro
-// The shared IDE chrome. index.astro and deploy.astro both render through this.
+// Shared IDE chrome for the home page and every [section] page.
 import TopBar from './TopBar.astro';
 import MobileTopBar from './MobileTopBar.astro';
 import Explorer from './Explorer.astro';
@@ -20,12 +20,12 @@ const { active = 'home', standalone = false } = Astro.props;
   data-initial-active={active}
   data-standalone={standalone ? '' : undefined}
 >
-  <div class="hidden lg:block"><TopBar /></div>
-  <MobileTopBar active={active} standalone={standalone} />
+  <div class="hidden lg:block" transition:persist="topbar"><TopBar /></div>
+  <MobileTopBar active={active} transition:persist="mobiletop" />
 
   <div class="studio-workbench flex min-h-0 flex-1">
-    <aside class="hidden w-64 shrink-0 overflow-y-auto border-r border-edge lg:block">
-      <Explorer active={active} idPrefix="side" standalone={standalone} />
+    <aside class="hidden w-64 shrink-0 overflow-y-auto border-r border-edge lg:block" transition:persist="sidebar">
+      <Explorer active={active} idPrefix="side" />
     </aside>
 
     <main class="studio-pane min-w-0 flex-1 lg:flex lg:flex-col">
@@ -33,11 +33,11 @@ const { active = 'home', standalone = false } = Astro.props;
     </main>
   </div>
 
-  <div class="hidden lg:block"><StatusBar active={active} /></div>
-  <Console />
+  <div class="hidden lg:block" transition:persist="statusbar"><StatusBar active={active} /></div>
+  <Console transition:persist="console" />
 </div>
 
-<CommandPalette />
+<CommandPalette transition:persist="palette" />
 
 <script>
   import '../../scripts/studio.ts';

@@ -45,22 +45,29 @@
   />
 </noscript>
 
-<script is:inline>
+<!--
+  data-astro-rerun: with <ClientRouter/>, this inline script re-executes on every
+  View-Transition navigation, so the consent buttons get re-bound on the freshly
+  swapped DOM and each SPA page records its own analytics page_view. Cross-navigation
+  state (analytics already loaded?) is kept on `window`, which persists across swaps.
+-->
+<script is:inline data-astro-rerun>
   (function () {
     var GA_ID = 'G-Q59L35YFPW';
     var META_PIXEL_ID = '25949277121347381';
     var STORAGE_KEY = 'libredb-cookie-consent';
 
     function loadGA() {
-      if (document.querySelector('script[src*="googletagmanager.com/gtag"]')) return;
+      if (window.__libredbGA) return;
+      window.__libredbGA = true;
       var s = document.createElement('script');
       s.async = true;
       s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
       document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', GA_ID);
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
     }
 
     function loadMetaPixel() {
@@ -73,8 +80,19 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window,document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', META_PIXEL_ID);
-      fbq('track', 'PageView');
+      window.fbq('init', META_PIXEL_ID);
+    }
+
+    function trackPageView() {
+      if (window.gtag) window.gtag('event', 'page_view', { page_path: location.pathname, page_location: location.href, page_title: document.title });
+      if (window.fbq) window.fbq('track', 'PageView');
+    }
+
+    function enableAnalytics() {
+      loadGA();
+      loadMetaPixel();
+      // GA `config` records this page; fire the single Meta PageView for it too
+      if (window.fbq) window.fbq('track', 'PageView');
     }
 
     function hideBanner() {
@@ -85,35 +103,43 @@
       }
     }
 
-    var consent = localStorage.getItem(STORAGE_KEY);
-
-    if (consent === 'accepted') {
-      loadGA();
-      loadMetaPixel();
-      return;
-    }
-
-    if (consent === 'declined') {
-      return;
-    }
-
-    // First visit: show banner after 1s delay
-    setTimeout(function () {
+    function showBanner() {
       var banner = document.getElementById('cookie-consent-banner');
       if (banner) {
         banner.classList.remove('translate-y-full');
         banner.classList.add('translate-y-0');
       }
-    }, 1000);
+    }
 
-    document.getElementById('cookie-accept')?.addEventListener('click', function () {
+    var consent = localStorage.getItem(STORAGE_KEY);
+
+    if (consent === 'declined') return;
+
+    if (consent === 'accepted') {
+      // First time analytics are enabled this session, load them (GA `config` +
+      // Meta PageView count this page). On later SPA navigations just track the view.
+      if (window.__libredbAnalytics) {
+        trackPageView();
+      } else {
+        window.__libredbAnalytics = true;
+        enableAnalytics();
+      }
+      return;
+    }
+
+    // Not yet decided: show the banner after 1s and bind the buttons on this
+    // (freshly swapped) DOM. A fresh node each navigation means no duplicate listeners.
+    setTimeout(showBanner, 1000);
+
+    var accept = document.getElementById('cookie-accept');
+    var decline = document.getElementById('cookie-decline');
+    if (accept) accept.addEventListener('click', function () {
       localStorage.setItem(STORAGE_KEY, 'accepted');
       hideBanner();
-      loadGA();
-      loadMetaPixel();
+      window.__libredbAnalytics = true;
+      enableAnalytics();
     });
-
-    document.getElementById('cookie-decline')?.addEventListener('click', function () {
+    if (decline) decline.addEventListener('click', function () {
       localStorage.setItem(STORAGE_KEY, 'declined');
       hideBanner();
     });

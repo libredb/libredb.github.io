@@ -2,28 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import StudioShell from '../components/studio/StudioShell.astro';
 import SectionShell from '../components/studio/SectionShell.astro';
-import { sectionById } from '../data/sections';
-
 import HomeSection from '../components/sections/HomeSection.astro';
-import FeaturesSection from '../components/sections/FeaturesSection.astro';
-import DatabasesSection from '../components/sections/DatabasesSection.astro';
-import CompareSection from '../components/sections/CompareSection.astro';
-import TechStackSection from '../components/sections/TechStackSection.astro';
-import GetStartedSection from '../components/sections/GetStartedSection.astro';
-import FaqSection from '../components/sections/FaqSection.astro';
-import DeploySection from '../components/sections/DeploySection.astro';
-
-const s = sectionById;
+import { sectionById } from '../data/sections';
+const home = sectionById['home'];
 ---
-<Layout title="LibreDB Studio - AI-Powered Open-Source SQL IDE">
-  <StudioShell active="home">
-    <SectionShell section={s.home} active><HomeSection /></SectionShell>
-    <SectionShell section={s.features}><FeaturesSection /></SectionShell>
-    <SectionShell section={s.databases}><DatabasesSection /></SectionShell>
-    <SectionShell section={s.compare}><CompareSection /></SectionShell>
-    <SectionShell section={s.tech_stack}><TechStackSection /></SectionShell>
-    <SectionShell section={s.get_started}><GetStartedSection /></SectionShell>
-    <SectionShell section={s.faq}><FaqSection /></SectionShell>
-    <SectionShell section={s.deploy}><DeploySection /></SectionShell>
+<Layout title={home.pageTitle} description={home.pageDescription}>
+  <StudioShell active="home" standalone>
+    <SectionShell section={home} active><HomeSection /></SectionShell>
   </StudioShell>
 </Layout>

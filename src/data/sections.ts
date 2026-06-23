@@ -20,6 +20,9 @@ export interface SectionMeta {
   execMs: number;      // fake exec time badge
   columns: SectionColumn[];
   explain: string;     // AI-generated explanation shown in the Explain panel
+  slug: string;        // URL slug ('' = home at '/')
+  pageTitle: string;   // <title> when this section is its own page
+  pageDescription: string;
 }
 
 export const sections: SectionMeta[] = [
@@ -36,6 +39,9 @@ export const sections: SectionMeta[] = [
       { name: 'stats', type: 'JSONB' },
     ],
     explain: 'Returns the LibreDB Studio overview: a modern, AI-powered, browser-based SQL IDE with SSO across 7+ engines — free and open source under MIT.',
+    slug: '',
+    pageTitle: 'LibreDB Studio - AI-Powered Open-Source SQL IDE',
+    pageDescription: 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
   },
   {
     id: 'features',
@@ -50,6 +56,9 @@ export const sections: SectionMeta[] = [
       { name: 'summary', type: 'TEXT' },
     ],
     explain: 'Lists 17 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking and the DBA toolkit.',
+    slug: 'features',
+    pageTitle: 'Features — LibreDB Studio SQL IDE',
+    pageDescription: 'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, 7+ databases, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
   },
   {
     id: 'databases',
@@ -64,6 +73,9 @@ export const sections: SectionMeta[] = [
       { name: 'driver', type: 'VARCHAR' },
     ],
     explain: 'The 7 supported engines and their drivers — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface.',
+    slug: 'databases',
+    pageTitle: 'Supported Databases — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis',
+    pageDescription: 'One tool, all your databases. Connect to PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB and Redis through one unified browser-based SQL IDE.',
   },
   {
     id: 'compare',
@@ -78,6 +90,9 @@ export const sections: SectionMeta[] = [
       { name: 'price', type: 'VARCHAR' },
     ],
     explain: 'Scores LibreDB Studio against DataGrip, DBeaver, pgAdmin and TablePlus on zero-install, mobile, AI, SSO and price — ordered by how free and open each is.',
+    slug: 'compare',
+    pageTitle: 'How LibreDB Studio Compares — vs DataGrip, DBeaver, pgAdmin, TablePlus',
+    pageDescription: 'See why teams switch to LibreDB Studio: zero-install, mobile, AI-native, SSO and free — compared against DataGrip, DBeaver, pgAdmin and TablePlus.',
   },
   {
     id: 'tech_stack',
@@ -91,6 +106,9 @@ export const sections: SectionMeta[] = [
       { name: 'tools', type: 'TEXT[]' },
     ],
     explain: 'The production stack in four layers: frontend (Next.js 16, React 19), editor & data (Monaco, TanStack, ReactFlow), AI & auth (Gemini, OIDC), and devops (Docker, Bun).',
+    slug: 'tech-stack',
+    pageTitle: 'Tech Stack — LibreDB Studio',
+    pageDescription: 'Built with a modern, production-ready stack: Next.js 16, React 19, TypeScript, Tailwind 4, Monaco, TanStack Table, ReactFlow, Gemini/OIDC, Docker and Bun.',
   },
   {
     id: 'get_started',
@@ -105,6 +123,9 @@ export const sections: SectionMeta[] = [
       { name: 'command', type: 'TEXT' },
     ],
     explain: 'Three steps to run locally — clone & install, configure env, launch — plus a one-command Docker alternative.',
+    slug: 'get-started',
+    pageTitle: 'Get Started in Minutes — LibreDB Studio',
+    pageDescription: 'Run LibreDB Studio locally in three steps — clone & install, configure, launch — or one-command Docker. Self-host the open-source AI SQL IDE.',
   },
   {
     id: 'faq',
@@ -118,6 +139,9 @@ export const sections: SectionMeta[] = [
       { name: 'answer', type: 'TEXT' },
     ],
     explain: 'The nine most common questions: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+    slug: 'faq',
+    pageTitle: 'FAQ — LibreDB Studio',
+    pageDescription: 'Frequently asked questions about LibreDB Studio: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
   },
   {
     id: 'deploy',
@@ -132,6 +156,26 @@ export const sections: SectionMeta[] = [
       { name: 'method', type: 'VARCHAR' },
     ],
     explain: 'Every place LibreDB Studio runs — 39 targets across registries, self-hosted PaaS, Kubernetes, managed PaaS and cloud — from one open-source image.',
+    slug: 'deploy',
+    pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
+    pageDescription: 'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway and CapRover one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.',
+  },
+  {
+    id: 'docker_compose',
+    table: 'docker_compose',
+    slug: 'docker-compose-example',
+    query: 'SELECT variable, default, description FROM env_vars;',
+    rows: 21,
+    cols: 3,
+    execMs: 6,
+    columns: [
+      { name: 'variable', type: 'VARCHAR' },
+      { name: 'default', type: 'VARCHAR' },
+      { name: 'description', type: 'TEXT' },
+    ],
+    explain: 'A copy-paste docker-compose.yml: pulls the published ghcr.io image with every environment variable (auth, OIDC SSO, storage, AI/LLM, seed) — self-host in one command.',
+    pageTitle: 'LibreDB Studio Docker Compose Example — Self-Host in Minutes',
+    pageDescription: 'Copy-paste docker-compose.example.yml for LibreDB Studio. Run the open-source SQL IDE with one command using the ghcr.io/libredb/libredb-studio image. Includes every environment variable, SQLite/PostgreSQL storage, and OIDC SSO options.',
   },
 ];
 

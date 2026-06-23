@@ -5,10 +5,8 @@ interface Props {
   active?: string;
   idPrefix?: string; // to keep ids unique between desktop sidebar & mobile drawer
   showConnectionsLabel?: boolean;
-  standalone?: boolean;
 }
-const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true, standalone = false } = Astro.props;
-const linkBase = standalone ? '/' : '';
+const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro.props;
 ---
 <div data-explorer-root class="flex h-full flex-col text-[13px]">
   <!-- Connections -->
@@ -58,7 +56,7 @@ const linkBase = standalone ? '/' : '';
               <span class="caret-icon" aria-hidden="true">▸</span>
             </button>
             <a
-              href={`${linkBase}#${s.id}`}
+              href={s.slug === '' ? '/' : `/${s.slug}`}
               class="flex flex-1 items-center justify-between gap-2 py-1.5 pl-0.5 pr-1"
               data-section-link={s.id}
             >
