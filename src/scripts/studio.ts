@@ -173,6 +173,19 @@ const studioConsole = {
   comment(text: string) { this.push({ kind: 'comment', text }); },
 };
 
+function runQuery() {
+  const id = currentHash();
+  const meta = sectionById[id] ?? sectionById['home'];
+  const pane = document.querySelector<HTMLElement>(`[data-section="${id}"] .studio-results`);
+  if (pane) {
+    pane.classList.remove('is-rerunning');
+    void pane.offsetWidth; // restart animation
+    pane.classList.add('is-rerunning');
+    pane.addEventListener('animationend', () => pane.classList.remove('is-rerunning'), { once: true });
+  }
+  studioConsole.ok(`${meta.rows} rows (${meta.execMs}ms)`);
+}
+
 function init() {
   if (studio) studio.classList.add('js');
 
@@ -200,12 +213,17 @@ function init() {
       const msg = NOTICES[el.dataset.notice ?? ''];
       if (msg) studioConsole.push(msg);
     }
+    if (action === 'run') { e.preventDefault(); runQuery(); }
   });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
   // browser back/forward after our pushState() desktop swaps.
   window.addEventListener('hashchange', () => setActive(currentHash()));
   window.addEventListener('popstate', () => setActive(currentHash()));
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runQuery(); }
+  });
 
   setActive(currentHash());
 }
