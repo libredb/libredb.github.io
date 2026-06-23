@@ -97,7 +97,7 @@
    Studio layout — progressive enhancement
    • Default (no-JS, any width): sections stack & the page scrolls.
    • JS + desktop (.studio.js @ lg): viewport-locked IDE, single
-     active section swaps in the result pane.
+     section per page is always shown (no swap).
    ============================================================ */
 .studio-section { display: block; }
 .caret-icon { display: inline-block; transition: transform 0.15s ease; }
@@ -128,8 +128,7 @@ details[open] > summary .faq-sign::before { content: '−'; }
 @media (min-width: 1024px) {
   .studio.js { height: 100vh; height: 100dvh; overflow: hidden; }
   .studio.js .studio-pane { min-height: 0; overflow: hidden; }
-  .studio.js .studio-section { display: none; height: 100%; min-height: 0; }
-  .studio.js .studio-section.is-active { display: flex; flex-direction: column; }
+  .studio.js .studio-section { display: flex; flex-direction: column; height: 100%; min-height: 0; }
   .studio.js .studio-results { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 }
 

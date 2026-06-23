@@ -7,68 +7,34 @@ import { filterItems, fuzzyMatch } from './lib/filter';
 /**
  * Studio interaction layer (progressive enhancement).
  * - Adds `.js` to the shell → desktop switches to viewport-locked single-view.
- * - Explorer selection swaps the active section (desktop) / scrolls (mobile).
- * - URL hash routing keeps deep links + back/forward working.
- * - Mobile drawer open/close; explorer column (schema) expand/collapse.
+ * - Explorer links are real URLs; navigating renders exactly one section per page.
+ * - `syncActive()` highlights the active Explorer row + updates StatusBar from the URL.
+ * - `astro:page-load` lifecycle re-runs `syncActive()` on every navigation.
  */
 
 const studio = document.querySelector<HTMLElement>('[data-studio]');
-const standalone = !!studio && studio.hasAttribute('data-standalone');
-const initialActive = studio?.dataset.initialActive || 'home';
-const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
-const ids = new Set(sections.map((s) => s.id));
 
-function setActive(id: string, opts: { scroll?: boolean } = {}) {
-  if (!ids.has(id)) id = initialActive;
-  // Focused/standalone pages render a single section; if the requested one
-  // isn't in the DOM, keep the current view instead of blanking it.
-  if (!document.querySelector(`[data-section="${id}"]`)) return;
-  const meta = sectionById[id];
+/* ---- Slug ↔ id helpers ---- */
+const slugToId = Object.fromEntries(sections.map((s) => [s.slug, s.id]));
+const href = (slug: string) => (slug === '' ? '/' : `/${slug}`);
 
-  // Toggle sections (desktop locked mode uses .is-active; CSS ignores it on mobile)
-  document.querySelectorAll<HTMLElement>('[data-section]').forEach((el) => {
-    el.classList.toggle('is-active', el.dataset.section === id);
-  });
+function currentId(): string {
+  const seg = location.pathname.replace(/^\/+|\/+$/g, '').split('/')[0] ?? '';
+  return slugToId[seg] ?? 'home';
+}
 
-  // Reset the active result pane scroll to top on desktop swap
-  if (isDesktop()) {
-    const pane = document.querySelector<HTMLElement>(`[data-section="${id}"] .studio-results`);
-    pane?.scrollTo({ top: 0 });
-  }
-
-  // Explorer active highlight (side + drawer) — single .active class, styled in CSS
+function syncActive() {
+  const id = currentId();
+  const meta = sectionById[id] ?? sectionById['home'];
   document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => {
     const on = a.dataset.sectionLink === id;
     a.closest<HTMLElement>('.exp-row')?.classList.toggle('active', on);
     a.setAttribute('aria-current', on ? 'true' : 'false');
   });
-
-  // Status bar
-  const tableEl = document.querySelector('[data-statusbar-table]');
-  const rowsEl = document.querySelector('[data-statusbar-rows]');
-  if (tableEl) tableEl.textContent = meta.table;
-  if (rowsEl) rowsEl.textContent = String(meta.rows);
-
-  if (opts.scroll && !isDesktop()) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-function currentHash(): string {
-  return (location.hash || `#${initialActive}`).slice(1);
-}
-
-function onLinkClick(e: Event, id: string) {
-  if (standalone) { closeDrawer(); return; } // links are /#id → let the browser navigate home
-  if (isDesktop()) {
-    e.preventDefault();
-    if (location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
-    setActive(id);
-  } else {
-    // mobile: let the anchor scroll naturally, just sync state + close drawer
-    setActive(id);
-    closeDrawer();
-  }
+  const t = document.querySelector('[data-statusbar-table]');
+  const r = document.querySelector('[data-statusbar-rows]');
+  if (t) t.textContent = meta.table;
+  if (r) r.textContent = String(meta.rows);
 }
 
 /* ---- Mobile drawer ---- */
@@ -94,7 +60,7 @@ function closeDrawer() {
 /* ---- Explain panel toggle ---- */
 function toggleExplain(trigger: HTMLElement) {
   const section = trigger.closest<HTMLElement>('[data-section]');
-  const id = section?.dataset.section ?? currentHash();
+  const id = section?.dataset.section ?? currentId();
   const panel = document.querySelector<HTMLElement>(`[data-explain="${id}"]`);
   if (!panel) return;
   const open = panel.hasAttribute('hidden');
@@ -194,7 +160,7 @@ const studioConsole = {
 };
 
 function runQuery() {
-  const id = currentHash();
+  const id = currentId();
   const meta = sectionById[id] ?? sectionById['home'];
   const pane = document.querySelector<HTMLElement>(`[data-section="${id}"] .studio-results`);
   const allowMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -208,11 +174,11 @@ function runQuery() {
 }
 
 async function copyLink() {
-  const id = currentHash();
-  const url = `${location.origin}${location.pathname}#${id}`;
+  const id = currentId();
+  const url = location.origin + href(sectionById[id]?.slug ?? '');
   try {
     await navigator.clipboard.writeText(url);
-    studioConsole.ok(`copied link to #${id}`);
+    studioConsole.ok(`copied link to ${url}`);
   } catch {
     studioConsole.notice(`copy this: ${url}`);
   }
@@ -231,7 +197,7 @@ function downloadBlob(content: string, filename: string, mime: string) {
 }
 
 function exportSection() {
-  const id = currentHash();
+  const id = currentId();
   const payloadEl = document.querySelector<HTMLElement>(`[data-export-payload="${id}"]`);
   if (!payloadEl?.textContent) { studioConsole.notice('nothing to export from this view'); return; }
   let rows: Row[];
@@ -248,30 +214,6 @@ function exportSection() {
   studioConsole.ok(`exported ${filename} (${rows.length} rows)`);
 }
 
-/* ---- Explorer search live-filter ---- */
-function wireExplorerSearch() {
-  document.querySelectorAll<HTMLInputElement>('[data-explorer-search]').forEach((input) => {
-    const scope = input.closest<HTMLElement>('[data-explorer-root]');
-    if (!scope) return;
-    const items = [...scope.querySelectorAll<HTMLElement>('[data-explorer-item]')];
-    const apply = () => {
-      const q = input.value;
-      items.forEach((li) => {
-        const name = li.dataset.explorerItem ?? '';
-        li.hidden = fuzzyMatch(q, name) === null;
-      });
-    };
-    input.addEventListener('input', apply);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const first = items.find((li) => !li.hidden);
-        const id = first?.dataset.explorerItem;
-        if (id) { location.hash = `#${id}`; input.blur(); }
-      }
-    });
-  });
-}
-
 /* ---- Command palette ---- */
 interface PaletteItem { label: string; hint: string; run: () => void; }
 
@@ -279,10 +221,7 @@ function paletteItems(): PaletteItem[] {
   const jumps: PaletteItem[] = sections.map((s) => ({
     label: `Jump to ${s.table}`,
     hint: `${s.rows} rows`,
-    run: () => {
-      if (standalone) location.href = `/#${s.id}`;
-      else location.hash = `#${s.id}`;
-    },
+    run: () => { location.href = href(s.slug); },
   }));
   const actions: PaletteItem[] = [
     { label: 'Copy link to current section', hint: 'clipboard', run: () => copyLink() },
@@ -362,14 +301,47 @@ function closePalette() {
   paletteLastFocus?.focus();
 }
 
-function init() {
-  if (studio) studio.classList.add('js');
+/* ---- Delegated action click handler ---- */
+function onActionClick(e: Event) {
+  const el = (e.target as HTMLElement).closest<HTMLElement>('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+  if (action === 'notice') {
+    e.preventDefault();
+    const msg = NOTICES[el.dataset.notice ?? ''];
+    if (msg) studioConsole.push(msg);
+  }
+  if (action === 'explain') { e.preventDefault(); toggleExplain(el); }
+  if (action === 'run') { e.preventDefault(); runQuery(); }
+  if (action === 'copy-link') { e.preventDefault(); copyLink(); }
+  if (action === 'export') { e.preventDefault(); exportSection(); }
+  if (action === 'palette') { e.preventDefault(); openPalette(); }
+  if (action === 'results') {
+    e.preventDefault();
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelector(`[data-section="${currentId()}"] .studio-results`)?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+  }
+}
 
-  // Wire explorer links
-  document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => {
-    a.addEventListener('click', (e) => onLinkClick(e, a.dataset.sectionLink!));
-  });
-  // Wire column toggles
+/* ---- Keyboard handler ---- */
+function onKeydown(e: KeyboardEvent) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runQuery(); return; }
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openPalette(); return; }
+  const root = document.querySelector('[data-palette-root]');
+  if (!root || root.hasAttribute('hidden')) return;
+  if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
+  else if (e.key === 'Tab') { e.preventDefault(); (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus(); }
+  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    if (paletteFiltered.length === 0) { e.preventDefault(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
+    else { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
+  }
+  else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
+}
+
+/* ---- Chrome bindings (persisted across navigations) ---- */
+function bindChrome() {
+  // Column toggles
   document.querySelectorAll<HTMLElement>('[data-explorer-toggle]').forEach((btn) => {
     btn.addEventListener('click', () => toggleColumns(btn.dataset.explorerToggle!, btn));
   });
@@ -378,63 +350,56 @@ function init() {
   document.querySelectorAll<HTMLElement>('[data-drawer-close]').forEach((el) =>
     el.addEventListener('click', closeDrawer),
   );
-
-  // Single delegated handler for all chrome controls.
-  document.addEventListener('click', (e) => {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-action]');
-    if (!el) return;
-    const action = el.dataset.action;
-    if (action === 'notice') {
-      e.preventDefault();
-      const msg = NOTICES[el.dataset.notice ?? ''];
-      if (msg) studioConsole.push(msg);
-    }
-    if (action === 'explain') { e.preventDefault(); toggleExplain(el); }
-    if (action === 'run') { e.preventDefault(); runQuery(); }
-    if (action === 'copy-link') { e.preventDefault(); copyLink(); }
-    if (action === 'export') { e.preventDefault(); exportSection(); }
-    if (action === 'palette') { e.preventDefault(); openPalette(); }
-    if (action === 'results') {
-      e.preventDefault();
-      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      document.querySelector(`[data-section="${currentHash()}"] .studio-results`)?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-    }
-  });
-
-  // Hash routing — hashchange covers in-page link nav; popstate covers
-  // browser back/forward after our pushState() desktop swaps.
-  window.addEventListener('hashchange', () => setActive(currentHash()));
-  window.addEventListener('popstate', () => setActive(currentHash()));
-
-  window.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runQuery(); }
-  });
-
-  // Palette open/close + keyboard
+  // Palette close + input
   document.querySelector('[data-palette-close]')?.addEventListener('click', closePalette);
   const paletteInput = document.querySelector<HTMLInputElement>('[data-palette-input]');
   paletteInput?.addEventListener('input', () => renderPalette(paletteInput.value));
-  window.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openPalette(); return; }
-    const root = document.querySelector('[data-palette-root]');
-    if (!root || root.hasAttribute('hidden')) return;
-    if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
-    else if (e.key === 'Tab') { e.preventDefault(); (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      if (paletteFiltered.length === 0) { e.preventDefault(); return; }
-      if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
-      else { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
-    }
-    else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
+  // Explorer search
+  document.querySelectorAll<HTMLInputElement>('[data-explorer-search]').forEach((input) => {
+    const scope = input.closest<HTMLElement>('[data-explorer-root]');
+    if (!scope) return;
+    const items = [...scope.querySelectorAll<HTMLElement>('[data-explorer-item]')];
+    const apply = () => {
+      const q = input.value;
+      items.forEach((li) => {
+        const name = li.dataset.explorerItem ?? '';
+        li.hidden = fuzzyMatch(q, name) === null;
+      });
+    };
+    input.addEventListener('input', apply);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const first = items.find((li) => !li.hidden);
+        const id = first?.dataset.explorerItem;
+        if (id) {
+          const slug = sectionById[id]?.slug ?? id;
+          location.href = href(slug);
+          input.blur();
+        }
+      }
+    });
   });
-
-  wireExplorerSearch();
-
-  setActive(currentHash());
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
+/* ---- Lifecycle ---- */
+let wiredOnce = false;
+
+function wireOnce() {
+  if (wiredOnce) return;
+  wiredOnce = true;
+  studio?.classList.add('js');
+  document.addEventListener('click', onActionClick);
+  window.addEventListener('keydown', onKeydown);
+  bindChrome();
 }
+
+function onPage() {
+  syncActive();
+}
+
+function start() { wireOnce(); onPage(); }
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+else start();
+
+document.addEventListener('astro:page-load', () => { wireOnce(); onPage(); });
