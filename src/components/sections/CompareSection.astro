@@ -17,6 +17,17 @@ const rows: Row[] = [
 
 const scoreText = (s: Score) => (s === 'partial' ? 'partial' : String(s));
 const scoreClass = (s: Score) => (s === true ? 'text-ok' : s === 'partial' ? 'text-warn' : 'text-bad');
+
+const exportRows = rows.map((r) => ({
+  tool: r.tool,
+  recommended: r.recommended ?? false,
+  zero_install: r.scores[0],
+  mobile: r.scores[1],
+  ai_native: r.scores[2],
+  sso_oidc: r.scores[3],
+  free: r.scores[4],
+  price: r.price,
+}));
 ---
 <div class="mx-auto max-w-6xl">
   <SectionHeader title="How we compare" subtitle="See why teams are switching to LibreDB Studio." />
@@ -70,3 +81,4 @@ const scoreClass = (s: Score) => (s === true ? 'text-ok' : s === 'partial' ? 'te
     ))}
   </div>
 </div>
+<script type="application/json" data-export-payload="compare" data-export-filename="compare.csv" data-export-format="csv" set:html={JSON.stringify(exportRows)} />

@@ -1,6 +1,7 @@
 import { sections, sectionById } from '../data/sections';
 import type { ConsoleMessage, ConsoleKind } from './lib/console-copy';
 import { NOTICES } from './lib/console-copy';
+import { serialize, type Row } from './lib/export';
 
 /**
  * Studio interaction layer (progressive enhancement).
@@ -197,6 +198,30 @@ async function copyLink() {
   }
 }
 
+function downloadBlob(content: string, filename: string, mime: string) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportSection() {
+  const id = currentHash();
+  const payloadEl = document.querySelector<HTMLElement>(`[data-export-payload="${id}"]`);
+  if (!payloadEl?.textContent) { studioConsole.notice('nothing to export from this view'); return; }
+  const rows = JSON.parse(payloadEl.textContent) as Row[];
+  const format = (payloadEl.dataset.exportFormat as 'json' | 'csv') ?? 'json';
+  const filename = payloadEl.dataset.exportFilename ?? `${id}.${format}`;
+  const content = serialize(rows, format);
+  downloadBlob(content, filename, format === 'csv' ? 'text/csv' : 'application/json');
+  studioConsole.ok(`exported ${filename} (${rows.length} rows)`);
+}
+
 function init() {
   if (studio) studio.classList.add('js');
 
@@ -226,6 +251,7 @@ function init() {
     }
     if (action === 'run') { e.preventDefault(); runQuery(); }
     if (action === 'copy-link') { e.preventDefault(); copyLink(); }
+    if (action === 'export') { e.preventDefault(); exportSection(); }
   });
 
   // Hash routing — hashchange covers in-page link nav; popstate covers
