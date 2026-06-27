@@ -14,6 +14,13 @@ const meta = sectionById[active] ?? sectionById['home'];
     <span class="text-muted"><span data-statusbar-table>{meta.table}</span>.sql</span>
   </div>
   <div class="flex items-center gap-4">
+    <nav class="flex items-center gap-3" aria-label="Quick links">
+      <a href="https://github.com/libredb/libredb-studio" target="_blank" rel="noopener noreferrer" class="cursor-pointer hover:text-fg">GitHub</a>
+      <a href="https://www.linkedin.com/company/libredb" target="_blank" rel="noopener noreferrer" class="cursor-pointer hover:text-fg">LinkedIn</a>
+      <a href="https://github.com/sponsors/libredb" target="_blank" rel="noopener noreferrer" class="cursor-pointer text-ok hover:text-fg">Sponsor ♥</a>
+      <a href="/privacy-policy" class="cursor-pointer hover:text-fg">Privacy</a>
+    </nav>
+    <span class="text-faint" aria-hidden="true">·</span>
     <span><span data-statusbar-rows>{meta.rows}</span> rows</span>
     <span class="text-faint">Ln 1, Col 1</span>
     <span class="text-faint">UTF-8</span>

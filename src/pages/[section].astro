@@ -7,13 +7,17 @@ import { sections, sectionById } from '../data/sections';
 import { sectionSeo } from '../data/section-seo';
 
 import FeaturesSection from '../components/sections/FeaturesSection.astro';
-import DatabasesSection from '../components/sections/DatabasesSection.astro';
+import ProvidersSection from '../components/sections/ProvidersSection.astro';
 import CompareSection from '../components/sections/CompareSection.astro';
 import TechStackSection from '../components/sections/TechStackSection.astro';
 import GetStartedSection from '../components/sections/GetStartedSection.astro';
 import FaqSection from '../components/sections/FaqSection.astro';
 import DeploySection from '../components/sections/DeploySection.astro';
 import DockerComposeSection from '../components/sections/DockerComposeSection.astro';
+import DatabaseSection from '../components/sections/DatabaseSection.astro';
+import DatabaseArchitectureSection from '../components/sections/DatabaseArchitectureSection.astro';
+import DatabaseReliabilitySection from '../components/sections/DatabaseReliabilitySection.astro';
+import PlatformSection from '../components/sections/PlatformSection.astro';
 
 export function getStaticPaths() {
   return sections
@@ -23,13 +27,17 @@ export function getStaticPaths() {
 
 const COMPONENTS: Record<string, any> = {
   features: FeaturesSection,
-  databases: DatabasesSection,
+  providers: ProvidersSection,
   compare: CompareSection,
   tech_stack: TechStackSection,
   get_started: GetStartedSection,
   faq: FaqSection,
   deploy: DeploySection,
   docker_compose: DockerComposeSection,
+  database: DatabaseSection,
+  database_architecture: DatabaseArchitectureSection,
+  database_reliability: DatabaseReliabilitySection,
+  platform: PlatformSection,
 };
 
 const { id } = Astro.props as { id: string };

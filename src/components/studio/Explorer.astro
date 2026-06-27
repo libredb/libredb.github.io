@@ -1,5 +1,6 @@
 ---
 import { sections } from '../../data/sections';
+import { schemas } from '../../data/schemas';
 
 interface Props {
   active?: string;
@@ -7,6 +8,7 @@ interface Props {
   showConnectionsLabel?: boolean;
 }
 const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro.props;
+const internalCount = sections.length; // total internal sections across schemas
 ---
 <div data-explorer-root class="flex h-full flex-col text-[13px]">
   <!-- Connections -->
@@ -21,7 +23,7 @@ const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro
   <!-- Explorer header -->
   <div class="flex items-center justify-between px-4 pt-2 pb-1">
     <span class="flex items-center gap-2 text-muted"><span aria-hidden="true">▤</span> Explorer</span>
-    <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-semibold text-white">{sections.length}</span>
+    <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-semibold text-white">{internalCount}</span>
   </div>
 
   <!-- Search (decorative) -->
@@ -38,49 +40,75 @@ const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro
 
   <!-- Tree -->
   <nav class="flex-1 overflow-y-auto px-2 pb-3" aria-label="Schema explorer">
-    <div class="flex items-center gap-1.5 px-2 py-1 text-muted">
-      <span aria-hidden="true">▾</span><span aria-hidden="true">▦</span><span>public</span>
-    </div>
-    <ul class="mt-0.5">
-      {sections.map((s) => (
-        <li data-explorer-item={s.id}>
-          <div class:list={['exp-row group flex items-center gap-1 pr-2', active === s.id && 'active']}>
-            <button
-              type="button"
-              class="flex h-7 w-5 shrink-0 items-center justify-center text-faint hover:text-fg"
-              aria-expanded="false"
-              aria-label={`Toggle ${s.table} columns`}
-              aria-controls={`${idPrefix}-cols-${s.id}`}
-              data-explorer-toggle={s.id}
-            >
-              <span class="caret-icon" aria-hidden="true">▸</span>
-            </button>
-            <a
-              href={s.slug === '' ? '/' : `/${s.slug}`}
-              class="flex flex-1 items-center justify-between gap-2 py-1.5 pl-0.5 pr-1"
-              data-section-link={s.id}
-            >
-              <span class="flex items-center gap-2 truncate">
-                <span class="text-dim" aria-hidden="true">▤</span>
-                <span class="truncate">{s.table}</span>
-              </span>
-              <span class="text-[11px] text-faint">{s.rows}</span>
-            </a>
-          </div>
-          <!-- Columns (schema), collapsed by default; revealed by toggle -->
-          <ul class="hidden pl-9 pb-1" id={`${idPrefix}-cols-${s.id}`} data-explorer-cols={s.id}>
-            {s.columns.map((c) => (
-              <li class="flex items-center justify-between py-1 pr-3 text-[12px]">
-                <span class="flex items-center gap-2 text-muted">
-                  <span class="text-primary/70" aria-hidden="true">◆</span>{c.name}
+    {schemas.map((schema) => (
+      <div class="mb-1">
+        <div class="flex items-center gap-1.5 px-2 py-1 text-muted">
+          <span aria-hidden="true">▾</span><span aria-hidden="true">▦</span>
+          <span>{schema.label}</span>
+          {schema.badge && (
+            <span class:list={['ml-1 rounded px-1.5 text-[10px] uppercase tracking-wide', schema.badgeClass]}>
+              {schema.badge}
+            </span>
+          )}
+        </div>
+
+        <ul class="mt-0.5">
+          {sections.filter((s) => s.schema === schema.id).map((s) => (
+            <li data-explorer-item={s.id}>
+              <div class:list={['exp-row group flex items-center gap-1 pr-2', active === s.id && 'active']}>
+                <button
+                  type="button"
+                  class="flex h-7 w-5 shrink-0 items-center justify-center text-faint hover:text-fg"
+                  aria-expanded="false"
+                  aria-label={`Toggle ${s.table} columns`}
+                  aria-controls={`${idPrefix}-cols-${s.id}`}
+                  data-explorer-toggle={s.id}
+                >
+                  <span class="caret-icon" aria-hidden="true">▸</span>
+                </button>
+                <a
+                  href={s.slug === '' ? '/' : `/${s.slug}`}
+                  class="flex flex-1 items-center justify-between gap-2 py-1.5 pl-0.5 pr-1"
+                  data-section-link={s.id}
+                >
+                  <span class="flex items-center gap-2 truncate">
+                    <span class="text-dim" aria-hidden="true">▤</span>
+                    <span class="truncate">{s.table}</span>
+                  </span>
+                  <span class="text-[11px] text-faint">{s.rows}</span>
+                </a>
+              </div>
+              <ul class="hidden pl-9 pb-1" id={`${idPrefix}-cols-${s.id}`} data-explorer-cols={s.id}>
+                {s.columns.map((c) => (
+                  <li class="flex items-center justify-between py-1 pr-3 text-[12px]">
+                    <span class="flex items-center gap-2 text-muted">
+                      <span class="text-primary/70" aria-hidden="true">◆</span>{c.name}
+                    </span>
+                    <span class="text-[10.5px] uppercase tracking-wide text-faint">{c.type}</span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+          {schema.external && (
+            <li>
+              <a
+                href={schema.external.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="exp-row group flex items-center justify-between gap-2 py-1.5 pl-8 pr-3"
+              >
+                <span class="flex items-center gap-2 truncate text-muted">
+                  <span class="text-dim" aria-hidden="true">↗</span>
+                  <span class="truncate">{schema.external.label}</span>
                 </span>
-                <span class="text-[10.5px] uppercase tracking-wide text-faint">{c.type}</span>
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))}
-    </ul>
+                <span class="text-[11px] text-faint" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+    ))}
   </nav>
 
   <!-- Footer status -->

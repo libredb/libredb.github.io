@@ -23,6 +23,7 @@ export interface SectionMeta {
   slug: string;        // URL slug ('' = home at '/')
   pageTitle: string;   // <title> when this section is its own page
   pageDescription: string;
+  schema: 'studio' | 'database' | 'platform'; // Explorer grouping
 }
 
 export const sections: SectionMeta[] = [
@@ -42,12 +43,13 @@ export const sections: SectionMeta[] = [
     slug: '',
     pageTitle: 'LibreDB Studio - AI-Powered Open-Source SQL IDE',
     pageDescription: 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
+    schema: 'studio',
   },
   {
     id: 'features',
     table: 'features',
     query: 'SELECT name, category, summary FROM features ORDER BY category;',
-    rows: 17,
+    rows: 18,
     cols: 3,
     execMs: 4,
     columns: [
@@ -55,16 +57,17 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'ENUM' },
       { name: 'summary', type: 'TEXT' },
     ],
-    explain: 'Lists 17 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking and the DBA toolkit.',
+    explain: 'Lists 18 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking, the DBA toolkit, and a zero-setup embedded LibreDB sample on first launch.',
     slug: 'features',
     pageTitle: 'Features — LibreDB Studio SQL IDE',
     pageDescription: 'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, 7+ databases, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
+    schema: 'studio',
   },
   {
-    id: 'databases',
-    table: 'databases',
-    query: 'SELECT name, type, driver FROM databases;',
-    rows: 7,
+    id: 'providers',
+    table: 'providers',
+    query: 'SELECT name, type, driver FROM providers;',
+    rows: 8,
     cols: 3,
     execMs: 2,
     columns: [
@@ -72,10 +75,62 @@ export const sections: SectionMeta[] = [
       { name: 'type', type: 'VARCHAR' },
       { name: 'driver', type: 'VARCHAR' },
     ],
-    explain: 'The 7 supported engines and their drivers — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface.',
-    slug: 'databases',
-    pageTitle: 'Supported Databases — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis',
-    pageDescription: 'One tool, all your databases. Connect to PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB and Redis through one unified browser-based SQL IDE.',
+    explain: 'The database engines LibreDB Studio connects to — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface, plus LibreDB, our own embedded engine.',
+    slug: 'providers',
+    pageTitle: 'Supported Providers — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis & LibreDB',
+    pageDescription: 'One tool, all your databases. Connect LibreDB Studio to PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB and Redis — plus LibreDB, our own open-source embedded engine — through one unified browser-based SQL IDE.',
+    schema: 'studio',
+  },
+  {
+    id: 'database',
+    table: 'manifesto',
+    query: 'SELECT principle, stance FROM manifesto;',
+    rows: 6,
+    cols: 2,
+    execMs: 2,
+    columns: [
+      { name: 'principle', type: 'TEXT' },
+      { name: 'stance', type: 'TEXT' },
+    ],
+    explain: 'The LibreDB engine manifesto: a small, readable, embeddable multi-model database you can read in one sitting — multi-model without the magic. Pre-alpha; community-driven.',
+    slug: 'database',
+    pageTitle: 'LibreDB — the embedded, multimodal database you can read in one sitting',
+    pageDescription: 'LibreDB is a small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses (key-value, document, relational), zero dependencies, every line tested. Open source (MIT), pre-alpha.',
+    schema: 'database',
+  },
+  {
+    id: 'database_architecture',
+    table: 'architecture',
+    query: 'SELECT layer, role FROM architecture;',
+    rows: 3,
+    cols: 2,
+    execMs: 3,
+    columns: [
+      { name: 'layer', type: 'TEXT' },
+      { name: 'role', type: 'TEXT' },
+    ],
+    explain: 'How LibreDB works: one ordered byte key-value kernel with thin kv/document/relational lenses on top (FoundationDB pattern). The file boundary is the trust boundary, and the write-ahead log is the database.',
+    slug: 'database-architecture',
+    pageTitle: 'Architecture — LibreDB: one core, three lenses',
+    pageDescription: 'Inside LibreDB: a single ordered key-value kernel with thin key-value, document, and relational lenses on top. The file boundary is the trust boundary; the write-ahead log is the only on-disk representation.',
+    schema: 'database',
+  },
+  {
+    id: 'database_reliability',
+    table: 'reliability',
+    query: 'SELECT guarantee, mechanism FROM reliability ORDER BY guarantee;',
+    rows: 4,
+    cols: 2,
+    execMs: 4,
+    columns: [
+      { name: 'guarantee', type: 'TEXT' },
+      { name: 'mechanism', type: 'TEXT' },
+    ],
+    explain: 'Why you can trust a pre-alpha engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
+    slug: 'database-reliability',
+    pageTitle: 'Reliability — LibreDB crash recovery & deterministic simulation testing',
+    pageDescription: 'LibreDB durability: a length-framed, CRC-32 checksummed write-ahead log fsync-d before commit, crash recovery proven by deterministic simulation testing, and 100% core line coverage. Honest about its v1 limits.',
+    schema: 'database',
   },
   {
     id: 'compare',
@@ -93,6 +148,7 @@ export const sections: SectionMeta[] = [
     slug: 'compare',
     pageTitle: 'How LibreDB Studio Compares — vs DataGrip, DBeaver, pgAdmin, TablePlus',
     pageDescription: 'See why teams switch to LibreDB Studio: zero-install, mobile, AI-native, SSO and free — compared against DataGrip, DBeaver, pgAdmin and TablePlus.',
+    schema: 'studio',
   },
   {
     id: 'tech_stack',
@@ -109,6 +165,7 @@ export const sections: SectionMeta[] = [
     slug: 'tech-stack',
     pageTitle: 'Tech Stack — LibreDB Studio',
     pageDescription: 'Built with a modern, production-ready stack: Next.js 16, React 19, TypeScript, Tailwind 4, Monaco, TanStack Table, ReactFlow, Gemini/OIDC, Docker and Bun.',
+    schema: 'studio',
   },
   {
     id: 'get_started',
@@ -126,6 +183,7 @@ export const sections: SectionMeta[] = [
     slug: 'get-started',
     pageTitle: 'Get Started in Minutes — LibreDB Studio',
     pageDescription: 'Run LibreDB Studio locally in three steps — clone & install, configure, launch — or one-command Docker. Self-host the open-source AI SQL IDE.',
+    schema: 'studio',
   },
   {
     id: 'faq',
@@ -142,6 +200,7 @@ export const sections: SectionMeta[] = [
     slug: 'faq',
     pageTitle: 'FAQ — LibreDB Studio',
     pageDescription: 'Frequently asked questions about LibreDB Studio: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+    schema: 'studio',
   },
   {
     id: 'deploy',
@@ -159,6 +218,7 @@ export const sections: SectionMeta[] = [
     slug: 'deploy',
     pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
     pageDescription: 'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway and CapRover one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.',
+    schema: 'studio',
   },
   {
     id: 'docker_compose',
@@ -176,6 +236,24 @@ export const sections: SectionMeta[] = [
     explain: 'A copy-paste docker-compose.yml: pulls the published ghcr.io image with every environment variable (auth, OIDC SSO, storage, AI/LLM, seed) — self-host in one command.',
     pageTitle: 'LibreDB Studio Docker Compose Example — Self-Host in Minutes',
     pageDescription: 'Copy-paste docker-compose.example.yml for LibreDB Studio. Run the open-source SQL IDE with one command using the ghcr.io/libredb/libredb-studio image. Includes every environment variable, SQLite/PostgreSQL storage, and OIDC SSO options.',
+    schema: 'studio',
+  },
+  {
+    id: 'platform',
+    table: 'overview',
+    query: 'SELECT capability, detail FROM access_governance;',
+    rows: 6,
+    cols: 2,
+    execMs: 5,
+    columns: [
+      { name: 'capability', type: 'TEXT' },
+      { name: 'detail', type: 'TEXT' },
+    ],
+    explain: 'LibreDB Platform: managed, multi-tenant Database Access Governance for teams — authorized, audited database access built on the open-source LibreDB Studio engine. Live in beta; the commercial layer of the open-core model.',
+    slug: 'platform',
+    pageTitle: 'LibreDB Platform — Database Access Governance for Teams (beta)',
+    pageDescription: 'Stop distributing connection strings. LibreDB Platform is managed, multi-tenant database access governance — role-based access, encrypted credentials, per-connection permissions, and full query audit logging — built on the open-source LibreDB Studio engine. Live in beta.',
+    schema: 'platform',
   },
 ];
 
