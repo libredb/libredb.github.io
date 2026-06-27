@@ -1,0 +1,5 @@
+# Reproducible installs: pin exact versions (no ^ ranges) so the lockfile and
+# package.json never drift. Mirrors the toolchain decision in the sibling
+# libredb-database repo, relaxed for a website.
+[install]
+exact = true
