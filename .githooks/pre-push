@@ -1,0 +1,10 @@
+#!/bin/sh
+# Full verification before pushing. Mirrors what CI enforces.
+set -e
+
+bun run gate
+
+# Advisory only: report known advisories but never block the push. The current
+# ones are transitive build-time deps (picomatch/js-yaml) with no static-site
+# attack surface; Dependabot bumps them upstream.
+bun audit || true

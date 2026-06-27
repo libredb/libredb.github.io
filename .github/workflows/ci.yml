@@ -39,6 +39,13 @@ jobs:
       - name: Gate (typecheck, format, lint, dead-code, tests)
         run: bun run gate
 
+      - name: Secret scan
+        run: bun run secrets
+
+      - name: Dependency audit (advisory, non-blocking)
+        continue-on-error: true
+        run: bun run audit
+
       - name: Build website
         run: bun run build
 
