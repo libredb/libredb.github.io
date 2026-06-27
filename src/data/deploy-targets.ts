@@ -182,10 +182,11 @@ export const deployTargets: DeployTarget[] = [
     name: 'Cosmos',
     slug: 'cosmos',
     category: 'oss-paas',
-    status: 'planned',
+    status: 'official',
     url: 'https://cosmos-cloud.io',
     github: 'azukaar/Cosmos-Server',
-    blurb: 'Self-hosted server with reverse proxy',
+    docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/cosmos',
+    blurb: 'Official servapp — one-click marketplace install',
   },
 
   // ③ Kubernetes & orchestration — Helm chart install; stars shown (open-source)
