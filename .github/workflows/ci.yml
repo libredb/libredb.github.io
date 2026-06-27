@@ -43,8 +43,7 @@ jobs:
         run: bun run secrets
 
       - name: Dependency audit (advisory, non-blocking)
-        continue-on-error: true
-        run: bun run audit
+        run: bun run audit || echo "::notice::bun audit reported advisories (non-blocking; Dependabot tracks upstream fixes)"
 
       - name: Build website
         run: bun run build
