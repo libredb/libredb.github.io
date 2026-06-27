@@ -8,10 +8,8 @@ interface Props {
   description?: string;
 }
 
-const {
-  title,
-  description = 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
-} = Astro.props;
+const { title, description = 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams' } =
+  Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteURL = 'https://libredb.org';
 
@@ -84,10 +82,7 @@ const webSiteSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content="LibreDB" />
-    <meta
-      name="robots"
-      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#0a0a0c" />
 
     <!-- Canonical URL -->

@@ -33,8 +33,7 @@ const KOYEB_DEPLOY_URL =
 
 // Render one-click deploy via the repo's render.yaml Blueprint. Works today,
 // not an official Render catalog listing.
-const RENDER_DEPLOY_URL =
-  'https://render.com/deploy?repo=https://github.com/libredb/libredb-studio';
+const RENDER_DEPLOY_URL = 'https://render.com/deploy?repo=https://github.com/libredb/libredb-studio';
 
 export const deployTargets: DeployTarget[] = [
   // ① Install primitives / registries — all available

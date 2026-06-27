@@ -50,12 +50,7 @@ const DEMO = 'https://app.libredb.org';
   >
     <div class="flex items-center justify-between border-b border-edge px-4 py-3">
       <span class="text-[11px] tracking-wider text-faint uppercase">Connections</span>
-      <button
-        type="button"
-        class="text-faint hover:text-fg"
-        aria-label="Close explorer"
-        data-drawer-close>✕</button
-      >
+      <button type="button" class="text-faint hover:text-fg" aria-label="Close explorer" data-drawer-close>✕</button>
     </div>
     <div class="h-[calc(100%-49px)]">
       <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} />

@@ -126,8 +126,7 @@ function renderToast(msg: ConsoleMessage): HTMLElement {
     cta.href = msg.cta.href;
     cta.target = '_blank';
     cta.rel = 'noopener noreferrer';
-    cta.className =
-      'mt-1 inline-block border border-edge-strong px-2 py-0.5 text-primary hover:bg-raised';
+    cta.className = 'mt-1 inline-block border border-edge-strong px-2 py-0.5 text-primary hover:bg-raised';
     cta.textContent = `${msg.cta.label} →`;
     body.appendChild(cta);
   }

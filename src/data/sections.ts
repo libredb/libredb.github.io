@@ -43,8 +43,7 @@ export const sections: SectionMeta[] = [
       'Returns the LibreDB Studio overview: a modern, AI-powered, browser-based SQL IDE with SSO across 7+ engines — free and open source under MIT.',
     slug: '',
     pageTitle: 'LibreDB Studio - AI-Powered Open-Source SQL IDE',
-    pageDescription:
-      'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
+    pageDescription: 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
     schema: 'studio',
   },
   {
@@ -82,8 +81,7 @@ export const sections: SectionMeta[] = [
     explain:
       'The database engines LibreDB Studio connects to — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface, plus LibreDB, our own embedded engine.',
     slug: 'providers',
-    pageTitle:
-      'Supported Providers — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis & LibreDB',
+    pageTitle: 'Supported Providers — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis & LibreDB',
     pageDescription:
       'One tool, all your databases. Connect LibreDB Studio to PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB and Redis — plus LibreDB, our own open-source embedded engine — through one unified browser-based SQL IDE.',
     schema: 'studio',
@@ -284,6 +282,4 @@ export const sections: SectionMeta[] = [
   },
 ];
 
-export const sectionById: Record<string, SectionMeta> = Object.fromEntries(
-  sections.map((s) => [s.id, s]),
-);
+export const sectionById: Record<string, SectionMeta> = Object.fromEntries(sections.map((s) => [s.id, s]));

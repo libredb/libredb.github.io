@@ -48,8 +48,7 @@ const rows: Row[] = [
 ];
 
 const scoreText = (s: Score) => (s === 'partial' ? 'partial' : String(s));
-const scoreClass = (s: Score) =>
-  s === true ? 'text-ok' : s === 'partial' ? 'text-warn' : 'text-bad';
+const scoreClass = (s: Score) => (s === true ? 'text-ok' : s === 'partial' ? 'text-warn' : 'text-bad');
 
 const exportRows = rows.map((r) => ({
   tool: r.tool,
@@ -70,9 +69,7 @@ const exportRows = rows.map((r) => ({
   <div class="hidden overflow-x-auto border border-edge lg:block">
     <table class="w-full border-collapse text-[13px]">
       <thead>
-        <tr
-          class="border-b border-edge bg-panel text-left text-[11px] tracking-wider text-dim uppercase"
-        >
+        <tr class="border-b border-edge bg-panel text-left text-[11px] tracking-wider text-dim uppercase">
           <th class="px-5 py-3 font-medium">TOOL</th>
           {criteria.map((c) => <th class="px-5 py-3 text-center font-medium">{c}</th>)}
           <th class="px-5 py-3 text-right font-medium">PRICE</th>
@@ -89,14 +86,10 @@ const exportRows = rows.map((r) => ({
             >
               <td class="px-5 py-3.5 font-semibold whitespace-nowrap text-bright">
                 {r.tool}
-                {r.recommended && (
-                  <span class="ml-2 text-[11px] font-normal text-primary">★ recommended</span>
-                )}
+                {r.recommended && <span class="ml-2 text-[11px] font-normal text-primary">★ recommended</span>}
               </td>
               {r.scores.map((s) => (
-                <td class={`px-5 py-3.5 text-center font-medium ${scoreClass(s)}`}>
-                  {scoreText(s)}
-                </td>
+                <td class={`px-5 py-3.5 text-center font-medium ${scoreClass(s)}`}>{scoreText(s)}</td>
               ))}
               <td class={`px-5 py-3.5 text-right font-semibold ${r.priceClass}`}>{r.price}</td>
             </tr>
@@ -110,9 +103,7 @@ const exportRows = rows.map((r) => ({
   <div class="flex flex-col gap-3 lg:hidden">
     {
       rows.map((r) => (
-        <article
-          class:list={['border border-edge bg-panel p-4', r.recommended && 'border-primary/40']}
-        >
+        <article class:list={['border border-edge bg-panel p-4', r.recommended && 'border-primary/40']}>
           <h3 class="flex items-center gap-2 text-[15px] font-bold text-bright">
             {r.tool}
             {r.recommended && <span class="text-[11px] font-normal text-primary">★</span>}
@@ -124,10 +115,7 @@ const exportRows = rows.map((r) => ({
               </span>
             ))}
             <span class="inline-flex items-center gap-1.5 border border-edge px-2 py-1 text-[12px] text-dim">
-              price{' '}
-              <span class={`font-semibold ${r.priceClass === 'text-ok' ? 'text-ok' : 'text-fg'}`}>
-                {r.price}
-              </span>
+              price <span class={`font-semibold ${r.priceClass === 'text-ok' ? 'text-ok' : 'text-fg'}`}>{r.price}</span>
             </span>
           </div>
         </article>

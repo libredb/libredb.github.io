@@ -10,9 +10,7 @@ const stars = await getStars(starRepos);
 const STATUS_ORDER = { official: 0, available: 1, planned: 2 } as const;
 const sortedCategories = [...deployCategories].sort((a, b) => a.order - b.order);
 const targetsByCategory = (id: string) =>
-  deployTargets
-    .filter((t) => t.category === id)
-    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+  deployTargets.filter((t) => t.category === id).sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
 
 const official = deployTargets.filter((t) => t.status === 'official');
 const totalStars = Object.values(stars).reduce((sum, n) => sum + n, 0);
@@ -36,9 +34,7 @@ const summary = sortedCategories.map((c, i) => ({
   />
 
   <!-- Category summary strip -->
-  <div
-    class="grid grid-cols-2 gap-px overflow-hidden border border-edge bg-edge md:grid-cols-3 lg:grid-cols-5"
-  >
+  <div class="grid grid-cols-2 gap-px overflow-hidden border border-edge bg-edge md:grid-cols-3 lg:grid-cols-5">
     {
       summary.map((c) => (
         <div class="bg-panel p-5">
@@ -52,22 +48,14 @@ const summary = sortedCategories.map((c, i) => ({
   <!-- Official one-click integrations -->
   <section class="mt-10">
     <h3 class="text-[15px] font-semibold text-bright">Official one-click integrations</h3>
-    <p class="mt-1 text-[13px] text-dim">
-      Listed in their marketplaces — deploy in a click, today.
-    </p>
+    <p class="mt-1 text-[13px] text-dim">Listed in their marketplaces — deploy in a click, today.</p>
     <div class="mt-4 grid gap-4 md:grid-cols-2">
       {
         official.map((t) => (
           <div class="flex flex-col border border-edge-strong bg-panel p-6">
             <div class="mb-3 flex items-center gap-3">
               {t.logo ? (
-                <img
-                  src={t.logo}
-                  alt={`${t.name} logo`}
-                  width="40"
-                  height="40"
-                  class="h-10 w-10 object-contain"
-                />
+                <img src={t.logo} alt={`${t.name} logo`} width="40" height="40" class="h-10 w-10 object-contain" />
               ) : (
                 <span class="grid h-10 w-10 place-items-center rounded-md bg-primary/20 text-lg font-bold text-primary">
                   {t.name.charAt(0)}
@@ -83,8 +71,7 @@ const summary = sortedCategories.map((c, i) => ({
                 rel="noopener noreferrer"
                 class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-bright"
               >
-                {t.deployUrl ? 'Deploy now' : 'View install guide'}{' '}
-                <span aria-hidden="true">→</span>
+                {t.deployUrl ? 'Deploy now' : 'View install guide'} <span aria-hidden="true">→</span>
               </a>
               {t.docsUrl && (
                 <a
@@ -125,10 +112,8 @@ const summary = sortedCategories.map((c, i) => ({
       <span data-stars-total>{formatStars(totalStars)}</span>+ GitHub stars
     </div>
     <p class="mx-auto max-w-2xl text-sm text-muted">
-      LibreDB Studio doesn't just support these platforms — it ships inside communities that
-      millions of developers already trust. More on the roadmap: {
-        plannedNames.slice(0, 8).join(', ')
-      }, and more.
+      LibreDB Studio doesn't just support these platforms — it ships inside communities that millions of developers
+      already trust. More on the roadmap: {plannedNames.slice(0, 8).join(', ')}, and more.
     </p>
   </section>
 

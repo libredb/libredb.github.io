@@ -65,9 +65,7 @@ const { section, class: className = '' } = Astro.props;
       <span aria-hidden="true">▶</span> RUN
     </button>
     <div class="flex items-center gap-4 text-faint">
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="begin"
-        >BEGIN</button
-      >
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="begin">BEGIN</button>
       <button type="button" class="hover:text-fg" data-action="notice" data-notice="sandbox"
         ><span aria-hidden="true">⬡</span> SANDBOX</button
       >
@@ -81,15 +79,12 @@ const { section, class: className = '' } = Astro.props;
   </div>
 
   <!-- Sub-toolbar -->
-  <div
-    class="flex items-center justify-between gap-3 border-y border-edge px-4 py-1.5 text-[12px] text-faint"
-  >
+  <div class="flex items-center justify-between gap-3 border-y border-edge px-4 py-1.5 text-[12px] text-faint">
     <div class="flex items-center gap-4">
       <button type="button" class="hover:text-fg" data-action="notice" data-notice="format"
         ><span aria-hidden="true">≡</span> Format</button
       >
-      <button type="button" class="hover:text-fg" data-action="copy-link"
-        ><span aria-hidden="true">⧉</span> Copy</button
+      <button type="button" class="hover:text-fg" data-action="copy-link"><span aria-hidden="true">⧉</span> Copy</button
       >
       <button type="button" class="hover:text-fg" data-action="notice" data-notice="clear"
         ><span aria-hidden="true">✕</span> Clear</button
@@ -109,9 +104,7 @@ const { section, class: className = '' } = Astro.props;
         aria-expanded="false"
         aria-controls={`explain-${section.id}`}><span aria-hidden="true">✦</span> Explain</button
       >
-      <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px]" aria-hidden="true"
-        >⌘+Enter</span
-      >
+      <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px]" aria-hidden="true">⌘+Enter</span>
     </div>
   </div>
 
@@ -123,9 +116,7 @@ const { section, class: className = '' } = Astro.props;
 
   <!-- Results tabs -->
   <div class="flex items-center justify-between gap-3 border-t border-edge px-4 text-[12px]">
-    <div
-      class="flex [scrollbar-width:none] items-center gap-4 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden"
-    >
+    <div class="flex [scrollbar-width:none] items-center gap-4 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden">
       <button
         type="button"
         class="pb-0.5 font-semibold whitespace-nowrap text-fg shadow-[inset_0_-2px_0_var(--color-primary)]"
@@ -144,17 +135,11 @@ const { section, class: className = '' } = Astro.props;
         data-action="notice"
         data-notice="history"><span aria-hidden="true">↺</span> History</button
       >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="saved"><span aria-hidden="true">⭐</span> Saved</button
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="saved"
+        ><span aria-hidden="true">⭐</span> Saved</button
       >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="charts"><span aria-hidden="true">◔</span> Charts</button
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="charts"
+        ><span aria-hidden="true">◔</span> Charts</button
       >
       <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="palette"
         ><span aria-hidden="true">✦</span> NL2SQL</button
@@ -165,11 +150,8 @@ const { section, class: className = '' } = Astro.props;
         data-action="notice"
         data-notice="autopilot"><span aria-hidden="true">✈</span> Autopilot</button
       >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="pivot"><span aria-hidden="true">▥</span> Pivot</button
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="pivot"
+        ><span aria-hidden="true">▥</span> Pivot</button
       >
       <a
         class="whitespace-nowrap text-faint hover:text-fg"
@@ -177,11 +159,8 @@ const { section, class: className = '' } = Astro.props;
         target="_blank"
         rel="noopener noreferrer"><span aria-hidden="true">▤</span> Docs</a
       >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="diff"><span aria-hidden="true">⇄</span> Diff</button
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="diff"
+        ><span aria-hidden="true">⇄</span> Diff</button
       >
       <button
         type="button"
@@ -212,8 +191,6 @@ const { section, class: className = '' } = Astro.props;
       <span class="text-edge-strong" aria-hidden="true">|</span>
       <span>{section.table}.sql</span>
     </div>
-    <span class="rounded border border-edge-strong px-2 py-0.5 tracking-wide"
-      >EXEC TIME: {section.execMs}</span
-    >
+    <span class="rounded border border-edge-strong px-2 py-0.5 tracking-wide">EXEC TIME: {section.execMs}</span>
   </div>
 </div>

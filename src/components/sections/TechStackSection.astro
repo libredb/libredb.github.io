@@ -51,20 +51,13 @@ const layers: Layer[] = [
 ---
 
 <div class="mx-auto max-w-6xl">
-  <SectionHeader
-    title="Built with modern tech"
-    subtitle="Production-ready stack for performance and scalability."
-  />
+  <SectionHeader title="Built with modern tech" subtitle="Production-ready stack for performance and scalability." />
 
-  <div
-    class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-4"
-  >
+  <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-4">
     {
       layers.map((l) => (
         <div class="bg-panel p-5">
-          <span class={`text-[11px] font-semibold tracking-wider uppercase ${l.color}`}>
-            {l.layer}
-          </span>
+          <span class={`text-[11px] font-semibold tracking-wider uppercase ${l.color}`}>{l.layer}</span>
           <ul class="mt-4 space-y-3">
             {l.tools.map((t) => (
               <li>

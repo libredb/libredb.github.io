@@ -10,13 +10,11 @@ const capabilities = [
   },
   {
     name: '5-role RBAC',
-    detail:
-      'Platform Admin, Platform Tech, Tenant Admin, Editor, Viewer — least privilege by default.',
+    detail: 'Platform Admin, Platform Tech, Tenant Admin, Editor, Viewer — least privilege by default.',
   },
   {
     name: 'Connection governance',
-    detail:
-      'Encrypted credentials with a permission matrix per connection — grant access, never hand out passwords.',
+    detail: 'Encrypted credentials with a permission matrix per connection — grant access, never hand out passwords.',
   },
   {
     name: 'Query audit log',
@@ -37,30 +35,25 @@ const openCore = [
 
 <div class="mx-auto max-w-5xl">
   <!-- beta badge -->
-  <span
-    class="inline-flex items-center gap-2 rounded-full border border-ai/40 px-3 py-1 text-[12.5px] text-ai"
-  >
+  <span class="inline-flex items-center gap-2 rounded-full border border-ai/40 px-3 py-1 text-[12.5px] text-ai">
     <span aria-hidden="true">●</span> Live · beta · for teams
   </span>
 
   <!-- Hero -->
-  <h1
-    class="mt-6 text-3xl leading-[1.1] font-extrabold tracking-tight text-bright sm:text-4xl lg:text-5xl"
-  >
+  <h1 class="mt-6 text-3xl leading-[1.1] font-extrabold tracking-tight text-bright sm:text-4xl lg:text-5xl">
     Database Access<br class="hidden sm:block" />
     <span class="text-ai">Governance</span> Platform
   </h1>
   <p class="mt-5 max-w-2xl text-[15px] leading-relaxed text-muted">
-    Centralized, authorized, audited database access for teams and enterprises — the managed, team
-    form of LibreDB.
+    Centralized, authorized, audited database access for teams and enterprises — the managed, team form of LibreDB.
   </p>
 
   <!-- Problem callout -->
   <div class="mt-8 border-l-2 border-ai/60 bg-panel p-5">
     <p class="text-[15px] font-semibold text-bright">Stop distributing connection strings.</p>
     <p class="mt-2 text-[13.5px] leading-relaxed text-dim">
-      Admins control who can access which databases, every query is logged, and teams collaborate
-      securely — instead of emailing credentials around and hoping for the best.
+      Admins control who can access which databases, every query is logged, and teams collaborate securely — instead of
+      emailing credentials around and hoping for the best.
     </p>
   </div>
 
@@ -70,9 +63,7 @@ const openCore = [
       title="What teams get"
       subtitle="Governance, audit, and access control on top of the Studio editor."
     />
-    <div
-      class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3"
-    >
+    <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
       {
         capabilities.map((c) => (
           <article class="flex flex-col bg-panel p-5">
@@ -101,9 +92,9 @@ const openCore = [
       }
     </div>
     <p class="mt-4 text-[13.5px] leading-relaxed text-dim">
-      Both run the same Studio engine (<code class="text-fg">@libredb/studio</code>) — Studio is the
-      single source of truth, and new editor features flow into Platform with each release. The same
-      proven model behind Supabase, Metabase, Preset, Neon, and YugabyteDB.
+      Both run the same Studio engine (<code class="text-fg">@libredb/studio</code>) — Studio is the single source of
+      truth, and new editor features flow into Platform with each release. The same proven model behind Supabase,
+      Metabase, Preset, Neon, and YugabyteDB.
     </p>
   </div>
 
@@ -113,9 +104,7 @@ const openCore = [
   >
     <div>
       <h3 class="text-[16px] font-bold text-bright">Try the beta</h3>
-      <p class="mt-1 text-[13.5px] text-dim">
-        Live now at platform.libredb.org — sign in or create a team.
-      </p>
+      <p class="mt-1 text-[13.5px] text-dim">Live now at platform.libredb.org — sign in or create a team.</p>
     </div>
     <a
       href={APP}

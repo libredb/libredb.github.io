@@ -52,25 +52,21 @@ const notForYet = [
   </div>
 
   <!-- Durability + DST -->
-  <div
-    class="mt-10 grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2"
-  >
+  <div class="mt-10 grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2">
     <article class="flex flex-col bg-panel p-5">
       <h3 class="text-[15px] font-bold text-bright">A write-ahead log, fsync-d before commit</h3>
       <p class="mt-2 text-[13px] leading-relaxed text-dim">
-        A transaction that returns has been written to a length-framed, CRC-32 checksummed log and
-        fsync-d
-        <em>before</em> the commit becomes visible. A crash can only ever damage the last, un-fsync-d
-        record — which recovery detects and truncates, leaving a valid committed prefix.
+        A transaction that returns has been written to a length-framed, CRC-32 checksummed log and fsync-d
+        <em>before</em> the commit becomes visible. A crash can only ever damage the last, un-fsync-d record — which recovery
+        detects and truncates, leaving a valid committed prefix.
       </p>
     </article>
     <article class="flex flex-col bg-panel p-5">
       <h3 class="text-[15px] font-bold text-bright">Deterministic simulation testing</h3>
       <p class="mt-2 text-[13px] leading-relaxed text-dim">
-        The crash/recovery path is proven by running the real engine against a seeded in-memory
-        filesystem that tears, corrupts, and crashes the log on command — then checking that
-        recovery is always a valid committed prefix. The FoundationDB-style approach that keeps the
-        durability claims honest.
+        The crash/recovery path is proven by running the real engine against a seeded in-memory filesystem that tears,
+        corrupts, and crashes the log on command — then checking that recovery is always a valid committed prefix. The
+        FoundationDB-style approach that keeps the durability claims honest.
       </p>
     </article>
   </div>

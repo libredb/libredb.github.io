@@ -37,8 +37,7 @@ const KEYWORDS = [
   'DELETE',
 ].sort((a, b) => b.length - a.length);
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function highlight(sql: string): string {
   let out = escapeHtml(sql);

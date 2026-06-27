@@ -42,15 +42,11 @@ const steps: Step[] = [
   },
 ];
 
-const lineClass = (k: Line['kind']) =>
-  k === 'comment' ? 'text-faint' : k === 'out' ? 'text-ok' : 'text-fg';
+const lineClass = (k: Line['kind']) => (k === 'comment' ? 'text-faint' : k === 'out' ? 'text-ok' : 'text-fg');
 ---
 
 <div class="mx-auto max-w-6xl">
-  <SectionHeader
-    title="Get started in minutes"
-    subtitle="Up and running with three simple steps."
-  />
+  <SectionHeader title="Get started in minutes" subtitle="Up and running with three simple steps." />
 
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
     {
@@ -95,13 +91,11 @@ const lineClass = (k: Line['kind']) =>
       <div>
         <h3 class="text-[15px] font-semibold text-bright">Prefer a one-click deploy?</h3>
         <p class="mt-1 text-[13px] leading-relaxed text-dim">
-          LibreDB Studio is an official Railway template and CapRover one-click app — and runs on
-          Docker, Helm, npm, and every major PaaS and cloud.
+          LibreDB Studio is an official Railway template and CapRover one-click app — and runs on Docker, Helm, npm, and
+          every major PaaS and cloud.
         </p>
       </div>
-      <a href="/deploy" class="text-[13px] text-primary hover:underline"
-        >Explore all deploy options →</a
-      >
+      <a href="/deploy" class="text-[13px] text-primary hover:underline">Explore all deploy options →</a>
     </div>
   </div>
 </div>

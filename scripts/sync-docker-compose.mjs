@@ -25,8 +25,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-const REMOTE_URL =
-  'https://raw.githubusercontent.com/libredb/libredb-studio/main/docker-compose.example.yml';
+const REMOTE_URL = 'https://raw.githubusercontent.com/libredb/libredb-studio/main/docker-compose.example.yml';
 const LOCAL_SIBLING = resolve(ROOT, '../libredb-studio/docker-compose.example.yml');
 
 const DEST_DATA = resolve(ROOT, 'src/data/docker-compose.example.yml');
@@ -57,9 +56,7 @@ async function resolveContent() {
     console.log('[sync-docker-compose] using remote source:', REMOTE_URL);
     return text;
   } catch (err) {
-    console.warn(
-      `[sync-docker-compose] remote fetch failed (${err.message}); trying local sibling`,
-    );
+    console.warn(`[sync-docker-compose] remote fetch failed (${err.message}); trying local sibling`);
   }
 
   try {

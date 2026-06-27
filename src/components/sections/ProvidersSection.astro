@@ -31,8 +31,7 @@ const databases: DB[] = [
     type: 'relational',
     driver: 'oracledb',
     color: 'text-warn',
-    summary:
-      'Enterprise database with V$ monitoring views, FETCH FIRST pagination, and ALTER INDEX REBUILD.',
+    summary: 'Enterprise database with V$ monitoring views, FETCH FIRST pagination, and ALTER INDEX REBUILD.',
   },
   {
     name: 'SQL Server',
@@ -53,8 +52,7 @@ const databases: DB[] = [
     type: 'document',
     driver: 'mongodb',
     color: 'text-ok',
-    summary:
-      'Full document database support with JSON queries, aggregations, and schema inference.',
+    summary: 'Full document database support with JSON queries, aggregations, and schema inference.',
   },
   {
     name: 'Redis',
@@ -75,14 +73,9 @@ const databases: DB[] = [
 ---
 
 <div class="mx-auto max-w-6xl">
-  <SectionHeader
-    title="One tool, all your databases"
-    subtitle="Connect to any engine with a unified interface."
-  />
+  <SectionHeader title="One tool, all your databases" subtitle="Connect to any engine with a unified interface." />
 
-  <div
-    class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3"
-  >
+  <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
     {
       databases.map((d) => (
         <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">

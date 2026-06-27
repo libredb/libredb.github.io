@@ -201,21 +201,14 @@ const sections = [
               data-accordion={section.id}
               aria-expanded="false"
             >
-              <span class="text-xs font-semibold tracking-wider text-faint uppercase">
-                {section.title}
-              </span>
+              <span class="text-xs font-semibold tracking-wider text-faint uppercase">{section.title}</span>
               <svg
                 class="accordion-icon h-4 w-4 text-dim transition-transform duration-200"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             <div class="accordion-content hidden" data-content={section.id}>
@@ -230,12 +223,7 @@ const sections = [
                     >
                       {link.label}
                       {link.external && (
-                        <svg
-                          class="h-3 w-3 opacity-50"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
+                        <svg class="h-3 w-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path
                             stroke-linecap="round"
                             stroke-linejoin="round"

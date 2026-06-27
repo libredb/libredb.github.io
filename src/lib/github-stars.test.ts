@@ -29,9 +29,7 @@ test('getStars uses the live count on success', async () => {
 });
 
 test('getStars falls back when the request fails', async () => {
-  globalThis.fetch = mock(
-    async () => new Response('nope', { status: 403 }),
-  ) as unknown as typeof fetch;
+  globalThis.fetch = mock(async () => new Response('nope', { status: 403 })) as unknown as typeof fetch;
 
   const result = await getStars(['caprover/caprover']);
   expect(result['caprover/caprover']).toBe(FALLBACK_STARS['caprover/caprover']);

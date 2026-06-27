@@ -23,8 +23,7 @@ const features: Feature[] = [
   {
     name: 'Monaco SQL IDE',
     category: 'EDITOR',
-    summary:
-      'VS Code engine with schema-aware autocomplete, multi-tab workspace, and SQL formatting.',
+    summary: 'VS Code engine with schema-aware autocomplete, multi-tab workspace, and SQL formatting.',
   },
   {
     name: 'NL2SQL Copilot',
@@ -44,14 +43,12 @@ const features: Feature[] = [
   {
     name: 'AI Data Profiler',
     category: 'AI',
-    summary:
-      'One-click table profiling with column statistics, null %, cardinality, and AI narrative summaries.',
+    summary: 'One-click table profiling with column statistics, null %, cardinality, and AI narrative summaries.',
   },
   {
     name: '7+ Databases',
     category: 'CORE',
-    summary:
-      'PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with a unified interface.',
+    summary: 'PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with a unified interface.',
   },
   {
     name: 'Mobile Ready',
@@ -61,26 +58,22 @@ const features: Feature[] = [
   {
     name: 'Pro Data Grid',
     category: 'DATA',
-    summary:
-      'Virtualized rendering, column filtering, inline editing, pivot table, and CSV/JSON export.',
+    summary: 'Virtualized rendering, column filtering, inline editing, pivot table, and CSV/JSON export.',
   },
   {
     name: 'Visual EXPLAIN',
     category: 'DATA',
-    summary:
-      'Graphical execution plans with AI-powered plain-language explanations and optimization tips.',
+    summary: 'Graphical execution plans with AI-powered plain-language explanations and optimization tips.',
   },
   {
     name: 'Interactive ER Diagrams',
     category: 'SCHEMA',
-    summary:
-      'Visual schema graph with table relationships, column details, and ReactFlow-powered navigation.',
+    summary: 'Visual schema graph with table relationships, column details, and ReactFlow-powered navigation.',
   },
   {
     name: 'Database Documentation',
     category: 'SCHEMA',
-    summary:
-      'Auto-generated searchable data dictionary with AI-powered descriptions and Markdown export.',
+    summary: 'Auto-generated searchable data dictionary with AI-powered descriptions and Markdown export.',
   },
   {
     name: 'SSO / Single Sign-On',
@@ -91,20 +84,17 @@ const features: Feature[] = [
   {
     name: 'Enterprise Security',
     category: 'SECURITY',
-    summary:
-      'JWT auth, RBAC, SSL/TLS, SSH Tunnel, transaction control, query cancellation, and SSO support.',
+    summary: 'JWT auth, RBAC, SSL/TLS, SSH Tunnel, transaction control, query cancellation, and SSO support.',
   },
   {
     name: 'Data Masking',
     category: 'SECURITY',
-    summary:
-      'Auto-detect sensitive columns (email, phone, SSN, financial). RBAC-enforced with export protection.',
+    summary: 'Auto-detect sensitive columns (email, phone, SSN, financial). RBAC-enforced with export protection.',
   },
   {
     name: 'ORM Code Generator',
     category: 'TOOLING',
-    summary:
-      'Generate TypeScript, Zod, Prisma, Go structs, Python dataclasses, and Java POJOs from live schemas.',
+    summary: 'Generate TypeScript, Zod, Prisma, Go structs, Python dataclasses, and Java POJOs from live schemas.',
   },
   {
     name: 'Test Data Generator',
@@ -114,8 +104,7 @@ const features: Feature[] = [
   {
     name: 'DBA Toolkit',
     category: 'TOOLING',
-    summary:
-      'Live monitoring, active sessions, one-click VACUUM/ANALYZE/REINDEX, and query auditing.',
+    summary: 'Live monitoring, active sessions, one-click VACUUM/ANALYZE/REINDEX, and query auditing.',
   },
   {
     name: 'Opens Ready-to-Use',
@@ -132,15 +121,11 @@ const features: Feature[] = [
     subtitle="Professional-grade features for developers, DBAs, and data teams."
   />
 
-  <div
-    class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3"
-  >
+  <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
     {
       features.map((f) => (
         <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
-          <span
-            class={`text-[10.5px] font-semibold tracking-wider uppercase ${catColor[f.category]}`}
-          >
+          <span class={`text-[10.5px] font-semibold tracking-wider uppercase ${catColor[f.category]}`}>
             {f.category}
           </span>
           <h3 class="mt-2 text-[15px] font-semibold text-bright">{f.name}</h3>
