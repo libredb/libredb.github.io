@@ -44,3 +44,12 @@ test('schemas manifest has studio, database, platform in order', () => {
   const platform = schemas.find((s) => s.id === 'platform');
   expect(platform?.external?.href).toBe('https://platform.libredb.org');
 });
+
+test('providers section replaces databases (id, slug, table)', () => {
+  expect(sectionById['databases']).toBeUndefined();
+  const p = sectionById['providers'];
+  expect(p).toBeDefined();
+  expect(p.slug).toBe('providers');
+  expect(p.table).toBe('providers');
+  expect(p.schema).toBe('studio');
+});

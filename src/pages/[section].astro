@@ -7,7 +7,7 @@ import { sections, sectionById } from '../data/sections';
 import { sectionSeo } from '../data/section-seo';
 
 import FeaturesSection from '../components/sections/FeaturesSection.astro';
-import DatabasesSection from '../components/sections/DatabasesSection.astro';
+import ProvidersSection from '../components/sections/ProvidersSection.astro';
 import CompareSection from '../components/sections/CompareSection.astro';
 import TechStackSection from '../components/sections/TechStackSection.astro';
 import GetStartedSection from '../components/sections/GetStartedSection.astro';
@@ -23,7 +23,7 @@ export function getStaticPaths() {
 
 const COMPONENTS: Record<string, any> = {
   features: FeaturesSection,
-  databases: DatabasesSection,
+  providers: ProvidersSection,
   compare: CompareSection,
   tech_stack: TechStackSection,
   get_started: GetStartedSection,
