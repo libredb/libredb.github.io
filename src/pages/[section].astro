@@ -15,6 +15,7 @@ import FaqSection from '../components/sections/FaqSection.astro';
 import DeploySection from '../components/sections/DeploySection.astro';
 import DockerComposeSection from '../components/sections/DockerComposeSection.astro';
 import DatabaseSection from '../components/sections/DatabaseSection.astro';
+import DatabaseArchitectureSection from '../components/sections/DatabaseArchitectureSection.astro';
 
 export function getStaticPaths() {
   return sections
@@ -32,6 +33,7 @@ const COMPONENTS: Record<string, any> = {
   deploy: DeploySection,
   docker_compose: DockerComposeSection,
   database: DatabaseSection,
+  database_architecture: DatabaseArchitectureSection,
 };
 
 const { id } = Astro.props as { id: string };
