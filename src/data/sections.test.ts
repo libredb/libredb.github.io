@@ -26,9 +26,9 @@ test('every section has page SEO fields', () => {
   }
 });
 
-test('every section declares a schema of studio or database', () => {
+test('every section declares a schema of studio, database, or platform', () => {
   for (const s of sections) {
-    expect(['studio', 'database']).toContain(s.schema);
+    expect(['studio', 'database', 'platform']).toContain(s.schema);
   }
 });
 
@@ -62,4 +62,12 @@ test('three database-schema sections exist with correct slugs', () => {
   expect(sectionById['database'].slug).toBe('database');
   expect(sectionById['database_architecture'].slug).toBe('database-architecture');
   expect(sectionById['database_reliability'].slug).toBe('database-reliability');
+});
+
+test('platform overview section exists (internal /platform)', () => {
+  const p = sectionById['platform'];
+  expect(p).toBeDefined();
+  expect(p.slug).toBe('platform');
+  expect(p.table).toBe('overview');
+  expect(p.schema).toBe('platform');
 });

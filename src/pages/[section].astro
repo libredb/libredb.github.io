@@ -17,6 +17,7 @@ import DockerComposeSection from '../components/sections/DockerComposeSection.as
 import DatabaseSection from '../components/sections/DatabaseSection.astro';
 import DatabaseArchitectureSection from '../components/sections/DatabaseArchitectureSection.astro';
 import DatabaseReliabilitySection from '../components/sections/DatabaseReliabilitySection.astro';
+import PlatformSection from '../components/sections/PlatformSection.astro';
 
 export function getStaticPaths() {
   return sections
@@ -36,6 +37,7 @@ const COMPONENTS: Record<string, any> = {
   database: DatabaseSection,
   database_architecture: DatabaseArchitectureSection,
   database_reliability: DatabaseReliabilitySection,
+  platform: PlatformSection,
 };
 
 const { id } = Astro.props as { id: string };

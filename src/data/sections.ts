@@ -23,7 +23,7 @@ export interface SectionMeta {
   slug: string;        // URL slug ('' = home at '/')
   pageTitle: string;   // <title> when this section is its own page
   pageDescription: string;
-  schema: 'studio' | 'database'; // Explorer grouping; platform has no sections
+  schema: 'studio' | 'database' | 'platform'; // Explorer grouping
 }
 
 export const sections: SectionMeta[] = [
@@ -237,6 +237,23 @@ export const sections: SectionMeta[] = [
     pageTitle: 'LibreDB Studio Docker Compose Example — Self-Host in Minutes',
     pageDescription: 'Copy-paste docker-compose.example.yml for LibreDB Studio. Run the open-source SQL IDE with one command using the ghcr.io/libredb/libredb-studio image. Includes every environment variable, SQLite/PostgreSQL storage, and OIDC SSO options.',
     schema: 'studio',
+  },
+  {
+    id: 'platform',
+    table: 'overview',
+    query: 'SELECT capability, detail FROM access_governance;',
+    rows: 6,
+    cols: 2,
+    execMs: 5,
+    columns: [
+      { name: 'capability', type: 'TEXT' },
+      { name: 'detail', type: 'TEXT' },
+    ],
+    explain: 'LibreDB Platform: managed, multi-tenant Database Access Governance for teams — authorized, audited database access built on the open-source LibreDB Studio engine. Live in beta; the commercial layer of the open-core model.',
+    slug: 'platform',
+    pageTitle: 'LibreDB Platform — Database Access Governance for Teams (beta)',
+    pageDescription: 'Stop distributing connection strings. LibreDB Platform is managed, multi-tenant database access governance — role-based access, encrypted credentials, per-connection permissions, and full query audit logging — built on the open-source LibreDB Studio engine. Live in beta.',
+    schema: 'platform',
   },
 ];
 

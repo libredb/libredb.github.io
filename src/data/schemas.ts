@@ -1,8 +1,8 @@
 // src/data/schemas.ts
 // Schema grouping for the Explorer tree. One connection (libredb.org), three
 // schemas: studio (production hero), database (pre-alpha engine), platform
-// (commercial, external). Sections belong to studio or database; platform has
-// no internal sections — only an external link.
+// (commercial, now has an internal overview page at /platform plus an external
+// live-app link to platform.libredb.org).
 
 export interface SchemaMeta {
   id: 'studio' | 'database' | 'platform';
@@ -25,6 +25,6 @@ export const schemas: SchemaMeta[] = [
     label: 'platform',
     badge: 'beta · teams',
     badgeClass: 'text-ai border border-ai/40',
-    external: { label: 'overview', href: 'https://platform.libredb.org' },
+    external: { label: 'open app', href: 'https://platform.libredb.org' },
   },
 ];
