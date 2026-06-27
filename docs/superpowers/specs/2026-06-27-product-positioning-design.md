@@ -33,7 +33,7 @@ The current website is a single-page-app-style "SQL IDE shell": `[section].astro
 - **LibreDB** = the open-source data company / brand. Mission: open, simple, no-magic data tooling.
 - **Studio** = production hero. Drives traffic, adoption, community. Keeps the homepage and primary nav weight.
 - **Database** = credibility + community play. Its own proud page (3 tables), explicitly pre-alpha. Job is *engineering-depth signal* and contributor funnel, **not** conversion.
-- **Platform** = commercial layer. Kept light/background: an honest open-core family block on-site + an external link. Real selling happens at `platform.libredb.org`.
+- **Platform** = commercial layer. A **lean internal `/platform` overview page** carries the open-core narrative (tagline, the connection-string problem, capabilities, beta status); the page's CTA — and a secondary Explorer `↗ open app` row — open the live app at `platform.libredb.org`. (Revised from external-link-only: that dropped users straight onto the login and lost the narrative.) No pricing on-site.
 - **Open-core model** = the trust narrative tying it together. Studio is free & open and self-hostable; Platform is the managed, paid layer that funds the open-source work — the proven pattern of Supabase, Metabase, Superset/Preset, Neon, YugabyteDB. This reassures the community that the OSS is sustainable, not abandonware.
 
 **Guiding principle: visibility ≠ equal prominence.** Maturity badges (stable / pre-alpha / beta-teams) let all three show without the pre-alpha engine or the commercial layer dragging down brand trust or stealing Studio's focus.
@@ -62,8 +62,9 @@ Explorer
       ▤ manifesto        6         → /database
       ▤ architecture     3         → /database-architecture
       ▤ reliability      4         → /database-reliability
-  ▾ ▦ platform  ↗ teams · beta
-      ↗ overview        → https://platform.libredb.org   (EXTERNAL)
+  ▾ ▦ platform  beta · teams
+      ▤ overview         → /platform        (internal narrative page)
+      ↗ open app        → https://platform.libredb.org   (the live app)
 ```
 
 This communicates maturity visually: `studio` is full (9 tables, production), `database` is a proud-but-thin credibility trio (3 tables, honestly pre-alpha), `platform` is external (commercial, beta, lives elsewhere).
@@ -76,9 +77,10 @@ This communicates maturity visually: `studio` is full (9 tables, production), `d
 | — | `/database` | new engine **manifesto** page (canonical engine page; gets JSON-LD) |
 | — | `/database-architecture` | new engine **architecture** page |
 | — | `/database-reliability` | new engine **reliability** page |
+| — | `/platform` | new lean Platform **overview** page (CTA → live app) |
 | `/` and all studio slugs | unchanged | — |
 
-Slugs are flat (matching the existing flat-slug architecture); the `database-` prefix groups them clearly for SEO/sharing while the Explorer expresses the schema grouping visually. The `platform` overview is an **external** link (not a generated route). No internal `/platform` route.
+Slugs are flat (matching the existing flat-slug architecture); the `database-` prefix groups them clearly for SEO/sharing while the Explorer expresses the schema grouping visually. The Platform `overview` is now a generated `/platform` page (the narrative surface); `platform.libredb.org` is reached via that page's CTA and a secondary Explorer `↗ open app` row.
 
 ## Data model changes
 
@@ -95,8 +97,8 @@ Introduce schema grouping while keeping the flat `sections` array (so `getStatic
    }
    export const schemas: SchemaMeta[] = [ /* studio, database, platform in order */ ];
    ```
-2. **`SectionMeta` gains `schema: 'studio' | 'database'`** (platform has no internal sections). Every existing section → `schema: 'studio'`. Three new `database` sections → `schema: 'database'`.
-3. **`Explorer.astro`** iterates `schemas`, and for each internal schema renders its sections (`sections.filter(s => s.schema === schema.id)`); for `platform` renders its `external` link rows with a `↗` glyph and `target="_blank" rel="noopener noreferrer"`. The count badge becomes total internal sections per schema.
+2. **`SectionMeta` gains `schema: 'studio' | 'database' | 'platform'`**. Every existing section → `schema: 'studio'`. Three new `database` sections → `schema: 'database'`. New `platform` overview section → `schema: 'platform'`.
+3. **`Explorer.astro`** iterates `schemas` and renders each schema's internal sections (`sections.filter(s => s.schema === schema.id)`); when a schema also has `external` (platform), it appends an additional `↗ open app` row with `target="_blank" rel="noopener noreferrer"`. The external row carries no `data-explorer-item` (not a searchable section).
 
 ## `/database` engine pages — three "tables" (credibility trio)
 
@@ -135,23 +137,25 @@ The previously out-of-scope "Studio ↔ engine integration narrative" is now rea
 
    (Provider internals — Strategy Pattern, `BaseDatabaseProvider`, env vars — stay in the Studio repo; only the user-facing nuggets surface here.)
 
-## Platform — light open-core presence
+## Platform — lean internal `/platform` page
 
-Chosen weight: **light open-core family block + external link** (not minimal, not a full internal page). Real marketing/pricing stays at the live beta `platform.libredb.org`.
+Chosen weight: **a lean internal `/platform` overview page**, not external-link-only and not a pricing sprawl. The page owns the narrative; the live beta `platform.libredb.org` owns login/signup. (Revised after feedback: linking straight to the app dropped users on the login and lost the tagline, the connection-string problem, the open-core story, and the capability list.)
 
-- **Home family block** (shared with bridge #1 above): a compact, honest block framing all three products and the open-core model.
-  ```
-  THE LIBREDB FAMILY — one spine, three faces
-    ▦ database   the plain core         OSS · pre-alpha
-    ▦ studio     the readable face      OSS · stable      ← hero
-    ▦ platform   managed for teams      beta ↗
-  "Open core: Studio is free & open; Platform funds the open-source work."
-  ```
-  Platform row links to `platform.libredb.org` (new tab). Studio row is visually weighted as the hero. Database row links to `/database`.
-- **Platform value (one honest line, for those who need it):** *"Database Access Governance for teams — stop distributing connection strings. Centralized, authorized, audited access. (Beta.)"* Capabilities (RBAC, audit, multi-tenant, managed Studio) are named only briefly; depth lives on the platform site.
-- **Explorer:** `platform` schema = a single external `↗ overview` row → `platform.libredb.org`, badge `beta · teams`.
-- **Footer:** a "Products" group — Studio · Database (pre-alpha) · Platform (beta ↗) — with honest labels.
-- **No internal `/platform` route, no pricing page on this site.**
+**`/platform` page content** (renders in `StudioShell`, same pattern as the engine pages):
+- **Hero:** "Database Access Governance Platform" + "Centralized, authorized, audited database access for teams." + **beta** badge.
+- **Problem callout:** *"Stop distributing connection strings."* — admins control who accesses which database, every query is logged, teams collaborate securely.
+- **Open-core model:** Studio (OSS · free · self-hosted · community) → Platform (closed · paid · cloud · enterprise); same Studio engine, single source of truth — Studio features flow into Platform with new versions. Proven peers: Supabase · Metabase · Preset · Neon · YugabyteDB.
+- **Capabilities:** multi-tenant · 5-role RBAC · encrypted credentials + per-connection permission matrix · query audit log · plans (Free/Team/Business/Enterprise) · SSO/OIDC.
+- **Status:** live, beta; runs on the open-source Studio engine (`@libredb/studio`).
+- **CTA (the only external link):** "Open the app ↗" → `https://platform.libredb.org` (`target="_blank" rel="noopener noreferrer"`).
+
+**Home family block:** unchanged in shape, but the platform row now links to `/platform` (internal narrative) instead of the external app — Studio still visually the hero, database → `/database`.
+
+**Explorer:** `platform` schema renders an internal `overview → /platform` row **plus** a secondary `↗ open app → platform.libredb.org` row, badge `beta · teams`.
+
+**Header / Footer:** "Platform" links to `/platform` (internal). The live-app link lives on the `/platform` CTA.
+
+**Still out of scope:** pricing page / plan comparison on-site (lives on the platform app).
 
 ## Component / file changes
 
@@ -180,8 +184,7 @@ Chosen weight: **light open-core family block + external link** (not minimal, no
 
 ## Out of scope (YAGNI)
 
-- Platform pricing page or full platform marketing on this site (lives at `platform.libredb.org`).
-- A dedicated internal `/platform` route.
+- Platform pricing page / plan comparison on this site (lives at `platform.libredb.org`). (A lean `/platform` overview page IS now in scope — see Platform section.)
 - Brand logo/lockup change ("LibreDB Studio" → "LibreDB" + product). Future consideration.
 - Heavy Studio↔engine integration narrative beyond the three light bridges above.
 - Engine API/guide documentation content (lives in the engine repo; the site links out).
@@ -193,7 +196,7 @@ Chosen weight: **light open-core family block + external link** (not minimal, no
 2. **Engine slug** — `/database` (singular) is the canonical manifesto page; secondary engine pages use the `database-` prefix.
 3. **Home teaser** — **yes**, folded into the "LibreDB family / open-core" block (a real Studio first-run benefit, not abstract cross-promotion).
 4. **Database tree depth** — **3 tables** (manifesto + architecture + reliability): proud but clearly thinner than Studio's 9.
-5. **Platform weight** — **light**: open-core family block + external link; no internal page, no pricing.
+5. **Platform weight** — **lean internal `/platform` page** (revised from light/external-only after feedback that the bare external link dropped users onto the login and lost the narrative): tagline · connection-string problem · open-core model · capabilities · beta, with a CTA into the live app. Still no on-site pricing.
 
 ## Success criteria
 
