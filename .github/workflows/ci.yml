@@ -38,3 +38,18 @@ jobs:
 
       - name: Build website
         run: bun run build
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "## 🏗️ Build verification — \`${{ job.status }}\`"
+            echo ""
+            echo "| Item | Value |"
+            echo "| --- | --- |"
+            echo "| Bun | $(bun --version) |"
+            echo "| Node | $(node --version) |"
+            echo "| Astro | $(node -p "require('astro/package.json').version" 2>/dev/null || echo n/a) |"
+            echo "| Pages built | $(find dist -name '*.html' 2>/dev/null | wc -l | tr -d ' ') |"
+            echo "| Commit | \`${GITHUB_SHA::7}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
