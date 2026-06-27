@@ -42,15 +42,20 @@ jobs:
       - name: Build summary
         if: always()
         run: |
+          bun_version=$(bun --version 2>/dev/null || echo n/a)
+          node_version=$(node --version 2>/dev/null || echo n/a)
+          astro_version=$(node -p "require('astro/package.json').version" 2>/dev/null || echo n/a)
+          pages_built=0
+          [ -d dist ] && pages_built=$(find dist -name '*.html' | wc -l | tr -d ' ')
           {
             echo "## 🏗️ Build — \`${{ job.status }}\`"
             echo ""
             echo "| Item | Value |"
             echo "| --- | --- |"
-            echo "| Bun | $(bun --version) |"
-            echo "| Node | $(node --version) |"
-            echo "| Astro | $(node -p "require('astro/package.json').version" 2>/dev/null || echo n/a) |"
-            echo "| Pages built | $(find dist -name '*.html' 2>/dev/null | wc -l | tr -d ' ') |"
+            echo "| Bun | $bun_version |"
+            echo "| Node | $node_version |"
+            echo "| Astro | $astro_version |"
+            echo "| Pages built | $pages_built |"
             echo "| Commit | \`${GITHUB_SHA::7}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
 
