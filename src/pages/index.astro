@@ -6,6 +6,7 @@ import HomeSection from '../components/sections/HomeSection.astro';
 import { sectionById } from '../data/sections';
 const home = sectionById['home'];
 ---
+
 <Layout title={home.pageTitle} description={home.pageDescription}>
   <StudioShell active="home" standalone>
     <SectionShell section={home} active><HomeSection /></SectionShell>

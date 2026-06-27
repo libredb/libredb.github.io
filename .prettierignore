@@ -1,0 +1,16 @@
+# Build output / generated
+dist
+.astro
+node_modules
+bun.lock
+
+# Internal design/plan artifacts (HTML mockups + agent plan files whose fenced
+# code blocks aren't valid JS). Not shipped source — don't format.
+docs
+
+# Served verbatim — Prettier must not reflow static assets
+public
+
+# Verbatim copy synced from libredb-studio by scripts/sync-docker-compose.mjs.
+# Formatting it here would fight the sync step on every build.
+src/data/docker-compose.example.yml

@@ -23,7 +23,8 @@ export const deployCategories: DeployCategory[] = [
   {
     id: 'kubernetes',
     title: 'Kubernetes & orchestration',
-    tagline: 'Install the published Helm chart on any cluster — including enterprise distributions.',
+    tagline:
+      'Install the published Helm chart on any cluster — including enterprise distributions.',
     order: 3,
   },
   {
@@ -35,7 +36,8 @@ export const deployCategories: DeployCategory[] = [
   {
     id: 'cloud',
     title: 'Cloud hyperscalers',
-    tagline: 'Runs as a container on any "run a container" service (ECS/Fargate, Cloud Run, ACI, App Platform).',
+    tagline:
+      'Runs as a container on any "run a container" service (ECS/Fargate, Cloud Run, ACI, App Platform).',
     order: 5,
   },
 ];

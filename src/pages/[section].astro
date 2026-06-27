@@ -46,10 +46,13 @@ const Body = COMPONENTS[id];
 if (!Body) throw new Error(`[section].astro: no component mapped for section id "${id}"`);
 const jsonLd = sectionSeo[id] ?? [];
 ---
+
 <Layout title={meta.pageTitle} description={meta.pageDescription}>
-  {jsonLd.map((schema) => (
-    <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-  ))}
+  {
+    jsonLd.map((schema) => (
+      <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))
+  }
   <StudioShell active={id} standalone>
     <SectionShell section={meta} active><Body /></SectionShell>
   </StudioShell>

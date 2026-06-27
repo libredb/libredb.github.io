@@ -4,47 +4,107 @@ import SectionHeader from './SectionHeader.astro';
 const GITHUB = 'https://github.com/libredb/libredb-studio';
 const LINKEDIN = 'https://www.linkedin.com/company/libredb';
 
-interface QA { q: string; a: string; }
+interface QA {
+  q: string;
+  a: string;
+}
 const faqs: QA[] = [
-  { q: 'Is LibreDB Studio really free?', a: 'Yes, 100% free and open source under the MIT license. No hidden costs, no premium tiers, no feature limitations. You get the full product, forever. We believe great developer tools should be accessible to everyone.' },
-  { q: 'Can I self-host LibreDB Studio?', a: 'Absolutely! Self-hosting is a first-class citizen. Deploy with Docker, Kubernetes, or any Node.js environment. Your data stays on your infrastructure, under your control. We provide detailed deployment guides for all major platforms.' },
-  { q: 'Which AI providers are supported?', a: 'We support multiple AI providers out of the box: Google Gemini (default), OpenAI (GPT-4o, GPT-4), Claude, and local LLMs via Ollama or LM Studio. You can also configure any OpenAI-compatible endpoint. Switch providers anytime or run completely offline with local models.' },
-  { q: 'Is my database connection secure?', a: 'Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We support JWT authentication, OIDC Single Sign-On (Auth0, Keycloak, Okta, Azure AD), role-based access control (RBAC), transaction control (BEGIN/COMMIT/ROLLBACK), and automatic data masking — sensitive columns like email, phone, SSN, and financial data are detected and masked across the grid, exports, and clipboard with configurable RBAC enforcement.' },
-  { q: 'Does it support SSO / Single Sign-On?', a: 'Yes! LibreDB Studio supports vendor-agnostic OpenID Connect (OIDC) authentication out of the box. Connect with Auth0, Keycloak, Okta, Azure AD, Google, or any OIDC-compliant identity provider. The integration uses Authorization Code Flow with PKCE for maximum security, supports configurable role mapping from provider claims, and handles both login and logout at the provider level. Just set three environment variables (issuer, client ID, client secret) and you’re ready to go.' },
-  { q: 'Which databases are supported?', a: 'We support PostgreSQL, MySQL, Oracle Database, Microsoft SQL Server, SQLite, MongoDB, and Redis. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, maintenance tools, and monitoring. Oracle uses oracledb Thin mode (pure JavaScript, no Instant Client needed) and SQL Server uses the mssql/tedious driver with Azure SQL auto-detection.' },
-  { q: 'Can I use it on my phone or tablet?', a: 'Yes! LibreDB Studio is built mobile-first. The entire UI is touch-optimized and responsive. Check your production database from anywhere - perfect for on-call situations or quick fixes on the go.' },
-  { q: 'Do I need to install anything?', a: 'No installation required for end users. LibreDB Studio runs entirely in your browser. For self-hosting, you just need Docker or Node.js. That’s it - no Java, no Electron, no heavy desktop apps.' },
-  { q: 'How does it compare to pgAdmin or DBeaver?', a: 'Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and deeply AI-powered. Beyond NL2SQL, we offer AI Query Safety Analysis, AI Query Explainer, AI Query Autopilot, AI Data Profiler, ORM Code Generator, Test Data Generator, Interactive Pivot Tables, ER Diagrams, Database Documentation, and automatic Data Masking with RBAC enforcement - features no desktop IDE provides. Zero installation, works on any device.' },
+  {
+    q: 'Is LibreDB Studio really free?',
+    a: 'Yes, 100% free and open source under the MIT license. No hidden costs, no premium tiers, no feature limitations. You get the full product, forever. We believe great developer tools should be accessible to everyone.',
+  },
+  {
+    q: 'Can I self-host LibreDB Studio?',
+    a: 'Absolutely! Self-hosting is a first-class citizen. Deploy with Docker, Kubernetes, or any Node.js environment. Your data stays on your infrastructure, under your control. We provide detailed deployment guides for all major platforms.',
+  },
+  {
+    q: 'Which AI providers are supported?',
+    a: 'We support multiple AI providers out of the box: Google Gemini (default), OpenAI (GPT-4o, GPT-4), Claude, and local LLMs via Ollama or LM Studio. You can also configure any OpenAI-compatible endpoint. Switch providers anytime or run completely offline with local models.',
+  },
+  {
+    q: 'Is my database connection secure?',
+    a: 'Security is our top priority. All connections support TLS/SSL encryption and SSH Tunnel for accessing databases behind firewalls. Credentials are never stored in plain text. For self-hosted deployments, your data never leaves your network. We support JWT authentication, OIDC Single Sign-On (Auth0, Keycloak, Okta, Azure AD), role-based access control (RBAC), transaction control (BEGIN/COMMIT/ROLLBACK), and automatic data masking — sensitive columns like email, phone, SSN, and financial data are detected and masked across the grid, exports, and clipboard with configurable RBAC enforcement.',
+  },
+  {
+    q: 'Does it support SSO / Single Sign-On?',
+    a: 'Yes! LibreDB Studio supports vendor-agnostic OpenID Connect (OIDC) authentication out of the box. Connect with Auth0, Keycloak, Okta, Azure AD, Google, or any OIDC-compliant identity provider. The integration uses Authorization Code Flow with PKCE for maximum security, supports configurable role mapping from provider claims, and handles both login and logout at the provider level. Just set three environment variables (issuer, client ID, client secret) and you’re ready to go.',
+  },
+  {
+    q: 'Which databases are supported?',
+    a: 'We support PostgreSQL, MySQL, Oracle Database, Microsoft SQL Server, SQLite, MongoDB, and Redis. Each adapter is optimized for its specific database with full feature support including schema inspection, query execution, maintenance tools, and monitoring. Oracle uses oracledb Thin mode (pure JavaScript, no Instant Client needed) and SQL Server uses the mssql/tedious driver with Azure SQL auto-detection.',
+  },
+  {
+    q: 'Can I use it on my phone or tablet?',
+    a: 'Yes! LibreDB Studio is built mobile-first. The entire UI is touch-optimized and responsive. Check your production database from anywhere - perfect for on-call situations or quick fixes on the go.',
+  },
+  {
+    q: 'Do I need to install anything?',
+    a: 'No installation required for end users. LibreDB Studio runs entirely in your browser. For self-hosting, you just need Docker or Node.js. That’s it - no Java, no Electron, no heavy desktop apps.',
+  },
+  {
+    q: 'How does it compare to pgAdmin or DBeaver?',
+    a: 'Unlike pgAdmin (PostgreSQL only) or DBeaver (desktop app), LibreDB Studio is web-based, mobile-ready, and deeply AI-powered. Beyond NL2SQL, we offer AI Query Safety Analysis, AI Query Explainer, AI Query Autopilot, AI Data Profiler, ORM Code Generator, Test Data Generator, Interactive Pivot Tables, ER Diagrams, Database Documentation, and automatic Data Masking with RBAC enforcement - features no desktop IDE provides. Zero installation, works on any device.',
+  },
 ];
 ---
+
 <div class="mx-auto max-w-4xl">
-  <SectionHeader title="Frequently asked questions" subtitle="Everything you need to know about LibreDB Studio." />
+  <SectionHeader
+    title="Frequently asked questions"
+    subtitle="Everything you need to know about LibreDB Studio."
+  />
 
   <div class="flex flex-col gap-px overflow-hidden border border-edge bg-edge">
-    {faqs.map((f, i) => (
-      <details class="group bg-panel" open={i === 0}>
-        <summary class="flex items-center justify-between gap-4 px-5 py-4 text-[14.5px] font-medium text-fg hover:text-bright">
-          <span class="flex items-center gap-3">
-            <span class="caret-icon text-faint" aria-hidden="true">▸</span>
-            {f.q}
-          </span>
-          <span class="faq-sign shrink-0 text-[16px] text-faint" aria-hidden="true"></span>
-        </summary>
-        <p class="px-5 pb-5 pl-11 text-[13.5px] leading-relaxed text-dim">{f.a}</p>
-      </details>
-    ))}
+    {
+      faqs.map((f, i) => (
+        <details class="group bg-panel" open={i === 0}>
+          <summary class="flex items-center justify-between gap-4 px-5 py-4 text-[14.5px] font-medium text-fg hover:text-bright">
+            <span class="flex items-center gap-3">
+              <span class="caret-icon text-faint" aria-hidden="true">
+                ▸
+              </span>
+              {f.q}
+            </span>
+            <span class="faq-sign shrink-0 text-[16px] text-faint" aria-hidden="true" />
+          </summary>
+          <p class="px-5 pb-5 pl-11 text-[13.5px] leading-relaxed text-dim">{f.a}</p>
+        </details>
+      ))
+    }
   </div>
 
   <!-- Still have questions -->
-  <div class="mt-6 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center">
+  <div
+    class="mt-6 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center"
+  >
     <div>
       <h3 class="text-[15px] font-bold text-bright">Still have questions?</h3>
-      <p class="mt-1 text-[13.5px] text-dim">Can&rsquo;t find the answer you&rsquo;re looking for? Reach out to our community.</p>
+      <p class="mt-1 text-[13.5px] text-dim">
+        Can&rsquo;t find the answer you&rsquo;re looking for? Reach out to our community.
+      </p>
     </div>
     <div class="flex flex-wrap gap-3">
-      <a href={`${GITHUB}/discussions`} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-fg hover:border-line hover:bg-raised">GitHub Discussions</a>
-      <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-fg hover:border-line hover:bg-raised">Follow on LinkedIn</a>
+      <a
+        href={`${GITHUB}/discussions`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-fg hover:border-line hover:bg-raised"
+        >GitHub Discussions</a
+      >
+      <a
+        href={LINKEDIN}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-fg hover:border-line hover:bg-raised"
+        >Follow on LinkedIn</a
+      >
     </div>
   </div>
 </div>
-<script type="application/json" data-export-payload="faq" data-export-filename="faq.json" data-export-format="json" set:html={JSON.stringify(faqs)} />
+<script
+  type="application/json"
+  data-export-payload="faq"
+  data-export-filename="faq.json"
+  data-export-format="json"
+  set:html={JSON.stringify(faqs)}
+/>

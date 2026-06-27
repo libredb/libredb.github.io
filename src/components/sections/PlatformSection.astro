@@ -4,12 +4,29 @@ import SectionHeader from './SectionHeader.astro';
 const APP = 'https://platform.libredb.org';
 
 const capabilities = [
-  { name: 'Multi-tenant', detail: 'Organizations with isolated data and role-based access — one platform, many teams.' },
-  { name: '5-role RBAC', detail: 'Platform Admin, Platform Tech, Tenant Admin, Editor, Viewer — least privilege by default.' },
-  { name: 'Connection governance', detail: 'Encrypted credentials with a permission matrix per connection — grant access, never hand out passwords.' },
-  { name: 'Query audit log', detail: 'Every query logged with user, timing, and status — full accountability.' },
+  {
+    name: 'Multi-tenant',
+    detail: 'Organizations with isolated data and role-based access — one platform, many teams.',
+  },
+  {
+    name: '5-role RBAC',
+    detail:
+      'Platform Admin, Platform Tech, Tenant Admin, Editor, Viewer — least privilege by default.',
+  },
+  {
+    name: 'Connection governance',
+    detail:
+      'Encrypted credentials with a permission matrix per connection — grant access, never hand out passwords.',
+  },
+  {
+    name: 'Query audit log',
+    detail: 'Every query logged with user, timing, and status — full accountability.',
+  },
   { name: 'Plans', detail: 'Free, Team, Business, and Enterprise tiers — runtime-configurable.' },
-  { name: 'SSO / OIDC', detail: 'Vendor-agnostic single sign-on (Auth0, Keycloak, Okta, Azure AD).' },
+  {
+    name: 'SSO / OIDC',
+    detail: 'Vendor-agnostic single sign-on (Auth0, Keycloak, Okta, Azure AD).',
+  },
 ];
 
 const openCore = [
@@ -17,66 +34,88 @@ const openCore = [
   { tier: 'Platform', line: 'closed · paid · cloud · enterprise', cls: 'text-ai' },
 ];
 ---
+
 <div class="mx-auto max-w-5xl">
   <!-- beta badge -->
-  <span class="inline-flex items-center gap-2 rounded-full border border-ai/40 px-3 py-1 text-[12.5px] text-ai">
+  <span
+    class="inline-flex items-center gap-2 rounded-full border border-ai/40 px-3 py-1 text-[12.5px] text-ai"
+  >
     <span aria-hidden="true">●</span> Live · beta · for teams
   </span>
 
   <!-- Hero -->
-  <h1 class="mt-6 text-3xl font-extrabold leading-[1.1] tracking-tight text-bright sm:text-4xl lg:text-5xl">
+  <h1
+    class="mt-6 text-3xl leading-[1.1] font-extrabold tracking-tight text-bright sm:text-4xl lg:text-5xl"
+  >
     Database Access<br class="hidden sm:block" />
     <span class="text-ai">Governance</span> Platform
   </h1>
   <p class="mt-5 max-w-2xl text-[15px] leading-relaxed text-muted">
-    Centralized, authorized, audited database access for teams and enterprises — the managed, team form of LibreDB.
+    Centralized, authorized, audited database access for teams and enterprises — the managed, team
+    form of LibreDB.
   </p>
 
   <!-- Problem callout -->
   <div class="mt-8 border-l-2 border-ai/60 bg-panel p-5">
     <p class="text-[15px] font-semibold text-bright">Stop distributing connection strings.</p>
     <p class="mt-2 text-[13.5px] leading-relaxed text-dim">
-      Admins control who can access which databases, every query is logged, and teams collaborate securely —
-      instead of emailing credentials around and hoping for the best.
+      Admins control who can access which databases, every query is logged, and teams collaborate
+      securely — instead of emailing credentials around and hoping for the best.
     </p>
   </div>
 
   <!-- Capabilities -->
   <div class="mt-10">
-    <SectionHeader title="What teams get" subtitle="Governance, audit, and access control on top of the Studio editor." />
-    <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
-      {capabilities.map((c) => (
-        <article class="flex flex-col bg-panel p-5">
-          <h3 class="text-[15px] font-bold text-ai">{c.name}</h3>
-          <p class="mt-2 text-[13px] leading-relaxed text-dim">{c.detail}</p>
-        </article>
-      ))}
+    <SectionHeader
+      title="What teams get"
+      subtitle="Governance, audit, and access control on top of the Studio editor."
+    />
+    <div
+      class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {
+        capabilities.map((c) => (
+          <article class="flex flex-col bg-panel p-5">
+            <h3 class="text-[15px] font-bold text-ai">{c.name}</h3>
+            <p class="mt-2 text-[13px] leading-relaxed text-dim">{c.detail}</p>
+          </article>
+        ))
+      }
     </div>
   </div>
 
   <!-- Open-core model -->
   <div class="mt-10">
-    <SectionHeader title="Open core" subtitle="Studio is free & open; Platform is the managed layer that funds the open-source work." />
+    <SectionHeader
+      title="Open core"
+      subtitle="Studio is free & open; Platform is the managed layer that funds the open-source work."
+    />
     <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2">
-      {openCore.map((o) => (
-        <article class="flex flex-col bg-panel p-5">
-          <h3 class={`text-[15px] font-bold ${o.cls}`}>{o.tier}</h3>
-          <p class="mt-2 text-[13px] leading-relaxed text-dim">{o.line}</p>
-        </article>
-      ))}
+      {
+        openCore.map((o) => (
+          <article class="flex flex-col bg-panel p-5">
+            <h3 class={`text-[15px] font-bold ${o.cls}`}>{o.tier}</h3>
+            <p class="mt-2 text-[13px] leading-relaxed text-dim">{o.line}</p>
+          </article>
+        ))
+      }
     </div>
     <p class="mt-4 text-[13.5px] leading-relaxed text-dim">
-      Both run the same Studio engine (<code class="text-fg">@libredb/studio</code>) — Studio is the single source of truth,
-      and new editor features flow into Platform with each release. The same proven model behind
-      Supabase, Metabase, Preset, Neon, and YugabyteDB.
+      Both run the same Studio engine (<code class="text-fg">@libredb/studio</code>) — Studio is the
+      single source of truth, and new editor features flow into Platform with each release. The same
+      proven model behind Supabase, Metabase, Preset, Neon, and YugabyteDB.
     </p>
   </div>
 
   <!-- CTA (the only external link) -->
-  <div class="mt-10 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center">
+  <div
+    class="mt-10 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center"
+  >
     <div>
       <h3 class="text-[16px] font-bold text-bright">Try the beta</h3>
-      <p class="mt-1 text-[13.5px] text-dim">Live now at platform.libredb.org — sign in or create a team.</p>
+      <p class="mt-1 text-[13.5px] text-dim">
+        Live now at platform.libredb.org — sign in or create a team.
+      </p>
     </div>
     <a
       href={APP}

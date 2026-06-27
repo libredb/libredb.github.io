@@ -57,7 +57,9 @@ async function resolveContent() {
     console.log('[sync-docker-compose] using remote source:', REMOTE_URL);
     return text;
   } catch (err) {
-    console.warn(`[sync-docker-compose] remote fetch failed (${err.message}); trying local sibling`);
+    console.warn(
+      `[sync-docker-compose] remote fetch failed (${err.message}); trying local sibling`,
+    );
   }
 
   try {

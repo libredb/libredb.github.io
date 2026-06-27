@@ -33,7 +33,16 @@ test('every section declares a schema of studio, database, or platform', () => {
 });
 
 test('all existing (non-database) sections are schema "studio"', () => {
-  const studioIds = ['home', 'features', 'compare', 'tech_stack', 'get_started', 'faq', 'deploy', 'docker_compose'];
+  const studioIds = [
+    'home',
+    'features',
+    'compare',
+    'tech_stack',
+    'get_started',
+    'faq',
+    'deploy',
+    'docker_compose',
+  ];
   for (const id of studioIds) {
     expect(sectionById[id].schema).toBe('studio');
   }

@@ -1,19 +1,30 @@
 ---
 import SectionHeader from './SectionHeader.astro';
 
-interface Line { kind: 'cmd' | 'comment' | 'out'; text: string; }
-interface Step { n: number; title: string; lines: Line[]; }
+interface Line {
+  kind: 'cmd' | 'comment' | 'out';
+  text: string;
+}
+interface Step {
+  n: number;
+  title: string;
+  lines: Line[];
+}
 
 const steps: Step[] = [
   {
-    n: 1, title: 'Clone & Install', lines: [
+    n: 1,
+    title: 'Clone & Install',
+    lines: [
       { kind: 'cmd', text: 'git clone https://github.com/libredb/libredb-studio.git' },
       { kind: 'cmd', text: 'cd libredb-studio' },
       { kind: 'cmd', text: 'bun install' },
     ],
   },
   {
-    n: 2, title: 'Configure', lines: [
+    n: 2,
+    title: 'Configure',
+    lines: [
       { kind: 'cmd', text: 'cp .env.example .env.local' },
       { kind: 'comment', text: '# set JWT_SECRET (32+ chars),' },
       { kind: 'comment', text: '# admin/user creds, LLM provider' },
@@ -21,7 +32,9 @@ const steps: Step[] = [
     ],
   },
   {
-    n: 3, title: 'Launch', lines: [
+    n: 3,
+    title: 'Launch',
+    lines: [
       { kind: 'cmd', text: 'bun dev' },
       { kind: 'out', text: '→ localhost:3000' },
       { kind: 'comment', text: '# or: docker compose up -d' },
@@ -32,21 +45,36 @@ const steps: Step[] = [
 const lineClass = (k: Line['kind']) =>
   k === 'comment' ? 'text-faint' : k === 'out' ? 'text-ok' : 'text-fg';
 ---
+
 <div class="mx-auto max-w-6xl">
-  <SectionHeader title="Get started in minutes" subtitle="Up and running with three simple steps." />
+  <SectionHeader
+    title="Get started in minutes"
+    subtitle="Up and running with three simple steps."
+  />
 
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-    {steps.map((s) => (
-      <article class="border border-edge bg-panel">
-        <div class="flex items-center gap-3 border-b border-edge px-4 py-3">
-          <span class="flex h-7 w-7 items-center justify-center bg-primary text-[13px] font-bold text-white">{s.n}</span>
-          <h3 class="text-[15px] font-semibold text-bright">{s.title}</h3>
-        </div>
-        <pre class="overflow-x-auto px-4 py-4 text-[12.5px] leading-relaxed"><code>{s.lines.map((l) => (
-          <span class={`block ${lineClass(l.kind)}`}>{l.kind === 'cmd' ? <span class="text-primary">$ </span> : ''}{l.text}</span>
-        ))}</code></pre>
-      </article>
-    ))}
+    {
+      steps.map((s) => (
+        <article class="border border-edge bg-panel">
+          <div class="flex items-center gap-3 border-b border-edge px-4 py-3">
+            <span class="flex h-7 w-7 items-center justify-center bg-primary text-[13px] font-bold text-white">
+              {s.n}
+            </span>
+            <h3 class="text-[15px] font-semibold text-bright">{s.title}</h3>
+          </div>
+          <pre class="overflow-x-auto px-4 py-4 text-[12.5px] leading-relaxed">
+            <code>
+              {s.lines.map((l) => (
+                <span class={`block ${lineClass(l.kind)}`}>
+                  {l.kind === 'cmd' ? <span class="text-primary">$ </span> : ''}
+                  {l.text}
+                </span>
+              ))}
+            </code>
+          </pre>
+        </article>
+      ))
+    }
   </div>
 
   <!-- Docker + one-click pointers (content preserved from original Get Started) -->
@@ -56,8 +84,12 @@ const lineClass = (k: Line['kind']) =>
         <h3 class="text-[15px] font-semibold text-bright">Prefer Docker?</h3>
         <p class="mt-1 text-[13px] text-dim">One command to run anywhere.</p>
       </div>
-      <code class="block bg-canvas px-3 py-2 text-[12.5px] text-fg"><span class="text-primary">$ </span>docker compose up -d</code>
-      <a href="/docker-compose-example" class="text-[13px] text-primary hover:underline">View the full docker-compose.example.yml →</a>
+      <code class="block bg-canvas px-3 py-2 text-[12.5px] text-fg"
+        ><span class="text-primary">$ </span>docker compose up -d</code
+      >
+      <a href="/docker-compose-example" class="text-[13px] text-primary hover:underline"
+        >View the full docker-compose.example.yml →</a
+      >
     </div>
     <div class="flex flex-col justify-between gap-3 border border-edge bg-panel p-5">
       <div>
@@ -67,8 +99,16 @@ const lineClass = (k: Line['kind']) =>
           Docker, Helm, npm, and every major PaaS and cloud.
         </p>
       </div>
-      <a href="/deploy" class="text-[13px] text-primary hover:underline">Explore all deploy options →</a>
+      <a href="/deploy" class="text-[13px] text-primary hover:underline"
+        >Explore all deploy options →</a
+      >
     </div>
   </div>
 </div>
-<script type="application/json" data-export-payload="get_started" data-export-filename="get_started.json" data-export-format="json" set:html={JSON.stringify(steps)} />
+<script
+  type="application/json"
+  data-export-payload="get_started"
+  data-export-filename="get_started.json"
+  data-export-format="json"
+  set:html={JSON.stringify(steps)}
+/>

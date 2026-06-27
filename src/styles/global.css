@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ============================================================
    LibreDB Studio — IDE design system
@@ -12,40 +12,49 @@
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Surfaces */
-  --color-canvas: #0a0a0c;       /* app background */
-  --color-panel: #0c0c0f;      /* panels, cards, editor */
-  --color-raised: #16181d;     /* hover / elevated rows */
-  --color-ok-tint: #0d1410;    /* success-tinted surface */
+  --color-canvas: #0a0a0c; /* app background */
+  --color-panel: #0c0c0f; /* panels, cards, editor */
+  --color-raised: #16181d; /* hover / elevated rows */
+  --color-ok-tint: #0d1410; /* success-tinted surface */
 
   /* Borders */
-  --color-edge: #1d1d22;       /* default hairline */
-  --color-edge-strong: #27272d;/* divider */
-  --color-line: #3f3f46;       /* emphasis (zinc-700) */
+  --color-edge: #1d1d22; /* default hairline */
+  --color-edge-strong: #27272d; /* divider */
+  --color-line: #3f3f46; /* emphasis (zinc-700) */
 
   /* Text */
-  --color-fg: #e4e4e7;         /* primary (zinc-200) */
-  --color-bright: #fafafa;     /* headings / white */
-  --color-muted: #a1a1aa;      /* zinc-400 */
-  --color-dim: #71717a;        /* zinc-500 (labels) */
-  --color-faint: #52525b;      /* zinc-600 */
+  --color-fg: #e4e4e7; /* primary (zinc-200) */
+  --color-bright: #fafafa; /* headings / white */
+  --color-muted: #a1a1aa; /* zinc-400 */
+  --color-dim: #71717a; /* zinc-500 (labels) */
+  --color-faint: #52525b; /* zinc-600 */
 
   /* Accent / semantic */
-  --color-primary: #2f6feb;        /* blue — buttons, links, active */
+  --color-primary: #2f6feb; /* blue — buttons, links, active */
   --color-primary-bright: #4b86f7; /* hover */
-  --color-ok: #4ade80;             /* true / online / strings */
-  --color-bad: #f87171;            /* false / destructive */
-  --color-warn: #fbbf24;           /* partial / MIT / numbers */
-  --color-ai: #a78bfa;             /* AI features */
-  --color-keyword: #f07178;        /* SQL keyword (salmon) */
+  --color-ok: #4ade80; /* true / online / strings */
+  --color-bad: #f87171; /* false / destructive */
+  --color-warn: #fbbf24; /* partial / MIT / numbers */
+  --color-ai: #a78bfa; /* AI features */
+  --color-keyword: #f07178; /* SQL keyword (salmon) */
 
   /* Motion */
   --animate-blink: blink 1.1s steps(2) infinite;
   --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
 
-  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
   @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
   }
 }
 
@@ -62,26 +71,49 @@
     text-rendering: optimizeLegibility;
   }
   /* Sharp by default (brutalist-leaning); selective rounding via utilities */
-  ::selection { background: rgba(47, 111, 235, 0.35); color: #fff; }
+  ::selection {
+    background: rgba(47, 111, 235, 0.35);
+    color: #fff;
+  }
 }
 
 /* Custom scrollbar — matches the IDE chrome */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-canvas);
+}
 ::-webkit-scrollbar-thumb {
   background: var(--color-edge-strong);
   border: 2px solid var(--color-canvas);
   border-radius: 6px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--color-line); }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-line);
+}
 
 /* SQL syntax highlighting for the query editors */
-.sql-kw  { color: var(--color-keyword); }   /* SELECT, FROM, WHERE, ORDER BY */
-.sql-fn  { color: var(--color-primary); }    /* table/identifier accent */
-.sql-str { color: var(--color-ok); }         /* 'strings' */
-.sql-num { color: var(--color-warn); }       /* numbers */
-.sql-com { color: var(--color-faint); font-style: italic; }
-.sql-punc{ color: var(--color-fg); }
+.sql-kw {
+  color: var(--color-keyword);
+} /* SELECT, FROM, WHERE, ORDER BY */
+.sql-fn {
+  color: var(--color-primary);
+} /* table/identifier accent */
+.sql-str {
+  color: var(--color-ok);
+} /* 'strings' */
+.sql-num {
+  color: var(--color-warn);
+} /* numbers */
+.sql-com {
+  color: var(--color-faint);
+  font-style: italic;
+}
+.sql-punc {
+  color: var(--color-fg);
+}
 
 /* Blinking caret used in query editors */
 .caret {
@@ -99,12 +131,24 @@
    • JS + desktop (.studio.js @ lg): viewport-locked IDE, single
      section per page is always shown (no swap).
    ============================================================ */
-.studio-section { display: block; }
-.caret-icon { display: inline-block; transition: transform 0.15s ease; }
+.studio-section {
+  display: block;
+}
+.caret-icon {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
 
 /* Explorer row — active state driven by a single class so SSR + JS stay in sync */
-.exp-row { color: var(--color-fg); transition: background-color 0.15s ease, color 0.15s ease; }
-.exp-row:hover { background: color-mix(in srgb, var(--color-raised) 60%, transparent); }
+.exp-row {
+  color: var(--color-fg);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+.exp-row:hover {
+  background: color-mix(in srgb, var(--color-raised) 60%, transparent);
+}
 .exp-row.active {
   background: var(--color-raised);
   color: var(--color-bright);
@@ -112,28 +156,71 @@
 }
 
 /* RUN re-run shimmer on the active result pane */
-@keyframes studio-rerun-fade { 0% { opacity: 0.35; } 100% { opacity: 1; } }
-.studio-results.is-rerunning { animation: studio-rerun-fade 0.5s ease; }
+@keyframes studio-rerun-fade {
+  0% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.studio-results.is-rerunning {
+  animation: studio-rerun-fade 0.5s ease;
+}
 @media (prefers-reduced-motion: reduce) {
-  .studio-results.is-rerunning { animation: none; }
+  .studio-results.is-rerunning {
+    animation: none;
+  }
 }
 
 /* Accordion (native <details>) */
-summary { list-style: none; cursor: pointer; }
-summary::-webkit-details-marker { display: none; }
-details[open] > summary .caret-icon { transform: rotate(90deg); }
-details[open] > summary .faq-sign::before { content: '−'; }
-.faq-sign::before { content: '+'; }
+summary {
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+details[open] > summary .caret-icon {
+  transform: rotate(90deg);
+}
+details[open] > summary .faq-sign::before {
+  content: '−';
+}
+.faq-sign::before {
+  content: '+';
+}
 
 @media (min-width: 1024px) {
-  .studio.js { height: 100vh; height: 100dvh; overflow: hidden; }
-  .studio.js .studio-pane { min-height: 0; overflow: hidden; }
-  .studio.js .studio-section { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-  .studio.js .studio-results { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  .studio.js {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .studio.js .studio-pane {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .studio.js .studio-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+  .studio.js .studio-results {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
 }
 
 /* Reduced motion: stop decorative blink/pulse and forced smooth scrolling */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .caret, .animate-pulse-dot { animation: none !important; }
+  html {
+    scroll-behavior: auto;
+  }
+  .caret,
+  .animate-pulse-dot {
+    animation: none !important;
+  }
 }

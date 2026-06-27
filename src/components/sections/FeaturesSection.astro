@@ -13,43 +13,147 @@ const catColor: Record<Cat, string> = {
   TOOLING: 'text-muted',
 };
 
-interface Feature { name: string; category: Cat; summary: string; }
+interface Feature {
+  name: string;
+  category: Cat;
+  summary: string;
+}
 
 const features: Feature[] = [
-  { name: 'Monaco SQL IDE', category: 'EDITOR', summary: 'VS Code engine with schema-aware autocomplete, multi-tab workspace, and SQL formatting.' },
-  { name: 'NL2SQL Copilot', category: 'AI', summary: 'Ask questions in plain English and get executable SQL. Schema-aware multi-model AI.' },
-  { name: 'AI Query Safety', category: 'AI', summary: 'Pre-execution risk analysis for destructive queries (DELETE, DROP, TRUNCATE).' },
-  { name: 'AI Query Autopilot', category: 'AI', summary: 'Automated slow query analysis with actionable index and rewrite recommendations.' },
-  { name: 'AI Data Profiler', category: 'AI', summary: 'One-click table profiling with column statistics, null %, cardinality, and AI narrative summaries.' },
-  { name: '7+ Databases', category: 'CORE', summary: 'PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with a unified interface.' },
-  { name: 'Mobile Ready', category: 'CORE', summary: 'Touch-optimized responsive UI for tablets and phones. Manage databases anywhere.' },
-  { name: 'Pro Data Grid', category: 'DATA', summary: 'Virtualized rendering, column filtering, inline editing, pivot table, and CSV/JSON export.' },
-  { name: 'Visual EXPLAIN', category: 'DATA', summary: 'Graphical execution plans with AI-powered plain-language explanations and optimization tips.' },
-  { name: 'Interactive ER Diagrams', category: 'SCHEMA', summary: 'Visual schema graph with table relationships, column details, and ReactFlow-powered navigation.' },
-  { name: 'Database Documentation', category: 'SCHEMA', summary: 'Auto-generated searchable data dictionary with AI-powered descriptions and Markdown export.' },
-  { name: 'SSO / Single Sign-On', category: 'SECURITY', summary: 'Vendor-agnostic OIDC authentication with Auth0, Keycloak, Okta, Azure AD. PKCE, role mapping, and provider logout.' },
-  { name: 'Enterprise Security', category: 'SECURITY', summary: 'JWT auth, RBAC, SSL/TLS, SSH Tunnel, transaction control, query cancellation, and SSO support.' },
-  { name: 'Data Masking', category: 'SECURITY', summary: 'Auto-detect sensitive columns (email, phone, SSN, financial). RBAC-enforced with export protection.' },
-  { name: 'ORM Code Generator', category: 'TOOLING', summary: 'Generate TypeScript, Zod, Prisma, Go structs, Python dataclasses, and Java POJOs from live schemas.' },
-  { name: 'Test Data Generator', category: 'TOOLING', summary: 'Schema-aware fake data with 30+ semantic inferences (email, phone, name, address).' },
-  { name: 'DBA Toolkit', category: 'TOOLING', summary: 'Live monitoring, active sessions, one-click VACUUM/ANALYZE/REINDEX, and query auditing.' },
-  { name: 'Opens Ready-to-Use', category: 'CORE', summary: 'No empty screen on first launch — Studio ships with a live Sample (LibreDB) connection powered by our open-source embedded engine. Explore relational, document, and key-value side by side, no server required. Editable, deletable, and disabled by a single env flag.' },
+  {
+    name: 'Monaco SQL IDE',
+    category: 'EDITOR',
+    summary:
+      'VS Code engine with schema-aware autocomplete, multi-tab workspace, and SQL formatting.',
+  },
+  {
+    name: 'NL2SQL Copilot',
+    category: 'AI',
+    summary: 'Ask questions in plain English and get executable SQL. Schema-aware multi-model AI.',
+  },
+  {
+    name: 'AI Query Safety',
+    category: 'AI',
+    summary: 'Pre-execution risk analysis for destructive queries (DELETE, DROP, TRUNCATE).',
+  },
+  {
+    name: 'AI Query Autopilot',
+    category: 'AI',
+    summary: 'Automated slow query analysis with actionable index and rewrite recommendations.',
+  },
+  {
+    name: 'AI Data Profiler',
+    category: 'AI',
+    summary:
+      'One-click table profiling with column statistics, null %, cardinality, and AI narrative summaries.',
+  },
+  {
+    name: '7+ Databases',
+    category: 'CORE',
+    summary:
+      'PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with a unified interface.',
+  },
+  {
+    name: 'Mobile Ready',
+    category: 'CORE',
+    summary: 'Touch-optimized responsive UI for tablets and phones. Manage databases anywhere.',
+  },
+  {
+    name: 'Pro Data Grid',
+    category: 'DATA',
+    summary:
+      'Virtualized rendering, column filtering, inline editing, pivot table, and CSV/JSON export.',
+  },
+  {
+    name: 'Visual EXPLAIN',
+    category: 'DATA',
+    summary:
+      'Graphical execution plans with AI-powered plain-language explanations and optimization tips.',
+  },
+  {
+    name: 'Interactive ER Diagrams',
+    category: 'SCHEMA',
+    summary:
+      'Visual schema graph with table relationships, column details, and ReactFlow-powered navigation.',
+  },
+  {
+    name: 'Database Documentation',
+    category: 'SCHEMA',
+    summary:
+      'Auto-generated searchable data dictionary with AI-powered descriptions and Markdown export.',
+  },
+  {
+    name: 'SSO / Single Sign-On',
+    category: 'SECURITY',
+    summary:
+      'Vendor-agnostic OIDC authentication with Auth0, Keycloak, Okta, Azure AD. PKCE, role mapping, and provider logout.',
+  },
+  {
+    name: 'Enterprise Security',
+    category: 'SECURITY',
+    summary:
+      'JWT auth, RBAC, SSL/TLS, SSH Tunnel, transaction control, query cancellation, and SSO support.',
+  },
+  {
+    name: 'Data Masking',
+    category: 'SECURITY',
+    summary:
+      'Auto-detect sensitive columns (email, phone, SSN, financial). RBAC-enforced with export protection.',
+  },
+  {
+    name: 'ORM Code Generator',
+    category: 'TOOLING',
+    summary:
+      'Generate TypeScript, Zod, Prisma, Go structs, Python dataclasses, and Java POJOs from live schemas.',
+  },
+  {
+    name: 'Test Data Generator',
+    category: 'TOOLING',
+    summary: 'Schema-aware fake data with 30+ semantic inferences (email, phone, name, address).',
+  },
+  {
+    name: 'DBA Toolkit',
+    category: 'TOOLING',
+    summary:
+      'Live monitoring, active sessions, one-click VACUUM/ANALYZE/REINDEX, and query auditing.',
+  },
+  {
+    name: 'Opens Ready-to-Use',
+    category: 'CORE',
+    summary:
+      'No empty screen on first launch — Studio ships with a live Sample (LibreDB) connection powered by our open-source embedded engine. Explore relational, document, and key-value side by side, no server required. Editable, deletable, and disabled by a single env flag.',
+  },
 ];
 ---
+
 <div class="mx-auto max-w-6xl">
   <SectionHeader
     title="Everything you need to master your data"
     subtitle="Professional-grade features for developers, DBAs, and data teams."
   />
 
-  <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
-    {features.map((f) => (
-      <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
-        <span class={`text-[10.5px] font-semibold uppercase tracking-wider ${catColor[f.category]}`}>{f.category}</span>
-        <h3 class="mt-2 text-[15px] font-semibold text-bright">{f.name}</h3>
-        <p class="mt-2 text-[13px] leading-relaxed text-dim">{f.summary}</p>
-      </article>
-    ))}
+  <div
+    class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      features.map((f) => (
+        <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
+          <span
+            class={`text-[10.5px] font-semibold tracking-wider uppercase ${catColor[f.category]}`}
+          >
+            {f.category}
+          </span>
+          <h3 class="mt-2 text-[15px] font-semibold text-bright">{f.name}</h3>
+          <p class="mt-2 text-[13px] leading-relaxed text-dim">{f.summary}</p>
+        </article>
+      ))
+    }
   </div>
 </div>
-<script type="application/json" data-export-payload="features" data-export-filename="features.json" data-export-format="json" set:html={JSON.stringify(features)} />
+<script
+  type="application/json"
+  data-export-payload="features"
+  data-export-filename="features.json"
+  data-export-format="json"
+  set:html={JSON.stringify(features)}
+/>

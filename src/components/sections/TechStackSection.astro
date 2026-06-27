@@ -1,11 +1,17 @@
 ---
 import SectionHeader from './SectionHeader.astro';
 
-interface Layer { layer: string; color: string; tools: { name: string; role: string }[]; }
+interface Layer {
+  layer: string;
+  color: string;
+  tools: { name: string; role: string }[];
+}
 
 const layers: Layer[] = [
   {
-    layer: 'FRONTEND', color: 'text-primary', tools: [
+    layer: 'FRONTEND',
+    color: 'text-primary',
+    tools: [
       { name: 'Next.js 16', role: 'App Router' },
       { name: 'React 19', role: 'Server Components' },
       { name: 'TypeScript', role: 'Type Safety' },
@@ -13,7 +19,9 @@ const layers: Layer[] = [
     ],
   },
   {
-    layer: 'EDITOR & DATA', color: 'text-ok', tools: [
+    layer: 'EDITOR & DATA',
+    color: 'text-ok',
+    tools: [
       { name: 'Monaco Editor', role: 'VS Code Engine' },
       { name: 'TanStack Table', role: 'Data Grid' },
       { name: 'ReactFlow', role: 'ER Diagrams' },
@@ -21,7 +29,9 @@ const layers: Layer[] = [
     ],
   },
   {
-    layer: 'AI & AUTH', color: 'text-ai', tools: [
+    layer: 'AI & AUTH',
+    color: 'text-ai',
+    tools: [
       { name: 'Gemini 2.5', role: 'Default LLM' },
       { name: 'OpenAI / Claude', role: 'Alternatives' },
       { name: 'Ollama / LM Studio', role: 'Local LLMs' },
@@ -29,7 +39,9 @@ const layers: Layer[] = [
     ],
   },
   {
-    layer: 'DEVOPS', color: 'text-warn', tools: [
+    layer: 'DEVOPS',
+    color: 'text-warn',
+    tools: [
       { name: 'Docker', role: 'Container' },
       { name: 'Kubernetes', role: 'Orchestration' },
       { name: 'Bun', role: 'Runtime' },
@@ -37,23 +49,39 @@ const layers: Layer[] = [
   },
 ];
 ---
-<div class="mx-auto max-w-6xl">
-  <SectionHeader title="Built with modern tech" subtitle="Production-ready stack for performance and scalability." />
 
-  <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-4">
-    {layers.map((l) => (
-      <div class="bg-panel p-5">
-        <span class={`text-[11px] font-semibold uppercase tracking-wider ${l.color}`}>{l.layer}</span>
-        <ul class="mt-4 space-y-3">
-          {l.tools.map((t) => (
-            <li>
-              <div class="text-[14px] font-semibold text-fg">{t.name}</div>
-              <div class="text-[12px] text-faint">{t.role}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+<div class="mx-auto max-w-6xl">
+  <SectionHeader
+    title="Built with modern tech"
+    subtitle="Production-ready stack for performance and scalability."
+  />
+
+  <div
+    class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-4"
+  >
+    {
+      layers.map((l) => (
+        <div class="bg-panel p-5">
+          <span class={`text-[11px] font-semibold tracking-wider uppercase ${l.color}`}>
+            {l.layer}
+          </span>
+          <ul class="mt-4 space-y-3">
+            {l.tools.map((t) => (
+              <li>
+                <div class="text-[14px] font-semibold text-fg">{t.name}</div>
+                <div class="text-[12px] text-faint">{t.role}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </div>
-<script type="application/json" data-export-payload="tech_stack" data-export-filename="tech_stack.json" data-export-format="json" set:html={JSON.stringify(layers)} />
+<script
+  type="application/json"
+  data-export-payload="tech_stack"
+  data-export-filename="tech_stack.json"
+  data-export-format="json"
+  set:html={JSON.stringify(layers)}
+/>

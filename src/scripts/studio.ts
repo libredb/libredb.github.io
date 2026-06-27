@@ -65,9 +65,9 @@ function toggleExplain(trigger: HTMLElement) {
   if (!panel) return;
   const open = panel.hasAttribute('hidden');
   panel.toggleAttribute('hidden', !open);
-  document.querySelectorAll<HTMLElement>(`[data-section="${id}"] [data-action="explain"]`).forEach((b) =>
-    b.setAttribute('aria-expanded', String(open)),
-  );
+  document
+    .querySelectorAll<HTMLElement>(`[data-section="${id}"] [data-action="explain"]`)
+    .forEach((b) => b.setAttribute('aria-expanded', String(open)));
 }
 
 /* ---- Explorer schema (column) expand/collapse ---- */
@@ -126,7 +126,8 @@ function renderToast(msg: ConsoleMessage): HTMLElement {
     cta.href = msg.cta.href;
     cta.target = '_blank';
     cta.rel = 'noopener noreferrer';
-    cta.className = 'mt-1 inline-block border border-edge-strong px-2 py-0.5 text-primary hover:bg-raised';
+    cta.className =
+      'mt-1 inline-block border border-edge-strong px-2 py-0.5 text-primary hover:bg-raised';
     cta.textContent = `${msg.cta.label} →`;
     body.appendChild(cta);
   }
@@ -151,12 +152,22 @@ const studioConsole = {
     while (root.children.length > 3) root.firstElementChild?.remove();
     let t = window.setTimeout(() => el.remove(), 6000);
     el.addEventListener('mouseenter', () => clearTimeout(t));
-    el.addEventListener('mouseleave', () => { t = window.setTimeout(() => el.remove(), 2500); });
+    el.addEventListener('mouseleave', () => {
+      t = window.setTimeout(() => el.remove(), 2500);
+    });
   },
-  notice(text: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'notice', text, cta }); },
-  error(text: string, hint?: string, cta?: ConsoleMessage['cta']) { this.push({ kind: 'error', text, hint, cta }); },
-  ok(text: string) { this.push({ kind: 'ok', text }); },
-  comment(text: string) { this.push({ kind: 'comment', text }); },
+  notice(text: string, cta?: ConsoleMessage['cta']) {
+    this.push({ kind: 'notice', text, cta });
+  },
+  error(text: string, hint?: string, cta?: ConsoleMessage['cta']) {
+    this.push({ kind: 'error', text, hint, cta });
+  },
+  ok(text: string) {
+    this.push({ kind: 'ok', text });
+  },
+  comment(text: string) {
+    this.push({ kind: 'comment', text });
+  },
 };
 
 function runQuery() {
@@ -168,7 +179,9 @@ function runQuery() {
     pane.classList.remove('is-rerunning');
     void pane.offsetWidth; // restart animation
     pane.classList.add('is-rerunning');
-    pane.addEventListener('animationend', () => pane.classList.remove('is-rerunning'), { once: true });
+    pane.addEventListener('animationend', () => pane.classList.remove('is-rerunning'), {
+      once: true,
+    });
   }
   studioConsole.ok(`${meta.rows} rows (${meta.execMs}ms)`);
 }
@@ -199,7 +212,10 @@ function downloadBlob(content: string, filename: string, mime: string) {
 function exportSection() {
   const id = currentId();
   const payloadEl = document.querySelector<HTMLElement>(`[data-export-payload="${id}"]`);
-  if (!payloadEl?.textContent) { studioConsole.notice('nothing to export from this view'); return; }
+  if (!payloadEl?.textContent) {
+    studioConsole.notice('nothing to export from this view');
+    return;
+  }
   let rows: Row[];
   try {
     rows = JSON.parse(payloadEl.textContent) as Row[];
@@ -215,20 +231,38 @@ function exportSection() {
 }
 
 /* ---- Command palette ---- */
-interface PaletteItem { label: string; hint: string; run: () => void; }
+interface PaletteItem {
+  label: string;
+  hint: string;
+  run: () => void;
+}
 
 function paletteItems(): PaletteItem[] {
   const jumps: PaletteItem[] = sections.map((s) => ({
     label: `Jump to ${s.table}`,
     hint: `${s.rows} rows`,
-    run: () => { location.href = href(s.slug); },
+    run: () => {
+      location.href = href(s.slug);
+    },
   }));
   const actions: PaletteItem[] = [
     { label: 'Copy link to current section', hint: 'clipboard', run: () => copyLink() },
     { label: 'Export current section', hint: 'download', run: () => exportSection() },
-    { label: 'Open live demo', hint: 'app.libredb.org', run: () => window.open('https://app.libredb.org', '_blank') },
-    { label: 'Open GitHub', hint: 'repo', run: () => window.open('https://github.com/libredb/libredb-studio', '_blank') },
-    { label: 'View README / docs', hint: 'github', run: () => window.open('https://github.com/libredb/libredb-studio#readme', '_blank') },
+    {
+      label: 'Open live demo',
+      hint: 'app.libredb.org',
+      run: () => window.open('https://app.libredb.org', '_blank'),
+    },
+    {
+      label: 'Open GitHub',
+      hint: 'repo',
+      run: () => window.open('https://github.com/libredb/libredb-studio', '_blank'),
+    },
+    {
+      label: 'View README / docs',
+      hint: 'github',
+      run: () => window.open('https://github.com/libredb/libredb-studio#readme', '_blank'),
+    },
   ];
   return [...jumps, ...actions];
 }
@@ -258,7 +292,10 @@ function renderPalette(query: string) {
     li.appendChild(labelSpan);
     li.appendChild(hintSpan);
     li.addEventListener('mousemove', () => setHighlight(i));
-    li.addEventListener('click', () => { it.run(); closePalette(); });
+    li.addEventListener('click', () => {
+      it.run();
+      closePalette();
+    });
     list.appendChild(li);
   });
   if (paletteFiltered.length > 0) {
@@ -307,9 +344,21 @@ function onActionClick(e: Event) {
   if (!(target instanceof Element)) return;
 
   // Chrome delegations: palette-close, drawer open/close, explorer column toggles
-  if (target.closest('[data-palette-close]')) { e.preventDefault(); closePalette(); return; }
-  if (target.closest('[data-drawer-open]')) { e.preventDefault(); openDrawer(); return; }
-  if (target.closest('[data-drawer-close]')) { e.preventDefault(); closeDrawer(); return; }
+  if (target.closest('[data-palette-close]')) {
+    e.preventDefault();
+    closePalette();
+    return;
+  }
+  if (target.closest('[data-drawer-open]')) {
+    e.preventDefault();
+    openDrawer();
+    return;
+  }
+  if (target.closest('[data-drawer-close]')) {
+    e.preventDefault();
+    closeDrawer();
+    return;
+  }
   const toggleBtn = target.closest<HTMLElement>('[data-explorer-toggle]');
   if (toggleBtn) {
     e.preventDefault();
@@ -326,32 +375,72 @@ function onActionClick(e: Event) {
     const msg = NOTICES[el.dataset.notice ?? ''];
     if (msg) studioConsole.push(msg);
   }
-  if (action === 'explain') { e.preventDefault(); toggleExplain(el); }
-  if (action === 'run') { e.preventDefault(); runQuery(); }
-  if (action === 'copy-link') { e.preventDefault(); copyLink(); }
-  if (action === 'export') { e.preventDefault(); exportSection(); }
-  if (action === 'palette') { e.preventDefault(); openPalette(); }
+  if (action === 'explain') {
+    e.preventDefault();
+    toggleExplain(el);
+  }
+  if (action === 'run') {
+    e.preventDefault();
+    runQuery();
+  }
+  if (action === 'copy-link') {
+    e.preventDefault();
+    copyLink();
+  }
+  if (action === 'export') {
+    e.preventDefault();
+    exportSection();
+  }
+  if (action === 'palette') {
+    e.preventDefault();
+    openPalette();
+  }
   if (action === 'results') {
     e.preventDefault();
     const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.querySelector(`[data-section="${currentId()}"] .studio-results`)?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    document
+      .querySelector(`[data-section="${currentId()}"] .studio-results`)
+      ?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
   }
 }
 
 /* ---- Keyboard handler ---- */
 function onKeydown(e: KeyboardEvent) {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runQuery(); return; }
-  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openPalette(); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    e.preventDefault();
+    runQuery();
+    return;
+  }
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault();
+    openPalette();
+    return;
+  }
   const root = document.querySelector('[data-palette-root]');
   if (!root || root.hasAttribute('hidden')) return;
-  if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
-  else if (e.key === 'Tab') { e.preventDefault(); (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus(); }
-  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-    if (paletteFiltered.length === 0) { e.preventDefault(); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1)); }
-    else { e.preventDefault(); setHighlight(Math.max(paletteHighlight - 1, 0)); }
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closePalette();
+  } else if (e.key === 'Tab') {
+    e.preventDefault();
+    (document.querySelector('[data-palette-input]') as HTMLElement | null)?.focus();
+  } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    if (paletteFiltered.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlight(Math.min(paletteHighlight + 1, paletteFiltered.length - 1));
+    } else {
+      e.preventDefault();
+      setHighlight(Math.max(paletteHighlight - 1, 0));
+    }
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    paletteFiltered[paletteHighlight]?.run();
+    closePalette();
   }
-  else if (e.key === 'Enter') { e.preventDefault(); paletteFiltered[paletteHighlight]?.run(); closePalette(); }
 }
 
 /* ---- Explorer search filter helper ---- */
@@ -390,9 +479,14 @@ function wireOnce() {
     const target = e.target;
     if (!(target instanceof Element)) return;
     const searchInput = target.closest<HTMLInputElement>('[data-explorer-search]');
-    if (searchInput) { filterExplorer(searchInput); return; }
+    if (searchInput) {
+      filterExplorer(searchInput);
+      return;
+    }
     const paletteInput = target.closest<HTMLInputElement>('[data-palette-input]');
-    if (paletteInput) { renderPalette(paletteInput.value); }
+    if (paletteInput) {
+      renderPalette(paletteInput.value);
+    }
   });
 
   // Delegated keydown: explorer search Enter-to-jump
@@ -419,9 +513,15 @@ function onPage() {
   syncActive();
 }
 
-function start() { wireOnce(); onPage(); }
+function start() {
+  wireOnce();
+  onPage();
+}
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
 else start();
 
-document.addEventListener('astro:page-load', () => { wireOnce(); onPage(); });
+document.addEventListener('astro:page-load', () => {
+  wireOnce();
+  onPage();
+});

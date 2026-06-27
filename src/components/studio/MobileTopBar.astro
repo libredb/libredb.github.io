@@ -1,11 +1,16 @@
 ---
 import Explorer from './Explorer.astro';
 
-interface Props { active?: string; }
+interface Props {
+  active?: string;
+}
 const { active = 'home' } = Astro.props;
 const DEMO = 'https://app.libredb.org';
 ---
-<header class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-canvas/95 px-3 backdrop-blur lg:hidden">
+
+<header
+  class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-canvas/95 px-3 backdrop-blur lg:hidden"
+>
   <div class="flex items-center gap-3">
     <button
       type="button"
@@ -39,10 +44,18 @@ const DEMO = 'https://app.libredb.org';
 <!-- Drawer -->
 <div class="fixed inset-0 z-40 hidden lg:hidden" data-drawer-root>
   <div class="absolute inset-0 bg-black/60" data-drawer-close></div>
-  <aside class="absolute left-0 top-0 h-full w-[84%] max-w-xs -translate-x-full border-r border-edge bg-canvas transition-transform duration-200 ease-out" data-drawer-panel>
+  <aside
+    class="absolute top-0 left-0 h-full w-[84%] max-w-xs -translate-x-full border-r border-edge bg-canvas transition-transform duration-200 ease-out"
+    data-drawer-panel
+  >
     <div class="flex items-center justify-between border-b border-edge px-4 py-3">
-      <span class="text-[11px] uppercase tracking-wider text-faint">Connections</span>
-      <button type="button" class="text-faint hover:text-fg" aria-label="Close explorer" data-drawer-close>✕</button>
+      <span class="text-[11px] tracking-wider text-faint uppercase">Connections</span>
+      <button
+        type="button"
+        class="text-faint hover:text-fg"
+        aria-label="Close explorer"
+        data-drawer-close>✕</button
+      >
     </div>
     <div class="h-[calc(100%-49px)]">
       <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} />

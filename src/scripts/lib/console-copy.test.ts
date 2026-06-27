@@ -2,9 +2,25 @@ import { test, expect } from 'bun:test';
 import { NOTICES } from './console-copy';
 
 const REQUIRED_KEYS = [
-  'monitoring', 'query', 'save', 'begin', 'sandbox', 'edit', 'import',
-  'format', 'clear', 'lines', 'history', 'saved', 'charts', 'autopilot',
-  'pivot', 'diff', 'dashboard', 'newtab', 'closetab',
+  'monitoring',
+  'query',
+  'save',
+  'begin',
+  'sandbox',
+  'edit',
+  'import',
+  'format',
+  'clear',
+  'lines',
+  'history',
+  'saved',
+  'charts',
+  'autopilot',
+  'pivot',
+  'diff',
+  'dashboard',
+  'newtab',
+  'closetab',
 ];
 const VALID_KINDS = ['notice', 'error', 'ok', 'comment'];
 

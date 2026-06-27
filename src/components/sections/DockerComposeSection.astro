@@ -20,31 +20,79 @@ const envGroups = [
   {
     title: 'Authentication (required)',
     vars: [
-      { name: 'ADMIN_EMAIL', def: 'admin@libredb.org', desc: 'Admin login — full access plus maintenance tools.' },
-      { name: 'ADMIN_PASSWORD', def: '— (required)', desc: 'Admin password. Set this in your .env file.' },
-      { name: 'USER_EMAIL', def: 'user@libredb.org', desc: 'Standard user login — query execution only.' },
-      { name: 'USER_PASSWORD', def: '— (required)', desc: 'User password. Set this in your .env file.' },
-      { name: 'JWT_SECRET', def: '— (required)', desc: 'JWT signing secret, min 32 chars. Generate: openssl rand -base64 32' },
-      { name: 'NEXT_PUBLIC_AUTH_PROVIDER', def: 'local', desc: 'Auth mode: "local" (email/password) or "oidc" (SSO).' },
+      {
+        name: 'ADMIN_EMAIL',
+        def: 'admin@libredb.org',
+        desc: 'Admin login — full access plus maintenance tools.',
+      },
+      {
+        name: 'ADMIN_PASSWORD',
+        def: '— (required)',
+        desc: 'Admin password. Set this in your .env file.',
+      },
+      {
+        name: 'USER_EMAIL',
+        def: 'user@libredb.org',
+        desc: 'Standard user login — query execution only.',
+      },
+      {
+        name: 'USER_PASSWORD',
+        def: '— (required)',
+        desc: 'User password. Set this in your .env file.',
+      },
+      {
+        name: 'JWT_SECRET',
+        def: '— (required)',
+        desc: 'JWT signing secret, min 32 chars. Generate: openssl rand -base64 32',
+      },
+      {
+        name: 'NEXT_PUBLIC_AUTH_PROVIDER',
+        def: 'local',
+        desc: 'Auth mode: "local" (email/password) or "oidc" (SSO).',
+      },
     ],
   },
   {
     title: 'OIDC SSO (when NEXT_PUBLIC_AUTH_PROVIDER=oidc)',
     vars: [
-      { name: 'OIDC_ISSUER', def: '—', desc: 'Issuer URL serving /.well-known/openid-configuration.' },
+      {
+        name: 'OIDC_ISSUER',
+        def: '—',
+        desc: 'Issuer URL serving /.well-known/openid-configuration.',
+      },
       { name: 'OIDC_CLIENT_ID', def: '—', desc: 'OIDC client ID from your identity provider.' },
       { name: 'OIDC_CLIENT_SECRET', def: '—', desc: 'OIDC client secret.' },
       { name: 'OIDC_SCOPE', def: 'openid profile email', desc: 'Requested OIDC scopes.' },
-      { name: 'OIDC_ROLE_CLAIM', def: '—', desc: 'Claim holding roles, e.g. realm_access.roles (Keycloak), groups (Okta).' },
-      { name: 'OIDC_ADMIN_ROLES', def: 'admin', desc: 'Roles mapped to admin access. Works with Auth0, Keycloak, Okta, Azure AD, Zitadel.' },
+      {
+        name: 'OIDC_ROLE_CLAIM',
+        def: '—',
+        desc: 'Claim holding roles, e.g. realm_access.roles (Keycloak), groups (Okta).',
+      },
+      {
+        name: 'OIDC_ADMIN_ROLES',
+        def: 'admin',
+        desc: 'Roles mapped to admin access. Works with Auth0, Keycloak, Okta, Azure AD, Zitadel.',
+      },
     ],
   },
   {
     title: 'Storage — where connections & config persist',
     vars: [
-      { name: 'STORAGE_PROVIDER', def: 'local', desc: '"local" (browser localStorage, zero config), "sqlite" (single-node file), or "postgres" (multi-node).' },
-      { name: 'STORAGE_SQLITE_PATH', def: '/app/data/libredb-storage.db', desc: 'SQLite file path. Mount a volume to persist it.' },
-      { name: 'STORAGE_POSTGRES_URL', def: 'postgresql://…@libredb-postgres:5432/libredb_storage', desc: 'PostgreSQL connection string for multi-node persistence.' },
+      {
+        name: 'STORAGE_PROVIDER',
+        def: 'local',
+        desc: '"local" (browser localStorage, zero config), "sqlite" (single-node file), or "postgres" (multi-node).',
+      },
+      {
+        name: 'STORAGE_SQLITE_PATH',
+        def: '/app/data/libredb-storage.db',
+        desc: 'SQLite file path. Mount a volume to persist it.',
+      },
+      {
+        name: 'STORAGE_POSTGRES_URL',
+        def: 'postgresql://…@libredb-postgres:5432/libredb_storage',
+        desc: 'PostgreSQL connection string for multi-node persistence.',
+      },
     ],
   },
   {
@@ -53,117 +101,188 @@ const envGroups = [
       { name: 'LLM_PROVIDER', def: 'gemini', desc: 'Provider: gemini | openai | ollama | custom.' },
       { name: 'LLM_API_KEY', def: '—', desc: 'API key — required for gemini/openai.' },
       { name: 'LLM_MODEL', def: 'gemini-2.5-flash', desc: 'Model name to use for NL2SQL.' },
-      { name: 'LLM_API_URL', def: '—', desc: 'Base URL for ollama/custom, e.g. http://host:11434/v1' },
+      {
+        name: 'LLM_API_URL',
+        def: '—',
+        desc: 'Base URL for ollama/custom, e.g. http://host:11434/v1',
+      },
     ],
   },
   {
     title: 'Seed connections (optional)',
     vars: [
-      { name: 'SEED_CONFIG_PATH', def: '/app/config/seed-connections.yaml', desc: 'Pre-configure databases on boot from a mounted YAML file.' },
-      { name: 'SEED_CACHE_TTL_MS', def: '60000', desc: 'Cache TTL for seeded connections, in milliseconds.' },
+      {
+        name: 'SEED_CONFIG_PATH',
+        def: '/app/config/seed-connections.yaml',
+        desc: 'Pre-configure databases on boot from a mounted YAML file.',
+      },
+      {
+        name: 'SEED_CACHE_TTL_MS',
+        def: '60000',
+        desc: 'Cache TTL for seeded connections, in milliseconds.',
+      },
     ],
   },
 ];
 ---
 
-<SectionHeader title="Docker Compose example" subtitle="One command to self-host LibreDB Studio — pulls the published ghcr.io image, with every environment variable." />
+<SectionHeader
+  title="Docker Compose example"
+  subtitle="One command to self-host LibreDB Studio — pulls the published ghcr.io image, with every environment variable."
+/>
 
 <div class="mx-auto max-w-4xl">
   <!-- Quick start -->
-  <section class="mb-10 mt-8">
-    <h2 class="text-xl font-semibold text-bright mb-4">Quick start</h2>
-    <div class="relative group">
-      <pre class="p-4 pr-12 bg-canvas border border-edge text-xs md:text-sm text-fg font-mono overflow-x-auto"><code>{quickStart}</code></pre>
+  <section class="mt-8 mb-10">
+    <h2 class="mb-4 text-xl font-semibold text-bright">Quick start</h2>
+    <div class="group relative">
+      <pre
+        class="overflow-x-auto border border-edge bg-canvas p-4 pr-12 font-mono text-xs text-fg md:text-sm"><code>{quickStart}</code></pre>
       <button
-        class="copy-btn absolute top-3 right-3 p-1.5 rounded-md bg-raised hover:bg-edge-strong text-dim hover:text-fg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200"
+        class="copy-btn absolute top-3 right-3 rounded-md bg-raised p-1.5 text-dim opacity-100 transition-all duration-200 hover:bg-edge-strong hover:text-fg md:opacity-0 md:group-hover:opacity-100"
         data-code={quickStart}
         aria-label="Copy quick start commands"
       >
-        <svg class="w-4 h-4 copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-        <svg class="w-4 h-4 check-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <svg class="copy-icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+          ></path></svg
+        >
+        <svg class="check-icon hidden h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"
+          ></path></svg
+        >
       </button>
     </div>
-    <p class="text-sm text-muted mt-3">
+    <p class="mt-3 text-sm text-muted">
       That's it — LibreDB Studio is now running at
-      <code class="text-primary">http://localhost:3000</code>. Log in with the admin credentials from your
+      <code class="text-primary">http://localhost:3000</code>. Log in with the admin credentials
+      from your
       <code class="text-primary">.env</code> file.
     </p>
   </section>
 
   <!-- Full file -->
   <section class="mb-10">
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-      <h2 class="text-xl font-semibold text-bright">The full <code class="text-primary">docker-compose.example.yml</code></h2>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-xl font-semibold text-bright">
+        The full <code class="text-primary">docker-compose.example.yml</code>
+      </h2>
       <div class="flex items-center gap-2">
         <a
           href="/docker-compose.example.yml"
           download="docker-compose.yml"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-md border border-edge-strong text-fg hover:bg-raised transition-colors"
+          class="inline-flex items-center gap-1.5 rounded-md border border-edge-strong px-3 py-1.5 text-xs text-fg transition-colors hover:bg-raised md:text-sm"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg
+          >
           Download raw
         </a>
         <button
-          class="copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs md:text-sm rounded-md border border-edge-strong text-fg hover:bg-raised transition-colors"
+          class="copy-btn inline-flex items-center gap-1.5 rounded-md border border-edge-strong px-3 py-1.5 text-xs text-fg transition-colors hover:bg-raised md:text-sm"
           data-code={composeYaml}
           aria-label="Copy the full docker-compose file"
         >
-          <svg class="w-4 h-4 copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-          <svg class="w-4 h-4 check-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <svg class="copy-icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            ></path></svg
+          >
+          <svg
+            class="check-icon hidden h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"></path></svg
+          >
           <span class="copy-label">Copy</span>
         </button>
       </div>
     </div>
-    <div class="compose-code border border-edge overflow-hidden text-xs md:text-sm">
+    <div class="compose-code overflow-hidden border border-edge text-xs md:text-sm">
       <Code code={composeYaml} lang="yaml" theme="github-dark" />
     </div>
   </section>
 
   <!-- Environment variable reference -->
   <section class="mb-10">
-    <h2 class="text-xl font-semibold text-bright mb-2">Environment variable reference</h2>
-    <p class="text-sm text-muted mb-6">
+    <h2 class="mb-2 text-xl font-semibold text-bright">Environment variable reference</h2>
+    <p class="mb-6 text-sm text-muted">
       Every supported variable, grouped as in the file. Secrets are read from your
-      <code class="text-primary">.env</code> file via <code class="text-primary">${'{VAR}'}</code> interpolation —
-      never hardcoded in the compose file.
+      <code class="text-primary">.env</code> file via <code class="text-primary">${'{VAR}'}</code> interpolation
+      — never hardcoded in the compose file.
     </p>
-    {envGroups.map((group) => (
-      <div class="mb-8">
-        <h3 class="text-base font-medium text-bright mb-3">{group.title}</h3>
-        <div class="overflow-x-auto border border-edge">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-panel text-fg">
-              <tr>
-                <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Variable</th>
-                <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Default</th>
-                <th class="px-4 py-2.5 font-semibold">Description</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-edge">
-              {group.vars.map((v) => (
-                <tr class="align-top">
-                  <td class="px-4 py-2.5"><code class="text-primary whitespace-nowrap">{v.name}</code></td>
-                  <td class="px-4 py-2.5 text-muted font-mono text-xs whitespace-nowrap">{v.def}</td>
-                  <td class="px-4 py-2.5 text-fg">{v.desc}</td>
+    {
+      envGroups.map((group) => (
+        <div class="mb-8">
+          <h3 class="mb-3 text-base font-medium text-bright">{group.title}</h3>
+          <div class="overflow-x-auto border border-edge">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-panel text-fg">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Variable</th>
+                  <th class="px-4 py-2.5 font-semibold whitespace-nowrap">Default</th>
+                  <th class="px-4 py-2.5 font-semibold">Description</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody class="divide-y divide-edge">
+                {group.vars.map((v) => (
+                  <tr class="align-top">
+                    <td class="px-4 py-2.5">
+                      <code class="whitespace-nowrap text-primary">{v.name}</code>
+                    </td>
+                    <td class="px-4 py-2.5 font-mono text-xs whitespace-nowrap text-muted">
+                      {v.def}
+                    </td>
+                    <td class="px-4 py-2.5 text-fg">{v.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    ))}
+      ))
+    }
   </section>
 
   <!-- Links -->
   <section class="border-t border-edge pt-8">
     <div class="flex flex-wrap gap-3">
-      <a href={exampleFileURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
+      <a
+        href={exampleFileURL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-raised"
+      >
         View on GitHub
       </a>
-      <a href={issueURL} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
+      <a
+        href={issueURL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-raised"
+      >
         Related issue #54
       </a>
-      <a href="/get-started" class="inline-flex items-center gap-2 px-4 py-2 border border-edge-strong text-fg hover:bg-raised text-sm font-medium rounded-md transition-colors">
+      <a
+        href="/get-started"
+        class="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-raised"
+      >
         All install options
       </a>
     </div>
