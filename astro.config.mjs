@@ -9,13 +9,15 @@ export default defineConfig({
   redirects: {
     '/databases': '/providers',
   },
-  integrations: [sitemap({
-    lastmod: new Date(),
-  })],
+  integrations: [
+    sitemap({
+      lastmod: new Date(),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
   build: {
-    assets: 'assets'
-  }
+    assets: 'assets',
+  },
 });

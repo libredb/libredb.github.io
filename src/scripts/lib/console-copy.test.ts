@@ -2,9 +2,25 @@ import { test, expect } from 'bun:test';
 import { NOTICES } from './console-copy';
 
 const REQUIRED_KEYS = [
-  'monitoring', 'query', 'save', 'begin', 'sandbox', 'edit', 'import',
-  'format', 'clear', 'lines', 'history', 'saved', 'charts', 'autopilot',
-  'pivot', 'diff', 'dashboard', 'newtab', 'closetab',
+  'monitoring',
+  'query',
+  'save',
+  'begin',
+  'sandbox',
+  'edit',
+  'import',
+  'format',
+  'clear',
+  'lines',
+  'history',
+  'saved',
+  'charts',
+  'autopilot',
+  'pivot',
+  'diff',
+  'dashboard',
+  'newtab',
+  'closetab',
 ];
 const VALID_KINDS = ['notice', 'error', 'ok', 'comment'];
 
@@ -13,7 +29,7 @@ test('every required control has a console message', () => {
 });
 
 test('messages are well-formed', () => {
-  for (const [key, m] of Object.entries(NOTICES)) {
+  for (const m of Object.values(NOTICES)) {
     expect(VALID_KINDS).toContain(m.kind);
     expect(m.text.length).toBeGreaterThan(0);
     if (m.cta) expect(m.cta.href.startsWith('http')).toBe(true);

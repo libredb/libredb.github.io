@@ -1,10 +1,15 @@
 ---
 import { sectionById } from '../../data/sections';
-interface Props { active?: string; }
+interface Props {
+  active?: string;
+}
 const { active = 'home' } = Astro.props;
 const meta = sectionById[active] ?? sectionById['home'];
 ---
-<footer class="flex h-7 shrink-0 items-center justify-between border-t border-edge bg-panel px-4 text-[11.5px] text-dim cursor-default select-none">
+
+<footer
+  class="flex h-7 shrink-0 cursor-default items-center justify-between border-t border-edge bg-panel px-4 text-[11.5px] text-dim select-none"
+>
   <div class="flex items-center gap-4">
     <span class="flex items-center gap-1.5 text-ok">
       <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> Connected
@@ -15,9 +20,24 @@ const meta = sectionById[active] ?? sectionById['home'];
   </div>
   <div class="flex items-center gap-4">
     <nav class="flex items-center gap-3" aria-label="Quick links">
-      <a href="https://github.com/libredb/libredb-studio" target="_blank" rel="noopener noreferrer" class="cursor-pointer hover:text-fg">GitHub</a>
-      <a href="https://www.linkedin.com/company/libredb" target="_blank" rel="noopener noreferrer" class="cursor-pointer hover:text-fg">LinkedIn</a>
-      <a href="https://github.com/sponsors/libredb" target="_blank" rel="noopener noreferrer" class="cursor-pointer text-ok hover:text-fg">Sponsor ♥</a>
+      <a
+        href="https://github.com/libredb/libredb-studio"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer hover:text-fg">GitHub</a
+      >
+      <a
+        href="https://www.linkedin.com/company/libredb"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer hover:text-fg">LinkedIn</a
+      >
+      <a
+        href="https://github.com/sponsors/libredb"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer text-ok hover:text-fg">Sponsor ♥</a
+      >
       <a href="/privacy-policy" class="cursor-pointer hover:text-fg">Privacy</a>
     </nav>
     <span class="text-faint" aria-hidden="true">·</span>
@@ -25,6 +45,8 @@ const meta = sectionById[active] ?? sectionById['home'];
     <span class="text-faint">Ln 1, Col 1</span>
     <span class="text-faint">UTF-8</span>
     <span class="text-faint">SQL</span>
-    <span class="flex items-center gap-1.5 text-muted"><span class="text-primary" aria-hidden="true">◆</span> LibreDB Studio v0.9.29</span>
+    <span class="flex items-center gap-1.5 text-muted"
+      ><span class="text-primary" aria-hidden="true">◆</span> LibreDB Studio v0.9.29</span
+    >
   </div>
 </footer>

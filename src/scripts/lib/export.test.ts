@@ -6,7 +6,10 @@ test('toJSON pretty-prints rows', () => {
 });
 
 test('toCSV writes header then rows', () => {
-  const csv = toCSV([{ name: 'pg', type: 'relational' }, { name: 'redis', type: 'kv' }]);
+  const csv = toCSV([
+    { name: 'pg', type: 'relational' },
+    { name: 'redis', type: 'kv' },
+  ]);
   expect(csv).toBe('name,type\npg,relational\nredis,kv');
 });
 

@@ -11,13 +11,33 @@ const { query, class: className = '' } = Astro.props;
 
 // Pre-sorted longest-first (once) so highlight() neither sorts nor mutates per call.
 const KEYWORDS = [
-  'SELECT', 'FROM', 'WHERE', 'ORDER BY', 'GROUP BY', 'DESC', 'ASC', 'LIMIT',
-  'AND', 'OR', 'NOT', 'NULL', 'AS', 'IN', 'ON', 'JOIN', 'LEFT', 'INNER',
-  'BEGIN', 'COMMIT', 'ROLLBACK', 'INSERT', 'UPDATE', 'DELETE',
+  'SELECT',
+  'FROM',
+  'WHERE',
+  'ORDER BY',
+  'GROUP BY',
+  'DESC',
+  'ASC',
+  'LIMIT',
+  'AND',
+  'OR',
+  'NOT',
+  'NULL',
+  'AS',
+  'IN',
+  'ON',
+  'JOIN',
+  'LEFT',
+  'INNER',
+  'BEGIN',
+  'COMMIT',
+  'ROLLBACK',
+  'INSERT',
+  'UPDATE',
+  'DELETE',
 ].sort((a, b) => b.length - a.length);
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function highlight(sql: string): string {
   let out = escapeHtml(sql);
@@ -34,4 +54,5 @@ function highlight(sql: string): string {
   return out;
 }
 ---
+
 <code class={`font-mono ${className}`} set:html={highlight(query)} />

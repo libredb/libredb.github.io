@@ -10,12 +10,22 @@ const numbers = [
 ];
 
 const notForYet = [
-  { area: 'Production at scale', why: 'It is pre-alpha; today\'s beachhead is test/dev.' },
-  { area: 'Secondary indexes / planner', why: 'Queries are O(n) scans by design in v1 (on the roadmap).' },
-  { area: 'Concurrent / networked access', why: 'It is embedded and single-process — no replication or client/server.' },
-  { area: 'SQL wire compatibility', why: 'No SQL text, no existing-driver ecosystem — a relational view, not a SQL engine.' },
+  { area: 'Production at scale', why: "It is pre-alpha; today's beachhead is test/dev." },
+  {
+    area: 'Secondary indexes / planner',
+    why: 'Queries are O(n) scans by design in v1 (on the roadmap).',
+  },
+  {
+    area: 'Concurrent / networked access',
+    why: 'It is embedded and single-process — no replication or client/server.',
+  },
+  {
+    area: 'SQL wire compatibility',
+    why: 'No SQL text, no existing-driver ecosystem — a relational view, not a SQL engine.',
+  },
 ];
 ---
+
 <div class="mx-auto max-w-5xl">
   <SectionHeader
     title="Crash recovery you can trust"
@@ -24,17 +34,21 @@ const notForYet = [
 
   <!-- The numbers -->
   <div class="grid grid-cols-2 border border-edge sm:grid-cols-4">
-    {numbers.map((s, i) => (
-      <div class:list={[
-        'px-5 py-6',
-        i % 2 === 0 ? 'border-r border-edge' : '',
-        i < 2 ? 'border-b border-edge sm:border-b-0' : '',
-        i === 3 ? 'sm:border-r-0' : 'sm:border-r',
-      ]}>
-        <div class={`text-2xl font-bold ${s.cls}`}>{s.n}</div>
-        <div class="mt-1 text-[12.5px] text-dim">{s.l}</div>
-      </div>
-    ))}
+    {
+      numbers.map((s, i) => (
+        <div
+          class:list={[
+            'px-5 py-6',
+            i % 2 === 0 ? 'border-r border-edge' : '',
+            i < 2 ? 'border-b border-edge sm:border-b-0' : '',
+            i === 3 ? 'sm:border-r-0' : 'sm:border-r',
+          ]}
+        >
+          <div class={`text-2xl font-bold ${s.cls}`}>{s.n}</div>
+          <div class="mt-1 text-[12.5px] text-dim">{s.l}</div>
+        </div>
+      ))
+    }
   </div>
 
   <!-- Durability + DST -->
@@ -43,23 +57,26 @@ const notForYet = [
       <h3 class="text-[15px] font-bold text-bright">A write-ahead log, fsync-d before commit</h3>
       <p class="mt-2 text-[13px] leading-relaxed text-dim">
         A transaction that returns has been written to a length-framed, CRC-32 checksummed log and fsync-d
-        <em>before</em> the commit becomes visible. A crash can only ever damage the last, un-fsync-d record —
-        which recovery detects and truncates, leaving a valid committed prefix.
+        <em>before</em> the commit becomes visible. A crash can only ever damage the last, un-fsync-d record — which recovery
+        detects and truncates, leaving a valid committed prefix.
       </p>
     </article>
     <article class="flex flex-col bg-panel p-5">
       <h3 class="text-[15px] font-bold text-bright">Deterministic simulation testing</h3>
       <p class="mt-2 text-[13px] leading-relaxed text-dim">
-        The crash/recovery path is proven by running the real engine against a seeded in-memory filesystem that
-        tears, corrupts, and crashes the log on command — then checking that recovery is always a valid committed
-        prefix. The FoundationDB-style approach that keeps the durability claims honest.
+        The crash/recovery path is proven by running the real engine against a seeded in-memory filesystem that tears,
+        corrupts, and crashes the log on command — then checking that recovery is always a valid committed prefix. The
+        FoundationDB-style approach that keeps the durability claims honest.
       </p>
     </article>
   </div>
 
   <!-- When NOT to use (honest limits) -->
   <div class="mt-10">
-    <SectionHeader title="When NOT to use it (yet)" subtitle="These limits are deliberate v1 scope, not hidden gaps. LibreDB's strength comes from what it refuses." />
+    <SectionHeader
+      title="When NOT to use it (yet)"
+      subtitle="These limits are deliberate v1 scope, not hidden gaps. LibreDB's strength comes from what it refuses."
+    />
     <div class="overflow-x-auto border border-edge">
       <table class="w-full text-left text-[13px]">
         <thead class="bg-panel text-faint">
@@ -69,12 +86,14 @@ const notForYet = [
           </tr>
         </thead>
         <tbody>
-          {notForYet.map((r) => (
-            <tr class="border-t border-edge">
-              <td class="px-4 py-2.5 font-medium text-fg">{r.area}</td>
-              <td class="px-4 py-2.5 text-dim">{r.why}</td>
-            </tr>
-          ))}
+          {
+            notForYet.map((r) => (
+              <tr class="border-t border-edge">
+                <td class="px-4 py-2.5 font-medium text-fg">{r.area}</td>
+                <td class="px-4 py-2.5 text-dim">{r.why}</td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </div>

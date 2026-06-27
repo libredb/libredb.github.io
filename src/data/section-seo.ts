@@ -26,7 +26,8 @@ export const sectionSeo: Record<string, object[]> = {
       '@context': 'https://schema.org',
       '@type': 'SoftwareSourceCode',
       name: 'LibreDB',
-      description: 'A small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses, zero dependencies, every line tested.',
+      description:
+        'A small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses, zero dependencies, every line tested.',
       programmingLanguage: 'TypeScript',
       codeRepository: 'https://github.com/libredb/libredb-database',
       license: 'https://opensource.org/licenses/MIT',
@@ -47,7 +48,8 @@ export const sectionSeo: Record<string, object[]> = {
       '@type': 'WebApplication',
       name: 'LibreDB Platform',
       applicationCategory: 'BusinessApplication',
-      description: 'Managed, multi-tenant Database Access Governance for teams — authorized, audited database access built on the open-source LibreDB Studio engine.',
+      description:
+        'Managed, multi-tenant Database Access Governance for teams — authorized, audited database access built on the open-source LibreDB Studio engine.',
       operatingSystem: 'Web',
       url: 'https://platform.libredb.org',
       softwareVersion: 'beta',
@@ -60,11 +62,32 @@ export const sectionSeo: Record<string, object[]> = {
       name: 'Run LibreDB Studio with Docker Compose',
       description: 'Self-host the open-source LibreDB Studio SQL IDE using Docker Compose.',
       totalTime: 'PT5M',
-      tool: [{ '@type': 'HowToTool', name: 'Docker' }, { '@type': 'HowToTool', name: 'Docker Compose' }],
+      tool: [
+        { '@type': 'HowToTool', name: 'Docker' },
+        { '@type': 'HowToTool', name: 'Docker Compose' },
+      ],
       step: [
-        { '@type': 'HowToStep', position: 1, name: 'Download the compose file', text: 'Download docker-compose.example.yml and rename it to docker-compose.yml.', url: `${SITE}/docker-compose-example/` },
-        { '@type': 'HowToStep', position: 2, name: 'Configure environment', text: 'Set JWT_SECRET (min 32 chars), ADMIN_PASSWORD and USER_PASSWORD in your .env file.', url: `${SITE}/docker-compose-example/` },
-        { '@type': 'HowToStep', position: 3, name: 'Start the container', text: 'Run "docker compose up -d" and open http://localhost:3000.', url: `${SITE}/docker-compose-example/` },
+        {
+          '@type': 'HowToStep',
+          position: 1,
+          name: 'Download the compose file',
+          text: 'Download docker-compose.example.yml and rename it to docker-compose.yml.',
+          url: `${SITE}/docker-compose-example/`,
+        },
+        {
+          '@type': 'HowToStep',
+          position: 2,
+          name: 'Configure environment',
+          text: 'Set JWT_SECRET (min 32 chars), ADMIN_PASSWORD and USER_PASSWORD in your .env file.',
+          url: `${SITE}/docker-compose-example/`,
+        },
+        {
+          '@type': 'HowToStep',
+          position: 3,
+          name: 'Start the container',
+          text: 'Run "docker compose up -d" and open http://localhost:3000.',
+          url: `${SITE}/docker-compose-example/`,
+        },
       ],
     },
     {

@@ -6,9 +6,9 @@
 
 export interface SchemaMeta {
   id: 'studio' | 'database' | 'platform';
-  label: string;            // tree heading
-  badge?: string;           // e.g. "pre-alpha", "beta · teams"
-  badgeClass?: string;      // styling hook (Tailwind classes)
+  label: string; // tree heading
+  badge?: string; // e.g. "pre-alpha", "beta · teams"
+  badgeClass?: string; // styling hook (Tailwind classes)
   external?: { label: string; href: string }; // secondary "open app" row after the schema's internal sections (platform)
 }
 

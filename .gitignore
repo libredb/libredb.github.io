@@ -26,6 +26,9 @@ pnpm-debug.log*
 # Brainstorm visual companion
 .superpowers/
 
+# Session memory (remember plugin) — local tooling state, not project source
+.remember/
+
 # Playwright MCP output
 .playwright-mcp/
 

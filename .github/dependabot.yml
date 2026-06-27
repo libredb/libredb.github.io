@@ -5,29 +5,29 @@ version: 2
 updates:
   # JavaScript dependencies — managed with Bun (bun.lock is the source of truth;
   # the deploy/CI workflows run `bun install`). Requires Bun >= 1.1.39.
-  - package-ecosystem: "bun"
-    directory: "/"
+  - package-ecosystem: 'bun'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
     groups:
       # Batch all non-major updates into a single PR to cut review noise.
       # Major bumps still arrive as individual PRs (they need manual review).
       minor-and-patch:
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
 
   # GitHub Actions — keeps the SHA pins (and their `# vX.Y.Z` comments) current.
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     commit-message:
-      prefix: "ci"
+      prefix: 'ci'
     groups:
       actions:
         patterns:
-          - "*"
+          - '*'

@@ -8,24 +8,28 @@ const stats = [
   { n: 'MIT', l: 'License', cls: 'text-warn' },
 ];
 ---
+
 <div class="mx-auto max-w-5xl px-1">
   <!-- Badge -->
-  <span class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12.5px] text-ok">
-    <span class="h-1.5 w-1.5 rounded-full bg-ok animate-pulse-dot" aria-hidden="true"></span>
+  <span
+    class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12.5px] text-ok"
+  >
+    <span class="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span>
     Open Source &amp; Free Forever · MIT
   </span>
 
   <!-- Headline -->
-  <h1 class="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-bright sm:text-5xl lg:text-6xl">
+  <h1 class="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-bright sm:text-5xl lg:text-6xl">
     The Modern, <span class="text-primary">AI-Powered</span><br class="hidden sm:block" /> SQL IDE
   </h1>
 
   <!-- Subtitle -->
   <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
-    A lightweight, high-performance, and enterprise-secure web-based SQL editor with SSO
-    for cloud-native teams. Connect to <strong class="font-semibold text-primary">PostgreSQL</strong>,
+    A lightweight, high-performance, and enterprise-secure web-based SQL editor with SSO for cloud-native teams. Connect
+    to <strong class="font-semibold text-primary">PostgreSQL</strong>,
     <strong class="font-semibold text-ok">MySQL</strong>, <strong class="font-semibold text-warn">Oracle</strong>,
-    <strong class="font-semibold text-primary">SQL Server</strong>, <strong class="font-semibold text-ai">SQLite</strong>,
+    <strong class="font-semibold text-primary">SQL Server</strong>, <strong class="font-semibold text-ai">SQLite</strong
+    >,
     <strong class="font-semibold text-ok">MongoDB</strong>, or <strong class="font-semibold text-bad">Redis</strong>
     &mdash; from anywhere.
   </p>
@@ -50,18 +54,22 @@ const stats = [
 
   <!-- Stats -->
   <div class="mt-10 grid grid-cols-2 border border-edge sm:grid-cols-4">
-    {stats.map((s, i) => (
-      <div class:list={[
-        'px-5 py-6',
-        i % 2 === 0 ? 'border-r border-edge' : '',
-        i < 2 ? 'border-b border-edge sm:border-b-0' : '',
-        'sm:border-b-0',
-        i === 3 ? 'sm:border-r-0' : 'sm:border-r',
-      ]}>
-        <div class={`text-3xl font-bold ${s.cls}`}>{s.n}</div>
-        <div class="mt-1 text-[13px] text-dim">{s.l}</div>
-      </div>
-    ))}
+    {
+      stats.map((s, i) => (
+        <div
+          class:list={[
+            'px-5 py-6',
+            i % 2 === 0 ? 'border-r border-edge' : '',
+            i < 2 ? 'border-b border-edge sm:border-b-0' : '',
+            'sm:border-b-0',
+            i === 3 ? 'sm:border-r-0' : 'sm:border-r',
+          ]}
+        >
+          <div class={`text-3xl font-bold ${s.cls}`}>{s.n}</div>
+          <div class="mt-1 text-[13px] text-dim">{s.l}</div>
+        </div>
+      ))
+    }
   </div>
 
   <!-- Hint (only meaningful on desktop where the explorer drives navigation) -->
@@ -72,35 +80,55 @@ const stats = [
 
   <!-- The LibreDB family / open-core (secondary; Studio stays the hero above) -->
   <div class="mt-12 border-t border-edge pt-8">
-    <p class="text-[11px] uppercase tracking-wider text-faint">The LibreDB family — one spine, three faces</p>
+    <p class="text-[11px] tracking-wider text-faint uppercase">The LibreDB family — one spine, three faces</p>
     <div class="mt-4 grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-3">
       <a href="/database" class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
         <div class="flex items-baseline justify-between gap-2">
           <h3 class="text-[15px] font-bold text-fg">database</h3>
           <span class="text-[10.5px] text-warn">OSS · pre-alpha</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">The plain core — an embedded, multimodal engine you can read in one sitting.</p>
+        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
+          The plain core — an embedded, multimodal engine you can read in one sitting.
+        </p>
       </a>
-      <a href="/" class="flex flex-col bg-raised p-5 ring-1 ring-inset ring-primary/40">
+      <a href="/" class="flex flex-col bg-raised p-5 ring-1 ring-primary/40 ring-inset">
         <div class="flex items-baseline justify-between gap-2">
           <h3 class="text-[15px] font-bold text-primary">studio</h3>
           <span class="text-[10.5px] text-ok">OSS · stable</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">The readable face — the AI-powered SQL IDE for every database. <span class="text-primary">← you are here</span></p>
+        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
+          The readable face — the AI-powered SQL IDE for every database. <span class="text-primary">← you are here</span
+          >
+        </p>
       </a>
       <a href="/platform" class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
         <div class="flex items-baseline justify-between gap-2">
           <h3 class="text-[15px] font-bold text-ai">platform</h3>
           <span class="text-[10.5px] text-ai">beta</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">Managed for teams — Database Access Governance: authorized, audited, multi-tenant.</p>
+        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
+          Managed for teams — Database Access Governance: authorized, audited, multi-tenant.
+        </p>
       </a>
     </div>
     <p class="mt-4 text-[13px] leading-relaxed text-dim">
       <span class="sql-com">-- open core: Studio is free &amp; open; Platform funds the open-source work.</span><br />
-      <span class="sql-com">-- Studio opens live with a ready-to-use LibreDB sample across all three lenses, zero setup.</span><br />
-      <span class="sql-com">-- love the open-source work? </span><a href="https://github.com/sponsors/libredb" target="_blank" rel="noopener noreferrer" class="text-ok hover:underline">sponsor us ♥</a>
+      <span class="sql-com"
+        >-- Studio opens live with a ready-to-use LibreDB sample across all three lenses, zero setup.</span
+      ><br />
+      <span class="sql-com">-- love the open-source work? </span><a
+        href="https://github.com/sponsors/libredb"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-ok hover:underline">sponsor us ♥</a
+      >
     </p>
   </div>
 </div>
-<script type="application/json" data-export-payload="home" data-export-filename="home.json" data-export-format="json" set:html={JSON.stringify(stats)} />
+<script
+  type="application/json"
+  data-export-payload="home"
+  data-export-filename="home.json"
+  data-export-format="json"
+  set:html={JSON.stringify(stats)}
+/>

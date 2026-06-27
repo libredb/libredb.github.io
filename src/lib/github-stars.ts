@@ -48,7 +48,7 @@ export async function getStars(repos: string[]): Promise<Record<string, number>>
         if (!res.ok) throw new Error(`status ${res.status}`);
         const data = (await res.json()) as { stargazers_count?: number };
         const stars = data?.stargazers_count;
-        return [repo, typeof stars === 'number' ? stars : FALLBACK_STARS[repo] ?? 0];
+        return [repo, typeof stars === 'number' ? stars : (FALLBACK_STARS[repo] ?? 0)];
       } catch {
         return [repo, FALLBACK_STARS[repo] ?? 0];
       }

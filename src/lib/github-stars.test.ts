@@ -20,8 +20,8 @@ test('formatStars renders compact counts', () => {
 });
 
 test('getStars uses the live count on success', async () => {
-  globalThis.fetch = mock(async () =>
-    new Response(JSON.stringify({ stargazers_count: 12345 }), { status: 200 }),
+  globalThis.fetch = mock(
+    async () => new Response(JSON.stringify({ stargazers_count: 12345 }), { status: 200 }),
   ) as unknown as typeof fetch;
 
   const result = await getStars(['caprover/caprover']);

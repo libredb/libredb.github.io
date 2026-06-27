@@ -36,6 +36,15 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Gate (typecheck, format, lint, dead-code, tests)
+        run: bun run gate
+
+      - name: Secret scan
+        run: bun run secrets
+
+      - name: Dependency audit (advisory, non-blocking)
+        run: bun run audit || echo "::notice::bun audit reported advisories (non-blocking; Dependabot tracks upstream fixes)"
+
       - name: Build website
         run: bun run build
 

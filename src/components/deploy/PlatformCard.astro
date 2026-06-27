@@ -10,52 +10,88 @@ interface Props {
 
 const { target, stars } = Astro.props;
 
-const action =
-  target.deployUrl
-    ? { href: target.deployUrl, label: 'Deploy' }
-    : target.status === 'planned'
-      ? null
-      : target.docsUrl
-        ? { href: target.docsUrl, label: 'Docs' }
-        : { href: target.url, label: 'Learn more' };
+const action = target.deployUrl
+  ? { href: target.deployUrl, label: 'Deploy' }
+  : target.status === 'planned'
+    ? null
+    : target.docsUrl
+      ? { href: target.docsUrl, label: 'Docs' }
+      : { href: target.url, label: 'Learn more' };
 
 const initial = target.name.charAt(0).toUpperCase();
 const showStars = typeof stars === 'number' && Boolean(target.github);
 ---
 
-<div class="group flex flex-col h-full p-4 border border-edge bg-panel hover:border-line hover:bg-raised transition-colors">
-  <div class="flex items-start justify-between gap-2 mb-3">
-    <div class="flex items-center gap-2.5 min-w-0">
-      {target.logo ? (
-        <img src={target.logo} alt={`${target.name} logo`} width="28" height="28" class="w-7 h-7 object-contain shrink-0" loading="lazy" />
-      ) : (
-        <span class="w-7 h-7 shrink-0 rounded-md bg-primary/20 text-primary text-sm font-bold grid place-items-center">{initial}</span>
-      )}
-      <h4 class="text-sm font-semibold text-bright truncate">{target.name}</h4>
+<div
+  class="group flex h-full flex-col border border-edge bg-panel p-4 transition-colors hover:border-line hover:bg-raised"
+>
+  <div class="mb-3 flex items-start justify-between gap-2">
+    <div class="flex min-w-0 items-center gap-2.5">
+      {
+        target.logo ? (
+          <img
+            src={target.logo}
+            alt={`${target.name} logo`}
+            width="28"
+            height="28"
+            class="h-7 w-7 shrink-0 object-contain"
+            loading="lazy"
+          />
+        ) : (
+          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-primary/20 text-sm font-bold text-primary">
+            {initial}
+          </span>
+        )
+      }
+      <h4 class="truncate text-sm font-semibold text-bright">{target.name}</h4>
     </div>
     <StatusBadge status={target.status} />
   </div>
 
-  {target.blurb && <p class="text-xs text-muted mb-3 line-clamp-2">{target.blurb}</p>}
+  {target.blurb && <p class="mb-3 line-clamp-2 text-xs text-muted">{target.blurb}</p>}
 
   <div class="mt-auto flex items-center justify-between gap-2 pt-1">
-    {showStars ? (
-      <a href={`https://github.com/${target.github}`} target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-xs text-muted hover:text-warn transition-colors">
-        <svg class="w-3.5 h-3.5 text-warn" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 15l-5.3 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z"></path></svg>
-        <span data-stars-repo={target.github} data-stars-count={stars}>{formatStars(stars as number)}</span>
-      </a>
-    ) : <span></span>}
+    {
+      showStars ? (
+        <a
+          href={`https://github.com/${target.github}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 text-xs text-muted transition-colors hover:text-warn"
+        >
+          <svg class="h-3.5 w-3.5 text-warn" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 15l-5.3 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z" />
+          </svg>
+          <span data-stars-repo={target.github} data-stars-count={stars}>
+            {formatStars(stars as number)}
+          </span>
+        </a>
+      ) : (
+        <span />
+      )
+    }
 
-    {action ? (
-      <a href={action.href} target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-bright transition-colors">
-        {action.label}
-        <span aria-hidden="true">&rarr;</span>
-      </a>
-    ) : (
-      <a href={target.url} target="_blank" rel="noopener noreferrer"
-         class="text-xs text-faint hover:text-muted transition-colors">Learn more</a>
-    )}
+    {
+      action ? (
+        <a
+          href={action.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-bright"
+        >
+          {action.label}
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      ) : (
+        <a
+          href={target.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs text-faint transition-colors hover:text-muted"
+        >
+          Learn more
+        </a>
+      )
+    }
   </div>
 </div>

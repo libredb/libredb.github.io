@@ -8,80 +8,184 @@ interface Props {
 }
 const { section, class: className = '' } = Astro.props;
 ---
+
 <div class:list={['shrink-0 border-b border-edge bg-canvas', className]}>
   <!-- Tab bar -->
   <div class="flex items-center gap-0 border-b border-edge text-[12.5px]">
-    <a class="flex items-center gap-1.5 border-r border-edge px-4 py-2.5 text-faint hover:text-fg" href="https://github.com/libredb/libredb-studio#readme" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▤</span> README.md</a>
-    <span class="flex items-center gap-2 border-r border-edge bg-panel px-4 py-2.5 text-fg shadow-[inset_0_-2px_0_var(--color-primary)]">
-      <span class="text-primary" aria-hidden="true">#</span> {section.table}.sql
-      <button type="button" class="text-faint hover:text-fg" data-action="notice" data-notice="closetab" aria-label="Close tab">✕</button>
+    <a
+      class="flex items-center gap-1.5 border-r border-edge px-4 py-2.5 text-faint hover:text-fg"
+      href="https://github.com/libredb/libredb-studio#readme"
+      target="_blank"
+      rel="noopener noreferrer"><span aria-hidden="true">▤</span> README.md</a
+    >
+    <span
+      class="flex items-center gap-2 border-r border-edge bg-panel px-4 py-2.5 text-fg shadow-[inset_0_-2px_0_var(--color-primary)]"
+    >
+      <span class="text-primary" aria-hidden="true">#</span>
+      {section.table}.sql
+      <button
+        type="button"
+        class="text-faint hover:text-fg"
+        data-action="notice"
+        data-notice="closetab"
+        aria-label="Close tab">✕</button
+      >
     </span>
-    <button type="button" class="px-3 py-2.5 text-faint hover:text-fg" data-action="notice" data-notice="newtab" aria-label="New tab">＋</button>
+    <button
+      type="button"
+      class="px-3 py-2.5 text-faint hover:text-fg"
+      data-action="notice"
+      data-notice="newtab"
+      aria-label="New tab">＋</button
+    >
   </div>
 
   <!-- Query toolbar -->
   <div class="flex items-center justify-between gap-3 px-4 py-2 text-[12.5px]">
     <div class="flex items-center gap-4">
-      <button type="button" class="flex items-center gap-1.5 text-muted hover:text-fg" data-action="notice" data-notice="query"><span aria-hidden="true">▾</span> Query</button>
-      <button type="button" class="flex items-center gap-1.5 text-muted hover:text-fg" data-action="notice" data-notice="save"><span aria-hidden="true">▤</span> Save</button>
+      <button
+        type="button"
+        class="flex items-center gap-1.5 text-muted hover:text-fg"
+        data-action="notice"
+        data-notice="query"><span aria-hidden="true">▾</span> Query</button
+      >
+      <button
+        type="button"
+        class="flex items-center gap-1.5 text-muted hover:text-fg"
+        data-action="notice"
+        data-notice="save"><span aria-hidden="true">▤</span> Save</button
+      >
     </div>
-    <button type="button" class="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 font-semibold text-white hover:bg-primary-bright" data-action="run" data-run>
+    <button
+      type="button"
+      class="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 font-semibold text-white hover:bg-primary-bright"
+      data-action="run"
+      data-run
+    >
       <span aria-hidden="true">▶</span> RUN
     </button>
     <div class="flex items-center gap-4 text-faint">
       <button type="button" class="hover:text-fg" data-action="notice" data-notice="begin">BEGIN</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="sandbox"><span aria-hidden="true">⬡</span> SANDBOX</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="edit"><span aria-hidden="true">✎</span> EDIT</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="import"><span aria-hidden="true">↑</span> IMPORT</button>
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="sandbox"
+        ><span aria-hidden="true">⬡</span> SANDBOX</button
+      >
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="edit"
+        ><span aria-hidden="true">✎</span> EDIT</button
+      >
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="import"
+        ><span aria-hidden="true">↑</span> IMPORT</button
+      >
     </div>
   </div>
 
   <!-- Sub-toolbar -->
   <div class="flex items-center justify-between gap-3 border-y border-edge px-4 py-1.5 text-[12px] text-faint">
     <div class="flex items-center gap-4">
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="format"><span aria-hidden="true">≡</span> Format</button>
-      <button type="button" class="hover:text-fg" data-action="copy-link"><span aria-hidden="true">⧉</span> Copy</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="clear"><span aria-hidden="true">✕</span> Clear</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="lines"><span aria-hidden="true">#</span> Lines</button>
-      <button type="button" class="text-ai hover:brightness-125" data-action="palette"><span aria-hidden="true">✦</span> AI</button>
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="format"
+        ><span aria-hidden="true">≡</span> Format</button
+      >
+      <button type="button" class="hover:text-fg" data-action="copy-link"><span aria-hidden="true">⧉</span> Copy</button
+      >
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="clear"
+        ><span aria-hidden="true">✕</span> Clear</button
+      >
+      <button type="button" class="hover:text-fg" data-action="notice" data-notice="lines"
+        ><span aria-hidden="true">#</span> Lines</button
+      >
+      <button type="button" class="text-ai hover:brightness-125" data-action="palette"
+        ><span aria-hidden="true">✦</span> AI</button
+      >
     </div>
     <div class="flex items-center gap-3">
-      <button type="button" class="text-primary hover:brightness-125" data-action="explain" aria-expanded="false" aria-controls={`explain-${section.id}`}><span aria-hidden="true">✦</span> Explain</button>
+      <button
+        type="button"
+        class="text-primary hover:brightness-125"
+        data-action="explain"
+        aria-expanded="false"
+        aria-controls={`explain-${section.id}`}><span aria-hidden="true">✦</span> Explain</button
+      >
       <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px]" aria-hidden="true">⌘+Enter</span>
     </div>
   </div>
 
   <!-- Editor -->
   <div class="flex items-start gap-4 px-4 py-4 text-[15px] leading-relaxed">
-    <span class="select-none text-faint" aria-hidden="true">1</span>
+    <span class="text-faint select-none" aria-hidden="true">1</span>
     <div><Sql query={section.query} /><span class="caret"></span></div>
   </div>
 
   <!-- Results tabs -->
   <div class="flex items-center justify-between gap-3 border-t border-edge px-4 text-[12px]">
-    <div class="flex items-center gap-4 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <button type="button" class="whitespace-nowrap font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-primary)] pb-0.5" data-action="results"><span aria-hidden="true">▦</span> Results</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="explain" aria-expanded="false" aria-controls={`explain-${section.id}`}><span aria-hidden="true">⚡</span> Explain</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="history"><span aria-hidden="true">↺</span> History</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="saved"><span aria-hidden="true">⭐</span> Saved</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="charts"><span aria-hidden="true">◔</span> Charts</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="palette"><span aria-hidden="true">✦</span> NL2SQL</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="autopilot"><span aria-hidden="true">✈</span> Autopilot</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="pivot"><span aria-hidden="true">▥</span> Pivot</button>
-      <a class="whitespace-nowrap text-faint hover:text-fg" href="https://github.com/libredb/libredb-studio#readme" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▤</span> Docs</a>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="diff"><span aria-hidden="true">⇄</span> Diff</button>
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="dashboard"><span aria-hidden="true">▦</span> Dashboard</button>
+    <div class="flex [scrollbar-width:none] items-center gap-4 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden">
+      <button
+        type="button"
+        class="pb-0.5 font-semibold whitespace-nowrap text-fg shadow-[inset_0_-2px_0_var(--color-primary)]"
+        data-action="results"><span aria-hidden="true">▦</span> Results</button
+      >
+      <button
+        type="button"
+        class="whitespace-nowrap text-faint hover:text-fg"
+        data-action="explain"
+        aria-expanded="false"
+        aria-controls={`explain-${section.id}`}><span aria-hidden="true">⚡</span> Explain</button
+      >
+      <button
+        type="button"
+        class="whitespace-nowrap text-faint hover:text-fg"
+        data-action="notice"
+        data-notice="history"><span aria-hidden="true">↺</span> History</button
+      >
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="saved"
+        ><span aria-hidden="true">⭐</span> Saved</button
+      >
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="charts"
+        ><span aria-hidden="true">◔</span> Charts</button
+      >
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="palette"
+        ><span aria-hidden="true">✦</span> NL2SQL</button
+      >
+      <button
+        type="button"
+        class="whitespace-nowrap text-faint hover:text-fg"
+        data-action="notice"
+        data-notice="autopilot"><span aria-hidden="true">✈</span> Autopilot</button
+      >
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="pivot"
+        ><span aria-hidden="true">▥</span> Pivot</button
+      >
+      <a
+        class="whitespace-nowrap text-faint hover:text-fg"
+        href="https://github.com/libredb/libredb-studio#readme"
+        target="_blank"
+        rel="noopener noreferrer"><span aria-hidden="true">▤</span> Docs</a
+      >
+      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="diff"
+        ><span aria-hidden="true">⇄</span> Diff</button
+      >
+      <button
+        type="button"
+        class="whitespace-nowrap text-faint hover:text-fg"
+        data-action="notice"
+        data-notice="dashboard"><span aria-hidden="true">▦</span> Dashboard</button
+      >
     </div>
     <div class="flex shrink-0 items-center gap-3 py-2.5 text-faint">
       <span>{section.rows} rows • {section.execMs}ms</span>
-      <button type="button" class="text-muted hover:text-fg" data-action="export"><span aria-hidden="true">↑</span> Export</button>
+      <button type="button" class="text-muted hover:text-fg" data-action="export"
+        ><span aria-hidden="true">↑</span> Export</button
+      >
     </div>
   </div>
 
   <!-- Result meta -->
-  <div class="flex items-center justify-between border-t border-edge bg-panel px-4 py-1.5 text-[11.5px] text-faint cursor-default select-none">
+  <div
+    class="flex cursor-default items-center justify-between border-t border-edge bg-panel px-4 py-1.5 text-[11.5px] text-faint select-none"
+  >
     <div class="flex items-center gap-3">
-      <span class="flex items-center gap-1.5 text-ok"><span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> {section.rows} rows</span>
+      <span class="flex items-center gap-1.5 text-ok"
+        ><span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+        {section.rows} rows</span
+      >
       <span class="text-edge-strong" aria-hidden="true">|</span>
       <span>{section.cols} columns</span>
       <span class="text-edge-strong" aria-hidden="true">|</span>

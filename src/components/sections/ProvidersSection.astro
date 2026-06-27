@@ -3,43 +3,106 @@ import SectionHeader from './SectionHeader.astro';
 
 const DEMO = 'https://app.libredb.org';
 
-interface DB { name: string; type: string; driver: string; color: string; summary: string; }
+interface DB {
+  name: string;
+  type: string;
+  driver: string;
+  color: string;
+  summary: string;
+}
 
 const databases: DB[] = [
-  { name: 'PostgreSQL', type: 'relational', driver: 'pg', color: 'text-primary', summary: 'Full support with connection pooling, schema inspection, and maintenance tools.' },
-  { name: 'MySQL', type: 'relational', driver: 'mysql2', color: 'text-ok', summary: 'Full support with connection pooling and performance schema integration.' },
-  { name: 'Oracle', type: 'relational', driver: 'oracledb', color: 'text-warn', summary: 'Enterprise database with V$ monitoring views, FETCH FIRST pagination, and ALTER INDEX REBUILD.' },
-  { name: 'SQL Server', type: 'relational', driver: 'mssql', color: 'text-primary', summary: 'Microsoft SQL Server with TOP/OFFSET FETCH pagination, DMVs, and Azure SQL support.' },
-  { name: 'SQLite', type: 'embedded', driver: 'sqlite3', color: 'text-ai', summary: 'File-based database with WAL mode support. Perfect for local development.' },
-  { name: 'MongoDB', type: 'document', driver: 'mongodb', color: 'text-ok', summary: 'Full document database support with JSON queries, aggregations, and schema inference.' },
-  { name: 'Redis', type: 'key-value', driver: 'redis', color: 'text-bad', summary: 'Key-value store support with key browser, TTL management, and memory monitoring.' },
-  { name: 'LibreDB', type: 'embedded · our own', driver: '@libredb/libredb', color: 'text-ai', summary: 'Our own open-source embedded engine. Open a .libredb file directly — no server. Browse relational, document, and key-value lenses; query with a small get / put / prefix / range grammar (not SQL). Ships as a ready-to-use sample on first launch.' },
+  {
+    name: 'PostgreSQL',
+    type: 'relational',
+    driver: 'pg',
+    color: 'text-primary',
+    summary: 'Full support with connection pooling, schema inspection, and maintenance tools.',
+  },
+  {
+    name: 'MySQL',
+    type: 'relational',
+    driver: 'mysql2',
+    color: 'text-ok',
+    summary: 'Full support with connection pooling and performance schema integration.',
+  },
+  {
+    name: 'Oracle',
+    type: 'relational',
+    driver: 'oracledb',
+    color: 'text-warn',
+    summary: 'Enterprise database with V$ monitoring views, FETCH FIRST pagination, and ALTER INDEX REBUILD.',
+  },
+  {
+    name: 'SQL Server',
+    type: 'relational',
+    driver: 'mssql',
+    color: 'text-primary',
+    summary: 'Microsoft SQL Server with TOP/OFFSET FETCH pagination, DMVs, and Azure SQL support.',
+  },
+  {
+    name: 'SQLite',
+    type: 'embedded',
+    driver: 'sqlite3',
+    color: 'text-ai',
+    summary: 'File-based database with WAL mode support. Perfect for local development.',
+  },
+  {
+    name: 'MongoDB',
+    type: 'document',
+    driver: 'mongodb',
+    color: 'text-ok',
+    summary: 'Full document database support with JSON queries, aggregations, and schema inference.',
+  },
+  {
+    name: 'Redis',
+    type: 'key-value',
+    driver: 'redis',
+    color: 'text-bad',
+    summary: 'Key-value store support with key browser, TTL management, and memory monitoring.',
+  },
+  {
+    name: 'LibreDB',
+    type: 'embedded · our own',
+    driver: '@libredb/libredb',
+    color: 'text-ai',
+    summary:
+      'Our own open-source embedded engine. Open a .libredb file directly — no server. Browse relational, document, and key-value lenses; query with a small get / put / prefix / range grammar (not SQL). Ships as a ready-to-use sample on first launch.',
+  },
 ];
 ---
+
 <div class="mx-auto max-w-6xl">
-  <SectionHeader
-    title="One tool, all your databases"
-    subtitle="Connect to any engine with a unified interface."
-  />
+  <SectionHeader title="One tool, all your databases" subtitle="Connect to any engine with a unified interface." />
 
   <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2 lg:grid-cols-3">
-    {databases.map((d) => (
-      <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
-        <div class="flex items-baseline justify-between gap-3">
-          <h3 class={`text-[16px] font-bold ${d.color}`}>
-            {d.name === 'LibreDB'
-              ? <a href="/database" class="hover:underline">{d.name} <span aria-hidden="true">→</span></a>
-              : d.name}
-          </h3>
-          <span class="text-[11.5px] text-faint">{d.type} · {d.driver}</span>
-        </div>
-        <p class="mt-2 text-[13px] leading-relaxed text-dim">{d.summary}</p>
-      </article>
-    ))}
+    {
+      databases.map((d) => (
+        <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
+          <div class="flex items-baseline justify-between gap-3">
+            <h3 class={`text-[16px] font-bold ${d.color}`}>
+              {d.name === 'LibreDB' ? (
+                <a href="/database" class="hover:underline">
+                  {d.name} <span aria-hidden="true">→</span>
+                </a>
+              ) : (
+                d.name
+              )}
+            </h3>
+            <span class="text-[11.5px] text-faint">
+              {d.type} · {d.driver}
+            </span>
+          </div>
+          <p class="mt-2 text-[13px] leading-relaxed text-dim">{d.summary}</p>
+        </article>
+      ))
+    }
   </div>
 
   <!-- Demo mode banner -->
-  <div class="mt-6 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center">
+  <div
+    class="mt-6 flex flex-col items-start justify-between gap-4 border border-edge bg-panel p-6 sm:flex-row sm:items-center"
+  >
     <div>
       <h3 class="text-[16px] font-bold text-bright">No Database? No Problem!</h3>
       <p class="mt-1 text-[13.5px] text-dim">Try Demo Mode — zero setup required.</p>
@@ -54,4 +117,10 @@ const databases: DB[] = [
     </a>
   </div>
 </div>
-<script type="application/json" data-export-payload="providers" data-export-filename="providers.json" data-export-format="json" set:html={JSON.stringify(databases)} />
+<script
+  type="application/json"
+  data-export-payload="providers"
+  data-export-filename="providers.json"
+  data-export-format="json"
+  set:html={JSON.stringify(databases)}
+/>

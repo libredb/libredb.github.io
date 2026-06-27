@@ -4,7 +4,7 @@
 
 <div
   id="cookie-consent-banner"
-  class="fixed bottom-0 left-0 right-0 z-[60] translate-y-full transition-transform duration-500 ease-out"
+  class="fixed right-0 bottom-0 left-0 z-[60] translate-y-full transition-transform duration-500 ease-out"
   role="dialog"
   aria-label="Cookie consent"
 >
@@ -39,7 +39,10 @@
 </div>
 
 <noscript>
-  <img height="1" width="1" style="display:none"
+  <img
+    height="1"
+    width="1"
+    style="display:none"
     src="https://www.facebook.com/tr?id=25949277121347381&ev=PageView&noscript=1"
     alt=""
   />
@@ -65,26 +68,45 @@
       s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
       document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag =
+        window.gtag ||
+        function () {
+          window.dataLayer.push(arguments);
+        };
       window.gtag('js', new Date());
       window.gtag('config', GA_ID);
     }
 
     function loadMetaPixel() {
       if (window.fbq) return;
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window,document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
+      /* oxlint-disable no-unused-expressions -- canonical Meta Pixel vendor snippet; do not rewrite */
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      /* oxlint-enable no-unused-expressions */
       window.fbq('init', META_PIXEL_ID);
     }
 
     function trackPageView() {
-      if (window.gtag) window.gtag('event', 'page_view', { page_path: location.pathname, page_location: location.href, page_title: document.title });
+      if (window.gtag)
+        window.gtag('event', 'page_view', {
+          page_path: location.pathname,
+          page_location: location.href,
+          page_title: document.title,
+        });
       if (window.fbq) window.fbq('track', 'PageView');
     }
 
@@ -133,15 +155,17 @@
 
     var accept = document.getElementById('cookie-accept');
     var decline = document.getElementById('cookie-decline');
-    if (accept) accept.addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'accepted');
-      hideBanner();
-      window.__libredbAnalytics = true;
-      enableAnalytics();
-    });
-    if (decline) decline.addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'declined');
-      hideBanner();
-    });
+    if (accept)
+      accept.addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'accepted');
+        hideBanner();
+        window.__libredbAnalytics = true;
+        enableAnalytics();
+      });
+    if (decline)
+      decline.addEventListener('click', function () {
+        localStorage.setItem(STORAGE_KEY, 'declined');
+        hideBanner();
+      });
   })();
 </script>
