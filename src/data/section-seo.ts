@@ -50,7 +50,6 @@ export const sectionSeo: Record<string, object[]> = {
       description: 'Managed, multi-tenant Database Access Governance for teams — authorized, audited database access built on the open-source LibreDB Studio engine.',
       operatingSystem: 'Web',
       url: 'https://platform.libredb.org',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       softwareVersion: 'beta',
     },
   ],

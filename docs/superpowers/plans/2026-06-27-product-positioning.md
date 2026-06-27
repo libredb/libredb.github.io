@@ -12,7 +12,7 @@
 
 - **Studio stays the hero.** Homepage hero (`HomeSection.astro` headline/CTAs) and primary nav weight are unchanged; new content is secondary/lower.
 - **Database is pre-alpha, community-framed.** No production "Get Started" CTA on engine pages. CTAs are community only: GitHub star, npm, docs.
-- **Platform is light.** No internal `/platform` route, no pricing page. Family block + external link only. External links use `target="_blank" rel="noopener noreferrer"`.
+- **Platform is light.** A lean internal `/platform` overview page (narrative) whose CTA opens the live app; no pricing page on-site. (Revised mid-execution from external-link-only — see the spec's Platform section.) External links use `target="_blank" rel="noopener noreferrer"`.
 - **Engine repo URLs (verbatim):** GitHub `https://github.com/libredb/libredb-database`; npm `https://www.npmjs.com/package/@libredb/libredb`; guides `https://github.com/libredb/libredb-database/tree/main/docs/guides`.
 - **Platform URL (verbatim):** `https://platform.libredb.org` (live, beta).
 - **Engine facts must stay honest** (sourced from the engine repo): pre-alpha `0.0.x`; one ordered key-value core + three lenses (kv/document/relational); zero runtime dependencies; ~712 lines of shipped code; `core.ts` under 600 lines; 2.83 kB bundled (min+brotli, 4 kB CI budget); 100% core line coverage; deterministic simulation testing; O(n) scans / no secondary indexes / single-process / RAM-bounded in v1.
@@ -1220,7 +1220,7 @@ git status
 - Bridge 2 (engine→Studio reverse link) → in DatabaseSection (Task 5). ✅
 - Bridge 3 (`/providers` LibreDB native entry, Usage B) → Task 3. ✅
 - Usage A embed snippet on `/database` → Task 5. ✅
-- Platform light (open-core family block + external link, no internal route/pricing) → Tasks 8 (external row), 9 (family block), 11 (nav). ✅
+- Platform: open-core family block (Task 9) + nav (Task 11); lean internal `/platform` page with CTA→app + Explorer `↗ open app` row (added post-plan, Task 13). No on-site pricing. ✅
 - SEO: 301 redirect (Task 2), `database` JSON-LD (Task 5). ✅
 - Header/Footer updates → Task 11. ✅
 - Tests updated → Tasks 1, 2, 4; full run Task 12. ✅
