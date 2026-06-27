@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Gate (typecheck, format, lint, dead-code, tests)
+        run: bun run gate
+
       - name: Build website
         run: bun run build
 

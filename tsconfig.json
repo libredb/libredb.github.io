@@ -1,5 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    // Bun runtime types for the `bun:test` imports in *.test.ts. @types/bun
+    // also references @types/node, so this covers Node globals too. Astro's
+    // own ambient types load via .astro/types.d.ts (triple-slash), which the
+    // `types` array does not gate.
+    "types": ["bun"]
+  },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }
