@@ -13,7 +13,7 @@
     "lint": "oxlint",
     "knip": "knip",
     "test": "bun test",
-    "gate": "bun run typecheck && bun run format && bun run lint && bun run knip"
+    "gate": "bun run typecheck && bun run format && bun run lint && bun run knip && bun run test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
