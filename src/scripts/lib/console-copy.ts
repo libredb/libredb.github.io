@@ -1,5 +1,5 @@
 export type ConsoleKind = 'notice' | 'error' | 'ok' | 'comment';
-export interface ConsoleCta {
+interface ConsoleCta {
   label: string;
   href: string;
 }

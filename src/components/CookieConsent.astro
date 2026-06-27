@@ -83,6 +83,7 @@
 
     function loadMetaPixel() {
       if (window.fbq) return;
+      /* oxlint-disable no-unused-expressions -- canonical Meta Pixel vendor snippet; do not rewrite */
       !(function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
         n = f.fbq = function () {
@@ -99,6 +100,7 @@
         s = b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t, s);
       })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      /* oxlint-enable no-unused-expressions */
       window.fbq('init', META_PIXEL_ID);
     }
 

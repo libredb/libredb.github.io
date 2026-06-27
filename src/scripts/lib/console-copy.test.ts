@@ -29,7 +29,7 @@ test('every required control has a console message', () => {
 });
 
 test('messages are well-formed', () => {
-  for (const [key, m] of Object.entries(NOTICES)) {
+  for (const m of Object.values(NOTICES)) {
     expect(VALID_KINDS).toContain(m.kind);
     expect(m.text.length).toBeGreaterThan(0);
     if (m.cta) expect(m.cta.href.startsWith('http')).toBe(true);

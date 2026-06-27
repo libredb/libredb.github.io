@@ -6,7 +6,7 @@ import { deployTargets } from './deploy-targets';
  * as a result set. Drives the Explorer tree, the desktop query chrome, and the
  * mobile per-section query cards.
  */
-export interface SectionColumn {
+interface SectionColumn {
   name: string;
   type: string; // SQL-ish type shown in the explorer tree
 }
