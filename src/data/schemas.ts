@@ -9,7 +9,7 @@ export interface SchemaMeta {
   label: string;            // tree heading
   badge?: string;           // e.g. "pre-alpha", "beta · teams"
   badgeClass?: string;      // styling hook (Tailwind classes)
-  external?: { label: string; href: string }; // platform: link row, no section
+  external?: { label: string; href: string }; // secondary "open app" row after the schema's internal sections (platform)
 }
 
 export const schemas: SchemaMeta[] = [
