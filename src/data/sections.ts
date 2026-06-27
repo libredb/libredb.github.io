@@ -49,7 +49,7 @@ export const sections: SectionMeta[] = [
     id: 'features',
     table: 'features',
     query: 'SELECT name, category, summary FROM features ORDER BY category;',
-    rows: 17,
+    rows: 18,
     cols: 3,
     execMs: 4,
     columns: [
@@ -57,7 +57,7 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'ENUM' },
       { name: 'summary', type: 'TEXT' },
     ],
-    explain: 'Lists 17 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking and the DBA toolkit.',
+    explain: 'Lists 18 capabilities grouped by area — from the Monaco SQL editor and NL2SQL Copilot to data masking, the DBA toolkit, and a zero-setup embedded LibreDB sample on first launch.',
     slug: 'features',
     pageTitle: 'Features — LibreDB Studio SQL IDE',
     pageDescription: 'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, 7+ databases, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
