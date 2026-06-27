@@ -1,8 +1,10 @@
 name: Deploy to GitHub Pages
 
+# Production deploy is gated on publishing a GitHub release.
+# Build verification on PRs / main pushes lives in ci.yml.
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
