@@ -21,6 +21,26 @@ export const sectionSeo: Record<string, object[]> = {
       })),
     },
   ],
+  database: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareSourceCode',
+      name: 'LibreDB',
+      description: 'A small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses, zero dependencies, every line tested.',
+      programmingLanguage: 'TypeScript',
+      codeRepository: 'https://github.com/libredb/libredb-database',
+      license: 'https://opensource.org/licenses/MIT',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'LibreDB',
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Cross-platform (Bun, Node 22+)',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      softwareVersion: 'pre-alpha (0.0.x)',
+    },
+  ],
   docker_compose: [
     {
       '@context': 'https://schema.org',
