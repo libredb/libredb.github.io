@@ -67,7 +67,7 @@ export const sections: SectionMeta[] = [
     id: 'providers',
     table: 'providers',
     query: 'SELECT name, type, driver FROM providers;',
-    rows: 7,
+    rows: 8,
     cols: 3,
     execMs: 2,
     columns: [

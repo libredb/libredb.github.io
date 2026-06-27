@@ -13,6 +13,7 @@ const databases: DB[] = [
   { name: 'SQLite', type: 'embedded', driver: 'sqlite3', color: 'text-ai', summary: 'File-based database with WAL mode support. Perfect for local development.' },
   { name: 'MongoDB', type: 'document', driver: 'mongodb', color: 'text-ok', summary: 'Full document database support with JSON queries, aggregations, and schema inference.' },
   { name: 'Redis', type: 'key-value', driver: 'redis', color: 'text-bad', summary: 'Key-value store support with key browser, TTL management, and memory monitoring.' },
+  { name: 'LibreDB', type: 'embedded · our own', driver: '@libredb/libredb', color: 'text-ai', summary: 'Our own open-source embedded engine. Open a .libredb file directly — no server. Browse relational, document, and key-value lenses; query with a small get / put / prefix / range grammar (not SQL). Ships as a ready-to-use sample on first launch.' },
 ];
 ---
 <div class="mx-auto max-w-6xl">
@@ -25,7 +26,11 @@ const databases: DB[] = [
     {databases.map((d) => (
       <article class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
         <div class="flex items-baseline justify-between gap-3">
-          <h3 class={`text-[16px] font-bold ${d.color}`}>{d.name}</h3>
+          <h3 class={`text-[16px] font-bold ${d.color}`}>
+            {d.name === 'LibreDB'
+              ? <a href="/database" class="hover:underline">{d.name} <span aria-hidden="true">→</span></a>
+              : d.name}
+          </h3>
           <span class="text-[11.5px] text-faint">{d.type} · {d.driver}</span>
         </div>
         <p class="mt-2 text-[13px] leading-relaxed text-dim">{d.summary}</p>
