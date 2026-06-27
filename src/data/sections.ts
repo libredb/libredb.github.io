@@ -23,6 +23,7 @@ export interface SectionMeta {
   slug: string;        // URL slug ('' = home at '/')
   pageTitle: string;   // <title> when this section is its own page
   pageDescription: string;
+  schema: 'studio' | 'database'; // Explorer grouping; platform has no sections
 }
 
 export const sections: SectionMeta[] = [
@@ -42,6 +43,7 @@ export const sections: SectionMeta[] = [
     slug: '',
     pageTitle: 'LibreDB Studio - AI-Powered Open-Source SQL IDE',
     pageDescription: 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
+    schema: 'studio',
   },
   {
     id: 'features',
@@ -59,6 +61,7 @@ export const sections: SectionMeta[] = [
     slug: 'features',
     pageTitle: 'Features — LibreDB Studio SQL IDE',
     pageDescription: 'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, 7+ databases, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
+    schema: 'studio',
   },
   {
     id: 'databases',
@@ -76,6 +79,7 @@ export const sections: SectionMeta[] = [
     slug: 'databases',
     pageTitle: 'Supported Databases — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis',
     pageDescription: 'One tool, all your databases. Connect to PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB and Redis through one unified browser-based SQL IDE.',
+    schema: 'studio',
   },
   {
     id: 'compare',
@@ -93,6 +97,7 @@ export const sections: SectionMeta[] = [
     slug: 'compare',
     pageTitle: 'How LibreDB Studio Compares — vs DataGrip, DBeaver, pgAdmin, TablePlus',
     pageDescription: 'See why teams switch to LibreDB Studio: zero-install, mobile, AI-native, SSO and free — compared against DataGrip, DBeaver, pgAdmin and TablePlus.',
+    schema: 'studio',
   },
   {
     id: 'tech_stack',
@@ -109,6 +114,7 @@ export const sections: SectionMeta[] = [
     slug: 'tech-stack',
     pageTitle: 'Tech Stack — LibreDB Studio',
     pageDescription: 'Built with a modern, production-ready stack: Next.js 16, React 19, TypeScript, Tailwind 4, Monaco, TanStack Table, ReactFlow, Gemini/OIDC, Docker and Bun.',
+    schema: 'studio',
   },
   {
     id: 'get_started',
@@ -126,6 +132,7 @@ export const sections: SectionMeta[] = [
     slug: 'get-started',
     pageTitle: 'Get Started in Minutes — LibreDB Studio',
     pageDescription: 'Run LibreDB Studio locally in three steps — clone & install, configure, launch — or one-command Docker. Self-host the open-source AI SQL IDE.',
+    schema: 'studio',
   },
   {
     id: 'faq',
@@ -142,6 +149,7 @@ export const sections: SectionMeta[] = [
     slug: 'faq',
     pageTitle: 'FAQ — LibreDB Studio',
     pageDescription: 'Frequently asked questions about LibreDB Studio: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+    schema: 'studio',
   },
   {
     id: 'deploy',
@@ -159,6 +167,7 @@ export const sections: SectionMeta[] = [
     slug: 'deploy',
     pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
     pageDescription: 'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway and CapRover one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.',
+    schema: 'studio',
   },
   {
     id: 'docker_compose',
@@ -176,6 +185,7 @@ export const sections: SectionMeta[] = [
     explain: 'A copy-paste docker-compose.yml: pulls the published ghcr.io image with every environment variable (auth, OIDC SSO, storage, AI/LLM, seed) — self-host in one command.',
     pageTitle: 'LibreDB Studio Docker Compose Example — Self-Host in Minutes',
     pageDescription: 'Copy-paste docker-compose.example.yml for LibreDB Studio. Run the open-source SQL IDE with one command using the ghcr.io/libredb/libredb-studio image. Includes every environment variable, SQLite/PostgreSQL storage, and OIDC SSO options.',
+    schema: 'studio',
   },
 ];
 
