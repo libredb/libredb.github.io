@@ -73,11 +73,11 @@ bundler) understands this in dev and production builds.
 | `src/pages/playground.astro` | The route. Wraps `Playground.astro` in `StudioShell`, sets SEO title/description. |
 | `src/components/studio/Playground.astro` | Editor pane markup: command input, Run button, result grid container, persistence badge, Reset button, mounts `Cheatsheet`. Includes the client `<script>`. |
 | `src/components/studio/Cheatsheet.astro` | Clickable command list grouped per lens (kv / document / relational / meta). Each button carries `data-cmd`. |
-| `src/scripts/playground/protocol.ts` | **Pure, testable.** Message types (`WorkerRequest`/`WorkerResponse`), command parser/grammar, result-row shaping. No DOM, no engine import. |
-| `src/scripts/playground/seed.ts` | Sample dataset definition + a `seed(db)` function (imported by the worker). |
-| `src/scripts/playground/db.worker.ts` | The Worker. Owns the OPFS handle, opens db (durable→memory fallback), seeds on first open, dispatches parsed commands to lenses, returns results, `db.close()` on teardown. |
-| `src/scripts/playground/client.ts` | Main-thread bridge: spawns worker, `call()` request/response with ids, wires Run button + cheatsheet clicks + Reset, renders result grid, shows fallback banner, posts `close` + `terminate()` on `pagehide`. |
-| `src/scripts/playground/protocol.test.ts` | `bun:test` unit tests for the parser/grammar. |
+| `src/scripts/playground/protocol.ts` | **Pure, testable.** Message types (`WorkerRequest`/`WorkerResponse`), command grammar, parser. No DOM, no engine import. |
+| `src/scripts/playground/engine.ts` | **Testable.** `seed(db)` (the sample dataset), `isSeeded(db)`, and `execute(db, cmd)` — lens dispatch over the browser entry. (The seed lives here, not a separate `seed.ts`.) |
+| `src/scripts/playground/db.worker.ts` | The Worker. Owns the OPFS handle, opens db (durable→memory fallback), seeds on first open, dispatches parsed commands, and on `close` runs `db.close()` then `self.close()`. |
+| `src/scripts/playground/client.ts` | Main-thread bridge: spawns worker, `call()` request/response with ids, wires Run + cheatsheet + Reset, renders the grid + status echo + activity log, shows fallback banner, and posts `close` on `pagehide` (the worker self-closes; the client does **not** `terminate()`). |
+| `src/scripts/playground/protocol.test.ts`, `engine.test.ts` | `bun:test` units for the parser and the seed/execute engine (against an in-memory `open()`). |
 
 ### Reused as-is
 
@@ -150,7 +150,7 @@ document, `config:*` kv); clicking one fills the editor and runs it → **zero-t
 5. Worker parses, executes against the right lens, posts `{id, result}` or `{id, error}`.
 6. Client renders rows in the grid; errors → red console toast.
 7. Reset → `call(op:"reset")` → worker truncates the relevant keys/tables and reseeds.
-8. `pagehide` → `call(op:"close")` then `worker.terminate()`.
+8. `pagehide` (non-bfcache) → `call(op:"close")`; the worker runs `db.close()` then `self.close()`. The client does **not** call `worker.terminate()` — that would race and usually win before the worker releases the OPFS handle.
 
 ## Error handling & edge cases
 

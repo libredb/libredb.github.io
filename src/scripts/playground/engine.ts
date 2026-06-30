@@ -17,7 +17,11 @@ export const USERS_SCHEMA: TableSchema = {
 };
 
 export function isSeeded(db: Database): boolean {
-  return kv(db).get('config:theme') !== undefined;
+  // Mark "seeded" by the catalog, not a user-writable key like `config:theme`:
+  // the catalog is reserved (and write-protected), survives row deletions, and a
+  // visitor can't empty it — so deleting a kv key never triggers an unwanted
+  // re-seed (which would clobber their edits) on the next reload.
+  return catalog(db).size > 0;
 }
 
 export function seed(db: Database): void {

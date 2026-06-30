@@ -22,6 +22,12 @@ test('seed populates the catalog lenses and isSeeded flips', () => {
   expect(isSeeded(db)).toBe(true);
 });
 
+test('isSeeded keys off the catalog, so deleting a user kv key does not trigger a re-seed', () => {
+  const db = seeded();
+  run(db, 'delete config:theme'); // a user-writable key
+  expect(isSeeded(db)).toBe(true); // catalog (users/articles) still present
+});
+
 test('get returns a key/value row; missing key is a (nil) message', () => {
   const db = seeded();
   const hit = run(db, 'get config:theme');
