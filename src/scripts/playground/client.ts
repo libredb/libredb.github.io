@@ -66,30 +66,47 @@ function init(root: HTMLElement): void {
     if (banner) banner.hidden = mode === 'opfs';
   }
 
+  // One in-flight guard shared by run AND reset, so they can't overlap (which
+  // could skip the post-reset refresh or interleave UI state). While busy, both
+  // buttons are disabled and the Run label shows progress.
+  const RUN_LABEL = runBtn.textContent ?? '▶ Run';
   let busy = false;
+  function setBusy(on: boolean): void {
+    busy = on;
+    runBtn!.disabled = on;
+    if (resetBtn) resetBtn.disabled = on;
+    runBtn!.textContent = on ? '… Running' : RUN_LABEL;
+  }
+
+  /** Send a command and render it — NOT guarded, so internal callers (reset refresh) always run. */
+  async function exec(text: string, source: Source): Promise<void> {
+    const started = performance.now();
+    const res = await call({ op: 'run', text });
+    const ms = performance.now() - started;
+    if (res.kind === 'result') render(res.result, text, ms, source);
+  }
+
   async function run(text: string, source: Source = 'editor'): Promise<void> {
     const t = text.trim();
-    if (t === '' || busy) return; // ignore re-entrant runs (double-click / repeated ⌘-Enter)
-    busy = true;
-    runBtn!.disabled = true;
-    const label = runBtn!.textContent;
-    runBtn!.textContent = '… Running';
+    if (t === '' || busy) return; // ignore re-entrant runs (double-click / repeated ⌘-Enter / reset)
+    setBusy(true);
     try {
-      const started = performance.now();
-      const res = await call({ op: 'run', text: t });
-      const ms = performance.now() - started;
-      if (res.kind === 'result') render(res.result, t, ms, source);
+      await exec(t, source);
     } finally {
-      busy = false;
-      runBtn!.disabled = false;
-      runBtn!.textContent = label;
+      setBusy(false);
     }
   }
 
   async function doReset(): Promise<void> {
-    const res = await call({ op: 'reset' });
-    if (res.kind === 'result') render(res.result, 'reset', 0, 'system');
-    await run('prefix users:', 'system');
+    if (busy) return; // don't overlap a query in flight
+    setBusy(true);
+    try {
+      const res = await call({ op: 'reset' });
+      if (res.kind === 'result') render(res.result, 'reset', 0, 'system');
+      await exec('prefix users:', 'system'); // bypasses the busy guard — we own it here
+    } finally {
+      setBusy(false);
+    }
   }
 
   // Every run updates the grid/status AND appends one activity-log entry, so the

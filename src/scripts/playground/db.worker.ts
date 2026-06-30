@@ -56,47 +56,52 @@ async function reset(): Promise<void> {
   await boot();
 }
 
-let ready = boot();
-
 const reply = (msg: WorkerResponse) => self.postMessage(msg);
 
-self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
-  await ready;
+// Serialize ALL message handling onto one promise chain (starting with boot), so
+// only one op ever touches `db` at a time — a `run` can't land mid-`reset`, and
+// `close` can't race an in-flight op. Single-threaded JS + this chain = strict order.
+let chain: Promise<void> = boot();
+
+self.onmessage = (event: MessageEvent<WorkerRequest>) => {
   const msg = event.data;
-  try {
-    switch (msg.op) {
-      case 'ready':
-        reply({ id: msg.id, kind: 'ready', mode });
-        return;
-      case 'run': {
-        const cmd = parseCommand(msg.text);
-        // `stats` needs the on-disk size; getSize() only when relevant (and durable).
-        const fileSize = cmd.op === 'stats' && mode === 'opfs' && handle ? handle.getSize() : undefined;
-        reply({ id: msg.id, kind: 'result', result: execute(db, cmd, fileSize) });
-        return;
-      }
-      case 'reset':
-        ready = reset();
-        await ready;
-        reply({
-          id: msg.id,
-          kind: 'result',
-          result: { kind: 'message', message: 'Sandbox reset to sample data.' },
-        });
-        return;
-      case 'close':
-        try {
-          db.close(); // flush WAL + release the exclusive OPFS sync-access handle
-        } catch {
-          /* already closed */
-        }
-        reply({ id: msg.id, kind: 'closed' });
-        // Self-terminate so the handle is released without the client racing us
-        // via worker.terminate() before this handler runs.
-        self.close();
-        return;
-    }
-  } catch (e) {
-    reply({ id: msg.id, kind: 'result', result: { kind: 'error', error: (e as Error).message } });
-  }
+  chain = chain
+    .then(() => handleMessage(msg))
+    .catch((e) => {
+      reply({ id: msg.id, kind: 'result', result: { kind: 'error', error: (e as Error).message } });
+    });
 };
+
+async function handleMessage(msg: WorkerRequest): Promise<void> {
+  switch (msg.op) {
+    case 'ready':
+      reply({ id: msg.id, kind: 'ready', mode });
+      return;
+    case 'run': {
+      const cmd = parseCommand(msg.text);
+      // `stats` needs the on-disk size; getSize() only when relevant (and durable).
+      const fileSize = cmd.op === 'stats' && mode === 'opfs' && handle ? handle.getSize() : undefined;
+      reply({ id: msg.id, kind: 'result', result: execute(db, cmd, fileSize) });
+      return;
+    }
+    case 'reset':
+      await reset();
+      reply({
+        id: msg.id,
+        kind: 'result',
+        result: { kind: 'message', message: 'Sandbox reset to sample data.' },
+      });
+      return;
+    case 'close':
+      try {
+        db.close(); // flush WAL + release the exclusive OPFS sync-access handle
+      } catch {
+        /* already closed */
+      }
+      reply({ id: msg.id, kind: 'closed' });
+      // Self-terminate so the handle is released without the client racing us
+      // via worker.terminate() before this handler runs.
+      self.close();
+      return;
+  }
+}
