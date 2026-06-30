@@ -52,7 +52,6 @@ function init(root: HTMLElement): void {
   async function run(text: string): Promise<void> {
     const t = text.trim();
     if (t === '') return;
-    if (t.toLowerCase() === 'reset') return void doReset();
     const res = await call({ op: 'run', text: t });
     if (res.kind === 'result') render(res.result);
   }
@@ -60,7 +59,7 @@ function init(root: HTMLElement): void {
   async function doReset(): Promise<void> {
     const res = await call({ op: 'reset' });
     if (res.kind === 'result') render(res.result);
-    await run('select * from users');
+    await run('prefix users:');
   }
 
   function render(result: RunResult): void {
@@ -93,8 +92,8 @@ function init(root: HTMLElement): void {
     worker.terminate();
   });
 
-  // First view: show the seeded users table.
-  void run('select * from users');
+  // First view: scan the seeded users namespace.
+  void run('prefix users:');
 }
 
 /**

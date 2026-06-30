@@ -146,7 +146,7 @@ export const sections: SectionMeta[] = [
   {
     id: 'playground',
     table: 'playground',
-    query: 'SELECT * FROM users; -- runs in your browser via OPFS',
+    query: 'prefix users:  -- LibreDB kv command, runs in your browser via OPFS',
     rows: 3,
     cols: 3,
     execMs: 1,

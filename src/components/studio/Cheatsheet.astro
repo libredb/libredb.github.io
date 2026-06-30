@@ -1,41 +1,43 @@
 ---
-// Clickable, ready-to-run commands grouped per lens. Each button carries the
-// exact command in data-cmd; client.ts fills the editor and runs it on click.
+// Ready-to-run LibreDB commands, grouped by namespace. Every command is one of
+// the five real kv-lens verbs (get/put/delete/prefix/range) — the same grammar
+// as Studio's LibreDBProvider. "Tables" and "collections" are conventions over
+// the keyspace (users:<pk>, articles:<id>), shown here as their key prefixes;
+// the catalog kind is a label, not a separate command dialect.
 interface Group {
-  label: string;
-  badge: string;
-  badgeClass: string;
+  label: string; // namespace prefix, e.g. "users:*"
+  kind: string; // catalog kind label
+  kindClass: string;
   commands: string[];
 }
 const groups: Group[] = [
   {
-    label: 'Key–Value',
-    badge: 'kv',
-    badgeClass: 'bg-primary/15 text-primary',
-    commands: ['get config:theme', 'put config:theme light', 'prefix config:', 'range a z', 'delete config:theme'],
-  },
-  {
-    label: 'Document',
-    badge: 'doc',
-    badgeClass: 'bg-ok/15 text-ok',
+    label: 'users:*',
+    kind: 'relational table',
+    kindClass: 'bg-warn/15 text-warn',
     commands: [
-      'doc.all articles',
-      'doc.get articles a1',
-      'doc.put articles a3 {"title":"Local-first","published":true}',
-      'doc.find articles {"published":true}',
-      'doc.delete articles a2',
+      'prefix users:',
+      'get users:1',
+      'put users:4 {"id":"4","name":"Lin","age":29,"active":true}',
+      'delete users:4',
     ],
   },
   {
-    label: 'Relational',
-    badge: 'table',
-    badgeClass: 'bg-warn/15 text-warn',
+    label: 'articles:*',
+    kind: 'document collection',
+    kindClass: 'bg-ok/15 text-ok',
     commands: [
-      'select * from users',
-      'select * from users limit 2',
-      'insert into users {"id":"4","name":"Lin","age":29,"active":true}',
-      'delete from users 4',
+      'prefix articles:',
+      'get articles:a1',
+      'put articles:a3 {"title":"Local-first","published":true}',
+      'delete articles:a2',
     ],
+  },
+  {
+    label: 'config:*',
+    kind: 'key–value',
+    kindClass: 'bg-primary/15 text-primary',
+    commands: ['prefix config:', 'get config:theme', 'put config:theme light', 'range a z', 'delete config:theme'],
   },
 ];
 ---
@@ -44,13 +46,20 @@ const groups: Group[] = [
   <div class="border-b border-edge px-4 py-3">
     <p class="text-[11px] tracking-wider text-faint uppercase">Cheatsheet</p>
     <p class="mt-1 text-[12px] text-dim">Click any command to run it — no typing needed.</p>
+    <p class="mt-2 text-[11.5px] leading-relaxed text-faint">
+      LibreDB is an ordered key–value store. Tables and collections are conventions over keys (<code class="text-dim"
+        >users:1</code
+      >) — all operated with the same five verbs.
+    </p>
   </div>
   {
     groups.map((g) => (
       <div class="border-b border-edge px-3 py-3">
-        <p class="mb-2 flex items-center gap-2 px-1 text-[12.5px] text-muted">
+        <p class="mb-2 flex items-center gap-2 px-1 font-mono text-[12.5px] text-muted">
           {g.label}
-          <span class:list={['rounded px-1.5 text-[10px] tracking-wide uppercase', g.badgeClass]}>{g.badge}</span>
+          <span class:list={['rounded px-1.5 font-sans text-[10px] tracking-wide uppercase', g.kindClass]}>
+            {g.kind}
+          </span>
         </p>
         <ul class="space-y-1">
           {g.commands.map((cmd) => (

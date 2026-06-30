@@ -1,8 +1,14 @@
 /**
  * Command grammar + worker message protocol for the /playground editor.
- * Pure: no DOM, no engine import. Imports only types from the browser entry.
+ *
+ * The grammar is LibreDB's real one — the five kv-lens verbs, mirroring Studio's
+ * LibreDBProvider (docs/providers/libredb.md §5). LibreDB is an ordered key-value
+ * store; "tables" and "document collections" are conventions over the keyspace
+ * (`<table>:<pk>`, `<collection>:<id>`) recorded in the catalog — NOT separate
+ * command dialects. So there is one grammar, not a SQL/document translator.
+ *
+ * Pure: no DOM, no engine import.
  */
-import type { Doc, Row } from '@libredb/libredb/browser';
 
 export type Mode = 'opfs' | 'memory';
 
@@ -13,15 +19,6 @@ export type Command =
   | { op: 'delete'; key: string }
   | { op: 'prefix'; prefix: string }
   | { op: 'range'; start: string; end: string }
-  | { op: 'docget'; collection: string; id: string }
-  | { op: 'docput'; collection: string; id: string; json: Doc }
-  | { op: 'docdel'; collection: string; id: string }
-  | { op: 'docall'; collection: string }
-  | { op: 'docfind'; collection: string; predicate: Doc }
-  | { op: 'select'; table: string; limit?: number }
-  | { op: 'insert'; table: string; row: Row }
-  | { op: 'remove'; table: string; pk: string }
-  | { op: 'help' }
   | { op: 'error'; error: string };
 
 /** Normalized result a command produces, shaped for the grid or a console line. */
@@ -41,103 +38,83 @@ export type WorkerResponse =
   | { id: number; kind: 'result'; result: RunResult }
   | { id: number; kind: 'closed' };
 
+const VERBS = 'get, put, delete, prefix, range';
 const err = (error: string): Command => ({ op: 'error', error });
 
-type ParsedObject = { ok: true; value: Record<string, unknown> } | { ok: false; error: string };
+/**
+ * Quote-aware tokenizer (mirrors Studio's `tokenize`): single/double quotes
+ * preserve internal whitespace, an unmatched quote is rejected, and consecutive
+ * unquoted whitespace collapses to one boundary.
+ */
+function tokenize(line: string): { ok: true; tokens: string[] } | { ok: false; error: string } {
+  const tokens: string[] = [];
+  const n = line.length;
+  let i = 0;
+  const isSpace = (c: string) => c === ' ' || c === '\t';
+  while (i < n) {
+    while (i < n && isSpace(line[i])) i++;
+    if (i >= n) break;
+    const ch = line[i];
+    let tok = '';
+    if (ch === '"' || ch === "'") {
+      i++;
+      let closed = false;
+      while (i < n) {
+        if (line[i] === ch) {
+          closed = true;
+          i++;
+          break;
+        }
+        tok += line[i++];
+      }
+      if (!closed) return { ok: false, error: 'Unmatched quote in command.' };
+    } else {
+      while (i < n && !isSpace(line[i])) tok += line[i++];
+    }
+    tokens.push(tok);
+  }
+  return { ok: true, tokens };
+}
 
-/** Parse a JSON object tail; non-objects/arrays/garbage become a friendly error. */
-function parseObject(tail: string): ParsedObject {
-  let value: unknown;
-  try {
-    value = JSON.parse(tail);
-  } catch {
-    return { ok: false, error: `invalid JSON: ${tail}` };
+/** First non-blank, non-`#`-comment line — lets a commented cheatsheet buffer run its first command. */
+function firstCommandLine(text: string): string | undefined {
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (line === '' || line.startsWith('#')) continue;
+    return line;
   }
-  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-    return { ok: false, error: 'expected a JSON object, e.g. {"key":"value"}' };
-  }
-  return { ok: true, value: value as Record<string, unknown> };
+  return undefined;
 }
 
 /**
- * Parse one command line. Total: never throws; unrecognized or malformed input
+ * Parse one command. Total: never throws; unrecognized or malformed input
  * returns `{ op: "error" }` so the worker boundary stays clean.
  */
 export function parseCommand(text: string): Command {
-  const line = text.trim();
-  if (line === '') return err("empty command — type 'help'.");
+  const line = firstCommandLine(text);
+  if (line === undefined) return err(`Empty command. Supported: ${VERBS}.`);
 
-  // doc.<verb> <collection> ...
-  if (line.startsWith('doc.')) {
-    const [verb, ...rest] = line.split(/\s+/);
-    const collection = rest[0];
-    if (!collection) return err(`${verb} needs a collection — type 'help'.`);
-    switch (verb) {
-      case 'doc.all':
-        return { op: 'docall', collection };
-      case 'doc.get': {
-        const id = rest[1];
-        return id ? { op: 'docget', collection, id } : err('doc.get needs an id.');
-      }
-      case 'doc.delete': {
-        const id = rest[1];
-        return id ? { op: 'docdel', collection, id } : err('doc.delete needs an id.');
-      }
-      case 'doc.put': {
-        const id = rest[1];
-        if (!id) return err('doc.put needs an id and a JSON document.');
-        const json = parseObject(line.slice(line.indexOf(id) + id.length).trim());
-        return json.ok ? { op: 'docput', collection, id, json: json.value as Doc } : err(json.error);
-      }
-      case 'doc.find': {
-        const predicate = parseObject(line.slice(line.indexOf(collection) + collection.length).trim());
-        return predicate.ok ? { op: 'docfind', collection, predicate: predicate.value as Doc } : err(predicate.error);
-      }
-      default:
-        return err(`unknown command: ${verb} — type 'help'.`);
-    }
-  }
+  const t = tokenize(line);
+  if (!t.ok) return err(t.error);
+  const { tokens } = t;
+  const verb = (tokens[0] ?? '').toLowerCase();
 
-  // select * from <table> [limit <n>]
-  const select = /^select\s+\*\s+from\s+(\S+)(?:\s+limit\s+(\d+))?\s*$/i.exec(line);
-  if (select) {
-    const table = select[1];
-    return select[2] ? { op: 'select', table, limit: Number(select[2]) } : { op: 'select', table };
-  }
-
-  // insert into <table> <json>
-  const insert = /^insert\s+into\s+(\S+)\s+(.+)$/i.exec(line);
-  if (insert) {
-    const row = parseObject(insert[2]);
-    return row.ok ? { op: 'insert', table: insert[1], row: row.value as Row } : err(row.error);
-  }
-
-  // delete from <table> <pk>
-  const remove = /^delete\s+from\s+(\S+)\s+(\S+)\s*$/i.exec(line);
-  if (remove) return { op: 'remove', table: remove[1], pk: remove[2] };
-
-  // single-keyword and kv verbs
-  const [verb, ...rest] = line.split(/\s+/);
   switch (verb) {
-    case 'help':
-      return { op: 'help' };
     case 'get':
-      return rest[0] ? { op: 'get', key: rest[0] } : err('get needs a key.');
+      return tokens.length === 2 ? { op: 'get', key: tokens[1] } : err('Usage: get <key>');
     case 'delete':
-      return rest[0] ? { op: 'delete', key: rest[0] } : err('delete needs a key.');
+      return tokens.length === 2 ? { op: 'delete', key: tokens[1] } : err('Usage: delete <key>');
     case 'prefix':
-      return rest[0] ? { op: 'prefix', prefix: rest[0] } : err('prefix needs a non-empty argument.');
+      return tokens.length === 2 ? { op: 'prefix', prefix: tokens[1] } : err('Usage: prefix <prefix>');
     case 'range':
-      return rest[0] && rest[1]
-        ? { op: 'range', start: rest[0], end: rest[1] }
-        : err('range needs a start and an end key.');
-    case 'put': {
-      const key = rest[0];
-      if (!key) return err('put needs a key and a value.');
-      const value = line.slice(line.indexOf(key) + key.length).trim();
-      return value ? { op: 'put', key, value } : err('put needs a value.');
-    }
+      return tokens.length === 3
+        ? { op: 'range', start: tokens[1], end: tokens[2] }
+        : err('Usage: range <start> <end>');
+    case 'put':
+      return tokens.length >= 3
+        ? { op: 'put', key: tokens[1], value: tokens.slice(2).join(' ') }
+        : err('Usage: put <key> <value>');
     default:
-      return err(`unknown command: ${verb} — type 'help'.`);
+      return err(`Unknown command "${tokens[0] ?? ''}". Supported: ${VERBS}.`);
   }
 }

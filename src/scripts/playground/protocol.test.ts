@@ -1,69 +1,53 @@
 import { test, expect } from 'bun:test';
 import { parseCommand } from './protocol';
 
-test('get parses key', () => {
+test('the five kv verbs parse', () => {
   expect(parseCommand('get config:theme')).toEqual({ op: 'get', key: 'config:theme' });
-});
-
-test('put captures the whole value tail', () => {
-  expect(parseCommand('put config:theme dark mode')).toEqual({
-    op: 'put',
-    key: 'config:theme',
-    value: 'dark mode',
-  });
-});
-
-test('delete / prefix / range', () => {
-  expect(parseCommand('delete config:theme')).toEqual({ op: 'delete', key: 'config:theme' });
-  expect(parseCommand('prefix config:')).toEqual({ op: 'prefix', prefix: 'config:' });
+  expect(parseCommand('delete users:1')).toEqual({ op: 'delete', key: 'users:1' });
+  expect(parseCommand('prefix users:')).toEqual({ op: 'prefix', prefix: 'users:' });
   expect(parseCommand('range a z')).toEqual({ op: 'range', start: 'a', end: 'z' });
+  expect(parseCommand('put session:1 token')).toEqual({ op: 'put', key: 'session:1', value: 'token' });
 });
 
-test('doc family', () => {
-  expect(parseCommand('doc.all articles')).toEqual({ op: 'docall', collection: 'articles' });
-  expect(parseCommand('doc.get articles a1')).toEqual({ op: 'docget', collection: 'articles', id: 'a1' });
-  expect(parseCommand('doc.delete articles a1')).toEqual({ op: 'docdel', collection: 'articles', id: 'a1' });
-  expect(parseCommand('doc.put articles a3 {"title":"Hi"}')).toEqual({
-    op: 'docput',
-    collection: 'articles',
-    id: 'a3',
-    json: { title: 'Hi' },
-  });
-  expect(parseCommand('doc.find articles {"published":true}')).toEqual({
-    op: 'docfind',
-    collection: 'articles',
-    predicate: { published: true },
+test('verbs are case-insensitive', () => {
+  expect(parseCommand('GET config:theme')).toEqual({ op: 'get', key: 'config:theme' });
+  expect(parseCommand('Prefix users:')).toEqual({ op: 'prefix', prefix: 'users:' });
+});
+
+test('put captures a JSON value tail verbatim', () => {
+  expect(parseCommand('put users:4 {"id":"4","name":"Lin"}')).toEqual({
+    op: 'put',
+    key: 'users:4',
+    value: '{"id":"4","name":"Lin"}',
   });
 });
 
-test('relational family', () => {
-  expect(parseCommand('select * from users')).toEqual({ op: 'select', table: 'users' });
-  expect(parseCommand('select * from users limit 2')).toEqual({ op: 'select', table: 'users', limit: 2 });
-  expect(parseCommand('insert into users {"id":"4","name":"Lin","age":29,"active":true}')).toEqual({
-    op: 'insert',
-    table: 'users',
-    row: { id: '4', name: 'Lin', age: 29, active: true },
-  });
-  expect(parseCommand('delete from users 4')).toEqual({ op: 'remove', table: 'users', pk: '4' });
+test('put collapses unquoted whitespace, quotes preserve it', () => {
+  expect(parseCommand('put note hello   world')).toEqual({ op: 'put', key: 'note', value: 'hello world' });
+  expect(parseCommand('put note "hello   world"')).toEqual({ op: 'put', key: 'note', value: 'hello   world' });
 });
 
-test('help', () => {
-  expect(parseCommand('help')).toEqual({ op: 'help' });
+test('unmatched quote is a friendly error', () => {
+  expect(parseCommand('put k "oops')).toMatchObject({ op: 'error' });
 });
 
-test('empty input is an error', () => {
-  expect(parseCommand('   ')).toEqual({ op: 'error', error: "empty command — type 'help'." });
+test('comment and blank lines are skipped; first real line runs', () => {
+  expect(parseCommand('# a cheatsheet comment\n\nprefix users:')).toEqual({ op: 'prefix', prefix: 'users:' });
 });
 
-test('unknown verb is a friendly error', () => {
-  expect(parseCommand('frobnicate x')).toMatchObject({ op: 'error' });
+test('empty / comment-only input is an error', () => {
+  expect(parseCommand('   ')).toMatchObject({ op: 'error' });
+  expect(parseCommand('# only a comment')).toMatchObject({ op: 'error' });
 });
 
-test('invalid JSON tail is a friendly error, never a throw', () => {
-  expect(parseCommand('doc.put articles a3 {not json}')).toMatchObject({ op: 'error' });
-  expect(parseCommand('insert into users ["not","an","object"]')).toMatchObject({ op: 'error' });
+test('wrong arg count yields a usage error', () => {
+  expect(parseCommand('get')).toMatchObject({ op: 'error' });
+  expect(parseCommand('range a')).toMatchObject({ op: 'error' });
+  expect(parseCommand('put k')).toMatchObject({ op: 'error' });
 });
 
-test('prefix requires a non-empty argument', () => {
-  expect(parseCommand('prefix')).toMatchObject({ op: 'error' });
+test('unknown verb lists the supported verbs', () => {
+  const r = parseCommand('select * from users');
+  expect(r.op).toBe('error');
+  if (r.op === 'error') expect(r.error).toContain('get');
 });

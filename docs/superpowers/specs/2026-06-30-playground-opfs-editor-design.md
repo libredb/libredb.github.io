@@ -92,32 +92,37 @@ bundler) understands this in dev and production builds.
 | `package.json` | Add dependency `@libredb/libredb@0.1.3`. |
 | `src/data/sections.ts` *(if needed for nav)* | Optionally add a `/playground` entry; otherwise link from TopBar only. Decide during implementation — keep homepage unaffected. |
 
-## Command grammar (mirrors Studio's embedded provider)
+## Command grammar (mirrors Studio's `LibreDBProvider` exactly)
 
-Parsed in `protocol.ts`, executed in the worker:
+LibreDB is an ordered key-value store; documents and relational tables are **conventions over
+the keyspace** (`<table>:<pk>`, `<collection>:<id>`) recorded in the catalog — **not** separate
+command dialects (see `libredb-studio/docs/providers/libredb.md` §1, §3.5). The playground exposes
+**one** grammar — the five kv-lens verbs — never a SQL/document translator. Parsed in `protocol.ts`,
+executed by `engine.ts` in the worker:
 
 ```
-get <key>                    kv.get / doc.get by key
-put <key> <json>             set kv value, or upsert doc when json is an object
-delete <key>                 remove key
-prefix <p>                   kv prefix scan → rows
-range <a> <z>                kv key range → rows
-select * from <table>        table scan → rows (supports trailing `limit N`)
-insert into <table> <json>   table insert → echoes inserted row
-help                         list commands
-reset                        wipe + reseed (also available as toolbar button)
+get <key>              read one key → key/value row (JSON value pretty-printed); missing → (nil)
+put <key> <value>      write; quote-aware value tail → "OK · changed N"
+delete <key>           remove → "OK · changed N"
+prefix <prefix>        scan all keys under a prefix → rows
+range <start> <end>    half-open [start,end) keyspace scan → rows
 ```
 
-Parser rules:
-- Split on first whitespace boundaries by command keyword; the JSON tail is parsed with a
-  guarded `JSON.parse` (errors become a friendly `{error}` response, never throw across
-  the worker boundary).
-- Unknown command → `{ error: "unknown command: <x>. type 'help'." }`.
-- Results normalize to `{ columns: string[], rows: Array<Record<string, unknown>> }` for
-  the grid, or `{ message: string }` for scalar/ack responses.
+Parser rules (mirroring the provider's `tokenize`):
+- Verbs case-insensitive. Quote-aware tokenization: single/double quotes preserve internal
+  whitespace; an unmatched quote is a friendly error; consecutive unquoted whitespace collapses.
+- Blank and `#`-comment lines are skipped; the first real line runs (a commented cheatsheet buffer
+  is directly runnable).
+- Empty / unknown verb / wrong arg count → `{ op: "error" }` (never throws across the worker boundary).
+- `prefix`/`range` results hide the reserved catalog namespace via the package's `isReservedKey`.
+- Results normalize to `{ kind:"rows", columns, rows }` for the grid, or `{ kind:"message" }` for
+  writes / `(nil)` reads.
 
-Each `Cheatsheet` button has `data-cmd="insert into users {…}"`; clicking it fills the
-editor and runs immediately → **zero-typing operation** of the DB.
+**Reset** is a host (sandbox) action, not a LibreDB verb: the toolbar button wipes the OPFS file and
+reseeds. The seed still writes through the `doc()` and `table()` lenses so the catalog is real; the
+visitor operates those namespaces through the same five kv verbs (`prefix users:`, `get users:1`,
+`put users:4 {…}`, …). The `Cheatsheet` groups buttons by namespace (`users:*` relational, `articles:*`
+document, `config:*` kv); clicking one fills the editor and runs it → **zero-typing**.
 
 ## Data flow
 
