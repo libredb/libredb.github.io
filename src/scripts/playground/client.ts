@@ -5,6 +5,19 @@
  */
 import type { WorkerRequest, WorkerResponse, RunResult, Mode } from './protocol';
 
+/** What triggered a run — shown in the activity log. */
+type Source = 'editor' | 'system';
+
+interface ActivityEntry {
+  command: string;
+  summary: string;
+  ms: number;
+  ok: boolean;
+  source: Source;
+}
+
+const MAX_LOG_ENTRIES = 50;
+
 const pgRoot = document.querySelector<HTMLElement>('[data-pg-root]');
 if (pgRoot) init(pgRoot);
 
@@ -14,6 +27,7 @@ function init(root: HTMLElement): void {
   const resetBtn = root.querySelector<HTMLButtonElement>('[data-pg-reset]');
   const grid = root.querySelector<HTMLElement>('[data-pg-grid]');
   const status = root.querySelector<HTMLElement>('[data-pg-status]');
+  const log = root.querySelector<HTMLElement>('[data-pg-log]');
   const badge = root.querySelector<HTMLElement>('[data-pg-badge]');
   const banner = root.querySelector<HTMLElement>('[data-pg-banner]');
   if (!input || !runBtn || !grid) return;
@@ -50,34 +64,36 @@ function init(root: HTMLElement): void {
     if (banner) banner.hidden = mode === 'opfs';
   }
 
-  async function run(text: string): Promise<void> {
+  async function run(text: string, source: Source = 'editor'): Promise<void> {
     const t = text.trim();
     if (t === '') return;
     const started = performance.now();
     const res = await call({ op: 'run', text: t });
     const ms = performance.now() - started;
-    if (res.kind === 'result') render(res.result, t, ms);
+    if (res.kind === 'result') render(res.result, t, ms, source);
   }
 
   async function doReset(): Promise<void> {
     const res = await call({ op: 'reset' });
-    if (res.kind === 'result') render(res.result, 'reset', 0);
-    await run('prefix users:');
+    if (res.kind === 'result') render(res.result, 'reset', 0, 'system');
+    await run('prefix users:', 'system');
   }
 
-  function render(result: RunResult, command: string, ms: number): void {
-    // The status strip echoes the command + outcome + timing so an instant query
-    // is legible; it re-animates on every run, even an identical re-run.
+  // Every run updates the grid/status AND appends one activity-log entry, so the
+  // console is a complete history (not just the write commands).
+  function render(result: RunResult, command: string, ms: number, source: Source): void {
     if (result.kind === 'rows') {
       const n = result.rows.length;
-      setStatus(command, `${n} ${n === 1 ? 'row' : 'rows'}`, ms);
+      const summary = `${n} ${n === 1 ? 'row' : 'rows'}`;
+      setStatus(command, summary, ms);
       renderGrid(grid!, result.columns, result.rows);
+      logActivity(log, { command, summary, ms, ok: true, source });
     } else if (result.kind === 'error') {
       setStatus(command, '✕ error', ms);
-      renderConsole(`✕ ${result.error}`, 'error');
+      logActivity(log, { command, summary: result.error, ms, ok: false, source });
     } else {
       setStatus(command, result.message, ms);
-      renderConsole(result.message, 'ok');
+      logActivity(log, { command, summary: result.message, ms, ok: true, source });
     }
   }
 
@@ -105,14 +121,13 @@ function init(root: HTMLElement): void {
   resetBtn?.addEventListener('click', () => void doReset());
 
   // Cheatsheet: clicking a command loads it into the editor and clears the
-  // previous result, so you can read/edit it before pressing Run.
-  const log = root.querySelector<HTMLElement>('[data-pg-log]');
+  // current result (but NOT the activity log — that's history), so you can
+  // read/edit it before pressing Run.
   root.querySelectorAll<HTMLElement>('[data-cmd]').forEach((b) =>
     b.addEventListener('click', () => {
       const cmd = b.dataset.cmd ?? '';
       input.value = cmd;
       grid.replaceChildren();
-      log?.replaceChildren();
       if (status) status.hidden = true; // stale timing/echo shouldn't linger before the run
       renderHint(grid, 'Press ▶ Run (or ⌘/Ctrl+Enter) to execute.');
       input.focus();
@@ -127,7 +142,7 @@ function init(root: HTMLElement): void {
   });
 
   // First view: scan the seeded users namespace.
-  void run('prefix users:');
+  void run('prefix users:', 'system');
 }
 
 /**
@@ -191,12 +206,35 @@ function renderGrid(grid: HTMLElement, columns: string[], rows: Array<Record<str
   grid.append(table);
 }
 
-/** Append a line to the inline console log. */
-function renderConsole(message: string, kind: 'ok' | 'error'): void {
-  const host = document.querySelector<HTMLElement>('[data-pg-log]');
+/**
+ * Append one structured entry to the activity log — every run, not just writes.
+ * Fields: time (HH:MM:SS, full datetime on hover), status, command, outcome
+ * summary, duration, and the trigger source. Newest first, capped to keep the DOM small.
+ */
+function logActivity(host: HTMLElement | null, entry: ActivityEntry): void {
   if (!host) return;
-  const line = document.createElement('pre');
-  line.className = kind === 'error' ? 'whitespace-pre-wrap text-bad' : 'whitespace-pre-wrap text-ok';
-  line.textContent = message;
+  const now = new Date();
+
+  const line = document.createElement('div');
+  line.className = 'flex items-baseline gap-2 leading-relaxed';
+  line.title = now.toLocaleString();
+
+  const time = span('shrink-0 text-faint tabular-nums', now.toTimeString().slice(0, 8));
+  const stat = span(entry.ok ? 'shrink-0 text-ok' : 'shrink-0 text-bad', entry.ok ? '✓' : '✗');
+  const cmd = span('min-w-0 flex-1 truncate text-fg', entry.command);
+  const summary = span('shrink-0 max-w-[40%] truncate text-faint', entry.summary);
+  const dur = span('shrink-0 text-faint tabular-nums', `${entry.ms < 1 ? '<1' : entry.ms.toFixed(1)} ms`);
+  const src = span('shrink-0 text-dim', entry.source);
+
+  line.append(time, stat, cmd, summary, dur, src);
   host.prepend(line);
+
+  while (host.childElementCount > MAX_LOG_ENTRIES) host.lastElementChild?.remove();
+}
+
+function span(className: string, text: string): HTMLSpanElement {
+  const el = document.createElement('span');
+  el.className = className;
+  el.textContent = text;
+  return el;
 }

@@ -67,12 +67,11 @@ import Cheatsheet from './Cheatsheet.astro';
     <!-- Result grid -->
     <div data-pg-grid class="min-h-0 flex-1 overflow-auto" aria-label="Query results"></div>
 
-    <!-- Inline console log -->
+    <!-- Activity log: one entry per run (time · status · command · summary · ms · source) -->
     <div
       data-pg-log
       class="max-h-32 shrink-0 space-y-1 overflow-auto border-t border-edge bg-canvas px-4 py-2 font-mono text-[12px]"
-      aria-live="polite"
-      aria-label="Console"
+      aria-label="Activity log"
     >
     </div>
   </section>
