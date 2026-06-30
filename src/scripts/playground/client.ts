@@ -64,13 +64,24 @@ function init(root: HTMLElement): void {
     if (banner) banner.hidden = mode === 'opfs';
   }
 
+  let busy = false;
   async function run(text: string, source: Source = 'editor'): Promise<void> {
     const t = text.trim();
-    if (t === '') return;
-    const started = performance.now();
-    const res = await call({ op: 'run', text: t });
-    const ms = performance.now() - started;
-    if (res.kind === 'result') render(res.result, t, ms, source);
+    if (t === '' || busy) return; // ignore re-entrant runs (double-click / repeated ⌘-Enter)
+    busy = true;
+    runBtn!.disabled = true;
+    const label = runBtn!.textContent;
+    runBtn!.textContent = '… Running';
+    try {
+      const started = performance.now();
+      const res = await call({ op: 'run', text: t });
+      const ms = performance.now() - started;
+      if (res.kind === 'result') render(res.result, t, ms, source);
+    } finally {
+      busy = false;
+      runBtn!.disabled = false;
+      runBtn!.textContent = label;
+    }
   }
 
   async function doReset(): Promise<void> {
@@ -118,7 +129,28 @@ function init(root: HTMLElement): void {
       void run(input.value);
     }
   });
-  resetBtn?.addEventListener('click', () => void doReset());
+  // Reset is destructive (wipes durable edits), so require a two-step confirm:
+  // first click arms it; a second click within 3s runs it; otherwise it disarms.
+  if (resetBtn) {
+    const RESET_LABEL = resetBtn.textContent ?? '↺ Reset sandbox';
+    let armed = false;
+    let armTimer: number | undefined;
+    const disarm = () => {
+      armed = false;
+      resetBtn.textContent = RESET_LABEL;
+    };
+    resetBtn.addEventListener('click', () => {
+      if (armed) {
+        if (armTimer) clearTimeout(armTimer);
+        disarm();
+        void doReset();
+        return;
+      }
+      armed = true;
+      resetBtn.textContent = '↺ Click again to confirm';
+      armTimer = window.setTimeout(disarm, 3000);
+    });
+  }
 
   // Cheatsheet: clicking a command loads it into the editor and clears the
   // current result (but NOT the activity log — that's history), so you can

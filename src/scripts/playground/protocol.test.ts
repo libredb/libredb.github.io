@@ -65,6 +65,16 @@ test('import parses a JSON object of string values', () => {
   });
 });
 
+test('import keeps a literal "__proto__" key as an own property (no silent drop)', () => {
+  const r = parseCommand('import {"__proto__":"x","a":"1"}');
+  expect(r.op).toBe('import');
+  if (r.op === 'import') {
+    expect(Object.hasOwn(r.entries, '__proto__')).toBe(true);
+    expect(r.entries['__proto__']).toBe('x');
+    expect(r.entries['a']).toBe('1');
+  }
+});
+
 test('import rejects non-objects and non-string values', () => {
   expect(parseCommand('import [1,2,3]')).toMatchObject({ op: 'error' });
   expect(parseCommand('import {"n":1}')).toMatchObject({ op: 'error' });

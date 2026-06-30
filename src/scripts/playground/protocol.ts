@@ -55,7 +55,10 @@ function parseImport(tail: string): Command {
   if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
     return err('import expects a JSON object, e.g. import {"k":"v"}');
   }
-  const entries: Record<string, string> = {};
+  // Null-prototype accumulator: a literal "__proto__" key is an OWN property
+  // assignment here (not the Object.prototype setter), so it imports instead of
+  // silently no-op'ing.
+  const entries: Record<string, string> = Object.create(null);
   for (const [k, v] of Object.entries(parsed)) {
     if (typeof v !== 'string') return err(`import value for "${k}" must be a string`);
     entries[k] = v;

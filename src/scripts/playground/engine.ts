@@ -89,9 +89,23 @@ export function execute(db: Database, cmd: Command, fileSize?: number): RunResul
         let docCount = 0;
         let relCount = 0;
         for (const entry of reg.values()) {
-          if (entry.kind === 'document') docCount++;
-          else if (entry.kind === 'relational') relCount++;
-          else kvCount++;
+          switch (entry.kind) {
+            case 'document':
+              docCount++;
+              break;
+            case 'relational':
+              relCount++;
+              break;
+            case 'kv':
+              kvCount++;
+              break;
+            default: {
+              // Exhaustiveness guard: a new catalog kind becomes a compile error
+              // here rather than being silently miscounted as kv.
+              const _exhaustive: never = entry.kind;
+              void _exhaustive;
+            }
+          }
         }
         return {
           kind: 'rows',
