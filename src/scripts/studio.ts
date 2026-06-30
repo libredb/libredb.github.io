@@ -31,6 +31,14 @@ function syncActive() {
     a.closest<HTMLElement>('.exp-row')?.classList.toggle('active', on);
     a.setAttribute('aria-current', on ? 'true' : 'false');
   });
+  // Top-bar nav links (the bar is transition:persist'd, so reflect active here on
+  // every page-load rather than at SSR time, which would go stale across VT nav).
+  document.querySelectorAll<HTMLElement>('[data-topbar-link]').forEach((a) => {
+    const on = a.dataset.topbarLink === id;
+    a.classList.toggle('text-primary', on);
+    a.classList.toggle('text-muted', !on);
+    a.setAttribute('aria-current', on ? 'page' : 'false');
+  });
   const t = document.querySelector('[data-statusbar-table]');
   const r = document.querySelector('[data-statusbar-rows]');
   if (t) t.textContent = meta.table;

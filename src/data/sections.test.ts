@@ -54,14 +54,15 @@ test('providers section replaces databases (id, slug, table)', () => {
   expect(p.schema).toBe('studio');
 });
 
-test('three database-schema sections exist with correct slugs', () => {
+test('database-schema sections exist with correct slugs', () => {
   const dbSections = sections.filter((s) => s.schema === 'database');
   expect(dbSections.map((s) => s.id).sort()).toEqual(
-    ['database', 'database_architecture', 'database_reliability'].sort(),
+    ['database', 'database_architecture', 'database_reliability', 'playground'].sort(),
   );
   expect(sectionById['database'].slug).toBe('database');
   expect(sectionById['database_architecture'].slug).toBe('database-architecture');
   expect(sectionById['database_reliability'].slug).toBe('database-reliability');
+  expect(sectionById['playground'].slug).toBe('playground');
 });
 
 test('platform overview section exists (internal /platform)', () => {

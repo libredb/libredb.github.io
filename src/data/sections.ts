@@ -144,6 +144,26 @@ export const sections: SectionMeta[] = [
     schema: 'database',
   },
   {
+    id: 'playground',
+    table: 'playground',
+    query: 'prefix users:  -- LibreDB kv command, runs in your browser via OPFS',
+    rows: 3,
+    cols: 3,
+    execMs: 1,
+    columns: [
+      { name: 'kv', type: 'KV' },
+      { name: 'document', type: 'JSONB' },
+      { name: 'relational', type: 'TABLE' },
+    ],
+    explain:
+      'A real LibreDB database running entirely in your browser, backed by OPFS — preloaded sample data across all three lenses, clickable commands, persists across reloads, with zero backend and no signup.',
+    slug: 'playground',
+    pageTitle: 'Playground — run LibreDB in your browser | LibreDB',
+    pageDescription:
+      'Run a real LibreDB database entirely in your browser, backed by OPFS. Preloaded sample data, clickable commands, zero backend, no signup.',
+    schema: 'database',
+  },
+  {
     id: 'compare',
     table: 'compare',
     query: 'SELECT * FROM tools ORDER BY freedom DESC;',

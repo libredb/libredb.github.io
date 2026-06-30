@@ -173,6 +173,26 @@
   }
 }
 
+/* Playground: fade+slide the result in on each run so an instant query is still perceptible */
+@keyframes pg-result-in {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.pg-result-in {
+  animation: pg-result-in 0.18s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-result-in {
+    animation: none;
+  }
+}
+
 /* Accordion (native <details>) */
 summary {
   list-style: none;
