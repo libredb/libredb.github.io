@@ -50,7 +50,10 @@ interface AdminCommand {
 const adminCommands: AdminCommand[] = [
   { cmd: 'inspect', use: 'List namespaces, their kind, and relational schemas (reads the catalog).' },
   { cmd: 'stats', use: 'One-glance summary: file size on disk + namespace counts by kind.' },
-  { cmd: 'import {"user:9":"Zoe","color":"teal"}', use: 'Bulk-load many keys in a single atomic commit.' },
+  {
+    cmd: 'import {"session:a1":"token-abc","session:a2":"token-xyz"}',
+    use: 'Bulk-load many keys (here a new session:* namespace) in one atomic commit.',
+  },
 ];
 ---
 

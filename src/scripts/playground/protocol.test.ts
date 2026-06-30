@@ -59,9 +59,9 @@ test('inspect / stats parse with no args', () => {
 });
 
 test('import parses a JSON object of string values', () => {
-  expect(parseCommand('import {"user:9":"Zoe","color":"teal"}')).toEqual({
+  expect(parseCommand('import {"session:a1":"token-abc","session:a2":"token-xyz"}')).toEqual({
     op: 'import',
-    entries: { 'user:9': 'Zoe', color: 'teal' },
+    entries: { 'session:a1': 'token-abc', 'session:a2': 'token-xyz' },
   });
 });
 
