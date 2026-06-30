@@ -108,6 +108,22 @@ prefix <prefix>        scan all keys under a prefix → rows
 range <start> <end>    half-open [start,end) keyspace scan → rows
 ```
 
+Plus the CLI's database-level commands (`libredb-database/docs/CLI.md`), which the
+browser build fully supports:
+
+```
+inspect                list catalogued namespaces + kind + relational schema (reads catalog(db))
+stats                  file size (OPFS handle.getSize()) + namespace counts by kind
+import <json-object>   bulk-set a JSON object of string values in ONE atomic db.transact()
+```
+
+`inspect`/`stats` read `catalog(db)`; `import` commits through `db.transact()` (byte-level
+`tx.set` with UTF-8 encoding) and refuses reserved keys via `isReservedKey`. These appear in a
+separate **Manage** group in the cheatsheet with a use-case line each. (CLI file concepts — a
+`<path>` argument, `.lock` files, `--force` — have no browser analog: the worker owns the OPFS
+exclusive sync-access handle, and a second tab falls back to in-memory.) The CLI verbs `scan`/`set`
+are intentionally NOT aliased — the playground keeps Studio's `prefix`/`put` names as canonical.
+
 Parser rules (mirroring the provider's `tokenize`):
 - Verbs case-insensitive. Quote-aware tokenization: single/double quotes preserve internal
   whitespace; an unmatched quote is a friendly error; consecutive unquoted whitespace collapses.

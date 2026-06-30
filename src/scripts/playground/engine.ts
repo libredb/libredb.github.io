@@ -8,7 +8,7 @@
  * real — but the engine reads/writes everything through the kv lens, exactly as
  * the visitor's commands do: a "table" row is just the key `users:<pk>`.
  */
-import { kv, doc, table, isReservedKey, type Database, type TableSchema } from '@libredb/libredb/browser';
+import { kv, doc, table, catalog, isReservedKey, type Database, type TableSchema } from '@libredb/libredb/browser';
 import type { Command, RunResult } from './protocol';
 
 export const USERS_SCHEMA: TableSchema = {
@@ -53,12 +53,68 @@ function scanRows(entries: readonly { key: string; value: string }[]): Array<Rec
   return entries.filter((e) => !isReservedKey(e.key)).map((e) => ({ key: e.key, value: renderValue(e.value) }));
 }
 
-/** Execute a parsed command. Total: a lens throw (e.g. empty prefix) becomes an error result. */
-export function execute(db: Database, cmd: Command): RunResult {
+/**
+ * Execute a parsed command. Total: a lens throw (e.g. empty prefix) becomes an
+ * error result. `fileSize` is the OPFS file's byte size (worker-supplied) for
+ * `stats`; undefined in in-memory mode.
+ */
+export function execute(db: Database, cmd: Command, fileSize?: number): RunResult {
   try {
     switch (cmd.op) {
       case 'error':
         return { kind: 'error', error: cmd.error };
+      case 'inspect': {
+        const reg = catalog(db);
+        if (reg.size === 0) {
+          return {
+            kind: 'message',
+            message:
+              '(no catalogued namespaces) — only document/relational namespaces are catalogued; raw kv keys live in the keyspace (use prefix/get).',
+          };
+        }
+        const rows = [...reg.entries()].map(([namespace, entry]) => ({
+          namespace,
+          kind: entry.kind,
+          schema: entry.schema ? JSON.stringify(entry.schema) : '',
+        }));
+        return { kind: 'rows', columns: ['namespace', 'kind', 'schema'], rows };
+      }
+      case 'stats': {
+        const reg = catalog(db);
+        let kvCount = 0;
+        let docCount = 0;
+        let relCount = 0;
+        for (const entry of reg.values()) {
+          if (entry.kind === 'document') docCount++;
+          else if (entry.kind === 'relational') relCount++;
+          else kvCount++;
+        }
+        return {
+          kind: 'rows',
+          columns: ['size', 'namespaces', 'kv', 'document', 'relational'],
+          rows: [
+            {
+              size: fileSize === undefined ? 'in-memory' : `${fileSize} bytes`,
+              namespaces: reg.size,
+              kv: kvCount,
+              document: docCount,
+              relational: relCount,
+            },
+          ],
+        };
+      }
+      case 'import': {
+        const entries = Object.entries(cmd.entries);
+        for (const [k] of entries) {
+          if (isReservedKey(k)) return { kind: 'error', error: `refused: "${k}" is in the reserved namespace` };
+        }
+        const enc = new TextEncoder();
+        // One transaction → the whole load lands atomically, or none of it does.
+        db.transact((tx) => {
+          for (const [k, v] of entries) tx.set(enc.encode(k), enc.encode(v));
+        });
+        return { kind: 'message', message: `import ${entries.length} keys (one atomic commit)` };
+      }
       case 'get': {
         const v = kv(db).get(cmd.key);
         return v === undefined

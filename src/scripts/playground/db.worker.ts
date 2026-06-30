@@ -20,16 +20,18 @@ const FILE = 'playground.libredb';
 
 let db: Database;
 let mode: Mode = 'memory';
+let handle: SyncAccessHandle | undefined;
 
 /** Acquire the OPFS handle (Worker-only, secure context, exclusive lock) or fall back to in-memory. */
 async function boot(): Promise<void> {
   try {
     const root = await navigator.storage.getDirectory();
     const file = await root.getFileHandle(FILE, { create: true });
-    const handle = await file.createSyncAccessHandle();
+    handle = await file.createSyncAccessHandle();
     db = open({ path: FILE, fs: opfsFileSystem(handle) });
     mode = 'opfs';
   } catch {
+    handle = undefined;
     db = open();
     mode = 'memory';
   }
@@ -66,9 +68,13 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
       case 'ready':
         reply({ id: msg.id, kind: 'ready', mode });
         return;
-      case 'run':
-        reply({ id: msg.id, kind: 'result', result: execute(db, parseCommand(msg.text)) });
+      case 'run': {
+        const cmd = parseCommand(msg.text);
+        // `stats` needs the on-disk size; getSize() only when relevant (and durable).
+        const fileSize = cmd.op === 'stats' && mode === 'opfs' && handle ? handle.getSize() : undefined;
+        reply({ id: msg.id, kind: 'result', result: execute(db, cmd, fileSize) });
         return;
+      }
       case 'reset':
         ready = reset();
         await ready;

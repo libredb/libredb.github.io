@@ -51,3 +51,22 @@ test('unknown verb lists the supported verbs', () => {
   expect(r.op).toBe('error');
   if (r.op === 'error') expect(r.error).toContain('get');
 });
+
+test('inspect / stats parse with no args', () => {
+  expect(parseCommand('inspect')).toEqual({ op: 'inspect' });
+  expect(parseCommand('stats')).toEqual({ op: 'stats' });
+  expect(parseCommand('inspect extra')).toMatchObject({ op: 'error' });
+});
+
+test('import parses a JSON object of string values', () => {
+  expect(parseCommand('import {"user:9":"Zoe","color":"teal"}')).toEqual({
+    op: 'import',
+    entries: { 'user:9': 'Zoe', color: 'teal' },
+  });
+});
+
+test('import rejects non-objects and non-string values', () => {
+  expect(parseCommand('import [1,2,3]')).toMatchObject({ op: 'error' });
+  expect(parseCommand('import {"n":1}')).toMatchObject({ op: 'error' });
+  expect(parseCommand('import not-json')).toMatchObject({ op: 'error' });
+});

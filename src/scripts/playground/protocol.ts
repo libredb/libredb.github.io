@@ -19,6 +19,9 @@ export type Command =
   | { op: 'delete'; key: string }
   | { op: 'prefix'; prefix: string }
   | { op: 'range'; start: string; end: string }
+  | { op: 'inspect' }
+  | { op: 'stats' }
+  | { op: 'import'; entries: Record<string, string> }
   | { op: 'error'; error: string };
 
 /** Normalized result a command produces, shaped for the grid or a console line. */
@@ -38,8 +41,27 @@ export type WorkerResponse =
   | { id: number; kind: 'result'; result: RunResult }
   | { id: number; kind: 'closed' };
 
-const VERBS = 'get, put, delete, prefix, range';
+const VERBS = 'get, put, delete, prefix, range, inspect, stats, import';
 const err = (error: string): Command => ({ op: 'error', error });
+
+/** Parse an `import` JSON tail into a validated object of string values (mirrors the CLI). */
+function parseImport(tail: string): Command {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(tail);
+  } catch {
+    return err('import expects a JSON object of string values, e.g. import {"k":"v"}');
+  }
+  if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return err('import expects a JSON object, e.g. import {"k":"v"}');
+  }
+  const entries: Record<string, string> = {};
+  for (const [k, v] of Object.entries(parsed)) {
+    if (typeof v !== 'string') return err(`import value for "${k}" must be a string`);
+    entries[k] = v;
+  }
+  return { op: 'import', entries };
+}
 
 /**
  * Quote-aware tokenizer (mirrors Studio's `tokenize`): single/double quotes
@@ -94,12 +116,20 @@ export function parseCommand(text: string): Command {
   const line = firstCommandLine(text);
   if (line === undefined) return err(`Empty command. Supported: ${VERBS}.`);
 
+  // `import` takes a raw JSON tail (quotes/braces), so handle it before tokenizing.
+  const imp = /^import\s+([\s\S]+)$/i.exec(line);
+  if (imp) return parseImport(imp[1]);
+
   const t = tokenize(line);
   if (!t.ok) return err(t.error);
   const { tokens } = t;
   const verb = (tokens[0] ?? '').toLowerCase();
 
   switch (verb) {
+    case 'inspect':
+      return tokens.length === 1 ? { op: 'inspect' } : err('Usage: inspect');
+    case 'stats':
+      return tokens.length === 1 ? { op: 'stats' } : err('Usage: stats');
     case 'get':
       return tokens.length === 2 ? { op: 'get', key: tokens[1] } : err('Usage: get <key>');
     case 'delete':

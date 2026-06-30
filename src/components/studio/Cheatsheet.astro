@@ -40,6 +40,18 @@ const groups: Group[] = [
     commands: ['prefix config:', 'get config:theme', 'put config:theme light', 'range a z', 'delete config:theme'],
   },
 ];
+
+// Database-level "manage" commands (the CLI's inspect/stats/import), each with a
+// use case. Clicking loads the command into the editor — press Run to execute.
+interface AdminCommand {
+  cmd: string;
+  use: string;
+}
+const adminCommands: AdminCommand[] = [
+  { cmd: 'inspect', use: 'List namespaces, their kind, and relational schemas (reads the catalog).' },
+  { cmd: 'stats', use: 'One-glance summary: file size on disk + namespace counts by kind.' },
+  { cmd: 'import {"user:9":"Zoe","color":"teal"}', use: 'Bulk-load many keys in a single atomic commit.' },
+];
 ---
 
 <aside class="w-full shrink-0 overflow-y-auto border-l border-edge bg-canvas lg:w-72" aria-label="Command cheatsheet">
@@ -78,4 +90,29 @@ const groups: Group[] = [
       </div>
     ))
   }
+
+  <!-- Database-level admin/manage commands -->
+  <div class="border-b border-edge px-3 py-3">
+    <p class="mb-2 flex items-center gap-2 px-1 text-[12.5px] text-muted">
+      Manage
+      <span class="rounded bg-ai/15 px-1.5 text-[10px] tracking-wide text-ai uppercase">admin</span>
+    </p>
+    <ul class="space-y-2">
+      {
+        adminCommands.map((c) => (
+          <li>
+            <button
+              type="button"
+              data-cmd={c.cmd}
+              class="block w-full truncate border border-edge bg-panel px-2.5 py-1.5 text-left font-mono text-[12px] text-fg hover:border-primary hover:text-primary focus:border-primary focus:outline-none"
+              title={c.cmd}
+            >
+              {c.cmd}
+            </button>
+            <p class="mt-1 px-0.5 text-[11px] leading-snug text-faint">{c.use}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </aside>
