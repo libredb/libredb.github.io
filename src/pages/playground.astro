@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StudioShell from '../components/studio/StudioShell.astro';
+import Playground from '../components/studio/Playground.astro';
+---
+
+<Layout
+  title="Playground — run LibreDB in your browser | LibreDB"
+  description="Run a real LibreDB database entirely in your browser, backed by OPFS. Preloaded sample data, clickable commands, zero backend, no signup."
+>
+  <StudioShell active="home">
+    <Playground />
+  </StudioShell>
+</Layout>

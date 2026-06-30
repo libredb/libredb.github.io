@@ -1,0 +1,72 @@
+---
+// Clickable, ready-to-run commands grouped per lens. Each button carries the
+// exact command in data-cmd; client.ts fills the editor and runs it on click.
+interface Group {
+  label: string;
+  badge: string;
+  badgeClass: string;
+  commands: string[];
+}
+const groups: Group[] = [
+  {
+    label: 'Key–Value',
+    badge: 'kv',
+    badgeClass: 'bg-primary/15 text-primary',
+    commands: ['get config:theme', 'put config:theme light', 'prefix config:', 'range a z', 'delete config:theme'],
+  },
+  {
+    label: 'Document',
+    badge: 'doc',
+    badgeClass: 'bg-ok/15 text-ok',
+    commands: [
+      'doc.all articles',
+      'doc.get articles a1',
+      'doc.put articles a3 {"title":"Local-first","published":true}',
+      'doc.find articles {"published":true}',
+      'doc.delete articles a2',
+    ],
+  },
+  {
+    label: 'Relational',
+    badge: 'table',
+    badgeClass: 'bg-warn/15 text-warn',
+    commands: [
+      'select * from users',
+      'select * from users limit 2',
+      'insert into users {"id":"4","name":"Lin","age":29,"active":true}',
+      'delete from users 4',
+    ],
+  },
+];
+---
+
+<aside class="w-full shrink-0 overflow-y-auto border-l border-edge bg-canvas lg:w-72" aria-label="Command cheatsheet">
+  <div class="border-b border-edge px-4 py-3">
+    <p class="text-[11px] tracking-wider text-faint uppercase">Cheatsheet</p>
+    <p class="mt-1 text-[12px] text-dim">Click any command to run it — no typing needed.</p>
+  </div>
+  {
+    groups.map((g) => (
+      <div class="border-b border-edge px-3 py-3">
+        <p class="mb-2 flex items-center gap-2 px-1 text-[12.5px] text-muted">
+          {g.label}
+          <span class:list={['rounded px-1.5 text-[10px] tracking-wide uppercase', g.badgeClass]}>{g.badge}</span>
+        </p>
+        <ul class="space-y-1">
+          {g.commands.map((cmd) => (
+            <li>
+              <button
+                type="button"
+                data-cmd={cmd}
+                class="block w-full truncate border border-edge bg-panel px-2.5 py-1.5 text-left font-mono text-[12px] text-fg hover:border-primary hover:text-primary focus:border-primary focus:outline-none"
+                title={cmd}
+              >
+                {cmd}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</aside>
