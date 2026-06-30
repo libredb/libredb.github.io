@@ -8,6 +8,7 @@ interface Group {
   label: string; // namespace prefix, e.g. "users:*"
   kind: string; // catalog kind label
   kindClass: string;
+  note?: string; // optional clarifying line under the group header
   commands: string[];
 }
 const groups: Group[] = [
@@ -15,6 +16,7 @@ const groups: Group[] = [
     label: 'users:*',
     kind: 'relational table',
     kindClass: 'bg-warn/15 text-warn',
+    note: 'A relational row keeps its primary key both in the key (users:4) and as its id column.',
     commands: [
       'prefix users:',
       'get users:1',
@@ -76,6 +78,7 @@ const adminCommands: AdminCommand[] = [
             {g.kind}
           </span>
         </p>
+        {g.note && <p class="mb-2 px-1 text-[11px] leading-snug text-faint">{g.note}</p>}
         <ul class="space-y-1">
           {g.commands.map((cmd) => (
             <li>
