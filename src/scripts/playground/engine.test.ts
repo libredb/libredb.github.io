@@ -45,11 +45,40 @@ test('get on a relational key returns its JSON row, pretty-printed', () => {
   }
 });
 
-test('put / delete report changed count', () => {
+test('put/delete give graded create/overwrite/delete feedback with the prior value', () => {
   const db = seeded();
-  expect(run(db, 'put config:locale tr')).toEqual({ kind: 'message', message: 'OK · changed 1' });
-  expect(run(db, 'get config:locale')).toMatchObject({ rows: [{ key: 'config:locale', value: 'tr' }] });
-  expect(run(db, 'delete config:locale')).toEqual({ kind: 'message', message: 'OK · changed 1' });
+
+  // create: a brand-new key is plain success (no warn).
+  const created = run(db, 'put session:1 token');
+  expect(created).toMatchObject({ kind: 'message' });
+  if (created.kind === 'message') {
+    expect(created.level).toBeUndefined();
+    expect(created.message).toContain('created');
+  }
+
+  // overwrite: existing key → warn level, echoes the prior value.
+  const over = run(db, 'put config:theme light');
+  if (over.kind === 'message') {
+    expect(over.level).toBe('warn');
+    expect(over.message).toContain('overwrote');
+    expect(over.message).toContain('dark'); // prior value surfaced for recovery
+  }
+  expect(run(db, 'get config:theme')).toMatchObject({ rows: [{ key: 'config:theme', value: 'light' }] });
+
+  // delete existing: warn level, echoes the removed value.
+  const del = run(db, 'delete config:theme');
+  if (del.kind === 'message') {
+    expect(del.level).toBe('warn');
+    expect(del.message).toContain('deleted');
+    expect(del.message).toContain('light');
+  }
+
+  // delete missing: neutral no-op, no warn.
+  const miss = run(db, 'delete nope:x');
+  if (miss.kind === 'message') {
+    expect(miss.level).toBeUndefined();
+    expect(miss.message).toContain('not found');
+  }
 });
 
 test('prefix scans a namespace — table rows live at users:<pk>', () => {

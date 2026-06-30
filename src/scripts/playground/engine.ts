@@ -52,6 +52,12 @@ function renderValue(value: string): string {
   }
 }
 
+/** A compact, single-line preview of a value for caution messages (overwrote/deleted — was: …). */
+function preview(value: string, max = 60): string {
+  const compact = value.replace(/\s+/g, ' ').trim();
+  return compact.length > max ? `${compact.slice(0, max)}…` : compact;
+}
+
 /** Scan rows → grid rows, hiding the reserved (catalog) namespace and pretty-printing values. */
 function scanRows(entries: readonly { key: string; value: string }[]): Array<Record<string, unknown>> {
   return entries.filter((e) => !isReservedKey(e.key)).map((e) => ({ key: e.key, value: renderValue(e.value) }));
@@ -142,14 +148,25 @@ export function execute(db: Database, cmd: Command, fileSize?: number): RunResul
       case 'put': {
         if (isReservedKey(cmd.key))
           return { kind: 'error', error: `refused: "${cmd.key}" is in the reserved namespace` };
-        const r = kv(db).set(cmd.key, cmd.value);
-        return { kind: 'message', message: `OK · changed ${r.changed}` };
+        // Graded, non-blocking safeguard: a fresh write is silent success; an
+        // overwrite is flagged 'warn' and echoes the prior value so an accidental
+        // clobber is visible and recoverable (re-put it).
+        const prev = kv(db).get(cmd.key);
+        kv(db).set(cmd.key, cmd.value);
+        return prev === undefined
+          ? { kind: 'message', message: `created "${cmd.key}"` }
+          : { kind: 'message', level: 'warn', message: `overwrote "${cmd.key}" — was: ${preview(prev)}` };
       }
       case 'delete': {
         if (isReservedKey(cmd.key))
           return { kind: 'error', error: `refused: "${cmd.key}" is in the reserved namespace` };
-        const r = kv(db).delete(cmd.key);
-        return { kind: 'message', message: `OK · changed ${r.changed}` };
+        // Deleting an existing key is flagged 'warn' and echoes the removed value
+        // (recoverable: put it back). Deleting a missing key is a neutral no-op.
+        const prev = kv(db).get(cmd.key);
+        kv(db).delete(cmd.key);
+        return prev === undefined
+          ? { kind: 'message', message: `nothing to delete — "${cmd.key}" not found` }
+          : { kind: 'message', level: 'warn', message: `deleted "${cmd.key}" — was: ${preview(prev)}` };
       }
       case 'prefix':
         return { kind: 'rows', columns: ['key', 'value'], rows: scanRows(kv(db).prefix(cmd.prefix).toArray()) };

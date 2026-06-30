@@ -8,11 +8,13 @@ import type { WorkerRequest, WorkerResponse, RunResult, Mode } from './protocol'
 /** What triggered a run — shown in the activity log. */
 type Source = 'editor' | 'system';
 
+type Level = 'ok' | 'warn' | 'error';
+
 interface ActivityEntry {
   command: string;
   summary: string;
   ms: number;
-  ok: boolean;
+  level: Level;
   source: Source;
 }
 
@@ -96,19 +98,20 @@ function init(root: HTMLElement): void {
     if (result.kind === 'rows') {
       const n = result.rows.length;
       const summary = `${n} ${n === 1 ? 'row' : 'rows'}`;
-      setStatus(command, summary, ms);
+      setStatus(command, summary, ms, 'ok');
       renderGrid(grid!, result.columns, result.rows);
-      logActivity(log, { command, summary, ms, ok: true, source });
+      logActivity(log, { command, summary, ms, level: 'ok', source });
     } else if (result.kind === 'error') {
-      setStatus(command, '✕ error', ms);
-      logActivity(log, { command, summary: result.error, ms, ok: false, source });
+      setStatus(command, '✕ error', ms, 'error');
+      logActivity(log, { command, summary: result.error, ms, level: 'error', source });
     } else {
-      setStatus(command, result.message, ms);
-      logActivity(log, { command, summary: result.message, ms, ok: true, source });
+      const level: Level = result.level === 'warn' ? 'warn' : 'ok';
+      setStatus(command, result.message, ms, level);
+      logActivity(log, { command, summary: result.message, ms, level, source });
     }
   }
 
-  function setStatus(command: string, summary: string, ms: number): void {
+  function setStatus(command: string, summary: string, ms: number, level: Level): void {
     if (!status) return;
     status.hidden = false;
     status.replaceChildren();
@@ -116,7 +119,7 @@ function init(root: HTMLElement): void {
     cmd.className = 'text-fg';
     cmd.textContent = `▸ ${command}`;
     const meta = document.createElement('span');
-    meta.className = 'text-faint';
+    meta.className = level === 'warn' ? 'text-warn' : level === 'error' ? 'text-bad' : 'text-faint';
     meta.textContent = `· ${summary} · ${ms < 1 ? '<1' : ms.toFixed(1)} ms`;
     status.append(cmd, meta);
     retrigger(status); // replay the fade even when the text is identical
@@ -254,8 +257,10 @@ function logActivity(host: HTMLElement | null, entry: ActivityEntry): void {
   line.className = 'flex items-baseline gap-2 leading-relaxed';
   line.title = now.toLocaleString();
 
+  const icon = entry.level === 'warn' ? '⚠' : entry.level === 'error' ? '✗' : '✓';
+  const color = entry.level === 'warn' ? 'text-warn' : entry.level === 'error' ? 'text-bad' : 'text-ok';
   const time = span('shrink-0 text-faint tabular-nums', now.toTimeString().slice(0, 8));
-  const stat = span(entry.ok ? 'shrink-0 text-ok' : 'shrink-0 text-bad', entry.ok ? '✓' : '✗');
+  const stat = span(`shrink-0 ${color}`, icon);
   const cmd = span('min-w-0 flex-1 truncate text-fg', entry.command);
   const summary = span('shrink-0 max-w-[40%] truncate text-faint', entry.summary);
   const dur = span('shrink-0 text-faint tabular-nums', `${entry.ms < 1 ? '<1' : entry.ms.toFixed(1)} ms`);

@@ -27,7 +27,7 @@ export type Command =
 /** Normalized result a command produces, shaped for the grid or a console line. */
 export type RunResult =
   | { kind: 'rows'; columns: string[]; rows: Array<Record<string, unknown>> }
-  | { kind: 'message'; message: string }
+  | { kind: 'message'; message: string; level?: 'ok' | 'warn' } // 'warn' = a destructive write (overwrite/delete)
   | { kind: 'error'; error: string };
 
 export type WorkerRequest =
