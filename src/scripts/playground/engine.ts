@@ -41,6 +41,10 @@ const HELP = [
   'meta:  help · reset',
 ].join('\n');
 
+function kvRows(entries: readonly { key: string; value: string }[]): Array<Record<string, unknown>> {
+  return entries.map((e) => ({ key: e.key, value: e.value }));
+}
+
 function rowsFromDocs(entries: { id: string; doc: Record<string, unknown> }[]): RunResult {
   const cols = new Set<string>(['id']);
   for (const e of entries) for (const k of Object.keys(e.doc)) cols.add(k);
@@ -75,9 +79,13 @@ export function execute(db: Database, cmd: Command): RunResult {
         return { kind: 'message', message: `OK — deleted "${cmd.key}" (${r.changed} changed)` };
       }
       case 'prefix':
-        return { kind: 'rows', columns: ['key', 'value'], rows: kv(db).prefix(cmd.prefix).toArray() };
+        return { kind: 'rows', columns: ['key', 'value'], rows: kvRows(kv(db).prefix(cmd.prefix).toArray()) };
       case 'range':
-        return { kind: 'rows', columns: ['key', 'value'], rows: kv(db).range(cmd.start, cmd.end).toArray() };
+        return {
+          kind: 'rows',
+          columns: ['key', 'value'],
+          rows: kvRows(kv(db).range(cmd.start, cmd.end).toArray()),
+        };
       case 'docget': {
         const d = doc(db, cmd.collection).get(cmd.id);
         return {

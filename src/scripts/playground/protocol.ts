@@ -43,18 +43,20 @@ export type WorkerResponse =
 
 const err = (error: string): Command => ({ op: 'error', error });
 
+type ParsedObject = { ok: true; value: Record<string, unknown> } | { ok: false; error: string };
+
 /** Parse a JSON object tail; non-objects/arrays/garbage become a friendly error. */
-function parseObject(tail: string): Record<string, unknown> | { error: string } {
+function parseObject(tail: string): ParsedObject {
   let value: unknown;
   try {
     value = JSON.parse(tail);
   } catch {
-    return { error: `invalid JSON: ${tail}` };
+    return { ok: false, error: `invalid JSON: ${tail}` };
   }
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-    return { error: 'expected a JSON object, e.g. {"key":"value"}' };
+    return { ok: false, error: 'expected a JSON object, e.g. {"key":"value"}' };
   }
-  return value as Record<string, unknown>;
+  return { ok: true, value: value as Record<string, unknown> };
 }
 
 /**
@@ -85,11 +87,11 @@ export function parseCommand(text: string): Command {
         const id = rest[1];
         if (!id) return err('doc.put needs an id and a JSON document.');
         const json = parseObject(line.slice(line.indexOf(id) + id.length).trim());
-        return 'error' in json ? err(json.error) : { op: 'docput', collection, id, json };
+        return json.ok ? { op: 'docput', collection, id, json: json.value as Doc } : err(json.error);
       }
       case 'doc.find': {
         const predicate = parseObject(line.slice(line.indexOf(collection) + collection.length).trim());
-        return 'error' in predicate ? err(predicate.error) : { op: 'docfind', collection, predicate };
+        return predicate.ok ? { op: 'docfind', collection, predicate: predicate.value as Doc } : err(predicate.error);
       }
       default:
         return err(`unknown command: ${verb} — type 'help'.`);
@@ -107,7 +109,7 @@ export function parseCommand(text: string): Command {
   const insert = /^insert\s+into\s+(\S+)\s+(.+)$/i.exec(line);
   if (insert) {
     const row = parseObject(insert[2]);
-    return 'error' in row ? err(row.error) : { op: 'insert', table: insert[1], row };
+    return row.ok ? { op: 'insert', table: insert[1], row: row.value as Row } : err(row.error);
   }
 
   // delete from <table> <pk>
