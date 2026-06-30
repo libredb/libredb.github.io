@@ -20,7 +20,10 @@ import DatabaseReliabilitySection from '../components/sections/DatabaseReliabili
 import PlatformSection from '../components/sections/PlatformSection.astro';
 
 export function getStaticPaths() {
-  return sections.filter((s) => s.id !== 'home').map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
+  // 'home' is served by index.astro; 'playground' by its own interactive page.
+  return sections
+    .filter((s) => s.id !== 'home' && s.id !== 'playground')
+    .map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
 }
 
 const COMPONENTS: Record<string, any> = {
