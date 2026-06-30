@@ -55,8 +55,17 @@ import Cheatsheet from './Cheatsheet.astro';
       </div>
     </div>
 
+    <!-- Result status / command echo (also the screen-reader announcer) -->
+    <div
+      data-pg-status
+      hidden
+      class="flex shrink-0 items-center gap-2 border-b border-edge bg-canvas px-4 py-1.5 font-mono text-[11.5px] text-dim"
+      aria-live="polite"
+    >
+    </div>
+
     <!-- Result grid -->
-    <div data-pg-grid class="min-h-0 flex-1 overflow-auto" aria-live="polite" aria-label="Query results"></div>
+    <div data-pg-grid class="min-h-0 flex-1 overflow-auto" aria-label="Query results"></div>
 
     <!-- Inline console log -->
     <div

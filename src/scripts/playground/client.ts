@@ -13,6 +13,7 @@ function init(root: HTMLElement): void {
   const runBtn = root.querySelector<HTMLButtonElement>('[data-pg-run]');
   const resetBtn = root.querySelector<HTMLButtonElement>('[data-pg-reset]');
   const grid = root.querySelector<HTMLElement>('[data-pg-grid]');
+  const status = root.querySelector<HTMLElement>('[data-pg-status]');
   const badge = root.querySelector<HTMLElement>('[data-pg-badge]');
   const banner = root.querySelector<HTMLElement>('[data-pg-banner]');
   if (!input || !runBtn || !grid) return;
@@ -52,20 +53,46 @@ function init(root: HTMLElement): void {
   async function run(text: string): Promise<void> {
     const t = text.trim();
     if (t === '') return;
+    const started = performance.now();
     const res = await call({ op: 'run', text: t });
-    if (res.kind === 'result') render(res.result);
+    const ms = performance.now() - started;
+    if (res.kind === 'result') render(res.result, t, ms);
   }
 
   async function doReset(): Promise<void> {
     const res = await call({ op: 'reset' });
-    if (res.kind === 'result') render(res.result);
+    if (res.kind === 'result') render(res.result, 'reset', 0);
     await run('prefix users:');
   }
 
-  function render(result: RunResult): void {
-    if (result.kind === 'rows') return renderGrid(grid!, result.columns, result.rows);
-    if (result.kind === 'error') return renderConsole(`✕ ${result.error}`, 'error');
-    renderConsole(result.message, 'ok');
+  function render(result: RunResult, command: string, ms: number): void {
+    // The status strip echoes the command + outcome + timing so an instant query
+    // is legible; it re-animates on every run, even an identical re-run.
+    if (result.kind === 'rows') {
+      const n = result.rows.length;
+      setStatus(command, `${n} ${n === 1 ? 'row' : 'rows'}`, ms);
+      renderGrid(grid!, result.columns, result.rows);
+    } else if (result.kind === 'error') {
+      setStatus(command, '✕ error', ms);
+      renderConsole(`✕ ${result.error}`, 'error');
+    } else {
+      setStatus(command, result.message, ms);
+      renderConsole(result.message, 'ok');
+    }
+  }
+
+  function setStatus(command: string, summary: string, ms: number): void {
+    if (!status) return;
+    status.hidden = false;
+    status.replaceChildren();
+    const cmd = document.createElement('span');
+    cmd.className = 'text-fg';
+    cmd.textContent = `▸ ${command}`;
+    const meta = document.createElement('span');
+    meta.className = 'text-faint';
+    meta.textContent = `· ${summary} · ${ms < 1 ? '<1' : ms.toFixed(1)} ms`;
+    status.append(cmd, meta);
+    retrigger(status); // replay the fade even when the text is identical
   }
 
   runBtn.addEventListener('click', () => void run(input.value));
@@ -86,6 +113,7 @@ function init(root: HTMLElement): void {
       input.value = cmd;
       grid.replaceChildren();
       log?.replaceChildren();
+      if (status) status.hidden = true; // stale timing/echo shouldn't linger before the run
       renderHint(grid, 'Press ▶ Run (or ⌘/Ctrl+Enter) to execute.');
       input.focus();
       input.setSelectionRange(cmd.length, cmd.length);
@@ -107,6 +135,13 @@ function init(root: HTMLElement): void {
  * innerHTML with interpolated data — so database values (arbitrary user input)
  * cannot inject markup. Only the static class strings are set as attributes.
  */
+/** Replay a CSS animation on an element even if its content is unchanged. */
+function retrigger(el: HTMLElement): void {
+  el.classList.remove('pg-result-in');
+  void el.offsetWidth; // force reflow so the animation restarts
+  el.classList.add('pg-result-in');
+}
+
 /** Show a single guidance line in the result area (e.g. after loading a command). */
 function renderHint(grid: HTMLElement, message: string): void {
   grid.replaceChildren();
@@ -120,14 +155,14 @@ function renderGrid(grid: HTMLElement, columns: string[], rows: Array<Record<str
   grid.replaceChildren();
   if (rows.length === 0) {
     const empty = document.createElement('p');
-    empty.className = 'p-4 text-[13px] text-faint';
+    empty.className = 'p-4 text-[13px] text-faint pg-result-in';
     empty.textContent = 'No rows.';
     grid.append(empty);
     return;
   }
 
   const table = document.createElement('table');
-  table.className = 'w-full border-collapse font-mono text-[12.5px]';
+  table.className = 'w-full border-collapse font-mono text-[12.5px] pg-result-in';
 
   const headRow = document.createElement('tr');
   for (const c of columns) {
