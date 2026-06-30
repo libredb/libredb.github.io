@@ -122,6 +122,13 @@ test('import refuses reserved-namespace keys', () => {
   expect(execute(db, { op: 'import', entries: { [reservedKey]: 'x' } }).kind).toBe('error');
 });
 
+test('put and delete also refuse reserved-namespace keys (parity with import)', () => {
+  const db = seeded();
+  const reservedKey = String.fromCharCode(0) + 'libredb:catalog:theme';
+  expect(execute(db, { op: 'put', key: reservedKey, value: 'x' }).kind).toBe('error');
+  expect(execute(db, { op: 'delete', key: reservedKey }).kind).toBe('error');
+});
+
 test('stats reports a byte size when the worker supplies one', () => {
   const db = seeded();
   const r = execute(db, { op: 'stats' }, 412);

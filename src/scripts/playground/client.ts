@@ -135,10 +135,13 @@ function init(root: HTMLElement): void {
     }),
   );
 
-  // Free the exclusive OPFS lock so a reload reacquires cleanly.
-  window.addEventListener('pagehide', () => {
+  // Free the exclusive OPFS lock so a reload reacquires cleanly. The worker
+  // closes the db and self-terminates on 'close'; we must NOT terminate() here,
+  // or it would race (and usually win) before the worker runs db.close().
+  // Skip on bfcache (persisted) so a back/forward restore keeps a live worker.
+  window.addEventListener('pagehide', (e) => {
+    if (e.persisted) return;
     void call({ op: 'close' });
-    worker.terminate();
   });
 
   // First view: scan the seeded users namespace.

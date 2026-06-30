@@ -122,10 +122,14 @@ export function execute(db: Database, cmd: Command, fileSize?: number): RunResul
           : { kind: 'rows', columns: ['key', 'value'], rows: [{ key: cmd.key, value: renderValue(v) }] };
       }
       case 'put': {
+        if (isReservedKey(cmd.key))
+          return { kind: 'error', error: `refused: "${cmd.key}" is in the reserved namespace` };
         const r = kv(db).set(cmd.key, cmd.value);
         return { kind: 'message', message: `OK · changed ${r.changed}` };
       }
       case 'delete': {
+        if (isReservedKey(cmd.key))
+          return { kind: 'error', error: `refused: "${cmd.key}" is in the reserved namespace` };
         const r = kv(db).delete(cmd.key);
         return { kind: 'message', message: `OK · changed ${r.changed}` };
       }

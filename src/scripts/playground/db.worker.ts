@@ -86,11 +86,14 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         return;
       case 'close':
         try {
-          db.close();
+          db.close(); // flush WAL + release the exclusive OPFS sync-access handle
         } catch {
           /* already closed */
         }
         reply({ id: msg.id, kind: 'closed' });
+        // Self-terminate so the handle is released without the client racing us
+        // via worker.terminate() before this handler runs.
+        self.close();
         return;
     }
   } catch (e) {
