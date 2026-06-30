@@ -77,12 +77,18 @@ function init(root: HTMLElement): void {
   });
   resetBtn?.addEventListener('click', () => void doReset());
 
-  // Cheatsheet: clicking a command fills the editor and runs it (zero typing).
+  // Cheatsheet: clicking a command loads it into the editor and clears the
+  // previous result, so you can read/edit it before pressing Run.
+  const log = root.querySelector<HTMLElement>('[data-pg-log]');
   root.querySelectorAll<HTMLElement>('[data-cmd]').forEach((b) =>
     b.addEventListener('click', () => {
       const cmd = b.dataset.cmd ?? '';
       input.value = cmd;
-      void run(cmd);
+      grid.replaceChildren();
+      log?.replaceChildren();
+      renderHint(grid, 'Press ▶ Run (or ⌘/Ctrl+Enter) to execute.');
+      input.focus();
+      input.setSelectionRange(cmd.length, cmd.length);
     }),
   );
 
@@ -101,6 +107,15 @@ function init(root: HTMLElement): void {
  * innerHTML with interpolated data — so database values (arbitrary user input)
  * cannot inject markup. Only the static class strings are set as attributes.
  */
+/** Show a single guidance line in the result area (e.g. after loading a command). */
+function renderHint(grid: HTMLElement, message: string): void {
+  grid.replaceChildren();
+  const p = document.createElement('p');
+  p.className = 'p-4 text-[13px] text-faint';
+  p.textContent = message;
+  grid.append(p);
+}
+
 function renderGrid(grid: HTMLElement, columns: string[], rows: Array<Record<string, unknown>>): void {
   grid.replaceChildren();
   if (rows.length === 0) {
