@@ -5,8 +5,8 @@
  */
 import type { WorkerRequest, WorkerResponse, RunResult, Mode } from './protocol';
 
-const root = document.querySelector<HTMLElement>('[data-pg-root]');
-if (root) init(root);
+const pgRoot = document.querySelector<HTMLElement>('[data-pg-root]');
+if (pgRoot) init(pgRoot);
 
 function init(root: HTMLElement): void {
   const input = root.querySelector<HTMLTextAreaElement>('[data-pg-input]');
