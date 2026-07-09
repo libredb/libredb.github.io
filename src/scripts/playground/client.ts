@@ -20,10 +20,39 @@ interface ActivityEntry {
 
 const MAX_LOG_ENTRIES = 50;
 
-const pgRoot = document.querySelector<HTMLElement>('[data-pg-root]');
-if (pgRoot) init(pgRoot);
+// The playground lives under Astro's <ClientRouter/> (View Transitions), so this
+// bundled module script only executes on the initial full load — never when Astro
+// swaps the DOM during a client-side navigation into /playground. Bind to the
+// astro:page-load lifecycle (mirroring src/scripts/studio.ts) so init() runs
+// against the freshly swapped-in DOM every visit, and tear the worker down on exit.
+let teardown: (() => void) | null = null;
 
-function init(root: HTMLElement): void {
+function start(): void {
+  const root = document.querySelector<HTMLElement>('[data-pg-root]');
+  if (!root || root.dataset.pgReady) return; // not on the page, or already wired
+  root.dataset.pgReady = 'true';
+  teardown = init(root);
+}
+
+function stop(): void {
+  teardown?.();
+  teardown = null;
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+else start();
+document.addEventListener('astro:page-load', start);
+
+// Release the worker + exclusive OPFS lock when leaving the page. astro:before-swap
+// covers client-side navigation (pagehide does NOT fire during View Transitions);
+// pagehide covers a real unload. Skip bfcache (persisted) so a back/forward restore
+// keeps the live worker.
+document.addEventListener('astro:before-swap', stop);
+window.addEventListener('pagehide', (e) => {
+  if (!e.persisted) stop();
+});
+
+function init(root: HTMLElement): () => void {
   const input = root.querySelector<HTMLTextAreaElement>('[data-pg-input]');
   const runBtn = root.querySelector<HTMLButtonElement>('[data-pg-run]');
   const resetBtn = root.querySelector<HTMLButtonElement>('[data-pg-reset]');
@@ -32,7 +61,7 @@ function init(root: HTMLElement): void {
   const log = root.querySelector<HTMLElement>('[data-pg-log]');
   const badge = root.querySelector<HTMLElement>('[data-pg-badge]');
   const banner = root.querySelector<HTMLElement>('[data-pg-banner]');
-  if (!input || !runBtn || !grid) return;
+  if (!input || !runBtn || !grid) return () => {};
 
   const worker = new Worker(new URL('./db.worker.ts', import.meta.url), { type: 'module' });
 
@@ -187,17 +216,13 @@ function init(root: HTMLElement): void {
     }),
   );
 
-  // Free the exclusive OPFS lock so a reload reacquires cleanly. The worker
-  // closes the db and self-terminates on 'close'; we must NOT terminate() here,
-  // or it would race (and usually win) before the worker runs db.close().
-  // Skip on bfcache (persisted) so a back/forward restore keeps a live worker.
-  window.addEventListener('pagehide', (e) => {
-    if (e.persisted) return;
-    void call({ op: 'close' });
-  });
-
   // First view: scan the seeded users namespace.
   void run('prefix users:', 'system');
+
+  // Teardown (called on navigation away / unload): close the db so the next visit
+  // reacquires the OPFS lock cleanly. The worker self-terminates on 'close'; we must
+  // NOT terminate() here, or it would race (and usually win) before db.close() runs.
+  return () => void call({ op: 'close' });
 }
 
 /**
