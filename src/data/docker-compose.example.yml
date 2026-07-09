@@ -30,12 +30,15 @@ services:
     #     condition: service_healthy
     environment:
       # -----------------------------------------------------------------------
-      # AUTHENTICATION (required)
+      # AUTHENTICATION — local provider. ADMIN_PASSWORD is required (without it
+      # the login screen shows a clear config error); USER_* is optional.
       # -----------------------------------------------------------------------
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@libredb.org}        # admin: full access + maintenance tools
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
-      USER_EMAIL: ${USER_EMAIL:-user@libredb.org}           # user: query execution only
-      USER_PASSWORD: ${USER_PASSWORD:?set USER_PASSWORD in .env}
+      # Optional lower-privilege account (query execution only). Omit USER_PASSWORD
+      # to run admin-only — no default user password is ever assumed.
+      USER_EMAIL: ${USER_EMAIL:-user@libredb.org}
+      USER_PASSWORD: ${USER_PASSWORD:-}
       # JWT signing secret — min 32 chars. Generate: openssl rand -base64 32
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (min 32 chars)}
 
@@ -85,7 +88,7 @@ services:
     #   # Seed connections file (read-only):
     #   - ./seed-connections.yaml:/app/config/seed-connections.yaml:ro
 
-    # Image runs as node:20-slim (no curl/wget) — use Node's built-in fetch.
+    # Image runs as node:24.16.0-trixie-slim (no curl/wget) — use Node's built-in fetch.
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/db/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
@@ -99,7 +102,7 @@ services:
   # the depends_on block above, and the pgdata volume below.
   # ---------------------------------------------------------------------------
   # libredb-postgres:
-  #   image: postgres:17-alpine
+  #   image: postgres:18
   #   container_name: libredb-postgres
   #   restart: unless-stopped
   #   environment:

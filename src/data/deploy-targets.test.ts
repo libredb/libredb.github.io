@@ -34,4 +34,5 @@ test('official integrations are present', () => {
   const official = deployTargets.filter((t) => t.status === 'official').map((t) => t.slug);
   expect(official).toContain('railway');
   expect(official).toContain('caprover');
+  expect(official).toContain('dokploy');
 });
