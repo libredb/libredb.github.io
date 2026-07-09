@@ -35,4 +35,6 @@ pnpm-debug.log*
 docs/designs/_ref
 
 .qoder/
+docs/superpowers/
+
 
