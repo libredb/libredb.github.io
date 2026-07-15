@@ -1,6 +1,11 @@
 ---
 // Bottom status bar: one connection signal, the real footer links, and a
 // single faint IDE identity cluster. Every datum here appears nowhere else.
+// The studio version is fetched from GitHub releases at build time so the
+// site never advertises a stale number.
+import { getStudioVersion } from '../../lib/studio-version';
+
+const studioVersion = await getStudioVersion();
 ---
 
 <footer
@@ -66,7 +71,7 @@
       <span>Ln 1, Col 1</span>
       <span>UTF-8</span>
       <span>SQL</span>
-      <span><span aria-hidden="true">◆</span> v0.9.29</span>
+      <span><span aria-hidden="true">◆</span> studio:{studioVersion}</span>
     </span>
   </div>
 </footer>

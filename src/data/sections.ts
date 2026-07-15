@@ -226,7 +226,7 @@ export const sections: SectionMeta[] = [
     id: 'faq',
     table: 'faq',
     query: 'SELECT question, answer FROM faq;',
-    rows: 9,
+    rows: 11,
     cols: 2,
     execMs: 2,
     columns: [
@@ -234,11 +234,30 @@ export const sections: SectionMeta[] = [
       { name: 'answer', type: 'TEXT' },
     ],
     explain:
-      'The nine most common questions: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+      'The eleven most common questions: pricing and licensing, self-hosting, AI providers, security & SSO, supported databases, sponsorship, and how it compares to legacy tools.',
     slug: 'faq',
     pageTitle: 'FAQ — LibreDB Studio',
     pageDescription:
-      'Frequently asked questions about LibreDB Studio: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+      'Frequently asked questions about LibreDB Studio: pricing and Platform licensing, self-hosting, AI providers, security & SSO, supported databases, sponsorship, and how it compares to legacy tools.',
+    schema: 'studio',
+  },
+  {
+    id: 'security',
+    table: 'security',
+    query: 'SELECT control, detail FROM security_controls;',
+    rows: 7,
+    cols: 2,
+    execMs: 3,
+    columns: [
+      { name: 'control', type: 'TEXT' },
+      { name: 'detail', type: 'TEXT' },
+    ],
+    explain:
+      'The security model in one place: OIDC SSO with PKCE, JWT in httpOnly cookies, RBAC, env-var seed credentials, TLS and SSH tunnels, display-level data masking, checksummed releases — and how to report a vulnerability.',
+    slug: 'security',
+    pageTitle: 'Security — LibreDB Studio',
+    pageDescription:
+      'How LibreDB Studio handles security: OIDC Single Sign-On with PKCE, JWT in httpOnly cookies, role-based access control, environment-variable seed credentials, TLS/SSH tunnels to databases, data masking, audited open source, and responsible vulnerability disclosure.',
     schema: 'studio',
   },
   {
