@@ -62,11 +62,13 @@ Keep: Connected (the one animated pulse), 5 real links (promoted to
 Cut: `LibreDB:latest`, `public`, `{table}.sql`, `{rows} rows`, duplicate brand.
 
 ### Explorer
-Count pill de-pilled (plain faint text). Schema badges quieted to lowercase
-`text-dim`, no border/accent. Row counts stay (core "table = page" loop) but
-carets dim at rest and brighten on hover/active. Rows default `text-muted`,
-active bright (Railway dim pattern). Column `◆` icons → `text-dim`.
-Sidebar footer deleted (duplicate Connected + conflicting `v1.2.5`).
+Connection box, CONNECTIONS label and search placeholder removed (owner:
+the visitor is already on libredb.org). Count pill de-pilled (plain faint
+text). Schema badges quieted to lowercase `text-dim`, no border/accent.
+Row counts stay (core "table = page" loop) but carets dim at rest and
+brighten on hover/active. Rows default `text-muted`, active bright
+(Railway dim pattern). Column `◆` icons → `text-dim`. Sidebar footer
+deleted (duplicate Connected + conflicting `v1.2.5`).
 Toggles: `tabindex="-1"`, ≥24 px hit area (36 px in drawer).
 
 ### HomeSection
