@@ -92,6 +92,11 @@ of those went:
   studio card no longer a self-link (div, keeps ring + "you are here");
   sponsor line dropped (StatusBar link covers it).
 - Export payload now ships the engine list instead of the deleted stats.
+- **Promo video** (owner request): the 60s YouTube promo sits under the
+  CTAs as a click-to-load facade — self-hosted poster + play button, zero
+  third-party bytes/cookies at rest; on play, studio.ts swaps in a
+  `youtube-nocookie.com` iframe with autoplay. Keeps the page light and
+  consent-clean while giving the hero its "real product in motion" proof.
 
 ### Accessibility bundle
 Skip-to-content link (in-character), `aria-label="Explorer"` on asides,

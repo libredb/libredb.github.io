@@ -1,4 +1,6 @@
 ---
+import PromoVideo from './PromoVideo.astro';
+
 const DEMO = 'https://app.libredb.org';
 
 const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'MongoDB', 'Redis'];
@@ -50,6 +52,14 @@ const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'Mon
     >
       Deploy in one click <span aria-hidden="true">→</span>
     </a>
+  </div>
+
+  <!-- 60-second promo (click-to-load facade — no third-party bytes until play) -->
+  <div class="mt-10 max-w-3xl">
+    <PromoVideo videoId="wJPWPe1mJes" title="LibreDB Studio Promo" poster="/video/promo-poster.jpg" />
+    <p class="mt-2 text-[13px] leading-relaxed">
+      <span class="sql-com">-- 60s demo: the whole IDE, in motion.</span>
+    </p>
   </div>
 
   <!-- The LibreDB family / open-core (secondary; Studio stays the hero above) -->

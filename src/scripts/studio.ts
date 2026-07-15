@@ -420,6 +420,21 @@ function onActionClick(e: Event) {
     e.preventDefault();
     openPalette();
   }
+  if (action === 'video') {
+    e.preventDefault();
+    const wrap = el.closest<HTMLElement>('[data-video]');
+    const id = wrap?.dataset.video;
+    if (wrap && id) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+      iframe.title = wrap.dataset.videoTitle ?? 'Video';
+      iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.className = 'absolute inset-0 h-full w-full border-0';
+      wrap.replaceChildren(iframe);
+      iframe.focus();
+    }
+  }
   if (action === 'results') {
     e.preventDefault();
     const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
