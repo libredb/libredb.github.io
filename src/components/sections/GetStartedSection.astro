@@ -56,6 +56,18 @@ const copyText = (s: Step) =>
 <div class="mx-auto max-w-6xl">
   <SectionHeader title="Get started in minutes" subtitle="Up and running with three simple steps." />
 
+  <!-- The whole journey in motion, before the steps (click-to-load facade) -->
+  <div class="mb-8 max-w-3xl">
+    <PromoVideo
+      videoId="KazHTclbiSQ"
+      title="Connect Your Own Database in LibreDB Studio"
+      poster="/video/connect-poster.jpg"
+    />
+    <p class="mt-2 text-[13px] leading-relaxed">
+      <span class="sql-com">-- 70s: install → connect your database → first query. the steps below, in motion.</span>
+    </p>
+  </div>
+
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
     {
       steps.map((s) => (
@@ -166,18 +178,6 @@ const copyText = (s: Step) =>
         runtime — secrets stay in your secret manager, never in a config file.
       </li>
     </ol>
-
-    <!-- The same flow in motion (click-to-load facade — no third-party bytes until play) -->
-    <div class="mt-6 max-w-2xl">
-      <PromoVideo
-        videoId="KazHTclbiSQ"
-        title="Connect Your Own Database in LibreDB Studio"
-        poster="/video/connect-poster.jpg"
-      />
-      <p class="mt-2 text-[13px] leading-relaxed">
-        <span class="sql-com">-- 70s: the whole flow, from New Connection to first result.</span>
-      </p>
-    </div>
 
     <div class="mt-5 flex flex-wrap gap-4 text-[13px]">
       <a
