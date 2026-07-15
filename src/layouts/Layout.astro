@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import CookieConsent from '../components/CookieConsent.astro';
 import { ClientRouter } from 'astro:transitions';
+import { getStudioVersion } from '../lib/studio-version';
+import { ENGINES } from '../data/engines';
 
 interface Props {
   title: string;
@@ -12,6 +14,7 @@ const { title, description = 'LibreDB Studio - The Modern, AI-Powered Open-Sourc
   Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteURL = 'https://libredb.org';
+const studioVersion = await getStudioVersion();
 
 // Structured Data for SEO — WebApplication
 const webAppSchema = {
@@ -26,7 +29,7 @@ const webAppSchema = {
   browserRequirements: 'Requires a modern web browser (Chrome, Firefox, Safari, Edge)',
   description: description,
   url: siteURL,
-  softwareVersion: '0.8.2',
+  softwareVersion: studioVersion,
   isAccessibleForFree: true,
   offers: {
     '@type': 'Offer',
@@ -38,7 +41,7 @@ const webAppSchema = {
   license: 'https://opensource.org/licenses/MIT',
   featureList: [
     'AI-Powered NL2SQL',
-    'Multi-Database Support (PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis)',
+    `Multi-Database Support (${ENGINES.join(', ')})`,
     'Visual EXPLAIN Plans',
     'Interactive ER Diagrams',
     'Data Masking & Privacy',
@@ -61,7 +64,14 @@ const organizationSchema = {
   name: 'LibreDB',
   url: siteURL,
   logo: 'https://libredb.org/logo.svg',
-  sameAs: ['https://github.com/libredb/libredb-studio', 'https://www.linkedin.com/company/libredb'],
+  sameAs: [
+    'https://github.com/libredb/libredb-studio',
+    'https://www.linkedin.com/company/libredb',
+    'https://x.com/libredb',
+    'https://www.youtube.com/@libredb',
+    'https://www.instagram.com/libredb/',
+    'https://www.reddit.com/r/libredb/',
+  ],
 };
 
 // WebSite Schema (for Google Sitelinks)

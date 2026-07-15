@@ -1,0 +1,110 @@
+---
+// The consolidated security page a DBA or security reviewer looks for before
+// letting a tool near production. Deliberately honest: it states what is
+// enforced where (and display-level vs server-side), never more.
+import SectionHeader from './SectionHeader.astro';
+
+const SECURITY_MD = 'https://github.com/libredb/libredb-studio/blob/main/SECURITY.md';
+const SEED_DOCS = 'https://github.com/libredb/libredb-studio/blob/main/docs/SEED_CONNECTIONS.md';
+const OIDC_DOCS = 'https://github.com/libredb/libredb-studio/blob/main/docs/OIDC.md';
+
+const controls = [
+  {
+    control: 'Authentication',
+    detail:
+      'OpenID Connect SSO (Auth0, Keycloak, Okta, Azure AD or any OIDC provider) using Authorization Code Flow with PKCE. Sessions ride JWTs in httpOnly cookies — no tokens in localStorage.',
+    href: OIDC_DOCS,
+    linkLabel: 'OIDC guide',
+  },
+  {
+    control: 'Authorization',
+    detail:
+      'Role-based access control with per-connection visibility scoping — a connection can be exposed to admins only, to users, or to everyone. Roles map from your identity provider claims.',
+  },
+  {
+    control: 'Database credentials',
+    detail:
+      'Seed connections resolve ${ENV_VAR} placeholders at runtime, so secrets live in your environment or secret manager — never in a config file. Pair each connection with a dedicated least-privilege database account (read-only to start).',
+    href: SEED_DOCS,
+    linkLabel: 'Seed connections',
+  },
+  {
+    control: 'Transport',
+    detail:
+      'TLS between browser and app; TLS and SSH tunnels from the app to your databases — including databases behind firewalls that never get public exposure.',
+  },
+  {
+    control: 'Data masking',
+    detail:
+      'Sensitive columns (email, phone, SSN, financial data) are detected and masked across the grid, exports, and clipboard with RBAC enforcement. Masking is display-level — combine it with database-side grants for hard guarantees.',
+  },
+  {
+    control: 'Self-hosting & isolation',
+    detail:
+      'Self-hosting is a first-class citizen: run it on your infrastructure, inside your network, behind your VPN. Nothing needs to leave your perimeter — including AI, which can run fully local via Ollama or LM Studio.',
+  },
+  {
+    control: 'Supply chain',
+    detail:
+      'MIT-licensed source you can audit line by line. Every release ships SHA256 checksums; CI runs CodeQL and SonarCloud. Images are published to GHCR with immutable version tags.',
+  },
+];
+---
+
+<div class="mx-auto max-w-5xl">
+  <SectionHeader
+    title="Security model"
+    subtitle="What is enforced, where it is enforced, and how to reach us when something isn't."
+  />
+
+  <div class="flex flex-col gap-px overflow-hidden border border-edge bg-edge">
+    {
+      controls.map((c) => (
+        <article class="grid grid-cols-1 gap-2 bg-panel p-5 sm:grid-cols-[180px_1fr] sm:gap-6">
+          <h3 class="text-[13px] font-semibold tracking-wide text-bright uppercase">{c.control}</h3>
+          <div>
+            <p class="text-[13px] leading-relaxed text-muted">{c.detail}</p>
+            {c.href && (
+              <a
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-1.5 inline-block text-[12px] text-primary hover:text-primary-bright"
+              >
+                {c.linkLabel} <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <!-- Responsible disclosure -->
+  <section class="mt-10 border-l-2 border-warn/60 bg-panel p-5">
+    <h3 class="text-[15px] font-semibold text-bright">Found a vulnerability?</h3>
+    <p class="mt-2 max-w-2xl text-[13px] leading-relaxed text-dim">
+      Please report it privately — not in a public issue. The disclosure process, supported versions, and response
+      commitments live in the repository's security policy.
+    </p>
+    <a
+      href={SECURITY_MD}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13px] font-medium text-fg transition-colors hover:bg-raised"
+    >
+      Read SECURITY.md <span aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <p class="mt-6 text-[13px] leading-relaxed">
+    <span class="sql-com">-- honest by default: if a control is display-level, this page says so.</span>
+  </p>
+</div>
+<script
+  type="application/json"
+  data-export-payload="security"
+  data-export-filename="security.json"
+  data-export-format="json"
+  set:html={JSON.stringify(controls.map(({ control, detail }) => ({ control, detail })))}
+/>

@@ -141,6 +141,40 @@ const copyText = (s: Step) =>
       <a href="/deploy" class="text-[13px] text-primary hover:underline">Explore all deploy options →</a>
     </div>
   </div>
+
+  <!-- The first real step AFTER the app is running -->
+  <section class="mt-10 border border-edge bg-panel p-6">
+    <h3 class="text-[15px] font-semibold text-bright">Next: connect your first database</h3>
+    <ol class="mt-4 flex list-none flex-col gap-3 text-[13px] leading-relaxed text-muted">
+      <li>
+        <span class="text-faint select-none">1&nbsp;</span> Log in and open
+        <span class="font-semibold text-fg">Connections → New connection</span>.
+      </li>
+      <li>
+        <span class="text-faint select-none">2&nbsp;</span> Pick your engine — PostgreSQL, MySQL, Oracle, SQL Server, SQLite,
+        MongoDB, or Redis.
+      </li>
+      <li>
+        <span class="text-faint select-none">3&nbsp;</span> Enter host and credentials.
+        <span class="text-dim">Start with a dedicated read-only database account</span> — least privilege first, write access
+        when you actually need it. Databases behind a firewall connect over an SSH tunnel.
+      </li>
+      <li>
+        <span class="text-faint select-none">4&nbsp;</span> Deploying for a team? Define
+        <span class="font-semibold text-fg">seed connections</span> whose credentials resolve from environment variables at
+        runtime — secrets stay in your secret manager, never in a config file.
+      </li>
+    </ol>
+    <div class="mt-5 flex flex-wrap gap-4 text-[13px]">
+      <a
+        href="https://github.com/libredb/libredb-studio/blob/main/docs/SEED_CONNECTIONS.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline">Seed connections guide →</a
+      >
+      <a href="/security" class="text-primary hover:underline">How credentials are handled →</a>
+    </div>
+  </section>
 </div>
 <script
   type="application/json"
