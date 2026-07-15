@@ -253,12 +253,11 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'VARCHAR' },
       { name: 'method', type: 'VARCHAR' },
     ],
-    explain:
-      'Every place LibreDB Studio runs — 39 targets across registries, self-hosted PaaS, Kubernetes, managed PaaS and cloud — from one open-source image.',
+    explain: `Every place LibreDB Studio ships today — ${deployTargets.length} live targets across registries, self-hosted PaaS, Kubernetes and managed PaaS — from one open-source image.`,
     slug: 'deploy',
     pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
     pageDescription:
-      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, and Dokploy one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.',
+      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, Dokploy, Cosmos and Kubero one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, Homebrew, Snap, .deb/.rpm, and every major open-source PaaS, managed PaaS, and cloud.',
     schema: 'studio',
   },
   {

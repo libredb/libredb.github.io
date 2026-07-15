@@ -97,6 +97,21 @@ hit areas, mobile CTA relabeled `▶ Live Demo` (was a dishonest `RUN`),
 toast NOTICES lose leading glyphs (SR noise) and pause on keyboard focus,
 ~15 fake buttons demoted to spans (delegated handler works on any Element).
 
+### Deploy page
+Synced with `distribution/channels.yaml` in the studio repo (the channel
+inventory): Homebrew, Snap Store and GitHub Releases (tarballs + .deb/.rpm)
+were live channels missing from the site — now first-class registry cards.
+Every "planned" target (26 of the original 39) is **deleted from the data**
+(owner call: the site lists only what ships today; roadmap lives in
+channels.yaml). The all-planned "Cloud hyperscalers" category is replaced
+by one positive comment line — "any Docker host works today" — which says
+more than five aspirational cards did. Summary strip and the investor
+star-total band are deleted (counts duplicated the sections below; summing
+third-party platforms' stars overstated traction). Also fixed a real bug:
+the star-refresh script used `import` inside a `data-astro-rerun` inline
+script, which throws at runtime — live star counts had silently never
+refreshed; the helper is now mirrored inline.
+
 ### Section-page color discipline (cheap, systemic)
 Features kickers: 7-color map → `text-dim` (AI keeps `text-ai`; SECURITY no
 longer error-red). TechStack layer headers + Reliability stat numbers →
@@ -104,8 +119,9 @@ longer error-red). TechStack layer headers + Reliability stat numbers →
 the `text-bad` error token.
 
 ## Out of scope (follow-ups)
-- Deploy page: collapse 26 "planned" targets into chips; one-color summary.
 - Docker-compose page: `<details>` per env-var group; nest under deploy in tree.
+- Deploy page: generate `deploy-targets.ts` from `distribution/channels.yaml`
+  (single source of truth, kills drift).
 - Hero "one live moment" (query types itself once, VT-safe).
 - Trust row under stats (GitHub stars / quote as SQL comment).
 - Tokenized type scale in `@theme` + CI guard against new `text-[..px]` in chrome.

@@ -1,4 +1,4 @@
-export type CategoryId = 'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas' | 'cloud';
+export type CategoryId = 'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas';
 
 export interface DeployCategory {
   id: CategoryId;
@@ -31,11 +31,5 @@ export const deployCategories: DeployCategory[] = [
     title: 'Managed & commercial PaaS',
     tagline: 'One-click deploys on hosted platforms — no servers to manage.',
     order: 4,
-  },
-  {
-    id: 'cloud',
-    title: 'Cloud hyperscalers',
-    tagline: 'Runs as a container on any "run a container" service (ECS/Fargate, Cloud Run, ACI, App Platform).',
-    order: 5,
   },
 ];

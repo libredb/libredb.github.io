@@ -40,8 +40,8 @@ test('getStars falls back when fetch throws', async () => {
     throw new Error('offline');
   }) as unknown as typeof fetch;
 
-  const result = await getStars(['coollabsio/coolify']);
-  expect(result['coollabsio/coolify']).toBe(FALLBACK_STARS['coollabsio/coolify']);
+  const result = await getStars(['Dokploy/dokploy']);
+  expect(result['Dokploy/dokploy']).toBe(FALLBACK_STARS['Dokploy/dokploy']);
 });
 
 test('every starRepo has a baked fallback (build/client total coherence)', () => {
