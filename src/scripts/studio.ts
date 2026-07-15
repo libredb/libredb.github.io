@@ -8,7 +8,7 @@ import { filterItems, fuzzyMatch } from './lib/filter';
  * Studio interaction layer (progressive enhancement).
  * - Adds `.js` to the shell → desktop switches to viewport-locked single-view.
  * - Explorer links are real URLs; navigating renders exactly one section per page.
- * - `syncActive()` highlights the active Explorer row + updates StatusBar from the URL.
+ * - `syncActive()` highlights the active Explorer row + top-bar nav from the URL.
  * - `astro:page-load` lifecycle re-runs `syncActive()` on every navigation.
  */
 
@@ -153,14 +153,32 @@ const studioConsole = {
     root.appendChild(el);
     while (root.children.length > 3) root.firstElementChild?.remove();
     let t = window.setTimeout(() => el.remove(), 6000);
-    // pause auto-dismiss while hovered OR keyboard-focused (toasts can carry a CTA link)
-    el.addEventListener('mouseenter', () => clearTimeout(t));
-    el.addEventListener('focusin', () => clearTimeout(t));
-    const resume = () => {
+    // Pause auto-dismiss while hovered OR keyboard-focused (toasts can carry a
+    // CTA link). Track both states so e.g. a mouse pass-over can't restart the
+    // timer under a still-focused toast.
+    let hovered = false;
+    let focused = false;
+    const maybeResume = () => {
+      if (hovered || focused) return;
+      clearTimeout(t);
       t = window.setTimeout(() => el.remove(), 2500);
     };
-    el.addEventListener('mouseleave', resume);
-    el.addEventListener('focusout', resume);
+    el.addEventListener('mouseenter', () => {
+      hovered = true;
+      clearTimeout(t);
+    });
+    el.addEventListener('mouseleave', () => {
+      hovered = false;
+      maybeResume();
+    });
+    el.addEventListener('focusin', () => {
+      focused = true;
+      clearTimeout(t);
+    });
+    el.addEventListener('focusout', () => {
+      focused = false;
+      maybeResume();
+    });
   },
   notice(text: string, cta?: ConsoleMessage['cta']) {
     this.push({ kind: 'notice', text, cta });
@@ -529,6 +547,25 @@ function wireOnce() {
     const paletteInput = target.closest<HTMLInputElement>('[data-palette-input]');
     if (paletteInput) {
       renderPalette(paletteInput.value);
+    }
+  });
+
+  // Delegated keydown: ArrowRight/ArrowLeft on a focused explorer row link
+  // expands/collapses its column list — the caret buttons are tabindex="-1"
+  // (to keep tab stops down), so this is the keyboard path to the toggle.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    const item = target.closest<HTMLElement>('[data-section-link]')?.closest<HTMLElement>('[data-explorer-item]');
+    const id = item?.dataset.explorerItem;
+    if (!item || !id) return;
+    const toggle = item.querySelector<HTMLElement>(`[data-explorer-toggle="${id}"]`);
+    if (!toggle) return;
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    if ((e.key === 'ArrowRight' && !expanded) || (e.key === 'ArrowLeft' && expanded)) {
+      e.preventDefault();
+      toggleColumns(id, toggle);
     }
   });
 
