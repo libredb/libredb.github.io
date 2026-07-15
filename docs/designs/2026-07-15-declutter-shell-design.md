@@ -82,10 +82,12 @@ of those went:
   browser, with SSO built in." The 7 DB names render as **quoted green SQL
   string literals** — one hue, in-fiction, replacing the 5-hue rainbow.
 - Badge pill kept (the single open-source/MIT signal), dot static.
-- Tip comments 2 → 1 line; family heading → "one core, three products";
+- Tip comments and the open-core footnote deleted entirely — the explorer
+  rows read as navigation on their own, and the family cards' status labels
+  already tell the open-core story (the sustainability pitch belongs on
+  /platform or the FAQ); family heading → "one core, three products";
   studio card no longer a self-link (div, keeps ring + "you are here");
-  footnote trimmed to the unique open-core fact ("Platform funds the
-  open-source work"), sponsor line dropped (StatusBar link covers it).
+  sponsor line dropped (StatusBar link covers it).
 - Export payload now ships the engine list instead of the deleted stats.
 
 ### Accessibility bundle
