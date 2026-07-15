@@ -56,10 +56,13 @@ Owner-directed final form (tightened beyond the audit consensus):
 - Result-meta strip deleted — it was 100 % duplicate data.
 - Net: keyboard path to the hero CTA is 28 tab stops (was ~66).
 
-### StatusBar (15 items → 9)
-Keep: Connected (the one animated pulse), 5 real links (promoted to
+### StatusBar (15 items → 11)
+Keep: Connected (the one animated pulse), the real links (promoted to
 `text-muted`), one faint identity cluster `Ln 1, Col 1 · UTF-8 · SQL · ◆ v0.9.29`.
 Cut: `LibreDB:latest`, `public`, `{table}.sql`, `{rows} rows`, duplicate brand.
+Added later at owner request: X and YouTube links (active social channels —
+the status bar is the site's only footer, the conventional home for socials;
+Instagram deliberately skipped as the weakest channel for a dev audience).
 
 ### Explorer
 Connection box, CONNECTIONS label, the "▤ Explorer · 14" header row and the
