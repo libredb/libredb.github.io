@@ -1,20 +1,17 @@
 ---
+import PromoVideo from './PromoVideo.astro';
+
 const DEMO = 'https://app.libredb.org';
 
-const stats = [
-  { n: '7+', l: 'Databases', cls: 'text-primary' },
-  { n: '100%', l: 'Open Source', cls: 'text-ok' },
-  { n: 'AI', l: 'Native', cls: 'text-ai' },
-  { n: 'MIT', l: 'License', cls: 'text-warn' },
-];
+const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'MongoDB', 'Redis'];
 ---
 
 <div class="mx-auto max-w-5xl px-1">
   <!-- Badge -->
   <span
-    class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12.5px] text-ok"
+    class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12px] text-ok"
   >
-    <span class="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span>
+    <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
     Open Source &amp; Free Forever · MIT
   </span>
 
@@ -23,15 +20,20 @@ const stats = [
     The Modern, <span class="text-primary">AI-Powered</span><br class="hidden sm:block" /> SQL IDE
   </h1>
 
-  <!-- Subtitle -->
+  <!-- Subtitle: the seven engines read as SQL string literals — one hue, in-fiction.
+       Each hero element states one fact once: badge = license, H1 = AI/IDE,
+       subtitle = engines + SSO, CTAs = demo/deploy. -->
   <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
-    A lightweight, high-performance, and enterprise-secure web-based SQL editor with SSO for cloud-native teams. Connect
-    to <strong class="font-semibold text-primary">PostgreSQL</strong>,
-    <strong class="font-semibold text-ok">MySQL</strong>, <strong class="font-semibold text-warn">Oracle</strong>,
-    <strong class="font-semibold text-primary">SQL Server</strong>, <strong class="font-semibold text-ai">SQLite</strong
-    >,
-    <strong class="font-semibold text-ok">MongoDB</strong>, or <strong class="font-semibold text-bad">Redis</strong>
-    &mdash; from anywhere.
+    One editor for{' '}
+    {
+      databases.map((db, i) => (
+        <>
+          <span class="sql-str">'{db}'</span>
+          {i < databases.length - 1 ? ', ' : ' '}
+        </>
+      ))
+    }
+    — in your browser, with SSO built in.
   </p>
 
   <!-- CTAs -->
@@ -52,77 +54,46 @@ const stats = [
     </a>
   </div>
 
-  <!-- Stats -->
-  <div class="mt-10 grid grid-cols-2 border border-edge sm:grid-cols-4">
-    {
-      stats.map((s, i) => (
-        <div
-          class:list={[
-            'px-5 py-6',
-            i % 2 === 0 ? 'border-r border-edge' : '',
-            i < 2 ? 'border-b border-edge sm:border-b-0' : '',
-            'sm:border-b-0',
-            i === 3 ? 'sm:border-r-0' : 'sm:border-r',
-          ]}
-        >
-          <div class={`text-3xl font-bold ${s.cls}`}>{s.n}</div>
-          <div class="mt-1 text-[13px] text-dim">{s.l}</div>
-        </div>
-      ))
-    }
+  <!-- 60-second promo (click-to-load facade — no third-party bytes until play) -->
+  <div class="mt-10 max-w-3xl">
+    <PromoVideo videoId="wJPWPe1mJes" title="LibreDB Studio Promo" poster="/video/promo-poster.jpg" />
+    <p class="mt-2 text-[13px] leading-relaxed">
+      <span class="sql-com">-- 60s demo: the whole IDE, in motion.</span>
+    </p>
   </div>
 
-  <!-- Hint (only meaningful on desktop where the explorer drives navigation) -->
-  <p class="mt-8 hidden text-[13px] leading-relaxed text-faint lg:block">
-    <span class="sql-com">-- tip: pick a page from the explorer on the left.</span><br />
-    <span class="sql-com">-- each menu item runs a query and returns its content below.</span>
-  </p>
-
   <!-- The LibreDB family / open-core (secondary; Studio stays the hero above) -->
-  <div class="mt-12 border-t border-edge pt-8">
-    <p class="text-[11px] tracking-wider text-faint uppercase">The LibreDB family — one spine, three faces</p>
+  <div class="mt-14 border-t border-edge pt-8">
+    <p class="text-[11px] tracking-wider text-faint uppercase">The LibreDB family — one core, three products</p>
     <div class="mt-4 grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-3">
       <a href="/database" class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
         <div class="flex items-baseline justify-between gap-2">
-          <h3 class="text-[15px] font-bold text-fg">database</h3>
-          <span class="text-[10.5px] text-warn">OSS · pre-alpha</span>
+          <h3 class="text-[15px] font-bold text-bright">database</h3>
+          <span class="text-[11px] text-dim">OSS · early-beta</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
+        <p class="mt-2 text-[12px] leading-relaxed text-dim">
           The plain core — an embedded, multimodal engine you can read in one sitting.
         </p>
       </a>
-      <a href="/" class="flex flex-col bg-raised p-5 ring-1 ring-primary/40 ring-inset">
+      <div class="flex flex-col bg-raised p-5 ring-1 ring-primary/40 ring-inset">
         <div class="flex items-baseline justify-between gap-2">
-          <h3 class="text-[15px] font-bold text-primary">studio</h3>
-          <span class="text-[10.5px] text-ok">OSS · stable</span>
+          <h3 class="text-[15px] font-bold text-bright">studio</h3>
+          <span class="text-[11px] text-ok">OSS · stable</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
-          The readable face — the AI-powered SQL IDE for every database. <span class="text-primary">← you are here</span
-          >
+        <p class="mt-2 text-[12px] leading-relaxed text-dim">
+          The readable face — the AI-powered SQL IDE for every database. <span class="text-dim">← you are here</span>
         </p>
-      </a>
+      </div>
       <a href="/platform" class="flex flex-col bg-panel p-5 transition-colors hover:bg-raised">
         <div class="flex items-baseline justify-between gap-2">
-          <h3 class="text-[15px] font-bold text-ai">platform</h3>
-          <span class="text-[10.5px] text-ai">beta</span>
+          <h3 class="text-[15px] font-bold text-bright">platform</h3>
+          <span class="text-[11px] text-dim">beta</span>
         </div>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-dim">
+        <p class="mt-2 text-[12px] leading-relaxed text-dim">
           Managed for teams — Database Access Governance: authorized, audited, multi-tenant.
         </p>
       </a>
     </div>
-    <p class="mt-4 text-[13px] leading-relaxed text-dim">
-      <span class="sql-com">-- open core: Studio is free &amp; open; Platform funds the open-source work.</span><br />
-      <span class="sql-com"
-        >-- Studio opens live with a ready-to-use LibreDB sample across all three lenses, zero setup.</span
-      ><br />
-      <span class="sql-com">-- love the open-source work? </span><a
-        href="https://github.com/sponsors/libredb"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-ok hover:underline">sponsor us ♥</a
-      >
-    </p>
   </div>
 </div>
 <script
@@ -130,5 +101,5 @@ const stats = [
   data-export-payload="home"
   data-export-filename="home.json"
   data-export-format="json"
-  set:html={JSON.stringify(stats)}
+  set:html={JSON.stringify(databases.map((db) => ({ engine: db })))}
 />

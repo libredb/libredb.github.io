@@ -3,7 +3,7 @@ import SectionHeader from './SectionHeader.astro';
 import PlatformCard from '../deploy/PlatformCard.astro';
 import { deployTargets, starRepos } from '../../data/deploy-targets';
 import { deployCategories } from '../../data/deploy-categories';
-import { getStars, formatStars } from '../../lib/github-stars';
+import { getStars } from '../../lib/github-stars';
 
 const stars = await getStars(starRepos);
 
@@ -13,40 +13,17 @@ const targetsByCategory = (id: string) =>
   deployTargets.filter((t) => t.category === id).sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
 
 const official = deployTargets.filter((t) => t.status === 'official');
-const totalStars = Object.values(stars).reduce((sum, n) => sum + n, 0);
-
-const platformCount = deployTargets.length;
 const installMethodCount = deployTargets.filter((t) => t.category === 'registry').length;
-const plannedNames = deployTargets.filter((t) => t.status === 'planned').map((t) => t.name);
-
-const catColors = ['text-primary', 'text-ok', 'text-ai', 'text-warn', 'text-bad'];
-const summary = sortedCategories.map((c, i) => ({
-  title: c.title,
-  count: deployTargets.filter((t) => t.category === c.id).length,
-  color: catColors[i % catColors.length],
-}));
 ---
 
 <div class="mx-auto max-w-6xl">
   <SectionHeader
     title="Deploy anywhere"
-    subtitle={`One open-source image, every layer of the deploy stack — ${platformCount}+ platforms and ${installMethodCount} install methods.`}
+    subtitle={`One open-source image — ${installMethodCount} install methods, ${official.length} official one-click marketplaces, and any host that runs a container.`}
   />
 
-  <!-- Category summary strip -->
-  <div class="grid grid-cols-2 gap-px overflow-hidden border border-edge bg-edge md:grid-cols-3 lg:grid-cols-5">
-    {
-      summary.map((c) => (
-        <div class="bg-panel p-5">
-          <div class={`text-3xl font-bold ${c.color}`}>{c.count}</div>
-          <div class="mt-2 text-[12.5px] leading-snug text-dim">{c.title}</div>
-        </div>
-      ))
-    }
-  </div>
-
   <!-- Official one-click integrations -->
-  <section class="mt-10">
+  <section class="mt-2">
     <h3 class="text-[15px] font-semibold text-bright">Official one-click integrations</h3>
     <p class="mt-1 text-[13px] text-dim">Listed in their marketplaces — deploy in a click, today.</p>
     <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -90,7 +67,7 @@ const summary = sortedCategories.map((c, i) => ({
     </div>
   </section>
 
-  <!-- Category grids -->
+  <!-- Category grids — every card is a target that works today -->
   {
     sortedCategories.map((cat) => (
       <section class="mt-10">
@@ -105,17 +82,13 @@ const summary = sortedCategories.map((c, i) => ({
     ))
   }
 
-  <!-- Investor depth band -->
-  <section class="mt-10 border border-edge-strong bg-panel p-6 text-center md:p-8">
-    <p class="mb-2 text-sm text-muted">Embedded across open-source ecosystems totaling</p>
-    <div class="mb-3 text-3xl font-bold text-primary md:text-4xl">
-      <span data-stars-total>{formatStars(totalStars)}</span>+ GitHub stars
-    </div>
-    <p class="mx-auto max-w-2xl text-sm text-muted">
-      LibreDB Studio doesn't just support these platforms — it ships inside communities that millions of developers
-      already trust. More on the roadmap: {plannedNames.slice(0, 8).join(', ')}, and more.
-    </p>
-  </section>
+  <!-- Everything else is covered by the image itself -->
+  <p class="mt-8 text-[13px] leading-relaxed">
+    <span class="sql-com"
+      >-- anywhere else: it's one container image. ECS / Fargate, Cloud Run, ACI, App Platform — any Docker host works
+      today.</span
+    >
+  </p>
 
   <!-- CTA -->
   <section class="mt-8 flex flex-wrap gap-3">
@@ -141,35 +114,31 @@ const summary = sortedCategories.map((c, i) => ({
   </section>
 </div>
 
-<script data-astro-rerun>
-  import { formatStars } from '../../lib/github-stars';
-
-  async function refreshStars() {
-    const spans = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-repo]'));
-    await Promise.all(
-      spans.map(async (span) => {
-        const repo = span.getAttribute('data-stars-repo');
-        if (!repo) return;
-        try {
-          const res = await fetch(`https://api.github.com/repos/${repo}`, {
-            headers: { Accept: 'application/vnd.github+json' },
-          });
-          if (!res.ok) return;
-          const data = await res.json();
-          if (typeof data.stargazers_count !== 'number') return;
-          span.setAttribute('data-stars-count', String(data.stargazers_count));
-          span.textContent = formatStars(data.stargazers_count);
-        } catch {
-          /* keep the baked-in number */
-        }
-      }),
-    );
-    const total = Array.from(document.querySelectorAll<HTMLElement>('[data-stars-count]')).reduce(
-      (sum, el) => sum + (Number(el.getAttribute('data-stars-count')) || 0),
-      0,
-    );
-    const totalEl = document.querySelector<HTMLElement>('[data-stars-total]');
-    if (totalEl && total > 0) totalEl.textContent = formatStars(total);
-  }
-  refreshStars();
+<script is:inline data-astro-rerun>
+  // Live-refresh the baked-in star counts. Runs as a classic script (an import
+  // here would throw "Cannot use import statement outside a module"), so
+  // formatStars from lib/github-stars.ts is mirrored inline — keep in sync.
+  (() => {
+    const fmt = (n) => {
+      if (n < 1000) return String(n);
+      const k = n / 1000;
+      const rounded = k >= 100 ? Math.round(k) : Math.round(k * 10) / 10;
+      return `${rounded}k`;
+    };
+    document.querySelectorAll('[data-stars-repo]').forEach(async (span) => {
+      const repo = span.getAttribute('data-stars-repo');
+      if (!repo) return;
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repo}`, {
+          headers: { Accept: 'application/vnd.github+json' },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data.stargazers_count !== 'number') return;
+        span.textContent = fmt(data.stargazers_count);
+      } catch {
+        /* keep the baked-in number */
+      }
+    });
+  })();
 </script>

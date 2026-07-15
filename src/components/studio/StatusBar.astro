@@ -1,58 +1,72 @@
 ---
-import { sectionById } from '../../data/sections';
-interface Props {
-  active?: string;
-}
-const { active = 'home' } = Astro.props;
-const meta = sectionById[active] ?? sectionById['home'];
+// Bottom status bar: one connection signal, the real footer links, and a
+// single faint IDE identity cluster. Every datum here appears nowhere else.
 ---
 
 <footer
-  class="flex h-7 shrink-0 cursor-default items-center justify-between border-t border-edge bg-panel px-4 text-[11.5px] text-dim select-none"
+  class="flex h-7 shrink-0 cursor-default items-center justify-between border-t border-edge bg-panel px-4 text-[11px] text-dim select-none"
 >
-  <div class="flex items-center gap-4">
-    <span class="flex items-center gap-1.5 text-ok">
-      <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span> Connected
-    </span>
-    <span class="text-faint">LibreDB:latest</span>
-    <span class="text-faint">public</span>
-    <span class="text-muted"><span data-statusbar-table>{meta.table}</span>.sql</span>
-  </div>
+  <span class="flex items-center gap-1.5 text-ok">
+    <span class="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span> Connected
+  </span>
   <div class="flex items-center gap-4">
     <nav class="flex items-center gap-3" aria-label="Quick links">
       <a
         href="https://github.com/libredb/libredb-studio"
         target="_blank"
         rel="noopener noreferrer"
-        class="cursor-pointer hover:text-fg">GitHub</a
+        class="cursor-pointer text-muted hover:text-fg">GitHub</a
       >
       <a
         href="https://www.linkedin.com/company/libredb"
         target="_blank"
         rel="noopener noreferrer"
-        class="cursor-pointer hover:text-fg">LinkedIn</a
+        class="cursor-pointer text-muted hover:text-fg">LinkedIn</a
+      >
+      <a
+        href="https://x.com/libredb"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer text-muted hover:text-fg">X</a
+      >
+      <a
+        href="https://www.youtube.com/@libredb"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer text-muted hover:text-fg">YouTube</a
+      >
+      <a
+        href="https://www.instagram.com/libredb/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer text-muted hover:text-fg">Instagram</a
+      >
+      <a
+        href="https://www.reddit.com/r/libredb/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cursor-pointer text-muted hover:text-fg">Reddit</a
       >
       <a
         href="https://hub.docker.com/r/libredb/libredb-studio"
         target="_blank"
         rel="noopener noreferrer"
-        class="cursor-pointer hover:text-fg">Docker</a
+        class="cursor-pointer text-muted hover:text-fg">Docker</a
       >
       <a
         href="https://github.com/sponsors/libredb"
         target="_blank"
         rel="noopener noreferrer"
-        class="cursor-pointer text-ok hover:text-fg">Sponsor ♥</a
+        class="cursor-pointer text-muted hover:text-fg">Sponsor <span class="text-ok">♥</span></a
       >
-      <a href="/privacy-policy" class="cursor-pointer hover:text-fg">Privacy</a>
+      <a href="/privacy-policy" class="cursor-pointer text-muted hover:text-fg">Privacy</a>
     </nav>
     <span class="text-faint" aria-hidden="true">·</span>
-    <span><span data-statusbar-rows>{meta.rows}</span> rows</span>
-    <span class="text-faint">Ln 1, Col 1</span>
-    <span class="text-faint">UTF-8</span>
-    <span class="text-faint">SQL</span>
-    <span class="flex items-center gap-1.5 text-muted"
-      ><span class="text-primary" aria-hidden="true">◆</span> LibreDB Studio v0.9.29</span
-    >
+    <span class="flex items-center gap-3 text-faint">
+      <span>Ln 1, Col 1</span>
+      <span>UTF-8</span>
+      <span>SQL</span>
+      <span><span aria-hidden="true">◆</span> v0.9.29</span>
+    </span>
   </div>
 </footer>

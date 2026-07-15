@@ -17,10 +17,16 @@ test('slugs are unique', () => {
   expect(new Set(slugs).size).toBe(slugs.length);
 });
 
-test('all registries are available', () => {
+test('registries mirror the live channels in distribution/channels.yaml', () => {
   const registries = deployTargets.filter((t) => t.category === 'registry');
-  expect(registries.length).toBe(5);
-  expect(registries.every((t) => t.status === 'available')).toBe(true);
+  const available = registries.filter((t) => t.status === 'available').map((t) => t.slug);
+  expect(available.toSorted()).toEqual(
+    ['ghcr', 'docker', 'helm', 'artifacthub', 'npm', 'homebrew', 'snap', 'github-releases'].toSorted(),
+  );
+});
+
+test('only live targets are listed — planned platforms stay off the page', () => {
+  expect(deployTargets.every((t) => t.status !== 'planned')).toBe(true);
 });
 
 test('only open-source platforms declare a github repo (stars constraint)', () => {
@@ -32,7 +38,7 @@ test('only open-source platforms declare a github repo (stars constraint)', () =
 
 test('official integrations are present', () => {
   const official = deployTargets.filter((t) => t.status === 'official').map((t) => t.slug);
-  expect(official).toContain('railway');
-  expect(official).toContain('caprover');
-  expect(official).toContain('dokploy');
+  for (const slug of ['railway', 'caprover', 'dokploy', 'cosmos', 'kubero']) {
+    expect(official).toContain(slug);
+  }
 });

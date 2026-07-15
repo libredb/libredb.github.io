@@ -8,19 +8,9 @@
  */
 export const FALLBACK_STARS: Record<string, number> = {
   'caprover/caprover': 15000,
-  'coollabsio/coolify': 57000,
   'Dokploy/dokploy': 35000,
-  'portainer/portainer': 38000,
-  'dokku/dokku': 32000,
   'kubero-dev/kubero': 4300,
-  'basecamp/kamal': 14000,
-  'rancher/rancher': 26000,
-  'okd-project/okd': 2100,
   'kubernetes/kubernetes': 123000,
-  'kubesphere/kubesphere': 17000,
-  'k0rdent/k0rdent': 630,
-  'appwrite/appwrite': 56000,
-  'nhost/nhost': 9200,
   'azukaar/Cosmos-Server': 6000,
 };
 

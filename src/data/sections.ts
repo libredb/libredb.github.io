@@ -98,11 +98,11 @@ export const sections: SectionMeta[] = [
       { name: 'stance', type: 'TEXT' },
     ],
     explain:
-      'The LibreDB engine manifesto: a small, readable, embeddable multi-model database you can read in one sitting — multi-model without the magic. Pre-alpha; community-driven.',
+      'The LibreDB engine manifesto: a small, readable, embeddable multi-model database you can read in one sitting — multi-model without the magic. early-beta; community-driven.',
     slug: 'database',
     pageTitle: 'LibreDB — the embedded, multimodal database you can read in one sitting',
     pageDescription:
-      'LibreDB is a small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses (key-value, document, relational), zero dependencies, every line tested. Open source (MIT), pre-alpha.',
+      'LibreDB is a small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses (key-value, document, relational), zero dependencies, every line tested. Open source (MIT), early-beta.',
     schema: 'database',
   },
   {
@@ -136,7 +136,7 @@ export const sections: SectionMeta[] = [
       { name: 'mechanism', type: 'TEXT' },
     ],
     explain:
-      'Why you can trust a pre-alpha engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
+      'Why you can trust an early-beta engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
     slug: 'database-reliability',
     pageTitle: 'Reliability — LibreDB crash recovery & deterministic simulation testing',
     pageDescription:
@@ -253,12 +253,11 @@ export const sections: SectionMeta[] = [
       { name: 'category', type: 'VARCHAR' },
       { name: 'method', type: 'VARCHAR' },
     ],
-    explain:
-      'Every place LibreDB Studio runs — 39 targets across registries, self-hosted PaaS, Kubernetes, managed PaaS and cloud — from one open-source image.',
+    explain: `Every place LibreDB Studio ships today — ${deployTargets.length} live targets across registries, self-hosted PaaS, Kubernetes and managed PaaS — from one open-source image.`,
     slug: 'deploy',
     pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
     pageDescription:
-      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, and Dokploy one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, and every major open-source PaaS, managed PaaS, and cloud.',
+      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, Dokploy, Cosmos and Kubero one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub, npm, Homebrew, Snap, .deb/.rpm, and every major open-source PaaS, managed PaaS, and cloud.',
     schema: 'studio',
   },
   {

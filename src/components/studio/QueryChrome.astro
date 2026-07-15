@@ -7,19 +7,25 @@ interface Props {
   class?: string;
 }
 const { section, class: className = '' } = Astro.props;
+
+// Gags tucked one click deeper — every item keeps its in-character console notice.
+const moreTabs = [
+  { action: 'notice', notice: 'history', label: 'History' },
+  { action: 'notice', notice: 'saved', label: 'Saved' },
+  { action: 'notice', notice: 'charts', label: 'Charts' },
+  { action: 'palette', notice: '', label: 'NL2SQL' },
+  { action: 'notice', notice: 'autopilot', label: 'Autopilot' },
+  { action: 'notice', notice: 'pivot', label: 'Pivot' },
+  { action: 'notice', notice: 'diff', label: 'Diff' },
+  { action: 'notice', notice: 'dashboard', label: 'Dashboard' },
+];
 ---
 
 <div class:list={['shrink-0 border-b border-edge bg-canvas', className]}>
   <!-- Tab bar -->
-  <div class="flex items-center gap-0 border-b border-edge text-[12.5px]">
-    <a
-      class="flex items-center gap-1.5 border-r border-edge px-4 py-2.5 text-faint hover:text-fg"
-      href="https://github.com/libredb/libredb-studio#readme"
-      target="_blank"
-      rel="noopener noreferrer"><span aria-hidden="true">▤</span> README.md</a
-    >
+  <div class="flex items-center gap-0 border-b border-edge text-[13px]">
     <span
-      class="flex items-center gap-2 border-r border-edge bg-panel px-4 py-2.5 text-fg shadow-[inset_0_-2px_0_var(--color-primary)]"
+      class="flex items-center gap-2 border-r border-edge bg-panel px-4 py-2.5 text-fg shadow-[inset_0_-1px_0_var(--color-primary)]"
     >
       <span class="text-primary" aria-hidden="true">#</span>
       {section.table}.sql
@@ -31,166 +37,60 @@ const { section, class: className = '' } = Astro.props;
         aria-label="Close tab">✕</button
       >
     </span>
-    <button
-      type="button"
-      class="px-3 py-2.5 text-faint hover:text-fg"
+    <span
+      class="cursor-pointer px-3 py-2.5 text-faint select-none hover:text-fg"
       data-action="notice"
       data-notice="newtab"
-      aria-label="New tab">＋</button
+      aria-hidden="true">＋</span
     >
   </div>
 
-  <!-- Query toolbar -->
-  <div class="flex items-center justify-between gap-3 px-4 py-2 text-[12.5px]">
-    <div class="flex items-center gap-4">
-      <button
-        type="button"
-        class="flex items-center gap-1.5 text-muted hover:text-fg"
-        data-action="notice"
-        data-notice="query"><span aria-hidden="true">▾</span> Query</button
-      >
-      <button
-        type="button"
-        class="flex items-center gap-1.5 text-muted hover:text-fg"
-        data-action="notice"
-        data-notice="save"><span aria-hidden="true">▤</span> Save</button
-      >
-    </div>
+  <!-- Editor — RUN sits in the gutter, in front of the statement -->
+  <div class="flex items-center gap-4 px-4 py-3.5 text-[15px] leading-relaxed">
     <button
       type="button"
-      class="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 font-semibold text-white hover:bg-primary-bright"
+      class="flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1 text-[12px] font-semibold text-white hover:bg-primary-bright"
       data-action="run"
       data-run
+      title="Run query (⌘+Enter)"
     >
       <span aria-hidden="true">▶</span> RUN
     </button>
-    <div class="flex items-center gap-4 text-faint">
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="begin">BEGIN</button>
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="sandbox"
-        ><span aria-hidden="true">⬡</span> SANDBOX</button
-      >
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="edit"
-        ><span aria-hidden="true">✎</span> EDIT</button
-      >
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="import"
-        ><span aria-hidden="true">↑</span> IMPORT</button
-      >
-    </div>
-  </div>
-
-  <!-- Sub-toolbar -->
-  <div class="flex items-center justify-between gap-3 border-y border-edge px-4 py-1.5 text-[12px] text-faint">
-    <div class="flex items-center gap-4">
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="format"
-        ><span aria-hidden="true">≡</span> Format</button
-      >
-      <button type="button" class="hover:text-fg" data-action="copy-link"><span aria-hidden="true">⧉</span> Copy</button
-      >
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="clear"
-        ><span aria-hidden="true">✕</span> Clear</button
-      >
-      <button type="button" class="hover:text-fg" data-action="notice" data-notice="lines"
-        ><span aria-hidden="true">#</span> Lines</button
-      >
-      <button type="button" class="text-ai hover:brightness-125" data-action="palette"
-        ><span aria-hidden="true">✦</span> AI</button
-      >
-    </div>
-    <div class="flex items-center gap-3">
-      <button
-        type="button"
-        class="text-primary hover:brightness-125"
-        data-action="explain"
-        aria-expanded="false"
-        aria-controls={`explain-${section.id}`}><span aria-hidden="true">✦</span> Explain</button
-      >
-      <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px]" aria-hidden="true">⌘+Enter</span>
-    </div>
-  </div>
-
-  <!-- Editor -->
-  <div class="flex items-start gap-4 px-4 py-4 text-[15px] leading-relaxed">
-    <span class="text-faint select-none" aria-hidden="true">1</span>
-    <div><Sql query={section.query} /><span class="caret"></span></div>
+    <div class="min-w-0"><Sql query={section.query} /><span class="caret"></span></div>
   </div>
 
   <!-- Results tabs -->
-  <div class="flex items-center justify-between gap-3 border-t border-edge px-4 text-[12px]">
-    <div class="flex [scrollbar-width:none] items-center gap-4 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden">
-      <button
-        type="button"
-        class="pb-0.5 font-semibold whitespace-nowrap text-fg shadow-[inset_0_-2px_0_var(--color-primary)]"
-        data-action="results"><span aria-hidden="true">▦</span> Results</button
+  <div class="flex items-center gap-4 border-t border-edge px-4 py-2.5 text-[12px]">
+    <button
+      type="button"
+      class="pb-0.5 font-semibold whitespace-nowrap text-fg shadow-[inset_0_-1px_0_var(--color-primary)]"
+      data-action="results"><span aria-hidden="true">▦</span> Results</button
+    >
+    <button
+      type="button"
+      class="whitespace-nowrap text-muted hover:text-fg"
+      data-action="explain"
+      aria-expanded="false"
+      aria-controls={`explain-${section.id}`}><span class="text-ai" aria-hidden="true">✦</span> Explain</button
+    >
+    <details class="relative" data-chrome-menu>
+      <summary class="cursor-pointer text-faint select-none hover:text-fg" aria-label="More result views">⋯</summary>
+      <div
+        class="absolute bottom-full left-0 z-30 mb-1 flex w-36 flex-col border border-edge-strong bg-panel py-1 shadow-lg"
       >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="explain"
-        aria-expanded="false"
-        aria-controls={`explain-${section.id}`}><span aria-hidden="true">⚡</span> Explain</button
-      >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="history"><span aria-hidden="true">↺</span> History</button
-      >
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="saved"
-        ><span aria-hidden="true">⭐</span> Saved</button
-      >
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="charts"
-        ><span aria-hidden="true">◔</span> Charts</button
-      >
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="palette"
-        ><span aria-hidden="true">✦</span> NL2SQL</button
-      >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="autopilot"><span aria-hidden="true">✈</span> Autopilot</button
-      >
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="pivot"
-        ><span aria-hidden="true">▥</span> Pivot</button
-      >
-      <a
-        class="whitespace-nowrap text-faint hover:text-fg"
-        href="https://github.com/libredb/libredb-studio#readme"
-        target="_blank"
-        rel="noopener noreferrer"><span aria-hidden="true">▤</span> Docs</a
-      >
-      <button type="button" class="whitespace-nowrap text-faint hover:text-fg" data-action="notice" data-notice="diff"
-        ><span aria-hidden="true">⇄</span> Diff</button
-      >
-      <button
-        type="button"
-        class="whitespace-nowrap text-faint hover:text-fg"
-        data-action="notice"
-        data-notice="dashboard"><span aria-hidden="true">▦</span> Dashboard</button
-      >
-    </div>
-    <div class="flex shrink-0 items-center gap-3 py-2.5 text-faint">
-      <span>{section.rows} rows • {section.execMs}ms</span>
-      <button type="button" class="text-muted hover:text-fg" data-action="export"
-        ><span aria-hidden="true">↑</span> Export</button
-      >
-    </div>
-  </div>
-
-  <!-- Result meta -->
-  <div
-    class="flex cursor-default items-center justify-between border-t border-edge bg-panel px-4 py-1.5 text-[11.5px] text-faint select-none"
-  >
-    <div class="flex items-center gap-3">
-      <span class="flex items-center gap-1.5 text-ok"
-        ><span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
-        {section.rows} rows</span
-      >
-      <span class="text-edge-strong" aria-hidden="true">|</span>
-      <span>{section.cols} columns</span>
-      <span class="text-edge-strong" aria-hidden="true">|</span>
-      <span>{section.table}.sql</span>
-    </div>
-    <span class="rounded border border-edge-strong px-2 py-0.5 tracking-wide">EXEC TIME: {section.execMs}</span>
+        {
+          moreTabs.map((tab) => (
+            <button
+              type="button"
+              class="px-3 py-1.5 text-left text-muted hover:bg-raised hover:text-fg"
+              data-action={tab.action}
+              data-notice={tab.notice || undefined}
+            >
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+    </details>
   </div>
 </div>

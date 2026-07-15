@@ -8,7 +8,7 @@ import { filterItems, fuzzyMatch } from './lib/filter';
  * Studio interaction layer (progressive enhancement).
  * - Adds `.js` to the shell → desktop switches to viewport-locked single-view.
  * - Explorer links are real URLs; navigating renders exactly one section per page.
- * - `syncActive()` highlights the active Explorer row + updates StatusBar from the URL.
+ * - `syncActive()` highlights the active Explorer row + top-bar nav from the URL.
  * - `astro:page-load` lifecycle re-runs `syncActive()` on every navigation.
  */
 
@@ -25,7 +25,6 @@ function currentId(): string {
 
 function syncActive() {
   const id = currentId();
-  const meta = sectionById[id] ?? sectionById['home'];
   document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => {
     const on = a.dataset.sectionLink === id;
     a.closest<HTMLElement>('.exp-row')?.classList.toggle('active', on);
@@ -39,10 +38,6 @@ function syncActive() {
     a.classList.toggle('text-muted', !on);
     a.setAttribute('aria-current', on ? 'page' : 'false');
   });
-  const t = document.querySelector('[data-statusbar-table]');
-  const r = document.querySelector('[data-statusbar-rows]');
-  if (t) t.textContent = meta.table;
-  if (r) r.textContent = String(meta.rows);
 }
 
 /* ---- Mobile drawer ---- */
@@ -158,9 +153,31 @@ const studioConsole = {
     root.appendChild(el);
     while (root.children.length > 3) root.firstElementChild?.remove();
     let t = window.setTimeout(() => el.remove(), 6000);
-    el.addEventListener('mouseenter', () => clearTimeout(t));
-    el.addEventListener('mouseleave', () => {
+    // Pause auto-dismiss while hovered OR keyboard-focused (toasts can carry a
+    // CTA link). Track both states so e.g. a mouse pass-over can't restart the
+    // timer under a still-focused toast.
+    let hovered = false;
+    let focused = false;
+    const maybeResume = () => {
+      if (hovered || focused) return;
+      clearTimeout(t);
       t = window.setTimeout(() => el.remove(), 2500);
+    };
+    el.addEventListener('mouseenter', () => {
+      hovered = true;
+      clearTimeout(t);
+    });
+    el.addEventListener('mouseleave', () => {
+      hovered = false;
+      maybeResume();
+    });
+    el.addEventListener('focusin', () => {
+      focused = true;
+      clearTimeout(t);
+    });
+    el.addEventListener('focusout', () => {
+      focused = false;
+      maybeResume();
     });
   },
   notice(text: string, cta?: ConsoleMessage['cta']) {
@@ -270,6 +287,14 @@ function paletteItems(): PaletteItem[] {
       hint: 'github',
       run: () => window.open('https://github.com/libredb/libredb-studio#readme', '_blank'),
     },
+    {
+      label: 'Live monitoring',
+      hint: 'in the app',
+      run: () => {
+        const msg = NOTICES['monitoring'];
+        if (msg) studioConsole.push(msg);
+      },
+    },
   ];
   return [...jumps, ...actions];
 }
@@ -346,9 +371,18 @@ function closePalette() {
 }
 
 /* ---- Delegated action click handler ---- */
+function closeChromeMenus(except?: Element | null) {
+  document.querySelectorAll<HTMLDetailsElement>('details[data-chrome-menu][open]').forEach((d) => {
+    if (!except || !d.contains(except)) d.removeAttribute('open');
+  });
+}
+
 function onActionClick(e: Event) {
   const target = e.target;
   if (!(target instanceof Element)) return;
+
+  // A click outside an open chrome dropdown closes it
+  closeChromeMenus(target);
 
   // Chrome delegations: palette-close, drawer open/close, explorer column toggles
   if (target.closest('[data-palette-close]')) {
@@ -377,6 +411,8 @@ function onActionClick(e: Event) {
   const el = target.closest<HTMLElement>('[data-action]');
   if (!el) return;
   const action = el.dataset.action;
+  // An action chosen from a chrome dropdown also closes that dropdown
+  el.closest<HTMLDetailsElement>('details[data-chrome-menu]')?.removeAttribute('open');
   if (action === 'notice') {
     e.preventDefault();
     const msg = NOTICES[el.dataset.notice ?? ''];
@@ -402,6 +438,21 @@ function onActionClick(e: Event) {
     e.preventDefault();
     openPalette();
   }
+  if (action === 'video') {
+    e.preventDefault();
+    const wrap = el.closest<HTMLElement>('[data-video]');
+    const id = wrap?.dataset.video;
+    if (wrap && id) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+      iframe.title = wrap.dataset.videoTitle ?? 'Video';
+      iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.className = 'absolute inset-0 h-full w-full border-0';
+      wrap.replaceChildren(iframe);
+      iframe.focus();
+    }
+  }
   if (action === 'results') {
     e.preventDefault();
     const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -424,7 +475,10 @@ function onKeydown(e: KeyboardEvent) {
     return;
   }
   const root = document.querySelector('[data-palette-root]');
-  if (!root || root.hasAttribute('hidden')) return;
+  if (!root || root.hasAttribute('hidden')) {
+    if (e.key === 'Escape') closeChromeMenus();
+    return;
+  }
   if (e.key === 'Escape') {
     e.preventDefault();
     closePalette();
@@ -493,6 +547,25 @@ function wireOnce() {
     const paletteInput = target.closest<HTMLInputElement>('[data-palette-input]');
     if (paletteInput) {
       renderPalette(paletteInput.value);
+    }
+  });
+
+  // Delegated keydown: ArrowRight/ArrowLeft on a focused explorer row link
+  // expands/collapses its column list — the caret buttons are tabindex="-1"
+  // (to keep tab stops down), so this is the keyboard path to the toggle.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    const item = target.closest<HTMLElement>('[data-section-link]')?.closest<HTMLElement>('[data-explorer-item]');
+    const id = item?.dataset.explorerItem;
+    if (!item || !id) return;
+    const toggle = item.querySelector<HTMLElement>(`[data-explorer-toggle="${id}"]`);
+    if (!toggle) return;
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    if ((e.key === 'ArrowRight' && !expanded) || (e.key === 'ArrowLeft' && expanded)) {
+      e.preventDefault();
+      toggleColumns(id, toggle);
     }
   });
 
