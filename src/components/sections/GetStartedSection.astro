@@ -1,5 +1,6 @@
 ---
 import SectionHeader from './SectionHeader.astro';
+import PromoVideo from './PromoVideo.astro';
 
 interface Line {
   kind: 'cmd' | 'comment' | 'out';
@@ -147,7 +148,7 @@ const copyText = (s: Step) =>
     <h3 class="text-[15px] font-semibold text-bright">Next: connect your first database</h3>
     <ol class="mt-4 flex list-none flex-col gap-3 text-[13px] leading-relaxed text-muted">
       <li>
-        <span class="text-faint select-none">1&nbsp;</span> Log in and open
+        <span class="text-faint select-none">1&nbsp;</span> Log in and open{' '}
         <span class="font-semibold text-fg">Connections → New connection</span>.
       </li>
       <li>
@@ -155,16 +156,29 @@ const copyText = (s: Step) =>
         MongoDB, or Redis.
       </li>
       <li>
-        <span class="text-faint select-none">3&nbsp;</span> Enter host and credentials.
+        <span class="text-faint select-none">3&nbsp;</span> Enter host and credentials.{' '}
         <span class="text-dim">Start with a dedicated read-only database account</span> — least privilege first, write access
         when you actually need it. Databases behind a firewall connect over an SSH tunnel.
       </li>
       <li>
-        <span class="text-faint select-none">4&nbsp;</span> Deploying for a team? Define
+        <span class="text-faint select-none">4&nbsp;</span> Deploying for a team? Define{' '}
         <span class="font-semibold text-fg">seed connections</span> whose credentials resolve from environment variables at
         runtime — secrets stay in your secret manager, never in a config file.
       </li>
     </ol>
+
+    <!-- The same flow in motion (click-to-load facade — no third-party bytes until play) -->
+    <div class="mt-6 max-w-2xl">
+      <PromoVideo
+        videoId="KazHTclbiSQ"
+        title="Connect Your Own Database in LibreDB Studio"
+        poster="/video/connect-poster.jpg"
+      />
+      <p class="mt-2 text-[13px] leading-relaxed">
+        <span class="sql-com">-- 70s: the whole flow, from New Connection to first result.</span>
+      </p>
+    </div>
+
     <div class="mt-5 flex flex-wrap gap-4 text-[13px]">
       <a
         href="https://github.com/libredb/libredb-studio/blob/main/docs/SEED_CONNECTIONS.md"
