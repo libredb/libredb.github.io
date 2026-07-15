@@ -60,9 +60,9 @@ Owner-directed final form (tightened beyond the audit consensus):
 Keep: Connected (the one animated pulse), the real links (promoted to
 `text-muted`), one faint identity cluster `Ln 1, Col 1 · UTF-8 · SQL · ◆ v0.9.29`.
 Cut: `LibreDB:latest`, `public`, `{table}.sql`, `{rows} rows`, duplicate brand.
-Added later at owner request: X and YouTube links (active social channels —
-the status bar is the site's only footer, the conventional home for socials;
-Instagram deliberately skipped as the weakest channel for a dev audience).
+Added later at owner request: X, YouTube, Instagram and Reddit (r/libredb)
+links — the status bar is the site's only footer, the conventional home for
+socials, and all four channels are actively maintained.
 
 ### Explorer
 Connection box, CONNECTIONS label, the "▤ Explorer · 14" header row and the
