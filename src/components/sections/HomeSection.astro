@@ -1,13 +1,6 @@
 ---
 const DEMO = 'https://app.libredb.org';
 
-const stats = [
-  { n: '1-click', l: 'Deploy anywhere', cls: 'text-bright' },
-  { n: 'MIT', l: 'Open source & free', cls: 'text-bright' },
-  { n: 'AI', l: 'Native Copilot', cls: 'text-ai' },
-  { n: 'SSO', l: 'Enterprise sign-on', cls: 'text-bright' },
-];
-
 const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'MongoDB', 'Redis'];
 ---
 
@@ -25,18 +18,20 @@ const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'Mon
     The Modern, <span class="text-primary">AI-Powered</span><br class="hidden sm:block" /> SQL IDE
   </h1>
 
-  <!-- Subtitle: the seven engines read as SQL string literals — one hue, in-fiction -->
+  <!-- Subtitle: the seven engines read as SQL string literals — one hue, in-fiction.
+       Each hero element states one fact once: badge = license, H1 = AI/IDE,
+       subtitle = engines + SSO, CTAs = demo/deploy. -->
   <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
-    The open-source SQL IDE for the web — speaks{' '}
+    One editor for{' '}
     {
       databases.map((db, i) => (
         <>
           <span class="sql-str">'{db}'</span>
-          {i < databases.length - 1 ? ', ' : '. '}
+          {i < databases.length - 1 ? ', ' : ' '}
         </>
       ))
     }
-    SSO built in, runs anywhere.
+    — in your browser, with SSO built in.
   </p>
 
   <!-- CTAs -->
@@ -55,26 +50,6 @@ const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'Mon
     >
       Deploy in one click <span aria-hidden="true">→</span>
     </a>
-  </div>
-
-  <!-- Stats -->
-  <div class="mt-10 grid grid-cols-2 border border-edge sm:grid-cols-4">
-    {
-      stats.map((s, i) => (
-        <div
-          class:list={[
-            'px-5 py-6',
-            i % 2 === 0 ? 'border-r border-edge' : '',
-            i < 2 ? 'border-b border-edge sm:border-b-0' : '',
-            'sm:border-b-0',
-            i === 3 ? 'sm:border-r-0' : 'sm:border-r',
-          ]}
-        >
-          <div class={`text-3xl font-bold ${s.cls}`}>{s.n}</div>
-          <div class="mt-1 text-[13px] text-dim">{s.l}</div>
-        </div>
-      ))
-    }
   </div>
 
   <!-- Hint (only meaningful on desktop where the explorer drives navigation) -->
@@ -115,7 +90,7 @@ const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'Mon
       </a>
     </div>
     <p class="mt-4 text-[13px] leading-relaxed text-dim">
-      <span class="sql-com">-- open core: Studio is free &amp; open; Platform funds the work.</span>
+      <span class="sql-com">-- open core: Platform funds the open-source work.</span>
     </p>
   </div>
 </div>
@@ -124,5 +99,5 @@ const databases = ['PostgreSQL', 'MySQL', 'Oracle', 'SQL Server', 'SQLite', 'Mon
   data-export-payload="home"
   data-export-filename="home.json"
   data-export-format="json"
-  set:html={JSON.stringify(stats)}
+  set:html={JSON.stringify(databases.map((db) => ({ engine: db })))}
 />

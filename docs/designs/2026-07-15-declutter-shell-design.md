@@ -72,16 +72,21 @@ deleted (duplicate Connected + conflicting `v1.2.5`).
 Toggles: `tabindex="-1"`, ≥24 px hit area (36 px in drawer).
 
 ### HomeSection
-- Badge pill kept (fastest open-source signal), dot static.
-- Subtitle rewritten (~20 words, "IDE" matches H1, no adjective stack); the
-  7 DB names render as **quoted green SQL string literals** — one hue,
-  in-fiction, replacing the 5-hue rainbow.
-- Stats: `7+ Databases`/`100% Open Source`/`MIT License` dedup →
-  `1-click Deploy anywhere · MIT Open source & free · AI Native Copilot ·
-  SSO Enterprise sign-on`; numerals `text-bright`, AI tile keeps `text-ai`.
+One-fact-one-owner rule (owner-directed final form): badge owns the
+license/open-source claim, H1 owns AI + "SQL IDE", the subtitle owns the
+engine list + SSO, the CTAs own demo/deploy. Everything that restated one
+of those went:
+- **Stats grid deleted** — all four tiles (1-click deploy, MIT, AI, SSO)
+  duplicated facts already visible in the same viewport.
+- Subtitle rewritten: "One editor for 'PostgreSQL' … 'Redis' — in your
+  browser, with SSO built in." The 7 DB names render as **quoted green SQL
+  string literals** — one hue, in-fiction, replacing the 5-hue rainbow.
+- Badge pill kept (the single open-source/MIT signal), dot static.
 - Tip comments 2 → 1 line; family heading → "one core, three products";
   studio card no longer a self-link (div, keeps ring + "you are here");
-  footnote 3 lines → 1, sponsor line dropped (StatusBar link covers it).
+  footnote trimmed to the unique open-core fact ("Platform funds the
+  open-source work"), sponsor line dropped (StatusBar link covers it).
+- Export payload now ships the engine list instead of the deleted stats.
 
 ### Accessibility bundle
 Skip-to-content link (in-character), `aria-label="Explorer"` on asides,
