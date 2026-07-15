@@ -49,10 +49,10 @@ Owner-directed final form (tightened beyond the audit consensus):
   wired, surfaced via `title`). Query/Save/Copy/BEGIN/SANDBOX/EDIT/IMPORT/
   Format/Clear/Lines/AI removed from chrome (Copy/Export/AI stay reachable
   via ⌘K palette).
-- Results row: Results, ✦ Explain (single trigger), History (span),
-  Autopilot, and a `⋯` overflow with Saved/Charts/NL2SQL/Pivot/Diff/Dashboard
-  (notices intact). Docs tab and the `{rows} · {cols} · {ms}` + Export meta
-  removed — RUN's console toast still reports rows/ms in-fiction.
+- Results row: Results, ✦ Explain (single trigger), and a `⋯` overflow with
+  History/Saved/Charts/NL2SQL/Autopilot/Pivot/Diff/Dashboard (notices
+  intact). Docs tab and the `{rows} · {cols} · {ms}` + Export meta removed —
+  RUN's console toast still reports rows/ms in-fiction.
 - Result-meta strip deleted — it was 100 % duplicate data.
 - Net: keyboard path to the hero CTA is 28 tab stops (was ~66).
 
@@ -62,9 +62,9 @@ Keep: Connected (the one animated pulse), 5 real links (promoted to
 Cut: `LibreDB:latest`, `public`, `{table}.sql`, `{rows} rows`, duplicate brand.
 
 ### Explorer
-Connection box, CONNECTIONS label and search placeholder removed (owner:
-the visitor is already on libredb.org). Count pill de-pilled (plain faint
-text). Schema badges quieted to lowercase `text-dim`, no border/accent.
+Connection box, CONNECTIONS label, the "▤ Explorer · 14" header row and the
+search placeholder all removed (owner: the visitor is already on
+libredb.org; the tree speaks for itself — sidebar is now search + tree). Schema badges quieted to lowercase `text-dim`, no border/accent.
 Row counts stay (core "table = page" loop) but carets dim at rest and
 brighten on hover/active. Rows default `text-muted`, active bright
 (Railway dim pattern). Column `◆` icons → `text-dim`. Sidebar footer

@@ -10,9 +10,11 @@ const { section, class: className = '' } = Astro.props;
 
 // Gags tucked one click deeper — every item keeps its in-character console notice.
 const moreTabs = [
+  { action: 'notice', notice: 'history', label: 'History' },
   { action: 'notice', notice: 'saved', label: 'Saved' },
   { action: 'notice', notice: 'charts', label: 'Charts' },
   { action: 'palette', notice: '', label: 'NL2SQL' },
+  { action: 'notice', notice: 'autopilot', label: 'Autopilot' },
   { action: 'notice', notice: 'pivot', label: 'Pivot' },
   { action: 'notice', notice: 'diff', label: 'Diff' },
   { action: 'notice', notice: 'dashboard', label: 'Dashboard' },
@@ -70,18 +72,6 @@ const moreTabs = [
       data-action="explain"
       aria-expanded="false"
       aria-controls={`explain-${section.id}`}><span class="text-ai" aria-hidden="true">✦</span> Explain</button
-    >
-    <span
-      class="cursor-pointer whitespace-nowrap text-faint select-none hover:text-fg"
-      data-action="notice"
-      data-notice="history"
-      aria-hidden="true">History</span
-    >
-    <button
-      type="button"
-      class="whitespace-nowrap text-faint hover:text-fg"
-      data-action="notice"
-      data-notice="autopilot">Autopilot</button
     >
     <details class="relative" data-chrome-menu>
       <summary class="cursor-pointer text-faint select-none hover:text-fg" aria-label="More result views">⋯</summary>
