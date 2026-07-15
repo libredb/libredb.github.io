@@ -20,11 +20,9 @@ test('slugs are unique', () => {
 test('registries mirror the live channels in distribution/channels.yaml', () => {
   const registries = deployTargets.filter((t) => t.category === 'registry');
   const available = registries.filter((t) => t.status === 'available').map((t) => t.slug);
-  // Live channels: ghcr, docker, helm, artifacthub, npm, homebrew, snap, github-releases
-  expect(available.length).toBe(8);
-  for (const slug of ['homebrew', 'snap', 'github-releases', 'npm', 'ghcr', 'docker']) {
-    expect(available).toContain(slug);
-  }
+  expect(available.toSorted()).toEqual(
+    ['ghcr', 'docker', 'helm', 'artifacthub', 'npm', 'homebrew', 'snap', 'github-releases'].toSorted(),
+  );
 });
 
 test('only live targets are listed — planned platforms stay off the page', () => {

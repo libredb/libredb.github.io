@@ -136,7 +136,7 @@ export const sections: SectionMeta[] = [
       { name: 'mechanism', type: 'TEXT' },
     ],
     explain:
-      'Why you can trust a early-beta engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
+      'Why you can trust an early-beta engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
     slug: 'database-reliability',
     pageTitle: 'Reliability — LibreDB crash recovery & deterministic simulation testing',
     pageDescription:
