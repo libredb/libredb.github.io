@@ -3,14 +3,15 @@ import SectionHeader from './SectionHeader.astro';
 
 type Cat = 'EDITOR' | 'AI' | 'CORE' | 'DATA' | 'SCHEMA' | 'SECURITY' | 'TOOLING';
 
+// Color budget: purple marks the AI differentiator; every other category stays quiet.
 const catColor: Record<Cat, string> = {
   AI: 'text-ai',
-  EDITOR: 'text-primary',
-  CORE: 'text-ok',
-  DATA: 'text-warn',
-  SCHEMA: 'text-primary',
-  SECURITY: 'text-bad',
-  TOOLING: 'text-muted',
+  EDITOR: 'text-dim',
+  CORE: 'text-dim',
+  DATA: 'text-dim',
+  SCHEMA: 'text-dim',
+  SECURITY: 'text-dim',
+  TOOLING: 'text-dim',
 };
 
 interface Feature {

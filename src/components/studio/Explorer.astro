@@ -5,16 +5,14 @@ import { schemas } from '../../data/schemas';
 interface Props {
   active?: string;
   idPrefix?: string; // to keep ids unique between desktop sidebar & mobile drawer
-  showConnectionsLabel?: boolean;
 }
-const { active = 'home', idPrefix = 'exp', showConnectionsLabel = true } = Astro.props;
+const { active = 'home', idPrefix = 'exp' } = Astro.props;
 const internalCount = sections.length; // total internal sections across schemas
 ---
 
 <div data-explorer-root class="flex h-full flex-col text-[13px]">
-  <!-- Connections -->
+  <!-- Connection -->
   <div class="px-3 pt-3 pb-2">
-    {showConnectionsLabel && <p class="px-1 pb-2 text-[11px] tracking-wider text-faint uppercase">Connections</p>}
     <div class="flex items-center gap-2 border border-edge-strong bg-panel px-3 py-2 text-fg">
       <span class="text-primary" aria-hidden="true">▦</span>
       <span class="font-medium">libredb.org</span>
@@ -24,20 +22,17 @@ const internalCount = sections.length; // total internal sections across schemas
   <!-- Explorer header -->
   <div class="flex items-center justify-between px-4 pt-2 pb-1">
     <span class="flex items-center gap-2 text-muted"><span aria-hidden="true">▤</span> Explorer</span>
-    <span
-      class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-semibold text-white"
-      >{internalCount}</span
-    >
+    <span class="text-[11px] text-faint">{internalCount}</span>
   </div>
 
-  <!-- Search (decorative) -->
+  <!-- Search (filters the tree) -->
   <div class="px-3 py-2">
     <label class="sr-only" for={`${idPrefix}-search`}>Search pages or sections</label>
     <input
       id={`${idPrefix}-search`}
       type="text"
-      placeholder="⌕  Search pages or sections…"
-      class="w-full border border-edge bg-canvas px-3 py-1.5 text-[12.5px] text-fg placeholder:text-faint focus:border-primary focus:outline-none"
+      placeholder="⌕"
+      class="w-full border border-edge bg-canvas px-3 py-1.5 text-[12px] text-fg placeholder:text-faint focus:border-primary focus:outline-none"
       data-explorer-search
     />
   </div>
@@ -53,11 +48,7 @@ const internalCount = sections.length; // total internal sections across schemas
               <span aria-hidden="true">▦</span>
             </>
             <span>{schema.label}</span>
-            {schema.badge && (
-              <span class:list={['ml-1 rounded px-1.5 text-[10px] tracking-wide uppercase', schema.badgeClass]}>
-                {schema.badge}
-              </span>
-            )}
+            {schema.badge && <span class:list={['ml-1 text-[11px] lowercase', schema.badgeClass]}>{schema.badge}</span>}
           </div>
 
           <ul class="mt-0.5">
@@ -68,11 +59,12 @@ const internalCount = sections.length; // total internal sections across schemas
                   <div class:list={['exp-row group flex items-center gap-1 pr-2', active === s.id && 'active']}>
                     <button
                       type="button"
-                      class="flex h-7 w-5 shrink-0 items-center justify-center text-faint hover:text-fg"
+                      class="flex h-9 w-8 shrink-0 items-center justify-center text-faint hover:text-fg lg:h-7 lg:w-6"
                       aria-expanded="false"
                       aria-label={`Toggle ${s.table} columns`}
                       aria-controls={`${idPrefix}-cols-${s.id}`}
                       data-explorer-toggle={s.id}
+                      tabindex="-1"
                     >
                       <span class="caret-icon" aria-hidden="true">
                         ▸
@@ -96,12 +88,12 @@ const internalCount = sections.length; // total internal sections across schemas
                     {s.columns.map((c) => (
                       <li class="flex items-center justify-between py-1 pr-3 text-[12px]">
                         <span class="flex items-center gap-2 text-muted">
-                          <span class="text-primary/70" aria-hidden="true">
+                          <span class="text-dim" aria-hidden="true">
                             ◆
                           </span>
                           {c.name}
                         </span>
-                        <span class="text-[10.5px] tracking-wide text-faint uppercase">{c.type}</span>
+                        <span class="text-[11px] tracking-wide text-faint uppercase">{c.type}</span>
                       </li>
                     ))}
                   </ul>
@@ -132,13 +124,4 @@ const internalCount = sections.length; // total internal sections across schemas
       ))
     }
   </nav>
-
-  <!-- Footer status -->
-  <div class="flex items-center justify-between border-t border-edge px-4 py-2 text-[12px] text-dim">
-    <span class="flex items-center gap-2">
-      <span class="h-2 w-2 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span>
-      Connected
-    </span>
-    <span class="text-faint">v1.2.5</span>
-  </div>
 </div>

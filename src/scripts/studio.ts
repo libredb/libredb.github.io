@@ -25,7 +25,6 @@ function currentId(): string {
 
 function syncActive() {
   const id = currentId();
-  const meta = sectionById[id] ?? sectionById['home'];
   document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => {
     const on = a.dataset.sectionLink === id;
     a.closest<HTMLElement>('.exp-row')?.classList.toggle('active', on);
@@ -39,10 +38,6 @@ function syncActive() {
     a.classList.toggle('text-muted', !on);
     a.setAttribute('aria-current', on ? 'page' : 'false');
   });
-  const t = document.querySelector('[data-statusbar-table]');
-  const r = document.querySelector('[data-statusbar-rows]');
-  if (t) t.textContent = meta.table;
-  if (r) r.textContent = String(meta.rows);
 }
 
 /* ---- Mobile drawer ---- */
@@ -158,10 +153,14 @@ const studioConsole = {
     root.appendChild(el);
     while (root.children.length > 3) root.firstElementChild?.remove();
     let t = window.setTimeout(() => el.remove(), 6000);
+    // pause auto-dismiss while hovered OR keyboard-focused (toasts can carry a CTA link)
     el.addEventListener('mouseenter', () => clearTimeout(t));
-    el.addEventListener('mouseleave', () => {
+    el.addEventListener('focusin', () => clearTimeout(t));
+    const resume = () => {
       t = window.setTimeout(() => el.remove(), 2500);
-    });
+    };
+    el.addEventListener('mouseleave', resume);
+    el.addEventListener('focusout', resume);
   },
   notice(text: string, cta?: ConsoleMessage['cta']) {
     this.push({ kind: 'notice', text, cta });
@@ -270,6 +269,14 @@ function paletteItems(): PaletteItem[] {
       hint: 'github',
       run: () => window.open('https://github.com/libredb/libredb-studio#readme', '_blank'),
     },
+    {
+      label: 'Live monitoring',
+      hint: 'in the app',
+      run: () => {
+        const msg = NOTICES['monitoring'];
+        if (msg) studioConsole.push(msg);
+      },
+    },
   ];
   return [...jumps, ...actions];
 }
@@ -346,9 +353,18 @@ function closePalette() {
 }
 
 /* ---- Delegated action click handler ---- */
+function closeChromeMenus(except?: Element | null) {
+  document.querySelectorAll<HTMLDetailsElement>('details[data-chrome-menu][open]').forEach((d) => {
+    if (!except || !d.contains(except)) d.removeAttribute('open');
+  });
+}
+
 function onActionClick(e: Event) {
   const target = e.target;
   if (!(target instanceof Element)) return;
+
+  // A click outside an open chrome dropdown closes it
+  closeChromeMenus(target);
 
   // Chrome delegations: palette-close, drawer open/close, explorer column toggles
   if (target.closest('[data-palette-close]')) {
@@ -377,6 +393,8 @@ function onActionClick(e: Event) {
   const el = target.closest<HTMLElement>('[data-action]');
   if (!el) return;
   const action = el.dataset.action;
+  // An action chosen from a chrome dropdown also closes that dropdown
+  el.closest<HTMLDetailsElement>('details[data-chrome-menu]')?.removeAttribute('open');
   if (action === 'notice') {
     e.preventDefault();
     const msg = NOTICES[el.dataset.notice ?? ''];
@@ -424,7 +442,10 @@ function onKeydown(e: KeyboardEvent) {
     return;
   }
   const root = document.querySelector('[data-palette-root]');
-  if (!root || root.hasAttribute('hidden')) return;
+  if (!root || root.hasAttribute('hidden')) {
+    if (e.key === 'Escape') closeChromeMenus();
+    return;
+  }
   if (e.key === 'Escape') {
     e.preventDefault();
     closePalette();

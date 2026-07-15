@@ -10,22 +10,17 @@ const DEMO = 'https://app.libredb.org';
       <img src="/logo.svg" alt="LibreDB Studio" class="h-5 w-5" />
       <span>LibreDB Studio</span>
     </a>
-    <span class="flex cursor-default items-center gap-2 text-faint select-none" aria-hidden="true">
-      <span>▤</span>
-      <span>＋</span>
-    </span>
     <span class="mx-1 h-5 w-px bg-edge-strong" aria-hidden="true"></span>
-    <span class="flex items-center gap-2">
+    <span class="flex cursor-default items-center gap-2 select-none" title="Connected to production">
       <span class="text-primary" aria-hidden="true">▦</span>
       <span class="text-fg">libredb.org</span>
-      <span class="cursor-default text-[11px] tracking-wider text-faint select-none" aria-hidden="true"
-        >PRODUCTION • ONLINE</span
-      >
+      <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+      <span class="sr-only">online</span>
     </span>
   </div>
 
-  <!-- Status + actions -->
-  <div class="flex items-center gap-4 text-[12.5px]">
+  <!-- Nav + CTA -->
+  <div class="flex items-center gap-4 text-[12px]">
     <a
       href={GITHUB}
       target="_blank"
@@ -34,21 +29,12 @@ const DEMO = 'https://app.libredb.org';
     >
       <span class="text-warn" aria-hidden="true">★</span> GitHub
     </a>
-    <span class="flex cursor-default items-center gap-1.5 text-ok select-none">
-      <span class="h-2 w-2 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span> Online
-    </span>
-    <button
-      type="button"
-      class="flex items-center gap-1.5 text-muted hover:text-fg"
-      data-action="notice"
-      data-notice="monitoring"><span aria-hidden="true">◷</span> Monitoring</button
-    >
     <a href="/playground" data-topbar-link="playground" class="flex items-center gap-1.5 text-muted hover:text-fg">
-      <span class="text-primary" aria-hidden="true">▶</span> Playground
+      <span aria-hidden="true">▶</span> Playground
     </a>
     <button
       type="button"
-      class="hidden items-center gap-1.5 rounded-md border border-edge-strong px-2 py-1 text-[11.5px] text-faint hover:text-fg xl:flex"
+      class="hidden items-center gap-1.5 rounded-md border border-edge-strong px-2 py-1 text-[11px] text-faint hover:text-fg xl:flex"
       data-action="palette"
       aria-label="Open command palette">⌘K</button
     >
@@ -60,6 +46,5 @@ const DEMO = 'https://app.libredb.org';
     >
       <span aria-hidden="true">▶</span> Live Demo <span aria-hidden="true">→</span>
     </a>
-    <span class="cursor-default text-faint select-none" aria-hidden="true">v0.9.29</span>
   </div>
 </header>

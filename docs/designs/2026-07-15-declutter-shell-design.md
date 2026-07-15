@@ -1,0 +1,98 @@
+# Declutter the studio shell — design
+
+**Date:** 2026-07-15 · **Branch:** `design/declutter-shell`
+
+## Problem
+
+The IDE-shell concept is loved, but the page is overloaded. Measured on the
+desktop homepage (multi-agent audit, 6 dimensions + adversarial critique):
+
+- ~70 interactive chrome elements render before any marketing content
+  (~66 tab stops before the first CTA for keyboard users).
+- 19 buttons are `data-action="notice"` no-ops occupying tab order.
+- The same datum repeats: row count ×3, exec time ×2, `home.sql` ×3,
+  Connected/Online ×4, version ×3 (`v0.9.29` twice + a conflicting `v1.2.5`),
+  GitHub reachable from 4 chrome slots, open-source/MIT stated 4×.
+- 5–6 accent hues compete in one viewport (rainbow DB names, 4-color stats,
+  multi-color badges); no single accent moment.
+- QueryChrome stacks 5 horizontal strips above the H1 (~y=395px).
+
+## Principles
+
+1. **One strip, one job.** No datum appears twice in the shell.
+2. **Semantic color budget.** Blue = interactive/CTA (filled blue on exactly
+   two elements: Live Demo + RUN). Green = connection state, one animated
+   pulse total (StatusBar). Amber = warning/pre-alpha only. Purple = AI only.
+   Red = errors only. Everything else zinc.
+3. **Progressive disclosure, not deletion.** The console-notice gags are demo
+   funnels — they survive one click deeper (Query menu, `⋯` overflow, ⌘K
+   palette) or become non-focusable spans. The IDE fiction stays.
+4. **Chrome type scale:** 11 / 12 / 13 / 15 px only (no half-pixel steps).
+5. Mono stays everywhere (spec: mono-first). Body copy gets reading
+   ergonomics (measure/leading), not a sans face.
+
+## Changes
+
+### TopBar (12 items → 7)
+Cut: `▤ ＋` dead glyphs, `PRODUCTION • ONLINE` caps, separate Online pill,
+Monitoring button, `v0.9.29`. Connection chip gets one static green dot.
+Monitoring gag re-homed as a ⌘K palette entry. Keep: brand, connection chip,
+★ GitHub, Playground, ⌘K, Live Demo (filled).
+
+### QueryChrome (5 strips → 4 bands, 29 interactive → 8 visible)
+Owner-directed final form (tightened beyond the audit consensus):
+- Tab bar: `{table}.sql` + ✕ (kept gag), `＋` demoted to span. README.md tab
+  removed — GitHub lives in TopBar + StatusBar.
+- Toolbar strips 2+3 replaced by ONE strip holding only **RUN** + ⌘+Enter
+  chip. Query/Save/Copy/BEGIN/SANDBOX/EDIT/IMPORT/Format/Clear/Lines/AI all
+  removed from chrome (Copy/Export/AI remain reachable via ⌘K palette).
+- Results row: Results, ✦ Explain (single trigger), History (span),
+  Autopilot, and a `⋯` overflow with Saved/Charts/NL2SQL/Pivot/Diff/Dashboard
+  (notices intact). Docs tab and the `{rows} · {cols} · {ms}` + Export meta
+  removed — RUN's console toast still reports rows/ms in-fiction.
+- Result-meta strip (strip 5) deleted — it was 100 % duplicate data.
+
+### StatusBar (15 items → 9)
+Keep: Connected (the one animated pulse), 5 real links (promoted to
+`text-muted`), one faint identity cluster `Ln 1, Col 1 · UTF-8 · SQL · ◆ v0.9.29`.
+Cut: `LibreDB:latest`, `public`, `{table}.sql`, `{rows} rows`, duplicate brand.
+
+### Explorer
+Count pill de-pilled (plain faint text). Schema badges quieted to lowercase
+`text-dim`, no border/accent. Row counts stay (core "table = page" loop) but
+carets dim at rest and brighten on hover/active. Rows default `text-muted`,
+active bright (Railway dim pattern). Column `◆` icons → `text-dim`.
+Sidebar footer deleted (duplicate Connected + conflicting `v1.2.5`).
+Toggles: `tabindex="-1"`, ≥24 px hit area (36 px in drawer).
+
+### HomeSection
+- Badge pill kept (fastest open-source signal), dot static.
+- Subtitle rewritten (~20 words, "IDE" matches H1, no adjective stack); the
+  7 DB names render as **quoted green SQL string literals** — one hue,
+  in-fiction, replacing the 5-hue rainbow.
+- Stats: `7+ Databases`/`100% Open Source`/`MIT License` dedup →
+  `1-click Deploy anywhere · MIT Open source & free · AI Native Copilot ·
+  SSO Enterprise sign-on`; numerals `text-bright`, AI tile keeps `text-ai`.
+- Tip comments 2 → 1 line; family heading → "one core, three products";
+  studio card no longer a self-link (div, keeps ring + "you are here");
+  footnote 3 lines → 1, sponsor line dropped (StatusBar link covers it).
+
+### Accessibility bundle
+Skip-to-content link (in-character), `aria-label="Explorer"` on asides,
+global `:focus-visible` ring in primary, mobile drawer ✕ and Explain ≥40 px
+hit areas, mobile CTA relabeled `▶ Live Demo` (was a dishonest `RUN`),
+toast NOTICES lose leading glyphs (SR noise) and pause on keyboard focus,
+~15 fake buttons demoted to spans (delegated handler works on any Element).
+
+### Section-page color discipline (cheap, systemic)
+Features kickers: 7-color map → `text-dim` (AI keeps `text-ai`; SECURITY no
+longer error-red). TechStack layer headers + Reliability stat numbers →
+`text-bright`. Providers keeps its syntax-mimicry colors, but Redis moves off
+the `text-bad` error token.
+
+## Out of scope (follow-ups)
+- Deploy page: collapse 26 "planned" targets into chips; one-color summary.
+- Docker-compose page: `<details>` per env-var group; nest under deploy in tree.
+- Hero "one live moment" (query types itself once, VT-safe).
+- Trust row under stats (GitHub stars / quote as SQL comment).
+- Tokenized type scale in `@theme` + CI guard against new `text-[..px]` in chrome.

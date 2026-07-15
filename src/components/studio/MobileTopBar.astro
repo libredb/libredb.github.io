@@ -37,7 +37,7 @@ const DEMO = 'https://app.libredb.org';
     rel="noopener noreferrer"
     class="flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-white"
   >
-    <span aria-hidden="true">▶</span> RUN
+    <span aria-hidden="true">▶</span> Live Demo
   </a>
 </header>
 
@@ -47,13 +47,18 @@ const DEMO = 'https://app.libredb.org';
   <aside
     class="absolute top-0 left-0 h-full w-[84%] max-w-xs -translate-x-full border-r border-edge bg-canvas transition-transform duration-200 ease-out"
     data-drawer-panel
+    aria-label="Explorer"
   >
-    <div class="flex items-center justify-between border-b border-edge px-4 py-3">
-      <span class="text-[11px] tracking-wider text-faint uppercase">Connections</span>
-      <button type="button" class="text-faint hover:text-fg" aria-label="Close explorer" data-drawer-close>✕</button>
+    <div class="flex items-center justify-end border-b border-edge py-1 pr-1 pl-4">
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center text-faint hover:text-fg"
+        aria-label="Close explorer"
+        data-drawer-close>✕</button
+      >
     </div>
     <div class="h-[calc(100%-49px)]">
-      <Explorer active={active} idPrefix="drawer" showConnectionsLabel={false} />
+      <Explorer active={active} idPrefix="drawer" />
     </div>
   </aside>
 </div>

@@ -52,17 +52,17 @@ export const NOTICES: Record<string, ConsoleMessage> = {
   lines: { kind: 'comment', text: 'line numbers are bolted on around here' },
   history: {
     kind: 'notice',
-    text: '↺ every query you run is logged per-workspace — in the app',
+    text: 'every query you run is logged per-workspace — in the app',
     cta: demo(),
   },
   saved: {
     kind: 'notice',
-    text: '⭐ star a query to save it — saved queries live in the app',
+    text: 'star a query to save it — saved queries live in the app',
     cta: demo(),
   },
   charts: {
     kind: 'notice',
-    text: '◔ turn any result set into a chart, one click — in the app',
+    text: 'turn any result set into a chart, one click — in the app',
     cta: demo(),
   },
   autopilot: {
@@ -72,17 +72,17 @@ export const NOTICES: Record<string, ConsoleMessage> = {
   },
   pivot: {
     kind: 'notice',
-    text: '▥ pivot any result like a spreadsheet — only works in production',
+    text: 'pivot any result like a spreadsheet — only works in production',
     cta: demo(),
   },
   diff: {
     kind: 'notice',
-    text: '⇄ diff two schemas or result sets side-by-side — in the app',
+    text: 'diff two schemas or result sets side-by-side — in the app',
     cta: demo(),
   },
   dashboard: {
     kind: 'notice',
-    text: '▦ pin queries into a live dashboard — build yours in the app',
+    text: 'pin queries into a live dashboard — build yours in the app',
     cta: demo(),
   },
   newtab: { kind: 'notice', text: 'more tabs unlock in the app', cta: demo() },

@@ -17,14 +17,14 @@ export const schemas: SchemaMeta[] = [
   {
     id: 'database',
     label: 'database',
-    badge: '🧪 pre-alpha',
-    badgeClass: 'text-warn border border-warn/40',
+    badge: 'pre-alpha',
+    badgeClass: 'text-dim',
   },
   {
     id: 'platform',
     label: 'platform',
     badge: 'beta · teams',
-    badgeClass: 'text-ai border border-ai/40',
+    badgeClass: 'text-dim',
     external: { label: 'open app', href: 'https://platform.libredb.org' },
   },
 ];

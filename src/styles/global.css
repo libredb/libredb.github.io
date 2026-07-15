@@ -75,6 +75,11 @@
     background: rgba(47, 111, 235, 0.35);
     color: #fff;
   }
+  /* IDE-style keyboard focus ring — the accent means "interactive" */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 }
 
 /* Custom scrollbar — matches the IDE chrome */
@@ -139,20 +144,30 @@
   transition: transform 0.15s ease;
 }
 
-/* Explorer row — active state driven by a single class so SSR + JS stay in sync */
+/* Explorer row — active state driven by a single class so SSR + JS stay in sync.
+   Inactive rows sit dimmed; the active row carries full brightness + accent tick. */
 .exp-row {
-  color: var(--color-fg);
+  color: var(--color-muted);
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
 }
 .exp-row:hover {
   background: color-mix(in srgb, var(--color-raised) 60%, transparent);
+  color: var(--color-fg);
 }
 .exp-row.active {
   background: var(--color-raised);
   color: var(--color-bright);
   box-shadow: inset 2px 0 0 var(--color-primary);
+}
+/* Expand carets whisper at rest, surface on hover/active */
+.exp-row .caret-icon {
+  opacity: 0.35;
+}
+.exp-row:hover .caret-icon,
+.exp-row.active .caret-icon {
+  opacity: 1;
 }
 
 /* RUN re-run shimmer on the active result pane */
