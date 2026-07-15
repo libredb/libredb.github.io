@@ -43,25 +43,18 @@ const moreTabs = [
     >
   </div>
 
-  <!-- Toolbar (single strip: just RUN) -->
-  <div class="flex items-center gap-3 px-4 py-2 text-[12px]">
+  <!-- Editor — RUN sits in the gutter, in front of the statement -->
+  <div class="flex items-center gap-4 px-4 py-3.5 text-[15px] leading-relaxed">
     <button
       type="button"
-      class="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 font-semibold text-white hover:bg-primary-bright"
+      class="flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1 text-[12px] font-semibold text-white hover:bg-primary-bright"
       data-action="run"
       data-run
+      title="Run query (⌘+Enter)"
     >
       <span aria-hidden="true">▶</span> RUN
     </button>
-    <span class="rounded border border-edge-strong px-1.5 py-0.5 text-[11px] text-faint" aria-hidden="true"
-      >⌘+Enter</span
-    >
-  </div>
-
-  <!-- Editor -->
-  <div class="flex items-start gap-4 border-t border-edge px-4 py-4 text-[15px] leading-relaxed">
-    <span class="text-faint select-none" aria-hidden="true">1</span>
-    <div><Sql query={section.query} /><span class="caret"></span></div>
+    <div class="min-w-0"><Sql query={section.query} /><span class="caret"></span></div>
   </div>
 
   <!-- Results tabs -->

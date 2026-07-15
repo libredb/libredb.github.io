@@ -33,24 +33,28 @@ desktop homepage (multi-agent audit, 6 dimensions + adversarial critique):
 
 ## Changes
 
-### TopBar (12 items → 7)
-Cut: `▤ ＋` dead glyphs, `PRODUCTION • ONLINE` caps, separate Online pill,
-Monitoring button, `v0.9.29`. Connection chip gets one static green dot.
-Monitoring gag re-homed as a ⌘K palette entry. Keep: brand, connection chip,
-★ GitHub, Playground, ⌘K, Live Demo (filled).
+### TopBar (12 items → 5)
+Cut: `▤ ＋` dead glyphs, the whole `libredb.org` connection chip (owner:
+"zaten bu sitedeyim" — the visitor is already here), `PRODUCTION • ONLINE`,
+separate Online pill, Monitoring button, `v0.9.29`. Monitoring gag re-homed
+as a ⌘K palette entry. Keep: brand, ★ GitHub, Playground, ⌘K, Live Demo
+(filled). Mobile top bar mirrors this: brand instead of URL, no ONLINE line.
 
-### QueryChrome (5 strips → 4 bands, 29 interactive → 8 visible)
+### QueryChrome (5 strips → 3 bands, 29 interactive → 7 visible)
 Owner-directed final form (tightened beyond the audit consensus):
 - Tab bar: `{table}.sql` + ✕ (kept gag), `＋` demoted to span. README.md tab
   removed — GitHub lives in TopBar + StatusBar.
-- Toolbar strips 2+3 replaced by ONE strip holding only **RUN** + ⌘+Enter
-  chip. Query/Save/Copy/BEGIN/SANDBOX/EDIT/IMPORT/Format/Clear/Lines/AI all
-  removed from chrome (Copy/Export/AI remain reachable via ⌘K palette).
+- Both toolbars deleted. **RUN** moved into the editor gutter, in front of
+  the SQL statement (DataGrip-style); ⌘+Enter chip dropped (shortcut still
+  wired, surfaced via `title`). Query/Save/Copy/BEGIN/SANDBOX/EDIT/IMPORT/
+  Format/Clear/Lines/AI removed from chrome (Copy/Export/AI stay reachable
+  via ⌘K palette).
 - Results row: Results, ✦ Explain (single trigger), History (span),
   Autopilot, and a `⋯` overflow with Saved/Charts/NL2SQL/Pivot/Diff/Dashboard
   (notices intact). Docs tab and the `{rows} · {cols} · {ms}` + Export meta
   removed — RUN's console toast still reports rows/ms in-fiction.
-- Result-meta strip (strip 5) deleted — it was 100 % duplicate data.
+- Result-meta strip deleted — it was 100 % duplicate data.
+- Net: keyboard path to the hero CTA is 28 tab stops (was ~66).
 
 ### StatusBar (15 items → 9)
 Keep: Connected (the one animated pulse), 5 real links (promoted to
