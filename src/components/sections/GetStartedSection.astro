@@ -1,6 +1,9 @@
 ---
 import SectionHeader from './SectionHeader.astro';
 import PromoVideo from './PromoVideo.astro';
+import { ENGINES } from '../../data/engines';
+
+const engineList = `${ENGINES.slice(0, -1).join(', ')}, or ${ENGINES.at(-1)}`;
 
 interface Line {
   kind: 'cmd' | 'comment' | 'out';
@@ -163,10 +166,7 @@ const copyText = (s: Step) =>
         <span class="text-faint select-none">1&nbsp;</span> Log in and open{' '}
         <span class="font-semibold text-fg">Connections → New connection</span>.
       </li>
-      <li>
-        <span class="text-faint select-none">2&nbsp;</span> Pick your engine — PostgreSQL, MySQL, Oracle, SQL Server, SQLite,
-        MongoDB, or Redis.
-      </li>
+      <li><span class="text-faint select-none">2&nbsp;</span> Pick your engine — {engineList}.</li>
       <li>
         <span class="text-faint select-none">3&nbsp;</span> Enter host and credentials.{' '}
         <span class="text-dim">Start with a dedicated read-only database account</span> — least privilege first, write access

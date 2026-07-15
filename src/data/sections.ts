@@ -238,7 +238,7 @@ export const sections: SectionMeta[] = [
     slug: 'faq',
     pageTitle: 'FAQ — LibreDB Studio',
     pageDescription:
-      'Frequently asked questions about LibreDB Studio: pricing, self-hosting, AI providers, security & SSO, supported databases, and how it compares to legacy tools.',
+      'Frequently asked questions about LibreDB Studio: pricing and Platform licensing, self-hosting, AI providers, security & SSO, supported databases, sponsorship, and how it compares to legacy tools.',
     schema: 'studio',
   },
   {

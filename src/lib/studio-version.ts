@@ -25,8 +25,11 @@ export function pickLatestStudioVersion(releases: ReleaseLike[]): string | null 
 
 async function fetchStudioVersion(): Promise<string> {
   try {
-    const res = await fetch('https://api.github.com/repos/libredb/libredb-studio/releases?per_page=15', {
+    // per_page=30 comfortably covers interleaved chart releases; the timeout
+    // keeps a slow/blocked network from hanging the static build.
+    const res = await fetch('https://api.github.com/repos/libredb/libredb-studio/releases?per_page=30', {
       headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'libredb-website' },
+      signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok) throw new Error(`status ${res.status}`);
     const releases = (await res.json()) as ReleaseLike[];

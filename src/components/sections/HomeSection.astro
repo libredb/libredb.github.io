@@ -1,10 +1,12 @@
 ---
 import PromoVideo from './PromoVideo.astro';
 import { ENGINES } from '../../data/engines';
+import { sectionById } from '../../data/sections';
 
 const DEMO = 'https://app.libredb.org';
 
 const databases = ENGINES;
+const featureRows = sectionById['features'].rows;
 
 // Info-scent bridge to /features: four flagship rows of the full result set.
 const flagship = [
@@ -88,7 +90,7 @@ const flagship = [
       }
     </div>
     <a href="/features" class="mt-3 inline-block text-[13px] text-muted hover:text-fg">
-      … 14 more rows — see all 18 features <span aria-hidden="true">→</span>
+      … {featureRows - flagship.length} more rows — see all {featureRows} features <span aria-hidden="true">→</span>
     </a>
   </div>
 
