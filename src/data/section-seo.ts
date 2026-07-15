@@ -39,7 +39,7 @@ export const sectionSeo: Record<string, object[]> = {
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Cross-platform (Bun, Node 22+)',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      softwareVersion: 'pre-alpha (0.0.x)',
+      softwareVersion: 'early-beta (0.0.x)',
     },
   ],
   platform: [

@@ -98,11 +98,11 @@ export const sections: SectionMeta[] = [
       { name: 'stance', type: 'TEXT' },
     ],
     explain:
-      'The LibreDB engine manifesto: a small, readable, embeddable multi-model database you can read in one sitting — multi-model without the magic. Pre-alpha; community-driven.',
+      'The LibreDB engine manifesto: a small, readable, embeddable multi-model database you can read in one sitting — multi-model without the magic. early-beta; community-driven.',
     slug: 'database',
     pageTitle: 'LibreDB — the embedded, multimodal database you can read in one sitting',
     pageDescription:
-      'LibreDB is a small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses (key-value, document, relational), zero dependencies, every line tested. Open source (MIT), pre-alpha.',
+      'LibreDB is a small, readable, embeddable, multi-model database in TypeScript. One ordered key-value core, three lenses (key-value, document, relational), zero dependencies, every line tested. Open source (MIT), early-beta.',
     schema: 'database',
   },
   {
@@ -136,7 +136,7 @@ export const sections: SectionMeta[] = [
       { name: 'mechanism', type: 'TEXT' },
     ],
     explain:
-      'Why you can trust a pre-alpha engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
+      'Why you can trust a early-beta engine: a CRC-32 checksummed, fsync-before-commit write-ahead log, crash recovery proven by deterministic simulation testing, 100% core line coverage — plus an honest list of what it deliberately is NOT yet.',
     slug: 'database-reliability',
     pageTitle: 'Reliability — LibreDB crash recovery & deterministic simulation testing',
     pageDescription:

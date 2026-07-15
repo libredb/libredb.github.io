@@ -22,7 +22,7 @@ desktop homepage (multi-agent audit, 6 dimensions + adversarial critique):
 1. **One strip, one job.** No datum appears twice in the shell.
 2. **Semantic color budget.** Blue = interactive/CTA (filled blue on exactly
    two elements: Live Demo + RUN). Green = connection state, one animated
-   pulse total (StatusBar). Amber = warning/pre-alpha only. Purple = AI only.
+   pulse total (StatusBar). Amber = warning/early-beta only. Purple = AI only.
    Red = errors only. Everything else zinc.
 3. **Progressive disclosure, not deletion.** The console-notice gags are demo
    funnels — they survive one click deeper (Query menu, `⋯` overflow, ⌘K
