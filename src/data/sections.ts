@@ -215,11 +215,11 @@ export const sections: SectionMeta[] = [
       { name: 'command', type: 'TEXT' },
     ],
     explain:
-      'Three steps to run locally — clone & install, configure env, launch — plus a one-command Docker alternative.',
+      'Run it in one command — Docker (ghcr.io image) or npx, no clone or build — then open localhost:3000. Building from source (clone, install, dev server) is the separate contributor path below.',
     slug: 'get-started',
     pageTitle: 'Get Started in Minutes — LibreDB Studio',
     pageDescription:
-      'Run LibreDB Studio locally in three steps — clone & install, configure, launch — or one-command Docker. Self-host the open-source AI SQL IDE.',
+      'Run the open-source LibreDB Studio SQL IDE in one command — docker run ghcr.io/libredb/libredb-studio or npx @libredb/studio, no clone or build. Or build from source for local development.',
     schema: 'studio',
   },
   {

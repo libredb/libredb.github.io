@@ -65,6 +65,19 @@ const flagship = [
     </a>
   </div>
 
+  <!-- Run it yourself: the zero-install one-liner, in-fiction with the $ prompt.
+       New fact for the hero — self-host in one command — bridging to /get-started. -->
+  <div class="mt-6 max-w-2xl">
+    <div class="flex items-center gap-3 overflow-x-auto border border-edge bg-canvas px-3 py-2 font-mono text-[13px]">
+      <span class="text-primary select-none">$</span>
+      <code class="whitespace-nowrap text-fg">docker run -p 3000:3000 libredb/libredb-studio</code>
+    </div>
+    <p class="mt-2 text-[13px] text-dim">
+      or <code class="text-fg">npx @libredb/studio</code> — no Docker needed.{' '}
+      <a href="/get-started" class="text-primary hover:underline">Run it yourself in ~10s →</a>
+    </p>
+  </div>
+
   <!-- 60-second promo (click-to-load facade — no third-party bytes until play) -->
   <div class="mt-10 max-w-3xl">
     <PromoVideo videoId="wJPWPe1mJes" title="LibreDB Studio Promo" poster="/video/promo-poster.jpg" />
