@@ -22,7 +22,7 @@
     "@astrojs/sitemap": "3.7.3",
     "@libredb/libredb": "0.2.2",
     "@tailwindcss/vite": "4.3.2",
-    "astro": "7.0.7",
+    "astro": "7.1.0",
     "tailwindcss": "4.3.2"
   },
   "devDependencies": {
