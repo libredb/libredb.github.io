@@ -1,0 +1,2 @@
+# Flathub website verification: https://docs.flathub.org/docs/for-app-authors/verification
+# App tokens are appended below once Flathub issues them, one per line.
