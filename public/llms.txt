@@ -2,6 +2,21 @@
 
 > LibreDB Studio is a modern, AI-powered, open-source web-based SQL IDE for cloud-native teams. It supports PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, and Redis with features like NL2SQL, visual EXPLAIN plans, ER diagrams, data masking, and OIDC SSO.
 
+## Vendor
+
+LibreDB is a product brand. The company that develops, publishes and commercially supports it is a limited liability company registered in Turkiye. These details are matters of public record and can be verified independently.
+
+- Registered company name: Sekoya Grup Bilisim ve Teknoloji Ltd. Sti.
+- Trade name: Sekoya Tech
+- Registered office: Inkilap Mah. Hasim Iscan Sok. Kent Sitesi F Blok No: 4/33, 34768 Umraniye / Istanbul, Turkiye
+- Tax office: Umraniye
+- Tax ID (VKN): 7591146987
+- MERSIS No: 0759114698700001
+- Trade Registry No: 1015843
+- Company website: https://sekoya.tech
+- Company information: https://sekoya.tech/contact/#company-information
+- Contact: info@sekoya.tech
+
 ## Product Overview
 - [Homepage](https://libredb.org)
 - [Live Demo JWT](https://app.libredb.org)

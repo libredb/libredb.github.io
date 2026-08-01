@@ -4,9 +4,19 @@ Role: Founder & Developer
 Site: https://libredb.org
 GitHub: https://github.com/cevheri
 
+/* VENDOR */
+Company: Sekoya Grup Bilisim ve Teknoloji Ltd. Sti.
+Trade name: Sekoya Tech
+Address: Inkilap Mah. Hasim Iscan Sok. Kent Sitesi F Blok No: 4/33, 34768 Umraniye / Istanbul, Turkiye
+Tax ID (VKN): 7591146987
+MERSIS No: 0759114698700001
+Trade Registry No: 1015843
+Site: https://sekoya.tech
+Contact: info@sekoya.tech
+
 /* SITE */
-Last update: 2026/03/11
+Last update: 2026/08/01
 Language: English
 Standards: HTML5, CSS3, ES2024
-Framework: Astro 5
+Framework: Astro 7
 Hosting: GitHub Pages

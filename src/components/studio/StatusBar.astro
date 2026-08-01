@@ -4,6 +4,8 @@
 // The studio version is fetched from GitHub releases at build time so the
 // site never advertises a stale number.
 import { getStudioVersion } from '../../lib/studio-version';
+import { VENDOR, VENDOR_LOCALITY, VENDOR_ADDRESS_FULL } from '../../data/company';
+import { QUICK_LINKS } from '../../data/quick-links';
 
 const studioVersion = await getStudioVersion();
 ---
@@ -14,57 +16,43 @@ const studioVersion = await getStudioVersion();
   <span class="flex items-center gap-1.5 text-ok">
     <span class="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ok" aria-hidden="true"></span> Connected
   </span>
-  <div class="flex items-center gap-4">
+
+  {
+    /*
+    Vendor attribution. Fills the dead space between the connection signal and
+    the links, and gives the legal entity behind LibreDB a visible home on the
+    product site — certification reviews look for it here. Disclosed
+    progressively because the bar is one 28px line: the full name only fits from
+    xl up, the address from 2xl. `truncate` is the backstop.
+  */
+  }
+  <a
+    href={VENDOR.companyInfoUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    title={`${VENDOR.legalName} - ${VENDOR_ADDRESS_FULL}`}
+    class="mx-4 min-w-0 cursor-pointer truncate text-faint hover:text-fg"
+  >
+    <span class="xl:hidden">{VENDOR.tradeName}</span>
+    <span class="hidden xl:inline 2xl:hidden">{VENDOR.legalName}</span>
+    <span class="hidden 2xl:inline">{VENDOR.legalName} &middot; {VENDOR_LOCALITY}</span>
+  </a>
+
+  <div class="flex shrink-0 items-center gap-4">
     <nav class="flex items-center gap-3" aria-label="Quick links">
-      <a
-        href="https://github.com/libredb/libredb-studio"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">GitHub</a
-      >
-      <a
-        href="https://www.linkedin.com/company/libredb"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">LinkedIn</a
-      >
-      <a
-        href="https://x.com/libredb"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">X</a
-      >
-      <a
-        href="https://www.youtube.com/@libredb"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">YouTube</a
-      >
-      <a
-        href="https://www.instagram.com/libredb/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">Instagram</a
-      >
-      <a
-        href="https://www.reddit.com/r/libredb/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">Reddit</a
-      >
-      <a
-        href="https://hub.docker.com/r/libredb/libredb-studio"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">Docker</a
-      >
-      <a
-        href="https://github.com/sponsors/libredb"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cursor-pointer text-muted hover:text-fg">Sponsor <span class="text-ok">♥</span></a
-      >
-      <a href="/privacy-policy" class="cursor-pointer text-muted hover:text-fg">Privacy</a>
+      {
+        QUICK_LINKS.map((link) => (
+          <a
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
+            class="cursor-pointer text-muted hover:text-fg"
+          >
+            {link.label}
+            {link.accent && <span class="text-ok"> {link.accent}</span>}
+          </a>
+        ))
+      }
     </nav>
     <span class="text-faint" aria-hidden="true">·</span>
     <span class="flex items-center gap-3 text-faint">
