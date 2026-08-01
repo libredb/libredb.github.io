@@ -294,8 +294,10 @@ git push    ──────►  pre-push        ─────────�
 
 ---
 
-## Ek: Tespit Edilen Tutarsızlık
+## Ek: Giderilen Tutarsızlık
 
-`README.md` hâlâ *"Any push to the `main` branch will trigger an automatic build
-and deployment"* diyor. Bu **güncel değil** — gerçek davranış `deploy.yml`'de
-`release: published` ile kapılı. README'nin Deployment bölümü güncellenmelidir.
+`README.md` bir süre *"Any push to the `main` branch will trigger an automatic
+build and deployment"* diyordu; gerçek davranış ise `deploy.yml`'de
+`release: published` ile kapılıdır. README'nin Deployment bölümü, iki
+workflow'un ayrımını ve tag + release akışını anlatacak şekilde güncellendi —
+artık bu belgeyle tutarlı.
