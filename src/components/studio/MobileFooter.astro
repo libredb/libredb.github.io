@@ -1,0 +1,50 @@
+---
+// src/components/studio/MobileFooter.astro
+// The mobile counterpart of StatusBar. The status bar is a single 28px line and
+// is hidden below lg, which previously left small screens with no footer at all
+// — no Privacy link anywhere in the DOM, and no sign of who publishes the
+// product. Mobile has vertical room, so here the same quick links stack and the
+// vendor's registered name and full address are shown outright rather than
+// progressively disclosed.
+import { getStudioVersion } from '../../lib/studio-version';
+import { VENDOR, VENDOR_ADDRESS_STREET, VENDOR_LOCALITY } from '../../data/company';
+import { QUICK_LINKS } from '../../data/quick-links';
+
+const studioVersion = await getStudioVersion();
+---
+
+<footer class="border-t border-edge bg-panel px-4 py-6 text-[13px] lg:hidden">
+  <nav class="grid grid-cols-3 gap-x-4 gap-y-3" aria-label="Quick links">
+    {
+      QUICK_LINKS.map((link) => (
+        <a
+          href={link.href}
+          target={link.external ? '_blank' : undefined}
+          rel={link.external ? 'noopener noreferrer' : undefined}
+          class="text-muted hover:text-fg"
+        >
+          {link.label}
+          {link.accent && <span class="text-ok"> {link.accent}</span>}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="mt-6 border-t border-edge pt-4 text-[11px] leading-relaxed text-faint">
+    <p class="text-muted">LibreDB Studio is developed and commercially supported by</p>
+    <a
+      href={VENDOR.companyInfoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-1 block text-fg hover:text-bright">{VENDOR.legalName}</a
+    >
+    <address class="mt-1 text-pretty not-italic">
+      {VENDOR_ADDRESS_STREET}<br />
+      {VENDOR_LOCALITY}
+    </address>
+  </div>
+
+  <p class="mt-4 text-[11px] text-faint">
+    <span aria-hidden="true">◆</span> studio:{studioVersion}
+  </p>
+</footer>

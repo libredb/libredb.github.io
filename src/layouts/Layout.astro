@@ -4,6 +4,7 @@ import CookieConsent from '../components/CookieConsent.astro';
 import { ClientRouter } from 'astro:transitions';
 import { getStudioVersion } from '../lib/studio-version';
 import { ENGINES } from '../data/engines';
+import { VENDOR, vendorOrganizationSchema } from '../data/company';
 
 interface Props {
   title: string;
@@ -38,6 +39,8 @@ const webAppSchema = {
   },
   author: { '@id': 'https://libredb.org/#organization' },
   publisher: { '@id': 'https://libredb.org/#organization' },
+  // The legally identified company behind the product, resolvable by @id.
+  provider: { '@id': VENDOR.schemaId },
   license: 'https://opensource.org/licenses/MIT',
   featureList: [
     'AI-Powered NL2SQL',
@@ -55,7 +58,8 @@ const webAppSchema = {
   keywords: ['SQL IDE', 'database editor', ...ENGINES, 'AI SQL', 'open source', 'web-based database tool'].join(', '),
 };
 
-// Organization Schema
+// Organization Schema. LibreDB is a product brand; the legal entity that
+// publishes and supports it is the vendor referenced as parentOrganization.
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -63,6 +67,7 @@ const organizationSchema = {
   name: 'LibreDB',
   url: siteURL,
   logo: 'https://libredb.org/logo.svg',
+  parentOrganization: { '@id': VENDOR.schemaId },
   sameAs: [
     'https://github.com/libredb/libredb-studio',
     'https://www.linkedin.com/company/libredb',
@@ -126,6 +131,7 @@ const webSiteSchema = {
     <!-- Structured Data (JSON-LD) -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(vendorOrganizationSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(webSiteSchema)} />
 
     <!-- Favicons -->

@@ -5,6 +5,7 @@ import TopBar from './TopBar.astro';
 import MobileTopBar from './MobileTopBar.astro';
 import Explorer from './Explorer.astro';
 import StatusBar from './StatusBar.astro';
+import MobileFooter from './MobileFooter.astro';
 import Console from './Console.astro';
 import CommandPalette from './CommandPalette.astro';
 
@@ -44,6 +45,7 @@ const { active = 'home', standalone = false } = Astro.props;
   </div>
 
   <div class="hidden lg:block" transition:persist="statusbar"><StatusBar /></div>
+  <MobileFooter transition:persist="mobilefooter" />
   <Console transition:persist="console" />
 </div>
 

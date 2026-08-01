@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import StudioShell from '../components/studio/StudioShell.astro';
+import { VENDOR, VENDOR_ADDRESS_FULL } from '../data/company';
+
+const registrationRows = [
+  { label: 'Registered company name', value: VENDOR.legalName },
+  { label: 'Trade name', value: VENDOR.tradeName },
+  { label: 'Registered office', value: VENDOR_ADDRESS_FULL },
+  { label: 'Tax office', value: VENDOR.taxOffice },
+  { label: 'Tax ID (VKN)', value: VENDOR.taxId },
+  { label: 'MERSIS No', value: VENDOR.mersisNo },
+  { label: 'Trade Registry No', value: VENDOR.tradeRegistryNo },
+];
 ---
 
 <Layout
@@ -23,6 +34,36 @@ import StudioShell from '../components/studio/StudioShell.astro';
               <a href="https://libredb.org" class="text-primary underline underline-offset-2 hover:text-primary-bright"
                 >libredb.org</a
               >. LibreDB Studio is an open-source project and this website serves as its landing page.
+            </p>
+          </section>
+
+          <!-- Vendor & Data Controller -->
+          <section class="mb-10">
+            <h2 class="mb-4 text-xl font-semibold text-bright">Vendor and Data Controller</h2>
+            <p class="mb-4 leading-relaxed text-fg">
+              LibreDB is a product brand. The company that develops, publishes and commercially supports LibreDB Studio
+              — and the data controller responsible for the processing described in this policy — is{' '}
+              {VENDOR.legalName}, a limited liability company registered in Turkiye. The details below are matters of
+              public record and can be verified independently.
+            </p>
+            <dl class="grid gap-x-8 gap-y-3 sm:grid-cols-2">
+              {
+                registrationRows.map((row) => (
+                  <div class="min-w-0">
+                    <dt class="text-xs text-muted">{row.label}</dt>
+                    <dd class="wrap-break-word text-fg">{row.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <p class="mt-4 leading-relaxed text-fg">
+              Full company information is published at{' '}
+              <a
+                href={VENDOR.companyInfoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary underline underline-offset-2 hover:text-primary-bright">{VENDOR.url}</a
+              >.
             </p>
           </section>
 
@@ -217,8 +258,20 @@ import StudioShell from '../components/studio/StudioShell.astro';
           <!-- Contact -->
           <section class="mb-10">
             <h2 class="mb-4 text-xl font-semibold text-bright">Contact</h2>
+            <p class="mb-4 leading-relaxed text-fg">
+              For questions about this Privacy Policy, or to exercise your data protection rights, contact the data
+              controller:
+            </p>
+            <address class="mb-4 leading-relaxed text-fg not-italic">
+              {VENDOR.legalName}<br />
+              {VENDOR_ADDRESS_FULL}<br />
+              <a
+                href={`mailto:${VENDOR.email}`}
+                class="text-primary underline underline-offset-2 hover:text-primary-bright">{VENDOR.email}</a
+              >
+            </address>
             <p class="leading-relaxed text-fg">
-              If you have questions about this Privacy Policy, please open an issue on our
+              For anything about the software itself — bugs, features, questions — please open an issue on our{' '}
               <a
                 href="https://github.com/libredb/libredb-studio/issues"
                 target="_blank"
