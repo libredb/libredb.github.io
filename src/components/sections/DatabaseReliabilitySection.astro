@@ -56,7 +56,7 @@ const notForYet = [
     <article class="flex flex-col bg-panel p-5">
       <h3 class="text-[15px] font-bold text-bright">A write-ahead log, fsync-d before commit</h3>
       <p class="mt-2 text-[13px] leading-relaxed text-dim">
-        A transaction that returns has been written to a length-framed, CRC-32 checksummed log and fsync-d
+        A transaction that returns has been written to a length-framed, CRC-32 checksummed log and fsync-d{' '}
         <em>before</em> the commit becomes visible. A crash can only ever damage the last, un-fsync-d record — which recovery
         detects and truncates, leaving a valid committed prefix.
       </p>
