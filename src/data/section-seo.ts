@@ -66,7 +66,7 @@ export const sectionSeo: Record<string, object[]> = {
       name: 'LibreDB Studio commercial support',
       serviceType: 'Commercial software support',
       description:
-        'Commercial support for LibreDB Studio on SUSE Rancher Prime, RKE2, K3s and Kubernetes — Helm chart installation and upgrades, configuration, defect fixes and security patches.',
+        'Commercial support for LibreDB Studio on Kubernetes, K3s, RKE2, Rancher and OpenShift — installation and upgrades, configuration, defect fixes and security patches.',
       provider: { '@id': VENDOR.schemaId },
       areaServed: 'Worldwide',
       availableLanguage: ['en', 'tr'],

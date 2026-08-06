@@ -273,11 +273,11 @@ export const sections: SectionMeta[] = [
       { name: 'validated', type: 'TEXT' },
     ],
     explain:
-      'Who stands behind LibreDB Studio commercially — Sekoya, the vendor of record — on which Rancher, RKE2, K3s and Kubernetes versions, what that support covers, and how to reach us. Separates supported (the commitment) from validated (the published test run).',
+      'Who stands behind LibreDB Studio commercially — Sekoya, the vendor of record — on which Kubernetes distributions and runtimes, what that support covers, and how to reach us. Separates supported (the commitment) from validated (the published test run).',
     slug: 'support',
-    pageTitle: 'Commercial Support — LibreDB Studio on Rancher, RKE2, K3s & Kubernetes',
+    pageTitle: 'Commercial Support — LibreDB Studio',
     pageDescription:
-      'Commercial support for LibreDB Studio from Sekoya Grup Bilisim ve Teknoloji Ltd. Sti., the vendor of record: supported SUSE Rancher Prime, RKE2, K3s and Kubernetes versions, what support covers (Helm install and upgrades, configuration, defect fixes, security patches), and how to reach us.',
+      'Commercial support for LibreDB Studio from Sekoya Grup Bilisim ve Teknoloji Ltd. Sti., the vendor of record: the supported Kubernetes, K3s, RKE2, Rancher and OpenShift versions and container and Node.js runtimes, what support covers (installation and upgrades, configuration, defect fixes, security patches), and how to reach us.',
     schema: 'studio',
   },
   {
