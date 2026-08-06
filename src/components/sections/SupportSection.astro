@@ -1,0 +1,189 @@
+---
+// The page a certification reviewer or a procurement team gets sent to.
+//
+// SUSE Ready for Rancher asks the vendor to (a) provide commercial support on
+// named Rancher and RKE2/K3s versions and (b) publish those versions in its
+// documentation *and on its web site*. This is the web-site half; the
+// repository half is docs/RANCHER.md. The two tables must stay in step — if one
+// gains a row or a validated version, so does the other, in the same change.
+import SectionHeader from './SectionHeader.astro';
+import { VENDOR, VENDOR_ADDRESS_FULL } from '../../data/company';
+
+const RANCHER_DOCS = 'https://github.com/libredb/libredb-studio/blob/main/docs/RANCHER.md';
+const SECURITY_MD = 'https://github.com/libredb/libredb-studio/blob/main/SECURITY.md';
+const ISSUES = 'https://github.com/libredb/libredb-studio/issues';
+const SUSE_CATALOG = 'https://www.suse.com/pcsc/viewVersionPage?versionID=26969';
+
+// "Supported" is what the commitment above covers. "Validated" is what we have
+// actually exercised end to end and published a result for — an em dash means
+// supported on the same terms but not yet in a published test run. Never turn a
+// dash into a version without a run behind it: this table is read as evidence.
+const platforms = [
+  {
+    component: 'SUSE Rancher Prime and Rancher (community)',
+    supported: '2.9 or later',
+    validated: '2.14.3 (community build)',
+  },
+  { component: 'SUSE K3s', supported: '1.26 or later', validated: 'v1.31.14+k3s1, v1.35.5+k3s1' },
+  { component: 'SUSE RKE2', supported: '1.26 or later', validated: '—' },
+  { component: 'Kubernetes', supported: '1.26 or later', validated: 'v1.31.14, v1.35.5' },
+  { component: 'Any CNCF-conformant distribution', supported: '1.26 or later', validated: '—' },
+  { component: 'Architectures', supported: 'linux/amd64, linux/arm64', validated: 'linux/amd64' },
+];
+
+const scope = [
+  {
+    area: 'Deployment',
+    detail:
+      'Helm chart installation, upgrades and rollback on the versions above — including the Rancher Apps catalog path via a ClusterRepo, and air-gapped installs from your own registry.',
+  },
+  {
+    area: 'Configuration',
+    detail:
+      'OIDC single sign-on, role mapping, storage backends, seed connections, ingress and TLS, and the hardened chart defaults (non-root, read-only root filesystem, NetworkPolicy, PDB, HPA).',
+  },
+  {
+    area: 'Defects',
+    detail:
+      'Triage and fixes for reproducible defects, shipped in tagged releases. Serious bugs are disclosed in the release notes rather than fixed quietly.',
+  },
+  {
+    area: 'Security',
+    detail:
+      'Coordinated disclosure, timely patching of critical vulnerabilities, and advisories published in the repository security tab.',
+  },
+];
+
+const channels = [
+  { need: 'Commercial support enquiries', href: `mailto:${VENDOR.email}`, label: VENDOR.email, external: false },
+  { need: 'Security vulnerabilities', href: SECURITY_MD, label: 'SECURITY.md', external: true },
+  { need: 'Community questions and bug reports', href: ISSUES, label: 'GitHub issues', external: true },
+];
+---
+
+<div class="mx-auto max-w-5xl">
+  <SectionHeader
+    title="Commercial support"
+    subtitle="Who stands behind LibreDB Studio, on which platform versions, and how to reach them."
+  />
+
+  <!-- Who provides the support. The vendor identity is derived from company.ts,
+       so this page cannot drift from the privacy policy, the footer or the JSON-LD. -->
+  <section class="border-l-2 border-primary/60 bg-panel p-5">
+    <h3 class="text-[15px] font-semibold text-bright">The vendor of record</h3>
+    <p class="mt-2 max-w-3xl text-[13px] leading-relaxed text-dim">
+      LibreDB Studio is developed, published and commercially supported by{' '}
+      <strong class="font-semibold text-fg">{VENDOR.legalName}</strong> ({VENDOR.tradeName}), a company registered in
+      Türkiye. LibreDB is the product brand; {VENDOR.tradeName} is the legal entity behind the commitment on this page.
+    </p>
+    <p class="mt-2 text-[12px] leading-relaxed text-faint">{VENDOR_ADDRESS_FULL}</p>
+    <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[12px]">
+      <a
+        href={VENDOR.companyInfoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:text-primary-bright"
+      >
+        Company information <span aria-hidden="true">→</span>
+      </a>
+      <a href={SUSE_CATALOG} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-bright">
+        SUSE Partner Certification &amp; Solutions Catalog <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- The commitment itself: the sentence a certification reviewer looks for. -->
+  <p class="mt-8 max-w-3xl text-[14px] leading-relaxed text-fg">
+    <strong class="font-semibold text-bright"
+      >{VENDOR.tradeName} provides commercial support for LibreDB Studio on every Rancher, K3s, RKE2 and Kubernetes version
+      listed below.</strong
+    >
+    Support is available in English and Turkish. LibreDB Studio itself stays MIT-licensed and free — support is a service
+    on top of it, never a paywall in front of it.
+  </p>
+
+  <h3 class="mt-8 mb-3 text-[13px] font-semibold tracking-wide text-bright uppercase">Supported platform versions</h3>
+
+  <div class="overflow-x-auto border border-edge">
+    <table class="w-full border-collapse text-[13px]">
+      <thead>
+        <tr class="border-b border-edge bg-panel text-left text-[11px] tracking-wider text-dim uppercase">
+          <th class="px-5 py-3 font-medium">Component</th>
+          <th class="px-5 py-3 font-medium">Supported</th>
+          <th class="px-5 py-3 font-medium">Validated</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          platforms.map((p) => (
+            <tr class="border-b border-edge last:border-b-0 hover:bg-raised/50">
+              <td class="px-5 py-3.5 font-medium text-bright">{p.component}</td>
+              <td class="px-5 py-3.5 whitespace-nowrap text-muted">{p.supported}</td>
+              <td class="px-5 py-3.5 text-muted">{p.validated}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-3 max-w-3xl text-[12.5px] leading-relaxed text-dim">
+    <strong class="font-medium text-fg">Supported</strong> is what the commitment above covers.
+    <strong class="font-medium text-fg">Validated</strong> is what we have exercised end to end and published a result for;
+    an em dash means the same support terms apply, but no test run is published yet. The chart uses only core Kubernetes APIs
+    and carries no distribution-specific dependencies, so the version floor comes from the chart's{' '}
+    <code class="text-[12px] text-fg">kubeVersion</code> constraint rather than from distribution features.
+  </p>
+
+  <a
+    href={RANCHER_DOCS}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="mt-4 inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13px] font-medium text-fg transition-colors hover:bg-raised"
+  >
+    Rancher deployment &amp; validation record <span aria-hidden="true">→</span>
+  </a>
+
+  <h3 class="mt-10 mb-3 text-[13px] font-semibold tracking-wide text-bright uppercase">What support covers</h3>
+
+  <div class="flex flex-col gap-px overflow-hidden border border-edge bg-edge">
+    {
+      scope.map((s) => (
+        <article class="grid grid-cols-1 gap-2 bg-panel p-5 sm:grid-cols-[180px_1fr] sm:gap-6">
+          <h4 class="text-[13px] font-semibold tracking-wide text-bright uppercase">{s.area}</h4>
+          <p class="text-[13px] leading-relaxed text-muted">{s.detail}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <h3 class="mt-10 mb-3 text-[13px] font-semibold tracking-wide text-bright uppercase">How to reach us</h3>
+
+  <div class="flex flex-col gap-px overflow-hidden border border-edge bg-edge">
+    {
+      channels.map((c) => (
+        <article class="flex flex-col gap-1 bg-panel p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <span class="text-[13px] text-muted">{c.need}</span>
+          <a
+            href={c.href}
+            class="text-[13px] font-medium text-primary hover:text-primary-bright"
+            {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {c.label} <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="mt-6 text-[13px] leading-relaxed">
+    <span class="sql-com">-- supported is a promise; validated is a receipt. This page keeps them apart.</span>
+  </p>
+</div>
+<script
+  type="application/json"
+  data-export-payload="support"
+  data-export-filename="support.json"
+  data-export-format="json"
+  set:html={JSON.stringify(platforms)}
+/>

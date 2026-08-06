@@ -18,6 +18,17 @@ test('docker_compose table exists with page SEO', () => {
   expect(d.pageDescription.length).toBeGreaterThan(0);
 });
 
+test('support section exists at /support and names the platform columns', () => {
+  const s = sectionById['support'];
+  expect(s).toBeDefined();
+  expect(s.slug).toBe('support');
+  expect(s.table).toBe('support');
+  expect(s.schema).toBe('studio');
+  // The certification evidence lives in these three columns; renaming one
+  // silently breaks the parity with the table in docs/RANCHER.md.
+  expect(s.columns.map((c) => c.name)).toEqual(['component', 'supported', 'validated']);
+});
+
 test('every section has page SEO fields', () => {
   for (const s of sections) {
     expect(typeof s.slug).toBe('string');
