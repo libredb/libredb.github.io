@@ -261,6 +261,26 @@ export const sections: SectionMeta[] = [
     schema: 'studio',
   },
   {
+    id: 'support',
+    table: 'support',
+    query: 'SELECT component, supported, validated FROM supported_platforms;',
+    rows: 6,
+    cols: 3,
+    execMs: 2,
+    columns: [
+      { name: 'component', type: 'TEXT' },
+      { name: 'supported', type: 'TEXT' },
+      { name: 'validated', type: 'TEXT' },
+    ],
+    explain:
+      'Who stands behind LibreDB Studio commercially — Sekoya, the vendor of record — on which Rancher, RKE2, K3s and Kubernetes versions, what that support covers, and how to reach us. Separates supported (the commitment) from validated (the published test run).',
+    slug: 'support',
+    pageTitle: 'Commercial Support — LibreDB Studio on Rancher, RKE2, K3s & Kubernetes',
+    pageDescription:
+      'Commercial support for LibreDB Studio from Sekoya Grup Bilisim ve Teknoloji Ltd. Sti., the vendor of record: supported SUSE Rancher Prime, RKE2, K3s and Kubernetes versions, what support covers (Helm install and upgrades, configuration, defect fixes, security patches), and how to reach us.',
+    schema: 'studio',
+  },
+  {
     id: 'deploy',
     table: 'deploy',
     query: 'SELECT platform, category, method FROM deploy_targets ORDER BY category;',

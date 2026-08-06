@@ -153,6 +153,21 @@ export const deployTargets: DeployTarget[] = [
     logo: '/logos/deploy/kubernetes.svg',
     blurb: 'helm install from the published OCI chart',
   },
+  // Listed in the SUSE Partner Certification & Solutions Catalog. Install today
+  // is a ClusterRepo pointing at our chart repo; once rancher/partner-charts#1158
+  // lands, the chart also ships in Rancher's own Partners repository — bump the
+  // status to 'official' then, not before.
+  {
+    name: 'Rancher',
+    slug: 'rancher',
+    category: 'kubernetes',
+    status: 'available',
+    url: 'https://www.rancher.com',
+    github: 'rancher/rancher',
+    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/RANCHER.md',
+    logo: '/logos/deploy/rancher.svg',
+    blurb: 'Apps catalog install via ClusterRepo — SUSE catalog listed',
+  },
   {
     name: 'Kubero',
     slug: 'kubero',

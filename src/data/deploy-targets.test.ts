@@ -36,6 +36,16 @@ test('only open-source platforms declare a github repo (stars constraint)', () =
   expect(starRepos.length).toBeGreaterThan(0);
 });
 
+test('rancher is listed under kubernetes and points at our Rancher docs', () => {
+  const rancher = deployTargets.find((t) => t.slug === 'rancher');
+  expect(rancher).toBeDefined();
+  expect(rancher?.category).toBe('kubernetes');
+  // Stays 'available' until rancher/partner-charts#1158 merges and the chart
+  // ships in Rancher's own Partners repository.
+  expect(rancher?.status).toBe('available');
+  expect(rancher?.docsUrl).toContain('docs/RANCHER.md');
+});
+
 test('official integrations are present', () => {
   const official = deployTargets.filter((t) => t.status === 'official').map((t) => t.slug);
   for (const slug of ['railway', 'caprover', 'dokploy', 'cosmos', 'kubero']) {

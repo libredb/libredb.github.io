@@ -1,6 +1,7 @@
 // src/data/section-seo.ts
 // Per-section structured data injected into <head> by the dynamic route.
 import { deployTargets } from './deploy-targets';
+import { VENDOR } from './company';
 
 const SITE = 'https://libredb.org';
 const REPO = 'https://github.com/libredb/libredb-studio';
@@ -53,6 +54,24 @@ export const sectionSeo: Record<string, object[]> = {
       operatingSystem: 'Web',
       url: 'https://platform.libredb.org',
       softwareVersion: 'beta',
+    },
+  ],
+  // Partner programmes resolve the support provider from structured data as well
+  // as the prose, so the Service node points at the same @id as the vendor
+  // Organization node in company.ts — one entity, described once.
+  support: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'LibreDB Studio commercial support',
+      serviceType: 'Commercial software support',
+      description:
+        'Commercial support for LibreDB Studio on SUSE Rancher Prime, RKE2, K3s and Kubernetes — Helm chart installation and upgrades, configuration, defect fixes and security patches.',
+      provider: { '@id': VENDOR.schemaId },
+      areaServed: 'Worldwide',
+      availableLanguage: ['en', 'tr'],
+      url: `${SITE}/support/`,
+      about: { '@id': 'https://libredb.org/#application' },
     },
   ],
   docker_compose: [

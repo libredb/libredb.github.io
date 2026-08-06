@@ -11,6 +11,7 @@ export const FALLBACK_STARS: Record<string, number> = {
   'Dokploy/dokploy': 35000,
   'kubero-dev/kubero': 4300,
   'kubernetes/kubernetes': 123000,
+  'rancher/rancher': 25800,
   'azukaar/Cosmos-Server': 6000,
 };
 
