@@ -1,0 +1,149 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+// The five consequences of the belief. Each is a row of the `manifesto` table
+// in sections.ts (rows: 5) — keep the two in step if either changes.
+const consequences = [
+  {
+    belief: 'It runs in a browser',
+    consequence:
+      'Because the data is not on your machine, and neither are your teammates. A tool that has to be installed is a tool that half the team never opens.',
+  },
+  {
+    belief: 'It reaches a phone',
+    consequence:
+      'Because the incident that needs a query does not wait for you to open a laptop. The same editor, the same connections, on the screen you already have with you.',
+  },
+  {
+    belief: 'It deploys like infrastructure',
+    consequence:
+      'A container, a Helm chart, an OpenShift operator, a one-click template on your platform. The way everything else that sits next to a database gets installed.',
+  },
+  {
+    belief: 'It embeds',
+    consequence:
+      'One npm package, inside your own product. The most useful place for a database editor is the thing that created the database in the first place.',
+  },
+  {
+    belief: 'It holds nothing back',
+    consequence:
+      'Single sign-on, ER diagrams, the AI assistant and the NoSQL engines all ship in the MIT build. There is no edition where the useful parts live.',
+  },
+];
+---
+
+<div class="mx-auto max-w-5xl">
+  <!-- Licence badge: the same fact the home hero states, restated as the premise
+       this page argues from rather than as a feature. -->
+  <span
+    class="inline-flex items-center gap-2 rounded-full border border-ok/30 bg-ok-tint px-3 py-1 text-[12px] text-ok"
+  >
+    <span class="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden="true"></span>
+    Open source · MIT · nothing held back
+  </span>
+
+  <!-- Hero -->
+  <h1 class="mt-6 text-3xl leading-[1.1] font-extrabold tracking-tight text-bright sm:text-4xl lg:text-5xl">
+    Databases moved to the cloud.<br class="hidden sm:block" />{' '}
+    Their editors <span class="text-primary">stayed on the laptop.</span>
+  </h1>
+  <p class="mt-5 max-w-2xl text-[15px] leading-relaxed text-muted">
+    <strong class="font-semibold text-fg">The tool goes to the data. Not the data to the tool.</strong>{' '}
+    Everything else about LibreDB Studio follows from that one line — including the licence.
+  </p>
+
+  <!-- The two scenes. This is the part of the story that is not derivable from
+       the feature list, so it leads. -->
+  <div class="mt-10">
+    <SectionHeader
+      title="How we got here"
+      subtitle="Two moments, roughly a hundred times each, until the pattern was impossible to miss."
+    />
+    <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2">
+      <article class="flex flex-col bg-panel p-5">
+        <h3 class="text-[15px] font-bold text-primary">Forty seconds, then an afternoon</h3>
+        <p class="mt-2 text-[13px] leading-relaxed text-dim">
+          You create a Postgres on a managed platform. It is ready in forty seconds. Then you want to look inside it —
+          so you open a port to the internet, dig an SSH tunnel, or install a desktop client on every machine that needs
+          one. The database took forty seconds. The window into it takes the rest of the day.
+        </p>
+      </article>
+      <article class="flex flex-col bg-panel p-5">
+        <h3 class="text-[15px] font-bold text-primary">Now multiply it</h3>
+        <p class="mt-2 text-[13px] leading-relaxed text-dim">
+          The team runs Postgres for the application, Mongo for documents, Redis for the cache, ClickHouse for the
+          events. An engineer joins on Monday and spends their first days working out which data lives where, hunting
+          connection strings, waiting on access, and installing a different tool per engine.
+        </p>
+      </article>
+    </div>
+  </div>
+
+  <!-- What moved and what did not -->
+  <div class="mt-10 border-l-2 border-edge-strong bg-panel p-5">
+    <p class="text-[14px] leading-relaxed text-dim">
+      Databases moved. They live in Kubernetes now, on managed platforms, in a customer's VPC reached through a jump
+      host. The tools that read them did not move. They are still desktop applications: heavy, licensed per seat,
+      install-first, built on the assumption of one database, one laptop, and one person who never changes machines.
+    </p>
+  </div>
+
+  <!-- The consequences -->
+  <div class="mt-10">
+    <SectionHeader
+      title="What the belief forces"
+      subtitle="Take it seriously and it stops being a preference. It becomes a specification."
+    />
+    <div class="grid grid-cols-1 gap-px overflow-hidden border border-edge bg-edge sm:grid-cols-2">
+      {
+        consequences.map((c) => (
+          <article class="flex flex-col bg-panel p-5">
+            <h3 class="text-[15px] font-bold text-primary">{c.belief}</h3>
+            <p class="mt-2 text-[13px] leading-relaxed text-dim">{c.consequence}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- The payoff: the licence as an engineering consequence, not a gesture. -->
+  <div class="mt-10 border-l-2 border-primary bg-panel p-5">
+    <p class="text-[15px] font-semibold text-bright">MIT is not generosity. It is a requirement of the architecture.</p>
+    <p class="mt-2 text-[13.5px] text-dim">
+      You cannot place a per-seat licensed, feature-gated tool into every environment you own. The moment single sign-on
+      costs extra, the tool stops being deployable by default.
+    </p>
+  </div>
+
+  <!-- Why the paid product does not contradict any of the above -->
+  <div class="mt-10 border border-edge bg-panel p-6">
+    <h3 class="text-[16px] font-bold text-bright">Then why is Platform paid?</h3>
+    <p class="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-dim">
+      Because it is a service rather than an environment. LibreDB <strong class="text-fg">Studio</strong> is MIT because it
+      has to go everywhere. LibreDB <strong class="text-fg">Platform</strong> is hosting, tenancy, billing and support for
+      teams that would rather not run Studio themselves.
+    </p>
+    <p class="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-dim">
+      The line holds under pressure, which is the point. The editor you deploy is free and stays free. No capability is
+      moved across that line to manufacture a reason to upgrade.
+    </p>
+  </div>
+
+  <!-- Bridge back to the product -->
+  <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+    <a
+      href="https://app.libredb.org"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-primary-bright"
+    >
+      See it running
+    </a>
+    <a
+      href="/get-started"
+      class="inline-flex items-center justify-center gap-2 rounded-md border border-edge-strong bg-panel px-6 py-3 text-[15px] font-semibold text-fg transition-colors hover:border-line hover:bg-raised"
+    >
+      Run it yourself <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
