@@ -29,6 +29,26 @@ test('support section exists at /support and names the platform columns', () => 
   expect(s.columns.map((c) => c.name)).toEqual(['component', 'supported', 'validated']);
 });
 
+test('studio manifesto section exists at /manifesto and names the story columns', () => {
+  const m = sectionById['manifesto'];
+  expect(m).toBeDefined();
+  expect(m.slug).toBe('manifesto');
+  expect(m.table).toBe('manifesto');
+  expect(m.schema).toBe('studio');
+  // The page renders one card per consequence of the belief; renaming a column
+  // silently breaks the parity with docs/BRAND_MESSAGING.md in libredb-studio.
+  expect(m.columns.map((c) => c.name)).toEqual(['belief', 'consequence']);
+});
+
+test('no section copy hardcodes an engine count', () => {
+  // engines.ts is the single source of truth precisely so counts cannot drift.
+  // Copy that spells out "7+ engines" goes stale the moment a provider lands.
+  for (const s of sections) {
+    expect(s.explain).not.toMatch(/\d\s*\+?\s*(engines|databases)/i);
+    expect(s.pageDescription).not.toMatch(/\d\s*\+?\s*(engines|databases)/i);
+  }
+});
+
 test('every section has page SEO fields', () => {
   for (const s of sections) {
     expect(typeof s.slug).toBe('string');

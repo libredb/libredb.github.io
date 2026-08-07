@@ -40,10 +40,30 @@ export const sections: SectionMeta[] = [
       { name: 'stats', type: 'JSONB' },
     ],
     explain:
-      'Returns the LibreDB Studio overview: a modern, AI-powered, browser-based SQL IDE with SSO across 7+ engines — free and open source under MIT.',
+      'Returns the LibreDB Studio overview: the database editor that deploys next to your data instead of onto your laptop, with SSO and audit across ten engines — free and open source under MIT.',
     slug: '',
-    pageTitle: 'LibreDB Studio - AI-Powered Open-Source SQL IDE',
-    pageDescription: 'LibreDB Studio - The Modern, AI-Powered Open-Source SQL IDE for Cloud-Native Teams',
+    pageTitle: 'LibreDB Studio - The Open-Source SQL IDE That Deploys Next to Your Data',
+    pageDescription:
+      'LibreDB Studio is the database editor that deploys next to your data instead of onto your laptop. Ten engines in one browser tab, with SSO and audit built in. Open source under MIT.',
+    schema: 'studio',
+  },
+  {
+    id: 'manifesto',
+    table: 'manifesto',
+    query: 'SELECT belief, consequence FROM manifesto;',
+    rows: 5,
+    cols: 2,
+    execMs: 2,
+    columns: [
+      { name: 'belief', type: 'TEXT' },
+      { name: 'consequence', type: 'TEXT' },
+    ],
+    explain:
+      'Why LibreDB Studio exists: databases moved to the cloud and their editors stayed on the laptop. The tool goes to the data — which forces it to be browser-based, deployable, embeddable and unrestricted.',
+    slug: 'manifesto',
+    pageTitle: 'Why LibreDB Studio exists - the tool goes to the data',
+    pageDescription:
+      'Databases moved to the cloud. The tools that read them stayed on the laptop. LibreDB Studio deploys next to the data instead — which is why it is browser-based, deployable, embeddable, and MIT licensed with nothing held back.',
     schema: 'studio',
   },
   {
@@ -63,7 +83,7 @@ export const sections: SectionMeta[] = [
     slug: 'features',
     pageTitle: 'Features — LibreDB Studio SQL IDE',
     pageDescription:
-      'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, 7+ databases, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
+      'Everything you need to master your data: Monaco SQL editor, NL2SQL Copilot, AI query safety, ten database engines, pro data grid, visual EXPLAIN, ER diagrams, data masking, SSO and more.',
     schema: 'studio',
   },
   {
@@ -79,7 +99,7 @@ export const sections: SectionMeta[] = [
       { name: 'driver', type: 'VARCHAR' },
     ],
     explain:
-      'The database engines LibreDB Studio connects to — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis — behind one unified interface, plus LibreDB, our own embedded engine.',
+      'The database engines LibreDB Studio connects to — PostgreSQL, MySQL, Oracle, SQL Server, SQLite, MongoDB, Redis, Couchbase, ClickHouse and Apache Druid — behind one unified interface, plus LibreDB, our own embedded engine.',
     slug: 'providers',
     pageTitle: 'Supported Providers — PostgreSQL, MySQL, Oracle, SQL Server, MongoDB, Redis & LibreDB',
     pageDescription:

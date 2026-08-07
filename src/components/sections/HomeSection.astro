@@ -28,12 +28,14 @@ const flagship = [
 
   <!-- Headline -->
   <h1 class="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-bright sm:text-5xl lg:text-6xl">
-    The Modern, <span class="text-primary">AI-Powered</span><br class="hidden sm:block" /> SQL IDE
+    The editor that deploys<br class="hidden sm:block" />{' '}
+    <span class="text-primary">next to your data</span>
   </h1>
 
-  <!-- Subtitle: the seven engines read as SQL string literals — one hue, in-fiction.
-       Each hero element states one fact once: badge = license, H1 = AI/IDE,
-       subtitle = engines + SSO, CTAs = demo/deploy. -->
+  <!-- Subtitle: the engines read as SQL string literals — one hue, in-fiction.
+       The list is derived from ENGINES so the count cannot drift.
+       Each hero element states one fact once: badge = license, H1 = the claim,
+       subtitle = engines + where it runs, CTAs = demo/deploy. -->
   <p class="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
     One editor for{' '}
     {
@@ -44,7 +46,7 @@ const flagship = [
         </>
       ))
     }
-    — in your browser, with SSO built in.
+    — in your browser, in your cluster, or inside your own product.
   </p>
 
   <!-- CTAs -->
