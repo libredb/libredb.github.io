@@ -1,5 +1,5 @@
 ---
-import PromoVideo from './PromoVideo.astro';
+import LibreDBDemo from './LibreDBDemo.astro';
 import { ENGINES } from '../../data/engines';
 import { sectionById } from '../../data/sections';
 
@@ -80,11 +80,14 @@ const flagship = [
     </p>
   </div>
 
-  <!-- 60-second promo (click-to-load facade — no third-party bytes until play) -->
-  <div class="mt-10 max-w-3xl">
-    <PromoVideo videoId="wJPWPe1mJes" title="LibreDB Studio Promo" poster="/video/promo-poster.jpg" />
+  <!-- Interactive walkthrough (self-contained iframe — no third-party bytes).
+       Full container width, not the video's max-w-3xl: the demo renders a whole
+       IDE at 16:9, and the extra ~250px is the difference between readable SQL
+       and a thumbnail. -->
+  <div class="mt-10">
+    <LibreDBDemo />
     <p class="mt-2 text-[13px] leading-relaxed">
-      <span class="sql-com">-- 60s demo: the whole IDE, in motion.</span>
+      <span class="sql-com">-- the whole IDE, in motion.</span>
     </p>
   </div>
 
