@@ -49,11 +49,14 @@ const { class: className = '' } = Astro.props;
 
     // The two bundles listen for different messages and each ignores the
     // other's, so both forms go out and the loaded clip picks up its own.
+    // Both clips are served from our own origin, so the messages are addressed
+    // there rather than to '*' — nothing is delivered to a frame that some
+    // other document has managed to navigate elsewhere.
     const send = (frame, verb) => {
       const win = frame.contentWindow;
       if (!win) return;
-      win.postMessage(`libredb-demo:${verb}`, '*');
-      win.postMessage({ type: `om-demo-${verb}` }, '*');
+      win.postMessage(`libredb-demo:${verb}`, window.location.origin);
+      win.postMessage({ type: `om-demo-${verb}` }, window.location.origin);
     };
 
     const load = (frame, clip) => {
