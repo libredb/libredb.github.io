@@ -1,4 +1,4 @@
-export type CategoryId = 'registry' | 'oss-paas' | 'kubernetes' | 'managed-paas';
+export type CategoryId = 'registry' | 'packages' | 'oss-paas' | 'kubernetes' | 'managed-paas';
 
 export interface DeployCategory {
   id: CategoryId;
@@ -15,21 +15,27 @@ export const deployCategories: DeployCategory[] = [
     order: 1,
   },
   {
+    id: 'packages',
+    title: 'Desktop apps & package managers',
+    tagline: 'Install on your own machine with the package manager you already use.',
+    order: 2,
+  },
+  {
     id: 'oss-paas',
     title: 'Open-source & self-hosted PaaS',
     tagline: 'Run LibreDB Studio inside the open-source platforms you already self-host.',
-    order: 2,
+    order: 3,
   },
   {
     id: 'kubernetes',
     title: 'Kubernetes & orchestration',
     tagline: 'Install the published Helm chart on any cluster — including enterprise distributions.',
-    order: 3,
+    order: 4,
   },
   {
     id: 'managed-paas',
     title: 'Managed & commercial PaaS',
     tagline: 'One-click deploys on hosted platforms — no servers to manage.',
-    order: 4,
+    order: 5,
   },
 ];
