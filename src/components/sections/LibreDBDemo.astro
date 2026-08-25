@@ -1,0 +1,130 @@
+---
+// The interactive editor walkthrough, embedded in an iframe — a desktop clip
+// and a portrait phone clip, picked by viewport.
+//
+// Each bundle in public/demo/ is one self-contained file: React, fonts and
+// screenshots are all inlined, so there is no third-party request, no React in
+// our bundle, and no CSS or font leaking in either direction.
+//
+// Both load with ?autoplay=0 and are told to play when they scroll into view,
+// so a visitor never arrives after the walkthrough has already finished. Tab
+// clicks and the Replay button work inside the frame.
+//
+// The markup carries the desktop clip so it still renders without JS; the
+// script swaps in the phone clip below md. That runs at parse time, well before
+// a lazy iframe this far down the page starts fetching, so a phone never pulls
+// the desktop bundle.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative mx-auto aspect-[430/960] max-w-[460px] overflow-hidden bg-canvas',
+    'md:aspect-video md:max-w-none md:border md:border-edge-strong',
+    className,
+  ]}
+>
+  <iframe
+    src="/demo/libredb-studio-demo.html?autoplay=0"
+    title="LibreDB Studio — editor walkthrough"
+    loading="lazy"
+    scrolling="no"
+    class="absolute inset-0 h-full w-full border-0"
+    data-libredb-demo></iframe>
+</div>
+
+<script data-astro-rerun>
+  // data-astro-rerun: with <ClientRouter/> this has to re-bind after every
+  // client-side navigation.
+  const frames = document.querySelectorAll('iframe[data-libredb-demo]');
+  if (frames.length) {
+    const DESKTOP = '/demo/libredb-studio-demo.html';
+    const MOBILE = '/demo/libredb-studio-demo-mobile.html';
+    // Same breakpoint as the md: classes on the wrapper, so the clip and the
+    // box it is scaled into never disagree.
+    const narrow = window.matchMedia('(max-width: 767px)');
+
+    // The two bundles listen for different messages and each ignores the
+    // other's, so both forms go out and the loaded clip picks up its own.
+    const send = (frame, verb) => {
+      const win = frame.contentWindow;
+      if (!win) return;
+      win.postMessage(`libredb-demo:${verb}`, '*');
+      win.postMessage({ type: `om-demo-${verb}` }, '*');
+    };
+
+    const load = (frame, clip) => {
+      frame.dataset.clip = clip;
+      frame.dataset.ready = '0';
+      frame.src = `${clip === 'mobile' ? MOBILE : DESKTOP}?autoplay=0`;
+    };
+
+    const play = (frame) => {
+      if (frame.dataset.played === '1') return;
+      frame.dataset.played = '1';
+      send(frame, 'play');
+    };
+
+    // The desktop clip's 'play' does not resume a paused run — it starts another
+    // timeline on top of it, and you get a second animated cursor drifting
+    // across the frame (a third after the next re-entry). So it is played once
+    // per document and a re-entry gets a fresh one. The phone clip resumes
+    // properly, and just picks up where it left off.
+    const reenter = (frame) => {
+      if (frame.dataset.clip === 'mobile') {
+        frame.dataset.played = '0';
+        play(frame);
+        return;
+      }
+      frame.dataset.pending = '1';
+      frame.dataset.ready = '0';
+      frame.contentWindow?.location.reload();
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const frame = entry.target;
+          if (!entry.isIntersecting) {
+            send(frame, 'pause');
+          } else if (frame.dataset.ready !== '1') {
+            // Still loading (lazy) — the load handler picks this up.
+            frame.dataset.pending = '1';
+          } else if (frame.dataset.played === '1') {
+            reenter(frame);
+          } else {
+            play(frame);
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+
+    frames.forEach((frame) => {
+      frame.addEventListener('load', () => {
+        frame.dataset.ready = '1';
+        frame.dataset.played = '0';
+        if (frame.dataset.pending === '1') {
+          frame.dataset.pending = '0';
+          play(frame);
+        }
+      });
+
+      if (narrow.matches) load(frame, 'mobile');
+      else frame.dataset.clip = 'desktop';
+
+      // Crossing the breakpoint — a rotated tablet, a resized window — swaps the
+      // clip so the walkthrough always matches the shape it is drawn into.
+      narrow.addEventListener('change', (event) => {
+        const wanted = event.matches ? 'mobile' : 'desktop';
+        if (frame.dataset.clip === wanted) return;
+        load(frame, wanted);
+      });
+
+      observer.observe(frame);
+    });
+  }
+</script>
