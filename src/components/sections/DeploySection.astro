@@ -22,13 +22,13 @@ const installMethodCount = deployTargets.filter((t) => INSTALL_CATEGORIES.includ
 <div class="mx-auto max-w-6xl">
   <SectionHeader
     title="Deploy anywhere"
-    subtitle={`One open-source image — ${installMethodCount} install methods, ${official.length} official one-click marketplaces, and any host that runs a container.`}
+    subtitle={`One open-source image — ${installMethodCount} install methods, ${official.length} official catalog listings, and any host that runs a container.`}
   />
 
-  <!-- Official one-click integrations -->
+  <!-- Official integrations -->
   <section class="mt-2">
-    <h3 class="text-[15px] font-semibold text-bright">Official one-click integrations</h3>
-    <p class="mt-1 text-[13px] text-dim">Listed in their marketplaces — deploy in a click, today.</p>
+    <h3 class="text-[15px] font-semibold text-bright">Official integrations</h3>
+    <p class="mt-1 text-[13px] text-dim">First-party listings in their own catalogs — certified or official, today.</p>
     <div class="mt-4 grid gap-4 md:grid-cols-2">
       {
         official.map((t) => (

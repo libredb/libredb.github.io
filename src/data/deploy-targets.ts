@@ -38,10 +38,30 @@ const RENDER_DEPLOY_URL = 'https://render.com/deploy?repo=https://github.com/lib
 const RELEASES_URL = 'https://github.com/libredb/libredb-studio/releases/latest';
 
 export const deployTargets: DeployTarget[] = [
+  // Listed first: it leads the "Official integrations" hero, which renders the
+  // official targets in array order.
+  //
+  // rancher/partner-charts#1158 merged (17 Aug 2026), so the chart ships in
+  // Rancher Partner Charts and carries a SUSE Partner Certification listing —
+  // a certified first-party listing, which is what 'official' means here.
+  {
+    name: 'Rancher',
+    slug: 'rancher',
+    category: 'kubernetes',
+    status: 'official',
+    url: 'https://www.suse.com/pcsc/viewVersionPage?versionID=26969',
+    github: 'rancher/rancher',
+    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/RANCHER.md',
+    logo: '/logos/deploy/rancher.svg',
+    blurb: 'Certified chart in Rancher Partner Charts — SUSE catalog listed',
+  },
+
   // ① Install primitives / registries — mirrors distribution/channels.yaml in
   // the studio repo (the "visibility matrix"); every live channel gets a card.
-  // 'official' is reserved for platforms where a listing of ours makes the
-  // install one click in their own UI — catalog-only listings stay 'available'.
+  // 'official' means a first-party listing: the platform publishes it as ours,
+  // certified (Rancher Partner Charts) or as an official app (CapRover, Dokploy,
+  // Cosmos, Kubero, Railway). Community-contributed catalog entries and plain
+  // deploy buttons stay 'available'.
   {
     name: 'GitHub Container Registry',
     slug: 'ghcr',
@@ -229,21 +249,15 @@ export const deployTargets: DeployTarget[] = [
     logo: '/logos/deploy/kubernetes.svg',
     blurb: 'helm install from the published OCI chart',
   },
-  // rancher/partner-charts#1158 merged (17 Aug 2026): the chart ships in
-  // Rancher Partner Charts and is listed in the SUSE Solutions Catalog. Stays
-  // 'available' rather than 'official' because a partner catalog is not a
-  // one-click deploy of ours — the install is still an Apps catalog / ClusterRepo
-  // step. 'official' is reserved for our own one-click listings.
   {
-    name: 'Rancher',
-    slug: 'rancher',
+    name: 'OpenShift',
+    slug: 'openshift',
     category: 'kubernetes',
     status: 'available',
-    url: 'https://www.rancher.com',
-    github: 'rancher/rancher',
-    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/RANCHER.md',
-    logo: '/logos/deploy/rancher.svg',
-    blurb: 'In Rancher Partner Charts — SUSE catalog listed',
+    url: 'https://www.redhat.com/en/technologies/cloud-computing/openshift',
+    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/DISTRIBUTION.md#openshift-operator-operatorhub',
+    logo: '/logos/deploy/openshift.svg',
+    blurb: 'Community operator in the OpenShift console catalog',
   },
   {
     name: 'Kubero',

@@ -316,7 +316,7 @@ export const sections: SectionMeta[] = [
     slug: 'deploy',
     pageTitle: 'Deploy LibreDB Studio Anywhere — One-Click Apps, Helm, Docker & Cloud',
     pageDescription:
-      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, Dokploy, Cosmos and Kubero one-click apps, Docker Hub & GHCR images, a Helm chart on Artifact Hub and Rancher Partner Charts, npm, Homebrew, Snap, winget, Chocolatey, Flatpak, AppImage and .deb/.rpm packages, Unraid, TrueNAS SCALE, Sealos, Fly.io and the DigitalOcean Marketplace.',
+      'Run the open-source LibreDB Studio SQL IDE anywhere: official Railway, CapRover, Dokploy, Cosmos and Kubero one-click apps, Docker Hub & GHCR images, a certified Helm chart in Rancher Partner Charts, an OpenShift community operator, the chart on Artifact Hub, npm, Homebrew, Snap, winget, Chocolatey, Flatpak, AppImage and .deb/.rpm packages, Unraid, TrueNAS SCALE, Sealos, Fly.io and the DigitalOcean Marketplace.',
     schema: 'studio',
   },
   {

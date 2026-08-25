@@ -37,16 +37,11 @@ test('only live targets are listed — planned platforms stay off the page', () 
 test('channels that are pending or deprecated upstream are not listed', () => {
   // Flathub is deprecated (submission declined — FlatPark is our Flatpak
   // channel); the rest are status: pending in distribution/channels.yaml.
-  const offThePage = [
-    'flathub',
-    'casaos',
-    'umbrel',
-    'easypanel',
-    'portainer',
-    'operatorhub',
-    'koyeb-catalog',
-    'appimagehub',
-  ];
+  // OpenShift is not on this list: the community operator is live in the
+  // OpenShift console catalog (community-operators-prod#10497), even though the
+  // OperatorHub.io listing that would flip the yaml channel to live is still in
+  // review.
+  const offThePage = ['flathub', 'casaos', 'umbrel', 'easypanel', 'portainer', 'koyeb-catalog', 'appimagehub'];
   const slugs = deployTargets.map((t) => t.slug);
   for (const slug of offThePage) {
     expect(slugs).not.toContain(slug);
@@ -60,27 +55,39 @@ test('only open-source platforms declare a github repo (stars constraint)', () =
   expect(starRepos.length).toBeGreaterThan(0);
 });
 
-test('rancher is listed under kubernetes and points at our Rancher docs', () => {
+test('rancher is official, leads the hero, and points at our Rancher docs', () => {
   const rancher = deployTargets.find((t) => t.slug === 'rancher');
   expect(rancher).toBeDefined();
   expect(rancher?.category).toBe('kubernetes');
-  // rancher/partner-charts#1158 is merged, so the chart ships in Rancher
-  // Partner Charts — but a partner catalog is not one of our own one-click
-  // listings, so the status stays 'available'.
-  expect(rancher?.status).toBe('available');
+  // rancher/partner-charts#1158 merged: certified chart in Rancher Partner
+  // Charts, listed in the SUSE Partner Certification catalog.
+  expect(rancher?.status).toBe('official');
+  expect(rancher?.url).toContain('suse.com/pcsc');
   expect(rancher?.docsUrl).toContain('docs/RANCHER.md');
+  // The hero renders official targets in array order — Rancher goes first.
+  expect(deployTargets.filter((t) => t.status === 'official')[0]?.slug).toBe('rancher');
+});
+
+test('openshift installs via the community operator and is not claimed as official', () => {
+  const openshift = deployTargets.find((t) => t.slug === 'openshift');
+  expect(openshift).toBeDefined();
+  expect(openshift?.category).toBe('kubernetes');
+  expect(openshift?.status).toBe('available');
+  expect(openshift?.blurb).toContain('operator');
 });
 
 test('official integrations are present', () => {
   const official = deployTargets.filter((t) => t.status === 'official').map((t) => t.slug);
-  for (const slug of ['railway', 'caprover', 'dokploy', 'cosmos', 'kubero']) {
+  for (const slug of ['rancher', 'railway', 'caprover', 'dokploy', 'cosmos', 'kubero']) {
     expect(official).toContain(slug);
   }
 });
 
-test('official is reserved for our own one-click listings', () => {
+test('official is reserved for first-party listings', () => {
+  // Community-contributed catalog entries (Sealos, Unraid, TrueNAS) and plain
+  // deploy buttons (Koyeb, Render, Fly.io, DigitalOcean) stay 'available'.
   const official = deployTargets.filter((t) => t.status === 'official').map((t) => t.slug);
-  expect(official.toSorted()).toEqual(['railway', 'caprover', 'dokploy', 'cosmos', 'kubero'].toSorted());
+  expect(official.toSorted()).toEqual(['rancher', 'railway', 'caprover', 'dokploy', 'cosmos', 'kubero'].toSorted());
 });
 
 test('every target links somewhere useful', () => {
