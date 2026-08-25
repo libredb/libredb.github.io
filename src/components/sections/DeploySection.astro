@@ -13,7 +13,10 @@ const targetsByCategory = (id: string) =>
   deployTargets.filter((t) => t.category === id).sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
 
 const official = deployTargets.filter((t) => t.status === 'official');
-const installMethodCount = deployTargets.filter((t) => t.category === 'registry').length;
+// Install methods = the artifacts you pull plus the package managers you install
+// with; the PaaS/Kubernetes/cloud cards are ways to run those, not extra methods.
+const INSTALL_CATEGORIES = ['registry', 'packages'];
+const installMethodCount = deployTargets.filter((t) => INSTALL_CATEGORIES.includes(t.category)).length;
 ---
 
 <div class="mx-auto max-w-6xl">

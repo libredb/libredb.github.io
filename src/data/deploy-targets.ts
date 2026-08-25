@@ -35,9 +35,13 @@ const KOYEB_DEPLOY_URL =
 // not an official Render catalog listing.
 const RENDER_DEPLOY_URL = 'https://render.com/deploy?repo=https://github.com/libredb/libredb-studio';
 
+const RELEASES_URL = 'https://github.com/libredb/libredb-studio/releases/latest';
+
 export const deployTargets: DeployTarget[] = [
   // ① Install primitives / registries — mirrors distribution/channels.yaml in
   // the studio repo (the "visibility matrix"); every live channel gets a card.
+  // 'official' is reserved for platforms where a listing of ours makes the
+  // install one click in their own UI — catalog-only listings stay 'available'.
   {
     name: 'GitHub Container Registry',
     slug: 'ghcr',
@@ -84,9 +88,21 @@ export const deployTargets: DeployTarget[] = [
     blurb: 'npx @libredb/studio',
   },
   {
+    name: 'GitHub Releases',
+    slug: 'github-releases',
+    category: 'registry',
+    status: 'available',
+    url: 'https://github.com/libredb/libredb-studio/releases',
+    blurb: 'Standalone tarballs on every release',
+  },
+
+  // ② Desktop apps & package managers — the os-desktop and package-managers
+  // channels. Flathub is deprecated upstream (submission declined), so FlatPark
+  // is the only Flatpak channel; never list Flathub here.
+  {
     name: 'Homebrew',
     slug: 'homebrew',
-    category: 'registry',
+    category: 'packages',
     status: 'available',
     url: 'https://github.com/libredb/homebrew-tap',
     blurb: 'brew install libredb/tap/libredb-studio',
@@ -94,19 +110,54 @@ export const deployTargets: DeployTarget[] = [
   {
     name: 'Snap Store',
     slug: 'snap',
-    category: 'registry',
+    category: 'packages',
     status: 'available',
     url: 'https://snapcraft.io/libredb-studio',
     blurb: 'snap install libredb-studio',
   },
   {
-    name: 'GitHub Releases',
-    slug: 'github-releases',
-    category: 'registry',
+    name: 'winget',
+    slug: 'winget',
+    category: 'packages',
     status: 'available',
-    url: 'https://github.com/libredb/libredb-studio/releases',
-    blurb: 'Standalone tarballs + .deb / .rpm on every release',
+    url: 'https://github.com/microsoft/winget-pkgs/tree/master/manifests/l/LibreDB/Studio',
+    blurb: 'winget install LibreDB.Studio',
   },
+  {
+    name: 'Chocolatey',
+    slug: 'chocolatey',
+    category: 'packages',
+    status: 'available',
+    url: 'https://community.chocolatey.org/packages/libredb-studio',
+    blurb: 'choco install libredb-studio',
+  },
+  {
+    name: 'FlatPark',
+    slug: 'flatpark',
+    category: 'packages',
+    status: 'available',
+    url: 'https://flatpark.org/',
+    docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/packaging/flatpark',
+    blurb: 'Signed Flatpak remote — org.libredb.Studio',
+  },
+  {
+    name: 'Desktop app',
+    slug: 'desktop-app',
+    category: 'packages',
+    status: 'available',
+    url: RELEASES_URL,
+    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/desktop/README.md',
+    blurb: 'AppImage + GUI .deb, x64 and arm64',
+  },
+  {
+    name: 'Linux .deb / .rpm',
+    slug: 'linux-deb-rpm',
+    category: 'packages',
+    status: 'available',
+    url: RELEASES_URL,
+    blurb: 'apt / dnf install from the release assets',
+  },
+
   {
     name: 'CapRover',
     slug: 'caprover',
@@ -140,6 +191,31 @@ export const deployTargets: DeployTarget[] = [
     docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/cosmos',
     blurb: 'Official servapp — one-click marketplace install',
   },
+  {
+    name: 'Sealos',
+    slug: 'sealos',
+    category: 'oss-paas',
+    status: 'available',
+    url: 'https://sealos.io/products/app-store/libredb-studio',
+    github: 'labring/sealos',
+    blurb: 'App Store template — SQLite on a PVC by default',
+  },
+  {
+    name: 'Unraid',
+    slug: 'unraid',
+    category: 'oss-paas',
+    status: 'available',
+    url: 'https://ca.unraid.net/apps/libredb-studio-0a5x41a1cy1kay',
+    blurb: 'Community Applications template',
+  },
+  {
+    name: 'TrueNAS SCALE',
+    slug: 'truenas-scale',
+    category: 'oss-paas',
+    status: 'available',
+    url: 'https://apps.truenas.com/catalog/libredb-studio_community/',
+    blurb: 'Community apps catalog listing',
+  },
 
   // ③ Kubernetes & orchestration — Helm chart install; stars shown (open-source)
   {
@@ -153,10 +229,11 @@ export const deployTargets: DeployTarget[] = [
     logo: '/logos/deploy/kubernetes.svg',
     blurb: 'helm install from the published OCI chart',
   },
-  // Listed in the SUSE Partner Certification & Solutions Catalog. Install today
-  // is a ClusterRepo pointing at our chart repo; once rancher/partner-charts#1158
-  // lands, the chart also ships in Rancher's own Partners repository — bump the
-  // status to 'official' then, not before.
+  // rancher/partner-charts#1158 merged (17 Aug 2026): the chart ships in
+  // Rancher Partner Charts and is listed in the SUSE Solutions Catalog. Stays
+  // 'available' rather than 'official' because a partner catalog is not a
+  // one-click deploy of ours — the install is still an Apps catalog / ClusterRepo
+  // step. 'official' is reserved for our own one-click listings.
   {
     name: 'Rancher',
     slug: 'rancher',
@@ -166,7 +243,7 @@ export const deployTargets: DeployTarget[] = [
     github: 'rancher/rancher',
     docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/RANCHER.md',
     logo: '/logos/deploy/rancher.svg',
-    blurb: 'Apps catalog install via ClusterRepo — SUSE catalog listed',
+    blurb: 'In Rancher Partner Charts — SUSE catalog listed',
   },
   {
     name: 'Kubero',
@@ -210,6 +287,26 @@ export const deployTargets: DeployTarget[] = [
     docsUrl: 'https://github.com/libredb/libredb-studio/tree/main#-one-click-deploy',
     logo: '/logos/deploy/render.svg',
     blurb: 'One-click deploy via render.yaml Blueprint',
+  },
+  {
+    name: 'Fly.io',
+    slug: 'fly',
+    category: 'managed-paas',
+    status: 'available',
+    url: 'https://fly.io',
+    docsUrl: 'https://github.com/libredb/libredb-studio/blob/main/docs/FLY.md',
+    logo: '/logos/deploy/fly.svg',
+    blurb: 'fly launch from the repo fly.toml',
+  },
+  {
+    name: 'DigitalOcean',
+    slug: 'digitalocean',
+    category: 'managed-paas',
+    status: 'available',
+    url: 'https://marketplace.digitalocean.com/apps/libredb-studio',
+    docsUrl: 'https://github.com/libredb/libredb-studio/tree/main/deploy/digitalocean',
+    logo: '/logos/deploy/digitalocean.svg',
+    blurb: 'Marketplace app — 1-Click Droplet',
   },
 ];
 

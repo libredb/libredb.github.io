@@ -13,6 +13,7 @@ export const FALLBACK_STARS: Record<string, number> = {
   'kubernetes/kubernetes': 123000,
   'rancher/rancher': 25800,
   'azukaar/Cosmos-Server': 6000,
+  'labring/sealos': 18300,
 };
 
 /** 41200 -> "41.2k", 132000 -> "132k", 980 -> "980". */
