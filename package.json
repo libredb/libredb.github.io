@@ -22,7 +22,7 @@
     "@astrojs/sitemap": "3.7.3",
     "@libredb/libredb": "0.2.2",
     "@tailwindcss/vite": "4.3.3",
-    "astro": "7.2.4",
+    "astro": "7.2.6",
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "@secretlint/secretlint-rule-preset-recommend": "13.0.4",
     "@types/bun": "1.4.0",
     "knip": "6.32.2",
-    "oxlint": "1.79.0",
+    "oxlint": "1.80.0",
     "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "0.8.1",
