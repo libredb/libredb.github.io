@@ -17,7 +17,10 @@
 import { createServer } from 'node:http';
 import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync, statSync } from 'node:fs';
-import { extname, join, normalize } from 'node:path';
+// `resolve` is aliased: these files also use Promise executors whose own
+// `resolve` would shadow it, inside the very code that decides whether a
+// request escapes the served directory.
+import { extname, join, resolve as resolvePath, sep } from 'node:path';
 import { launch } from 'chrome-launcher';
 import lighthouse from 'lighthouse';
 
@@ -53,13 +56,38 @@ const TYPES = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
+/**
+ * Absolute path inside {root}, or null when the request escapes it.
+ *
+ * A request path is attacker-controlled even on a loopback port — any process on
+ * this machine can reach it while the server is up. Containment is asserted
+ * AFTER resolution rather than by scrubbing `..` out of the string, because a
+ * scrub has to be right about every encoding and a comparison against the
+ * resolved root does not.
+ */
+const within = (root, ...parts) => {
+  const p = resolvePath(root, ...parts);
+  return p === root || p.startsWith(root + sep) ? p : null;
+};
+
+/** Request path, percent-decoded and made relative. Malformed escapes 404. */
+const requestPath = (req) => {
+  try {
+    return decodeURIComponent((req.url ?? '/').split('?')[0]).replace(/^\/+/, '');
+  } catch {
+    return null;
+  }
+};
+
+const ROOT = resolvePath(DIST);
+
 /** Reads from disk on every request — no boot-time manifest to go stale. */
 const server = createServer(async (req, res) => {
-  const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
-  const base = normalize(join(DIST, url)).replace(/^(\.\.[/\\])+/, '');
-  const candidates = [base, `${base}.html`, join(base, 'index.html')];
+  const url = requestPath(req);
+  const candidates =
+    url === null ? [] : [within(ROOT, url), within(ROOT, `${url}.html`), within(ROOT, url, 'index.html')];
   for (const p of candidates) {
-    if (!existsSync(p) || !statSync(p).isFile()) continue;
+    if (p === null || !existsSync(p) || !statSync(p).isFile()) continue;
     res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' });
     res.end(await readFile(p));
     return;

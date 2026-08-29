@@ -13,7 +13,10 @@
 import { createServer } from 'node:http';
 import { readFile, writeFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync, readdirSync, statSync } from 'node:fs';
-import { extname, join, normalize } from 'node:path';
+// `resolve` is aliased: these files also use Promise executors whose own
+// `resolve` would shadow it, inside the very code that decides whether a
+// request escapes the served directory.
+import { extname, join, resolve as resolvePath, sep } from 'node:path';
 import { launch } from 'chrome-launcher';
 
 const DIST = 'dist';
@@ -44,10 +47,35 @@ const TYPES = {
   '.jpg': 'image/jpeg',
   '.woff2': 'font/woff2',
 };
+/**
+ * Absolute path inside {root}, or null when the request escapes it.
+ *
+ * A request path is attacker-controlled even on a loopback port — any process on
+ * this machine can reach it while the server is up. Containment is asserted
+ * AFTER resolution rather than by scrubbing `..` out of the string, because a
+ * scrub has to be right about every encoding and a comparison against the
+ * resolved root does not.
+ */
+const within = (root, ...parts) => {
+  const p = resolvePath(root, ...parts);
+  return p === root || p.startsWith(root + sep) ? p : null;
+};
+
+/** Request path, percent-decoded and made relative. Malformed escapes 404. */
+const requestPath = (req) => {
+  try {
+    return decodeURIComponent((req.url ?? '/').split('?')[0]).replace(/^\/+/, '');
+  } catch {
+    return null;
+  }
+};
+
+const ROOT = resolvePath(DIST);
+
 const server = createServer(async (req, res) => {
-  const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
-  const p = normalize(join(DIST, url));
-  if (existsSync(p) && statSync(p).isFile()) {
+  const url = requestPath(req);
+  const p = url === null ? null : within(ROOT, url);
+  if (p !== null && existsSync(p) && statSync(p).isFile()) {
     res.writeHead(200, { 'content-type': TYPES[extname(p)] ?? 'application/octet-stream' });
     res.end(await readFile(p));
     return;
