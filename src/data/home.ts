@@ -470,6 +470,6 @@ export const footer = {
     },
   ],
   legal:
-    '© 2026 LibreDB. Developed and commercially supported by Sekoya Grup Bilişim ve Teknoloji Ltd. Şti., İstanbul.',
+    '© 2026 LibreDB',
   versionChip: '◆ studio 0.13.4',
 } as const;
