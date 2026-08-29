@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test';
+import { spawnSync } from 'bun';
 import { existsSync, readFileSync } from 'node:fs';
 import site from '../site.config.json' with { type: 'json' };
 
@@ -72,7 +73,12 @@ describe('Outstatic wiring', () => {
   it('never commits CMS credentials', () => {
     const ignore = readFileSync('.gitignore', 'utf8');
     expect(ignore).toContain('cms/.env.local');
-    expect(existsSync('cms/.env.local'), 'a real .env.local must not be in the repo').toBe(false);
+    // The question is whether git TRACKS the file, not whether it exists on
+    // disk. Anyone who actually runs the dashboard has a filled-in local copy —
+    // an existsSync() check here fails the gate for exactly the person the CMS
+    // was built for, which is what it did.
+    const tracked = spawnSync(['git', 'ls-files', '--', 'cms/.env.local']).stdout.toString().trim();
+    expect(tracked, 'a real .env.local must never be committed').toBe('');
     expect(existsSync('cms/.env.local.example'), 'ship the template instead').toBe(true);
   });
 

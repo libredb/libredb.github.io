@@ -26,7 +26,7 @@
     "a11y": "bun run scripts/lighthouse-gate.mjs",
     "gate": "bun run typecheck && bun run format && bun run lint && bun run knip && bun run build && bun test",
     "verify": "bun run gate && bun run secrets && bun run a11y",
-    "cms": "bun --cwd cms run dev",
+    "cms": "bun --cwd=cms run dev",
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
