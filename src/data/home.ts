@@ -486,6 +486,6 @@ export const footer = {
     { label: 'YouTube', href: 'https://www.youtube.com/@libredb' },
     { label: 'Sponsor', href: 'https://github.com/sponsors/libredb' },
   ],
-  legal: '© 2026 LibreDB',
+  legal: 'Copyright © 2026 LibreDB',
   versionChip: `◆ studio ${site.version}`,
 } as const;
