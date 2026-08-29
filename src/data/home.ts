@@ -127,7 +127,7 @@ export const how = {
   ],
   terminal: [
     { tone: 'dim', prompt: '$', text: 'railway add postgres' },
-    { tone: 'bright', prompt: '$', text: 'docker run -d -p 3000:3000 libredb/libredb-studio' },
+    { tone: 'bright', prompt: '$', text: 'docker run -p 3000:3000 libredb/libredb-studio' },
     { tone: 'dim', prompt: '→', text: 'https://studio.internal — open anywhere' },
     { tone: 'dim', prompt: '✓', text: 'sso · rbac · query audit enabled' },
   ],
@@ -365,7 +365,7 @@ export const deploy = {
     {
       id: 'docker',
       label: 'Docker',
-      command: 'docker run -d -p 3000:3000 libredb/libredb-studio',
+      command: 'docker run -p 3000:3000 libredb/libredb-studio',
       note: '# zero-config first run — secrets generated at boot, printed once',
     },
     {

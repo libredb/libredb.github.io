@@ -57,7 +57,7 @@ taşıyor ve yerel kanallar öntanımlı olarak 127.0.0.1'e bağlanıyor. 27
 dağıtım kanalının 22'si şu anda yayında.
 
 ```
-docker run -d -p 3000:3000 libredb/libredb-studio
+docker run -p 3000:3000 libredb/libredb-studio
 ```
 
 Kurulum kırk saniye sürüyor; geri kalanı zaten sizin ağınızda.
