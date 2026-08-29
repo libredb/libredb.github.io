@@ -468,16 +468,23 @@ export const footer = {
         { label: 'FAQ', href: '/faq' },
       ],
     },
-    {
-      title: 'Community',
-      links: [
-        { label: 'GitHub', href: gh },
-        { label: 'X', href: 'https://x.com/libredb' },
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/company/libredb' },
-        { label: 'YouTube', href: 'https://www.youtube.com/@libredb' },
-        { label: 'Sponsor', href: 'https://github.com/sponsors/libredb' },
-      ],
-    },
+  ],
+  /**
+   * Not a fifth column, and not for want of room.
+   *
+   * These are not sections of the site — they are the same organisation
+   * somewhere else. Ranking them beside Product and Deploy asked the reader to
+   * scan a navigation column to find out we have a LinkedIn, and it pushed the
+   * grid to a second row, which spent a band of empty page on the least
+   * important links in the footer. They belong on the base line with the other
+   * identity marks: the copyright and the version.
+   */
+  social: [
+    { label: 'GitHub', href: gh },
+    { label: 'X', href: 'https://x.com/libredb' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/libredb' },
+    { label: 'YouTube', href: 'https://www.youtube.com/@libredb' },
+    { label: 'Sponsor', href: 'https://github.com/sponsors/libredb' },
   ],
   legal: '© 2026 LibreDB',
   versionChip: `◆ studio ${site.version}`,

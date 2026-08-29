@@ -35,6 +35,15 @@ const isExternal = (h: string) => /^https?:/i.test(h);
 
     <div class="ftr__base">
       <span class="ftr__legal">{footer.legal}</span>
+      <nav class="ftr__social" aria-label="LibreDB elsewhere">
+        {
+          footer.social.map((l) => (
+            <a class="ftr__sociallink" href={l.href} target="_blank" rel="noreferrer">
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
       <span class="ftr__version">{footer.versionChip}</span>
     </div>
   </div>
@@ -111,6 +120,24 @@ const isExternal = (h: string) => /^https?:/i.test(h);
     font-size: 12.5px;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+  /* Sits between the copyright and the version chip, which is where the base
+     row's other identity marks already are. Wrapping is allowed and lands it on
+     its own line on narrow screens, rather than squeezing three groups into one
+     line that fits none of them. */
+  .ftr__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03) var(--space-05);
+  }
+  .ftr__sociallink {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .ftr__sociallink:hover {
+    color: var(--text-primary);
   }
   .ftr__version {
     font: var(--weight-medium) 11.5px / 1 var(--font-mono);
