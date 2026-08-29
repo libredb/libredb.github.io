@@ -2,6 +2,7 @@
  * Homepage content, lifted verbatim from design/Home.dc.html.
  * Copy is final — see README.md § Fidelity. Nothing here is paraphrased.
  */
+import { site } from '../lib/site';
 
 /* --- header / nav --------------------------------------------------------- */
 export const navLinks = [
@@ -15,7 +16,7 @@ export const navLinks = [
 
 /* --- hero ----------------------------------------------------------------- */
 export const hero = {
-  badge: 'Open source · MIT · v0.13.4',
+  badge: `Open source · MIT · v${site.version}`,
   /** word-by-word lbWord entrance: line one plain, line two gradient-clipped */
   headline: {
     lineOne: ['You', 'created', 'the', 'database.'],
@@ -432,30 +433,39 @@ export const footer = {
     {
       title: 'Product',
       links: [
-        { label: 'Features', href: '/#features' },
-        { label: 'Databases', href: '/#databases' },
-        { label: 'Live demo', href: 'https://app.libredb.org' },
+        { label: 'Features', href: '/features' },
+        { label: 'Databases', href: '/databases' },
+        { label: 'How it compares', href: '/compare' },
         { label: 'Playground', href: '/playground' },
+        { label: 'Live demo', href: 'https://app.libredb.org' },
       ],
     },
     {
       title: 'Deploy',
       links: [
         { label: 'Docker Compose', href: '/docker-compose' },
-        { label: 'Helm chart', href: '/#deploy' },
-        { label: 'One-click templates', href: '/#deploy' },
-        { label: 'npm package', href: '/#deploy' },
+        { label: 'Every channel', href: '/deploy' },
+        { label: 'Get started', href: '/get-started' },
+        { label: 'Documentation', href: `${gh}/tree/main/docs` },
       ],
     },
     {
-      title: 'Resources',
+      title: 'Company',
       links: [
-        { label: 'Documentation', href: `${gh}/tree/main/docs` },
-        { label: 'Blog', href: '/blog' },
-        { label: 'Get started', href: '/get-started' },
-        { label: 'Security', href: `${gh}/blob/main/SECURITY.md` },
-        { label: 'FAQ', href: '/faq' },
+        { label: 'Open source', href: '/open-source' },
+        { label: 'Security model', href: '/security' },
+        { label: 'Commercial support', href: '/support' },
+        { label: 'LibreDB Platform', href: '/platform' },
         { label: 'Privacy', href: '/privacy-policy' },
+      ],
+    },
+    {
+      title: 'Projects',
+      links: [
+        { label: 'LibreDB Studio', href: gh },
+        { label: 'LibreDB database', href: '/libredb-database' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'FAQ', href: '/faq' },
       ],
     },
     {
@@ -470,5 +480,5 @@ export const footer = {
     },
   ],
   legal: '© 2026 LibreDB',
-  versionChip: '◆ studio 0.13.4',
+  versionChip: `◆ studio ${site.version}`,
 } as const;

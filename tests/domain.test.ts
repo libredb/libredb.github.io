@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { readFileSync, readdirSync } from 'node:fs';
 import site from '../site.config.json' with { type: 'json' };
+import { redirectPaths } from '../src/data/redirects';
 
 /** Assertions are about configuration, not the prose explaining it. */
 const stripJs = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -51,8 +52,10 @@ describe('the domain has one source of truth', () => {
     };
     walk('dist');
 
-    // Blog posts and the raw compose file are content, not routes of the site.
-    const routes = built.filter((r) => !r.startsWith('/blog/'));
+    // Blog posts are content, and the legacy stubs are tombstones — neither is
+    // a route of the site, and neither belongs in an inventory of what the site
+    // offers.
+    const routes = built.filter((r) => !r.startsWith('/blog/') && !redirectPaths.includes(r));
     expect([...site.routes].sort()).toEqual(routes.sort());
   });
 

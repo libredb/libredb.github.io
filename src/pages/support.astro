@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { VENDOR, VENDOR_ADDRESS_FULL, vendorOrganizationSchema } from '../data/company';
+import { listings, platforms, runtimes, scope } from '../data/support';
+import { site } from '../lib/site';
+
+const RANCHER_DOCS = `${site.links.github}/blob/main/docs/RANCHER.md`;
+const ISSUES = `${site.links.github}/issues`;
+
+/**
+ * The Service node is the machine-readable half of this page. A certification
+ * reviewer reads the prose; a marketplace's automated check reads this — and
+ * both have to resolve the supporting party to the same legally identified
+ * company the privacy policy names, which is why `provider` points at the
+ * vendor node from company.ts instead of spelling out a second Organization
+ * that could drift from it.
+ */
+const schema = [
+  vendorOrganizationSchema,
+  {
+    '@type': 'Service',
+    name: `Commercial support for ${site.name}`,
+    serviceType: 'Software support',
+    provider: { '@id': VENDOR.schemaId },
+    areaServed: 'Worldwide',
+    availableLanguage: ['en', 'tr'],
+    url: `${site.url}/support`,
+  },
+];
+
+const channels = [
+  { need: 'Support enquiries', href: `mailto:${VENDOR.email}`, label: VENDOR.email, external: false },
+  { need: 'Vulnerabilities', href: site.links.security, label: 'SECURITY.md', external: true },
+  { need: 'Bugs & questions', href: ISSUES, label: 'GitHub issues', external: true },
+];
+---
+
+<BaseLayout
+  path="/support"
+  title="Commercial support"
+  description="Who stands behind LibreDB Studio, on which Kubernetes distributions and runtime versions, and how to reach them. Sekoya Tech provides commercial support on every platform listed."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="sup-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="u-eyebrow">Commercial support</p>
+      <h1 class="doc__title" id="sup-title">Who stands behind LibreDB Studio</h1>
+      <p class="doc__intro">
+        The software is MIT and free. Support is a service on top of it, never a paywall in front of it — no capability
+        is withheld from anyone who does not buy it. This page states which company provides that service, on which
+        platforms and versions, and how to reach it.
+      </p>
+
+      <!-- The vendor of record. First thing a certification reviewer looks for,
+           so it is a panel rather than a paragraph. -->
+      <section class="doc__panel" aria-labelledby="ven-h">
+        <h2 id="ven-h">The vendor of record</h2>
+        <p>
+          LibreDB Studio is developed, published and commercially supported by <strong>{VENDOR.legalName}</strong> ({
+            VENDOR.tradeName
+          }), a company registered in Türkiye. LibreDB is the product brand; {VENDOR.tradeName} is the legal entity behind
+          the commitment on this page.
+        </p>
+        <p class="sup__addr">{VENDOR_ADDRESS_FULL}</p>
+        <p class="sup__addr">
+          <a href={VENDOR.companyInfoUrl} target="_blank" rel="noreferrer">Company information ↗</a>
+        </p>
+      </section>
+
+      <p class="doc__lead sup__commit">
+        <strong
+          >{VENDOR.tradeName} provides commercial support for {site.name} on every platform and runtime version listed below.</strong
+        > Support is available in English and Turkish.
+      </p>
+
+      <!-- Platforms ---------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="plat-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Kubernetes and distributions</p>
+          <h2 class="doc__h" id="plat-h">Supported versions</h2>
+        </div>
+
+        <div class="doc__tablewrap">
+          <table class="doc__table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Supported</th>
+                <th scope="col">Validated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                platforms.map((p) => (
+                  <tr>
+                    <th scope="row">{p.component}</th>
+                    <td class="doc__nowrap" data-label="Supported">
+                      {p.supported}
+                    </td>
+                    <td data-label="Validated">{p.validated}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <p class="doc__fine">
+          <strong>Supported</strong> is what the commitment above covers. <strong>Validated</strong> is what has been exercised
+          end to end with a published result; an em dash means the same support terms apply, but no test run is published
+          yet. The chart uses only core Kubernetes APIs and carries no distribution-specific dependencies, so the version
+          floor comes from its <code>kubeVersion</code> constraint rather than from any distribution's features.
+          <a href={RANCHER_DOCS} target="_blank" rel="noreferrer">Deployment and validation record ↗</a>
+        </p>
+      </section>
+
+      <!-- Runtimes ----------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="run-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Runtimes</p>
+          <h2 class="doc__h" id="run-h">What it runs on</h2>
+        </div>
+        <dl class="doc__defs">
+          {
+            runtimes.map((r) => (
+              <div class="doc__def">
+                <dt>{r.runtime}</dt>
+                <dd>
+                  {r.detail}
+                  {r.href && (
+                    <>
+                      {' '}
+                      <a href={r.href} target="_blank" rel="noreferrer">
+                        {r.linkLabel} ↗
+                      </a>
+                    </>
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <!-- Scope -------------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="scope-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Scope</p>
+          <h2 class="doc__h" id="scope-h">What support covers</h2>
+        </div>
+        <ul class="doc__cards">
+          {
+            scope.map((s) => (
+              <li class="doc__card">
+                <h3>{s.area}</h3>
+                <p>{s.detail}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Listings ----------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="list-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Verifiable listings</p>
+          <h2 class="doc__h" id="list-h">Where this is on the record</h2>
+          <p class="doc__lead">
+            Every listing below is live and can be opened. A submission that has been opened but not merged is not a
+            listing, and does not appear here until it is one.
+          </p>
+        </div>
+        <ul class="doc__list">
+          {
+            listings.map((l) => (
+              <li>
+                <a href={l.href} target="_blank" rel="noreferrer">
+                  {l.name} ↗
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Channels ----------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="chan-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Contact</p>
+          <h2 class="doc__h" id="chan-h">How to reach us</h2>
+        </div>
+        <dl class="doc__defs">
+          {
+            channels.map((c) => (
+              <div class="doc__def">
+                <dt>{c.need}</dt>
+                <dd>
+                  <a href={c.href} {...(c.external ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                    {c.label}
+                    {c.external ? ' ↗' : ''}
+                  </a>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="doc__fine">
+          A vulnerability goes to the address in the security policy, never into a public issue — the policy exists so a
+          fix can ship before the details do. <a href="/security">How the security model works →</a>
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* The two lines under the vendor name are quieter than a .doc__panel body:
+     an address and a link are reference detail, not part of the claim. */
+  .sup__addr {
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+  .sup__commit {
+    margin-top: var(--space-08);
+  }
+</style>

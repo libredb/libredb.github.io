@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { VENDOR } from '../data/company';
+import { capabilities, status, tiers } from '../data/platform';
+import { site } from '../lib/site';
+
+/**
+ * No `url` on the SoftwareApplication node and no offers: the product has no
+ * public endpoint that answers and no online price. A URL here would put the
+ * dead host into structured data, where it outlives the page that stopped
+ * linking to it — see src/data/platform.ts on why nothing links there yet.
+ */
+const schema = [
+  {
+    '@type': 'SoftwareApplication',
+    name: 'LibreDB Platform',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Self-hosted (Linux, Kubernetes)',
+    description:
+      'Database access governance for teams — authorised, audited database access built on the open-source LibreDB Studio engine.',
+    softwareVersion: 'beta',
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<BaseLayout
+  path="/platform"
+  title="LibreDB Platform"
+  description="Database access governance for teams: multi-tenant organisations, five-role RBAC, per-connection permissions and a full query audit log — self-hosted, built on the open-source Studio engine."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="plat-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="plat__badge"><span aria-hidden="true">●</span> {status.label}</p>
+      <h1 class="doc__title" id="plat-title">
+        {status.headline.before}<span class="u-grad-data">{status.headline.gradient}</span>
+      </h1>
+      <p class="doc__intro">{status.intro}</p>
+
+      <!-- Capabilities -------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="cap-h">
+        <div class="doc__head">
+          <p class="doc__kicker">What teams get</p>
+          <h2 class="doc__h" id="cap-h">Governance on top of the editor</h2>
+          <p class="doc__lead">
+            Everything here is about the question "who reached which data, and when" — nothing here is an editor feature
+            held back from Studio.
+          </p>
+        </div>
+        <ul class="doc__cards">
+          {
+            capabilities.map((c) => (
+              <li class="doc__card">
+                <h3>{c.name}</h3>
+                <p>{c.detail}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Open core ----------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="oc-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Open core</p>
+          <h2 class="doc__h" id="oc-h">Where the line is</h2>
+          <p class="doc__lead">
+            Studio is not a trial of Platform. No capability was moved across this line to create a reason to upgrade —
+            what costs money is an organisation needing someone accountable for access, not the editor working properly.
+          </p>
+        </div>
+        <div class="plat__tiers">
+          {
+            tiers.map((t) => (
+              <article class="plat__tier">
+                <h3>{t.tier}</h3>
+                <p class="plat__tierline">{t.line}</p>
+                <p class="plat__tierdetail">{t.detail}</p>
+                {t.href && <a href={t.href}>{t.cta}</a>}
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Getting it ---------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="get-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Getting it</p>
+          <h2 class="doc__h" id="get-h">Beta access is arranged directly</h2>
+          <p class="doc__lead">
+            There is no sign-up form and no online checkout. During the beta a licence is issued per organisation, so
+            the conversation starts with what you need to govern and how many people need to reach it.
+          </p>
+        </div>
+        <p class="plat__cta">
+          <a class="plat__ctaprimary" href={`mailto:${VENDOR.email}?subject=LibreDB%20Platform%20beta`}
+            >Ask about the beta</a
+          >
+          <a class="plat__ctaghost" href="/get-started">Or self-host Studio today</a>
+        </p>
+        <p class="doc__fine">
+          Studio covers everything on this site that is free, and it stays that way whether or not you ever talk to us
+          about Platform. <a href="/open-source">Read the licence commitment →</a>
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .plat__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-03);
+    padding: var(--space-02) var(--space-05);
+    border: var(--border-width-1) solid var(--border-strong);
+    border-radius: var(--radius-pill, 999px);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
+    color: var(--text-secondary);
+  }
+
+  .plat__tiers {
+    display: grid;
+    gap: var(--space-06);
+    margin-top: var(--space-08);
+  }
+  @media (min-width: 48rem) {
+    .plat__tiers {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .plat__tier {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .plat__tier h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .plat__tierline {
+    font: var(--weight-medium) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .plat__tierdetail {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .plat__tier a {
+    margin-top: auto;
+    padding-top: var(--space-02);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+    color: var(--link);
+  }
+  .plat__tier a:hover {
+    color: var(--link-hover);
+  }
+
+  .plat__cta {
+    margin-top: var(--space-08);
+    display: flex;
+    gap: var(--space-04);
+    flex-wrap: wrap;
+  }
+  .plat__ctaprimary,
+  .plat__ctaghost {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .plat__ctaprimary {
+    padding: 0 var(--space-07);
+    background: var(--action-primary);
+    color: #fff;
+  }
+  .plat__ctaprimary:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+  .plat__ctaghost {
+    padding: 0 22px;
+    border: var(--border-width-1) solid var(--border-strong);
+    color: var(--text-primary);
+  }
+  .plat__ctaghost:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+  }
+</style>

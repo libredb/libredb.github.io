@@ -50,6 +50,11 @@ const ROUTES = args.includes('--route')
       '/open-source',
       '/deploy',
       '/docker-compose',
+      '/libredb-database',
+      '/security',
+      '/support',
+      '/platform',
+      '/compare',
       '/privacy-policy',
     ];
 

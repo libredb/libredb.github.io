@@ -26,6 +26,7 @@
 @import './console.css';
 @import './a11y.css';
 @import './diagram.css';
+@import './doc.css';
 @import './prose.css';
 
 /* --- font override (replaces ds/tokens/fonts.css) ------------------------- */

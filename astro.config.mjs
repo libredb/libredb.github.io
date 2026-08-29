@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import site from './site.config.json' with { type: 'json' };
+import { redirectPaths } from './src/data/redirects.ts';
 
 // Custom domain (libredb.org) => the site is served from the root, so `base`
 // stays at its default. Setting it would double-prefix every asset and route;
@@ -20,7 +21,16 @@ export default defineConfig({
   build: { format: 'directory', inlineStylesheets: 'never' },
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
 
-  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
+  // A retired URL must stay out of the sitemap. Submitting a page whose only
+  // job is to send the crawler somewhere else asks Google to index a redirect,
+  // which it reports back as a "Page with redirect" error — and it contradicts
+  // the canonical the stub itself carries.
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !page.includes('/404') && !redirectPaths.some((p) => new URL(page).pathname.replace(/\/$/, '') === p),
+    }),
+  ],
 
   vite: {
     build: {

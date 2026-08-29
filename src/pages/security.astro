@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { controls, disclosure, limits } from '../data/security';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'TechArticle',
+    headline: `${site.name} security model`,
+    description: 'What LibreDB Studio enforces, where it enforces it, and where those guarantees end.',
+    url: `${site.url}/security`,
+    about: { '@type': 'SoftwareApplication', name: site.name, applicationCategory: 'DeveloperApplication' },
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<BaseLayout
+  path="/security"
+  title="Security model"
+  description="What LibreDB Studio enforces and where — OIDC SSO, RBAC, AES-256-GCM credential encryption, CSRF and audit — and the documented limits those guarantees stop at."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="sec-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="u-eyebrow">Security model</p>
+      <h1 class="doc__title" id="sec-title">What is enforced, and where it stops</h1>
+      <p class="doc__intro">
+        This page is written for the person looking for a reason to say no. The controls come first, and then the limits
+        — because a reviewer who finds an undocumented limitation stops believing the documented controls too.
+        Everything below is what the project's own <a href={disclosure.href} target="_blank" rel="noreferrer"
+          >security policy</a
+        > says, in the same words it says it.
+      </p>
+
+      <!-- Controls ----------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="ctl-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Controls</p>
+          <h2 class="doc__h" id="ctl-h">What the application enforces</h2>
+        </div>
+        <ul class="doc__cards">
+          {
+            controls.map((c) => (
+              <li class="doc__card">
+                <h3>{c.control}</h3>
+                <p>{c.detail}</p>
+                {c.href && (
+                  <a href={c.href} target="_blank" rel="noreferrer">
+                    {c.linkLabel} ↗
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Limits ------------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="lim-h">
+        <div class="doc__head">
+          <p class="doc__kicker doc__kicker--warn">Known limits</p>
+          <h2 class="doc__h" id="lim-h">Where the guarantees end</h2>
+          <p class="doc__lead">
+            Each of these is a real constraint to design around, not a disclaimer. They are published here for the same
+            reason they are published in the repository: you will find them either way, and finding them here first is
+            the version where we are still trustworthy.
+          </p>
+        </div>
+        <ol class="sec__limits">
+          {
+            limits.map((l) => (
+              <li>
+                <h3>{l.title}</h3>
+                <p>{l.detail}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- Disclosure --------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="dis-h">
+        <div class="doc__head">
+          <p class="doc__kicker doc__kicker--warn">Disclosure</p>
+          <h2 class="doc__h" id="dis-h">{disclosure.headline}</h2>
+        </div>
+        <p class="doc__lead">{disclosure.body}</p>
+        <p class="doc__fine">
+          {disclosure.note}
+          <a href={disclosure.href} target="_blank" rel="noreferrer">Read the security policy ↗</a>
+        </p>
+        <p class="doc__fine">
+          Who supports this software, on which versions, and for how long: <a href="/support">commercial support →</a>
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* An ordered list, and numbered visibly: these are read as a checklist by
+     someone deciding whether to deploy, and a reader who leaves halfway needs
+     to know how much they did not read. */
+  .sec__limits {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: lim;
+  }
+  .sec__limits li {
+    counter-increment: lim;
+    display: grid;
+    gap: var(--space-03);
+    padding: var(--card-padding);
+    padding-left: calc(var(--card-padding) + var(--space-07));
+    position: relative;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-left: 2px solid var(--console-warn);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .sec__limits li::before {
+    content: counter(lim);
+    position: absolute;
+    left: var(--card-padding);
+    top: var(--card-padding);
+    font: var(--weight-semibold) var(--label-size) / 1.3 var(--font-mono);
+    color: var(--console-warn);
+  }
+  .sec__limits h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  .sec__limits p {
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+</style>
