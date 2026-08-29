@@ -110,6 +110,11 @@ const schema = [
     padding: 0;
     list-style: none;
     counter-reset: lim;
+    /* One column, so it needs the cap the two-column card grids get for free.
+       Measured at 108 characters a line before this — the page's own intro sits
+       at 55. These are the paragraphs a reviewer reads most carefully, and they
+       were the hardest to read on the page. */
+    max-width: calc(var(--measure-long) + var(--space-07) + 2 * var(--card-padding));
   }
   .sec__limits li {
     counter-increment: lim;

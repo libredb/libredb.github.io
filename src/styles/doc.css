@@ -11,6 +11,13 @@
    Prefix is `doc-`. It sits alongside the `u-` utilities rather than inside
    src/styles/ds/, which is a byte-identical copy of design-system/ and is never
    edited here.
+
+   RULE: every SINGLE-COLUMN prose block needs an explicit max-width. The
+   two-column card grids get a readable line length for free; a one-column block
+   inherits the container instead, and on a 1433px viewport that came out at 90
+   and 108 characters a line against the 52-66 the rest of the page holds. Wide
+   is not a layout decision here, it is an unset one — if a new block below has
+   one column of running text, cap it.
    -------------------------------------------------------------------------- */
 
 .doc {
@@ -280,10 +287,16 @@
 }
 
 /* --- definition rows ------------------------------------------------------ */
+/* Capped, because a full-width single column is not a layout — it is a line
+   length. Measured on a 1433px viewport these rows ran to 90 characters while
+   every other block on the same page sat between 52 and 66, which is the range
+   --measure-long exists to hold. The cap is the label column plus its gap plus
+   that measure, so the prose lands inside it rather than beside it. */
 .doc__defs {
   margin: var(--space-08) 0 0;
   display: grid;
   gap: var(--space-05);
+  max-width: calc(12rem + var(--space-06) + var(--measure-long) + 2 * var(--card-padding));
 }
 .doc__def {
   display: grid;
