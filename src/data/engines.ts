@@ -1,5 +1,5 @@
 /**
- * The sixteen engines shown in the hexagon grid (design/Home.dc.html → engineData).
+ * The seventeen engines shown in the hexagon grid (design/Home.dc.html → engineData).
  * Copy, transport strings and the "what this engine does not do" lines are final —
  * they are the honest-capability claim the design is built around.
  *
@@ -37,7 +37,7 @@ export const engines: Engine[] = [
     logo: '/engines/mysql.svg',
     desc: 'Pooled connections with information_schema introspection, EXPLAIN plans and performance_schema-backed monitoring.',
     tr: 'mysql2 pool · 3306',
-    not: 'Agent mode is unavailable, as on every engine but PostgreSQL and SQLite.',
+    not: 'Agent mode is unavailable, as on every engine but PostgreSQL, SQLite and DuckDB.',
   },
   {
     id: 'oracle',
@@ -80,7 +80,7 @@ export const engines: Engine[] = [
     name: 'DuckDB',
     cat: 'Analytics',
     logo: '/engines/duckdb.svg',
-    desc: 'In-process analytics — query Parquet and CSV files directly, with full EXPLAIN support.',
+    desc: 'In-process analytics — query Parquet and CSV files directly, with full EXPLAIN support and agent mode.',
     tr: 'file · embedded',
     not: 'Single-writer by design: no sessions to list, so health shows storage, not connections.',
   },
@@ -125,9 +125,9 @@ export const engines: Engine[] = [
     name: 'Couchbase',
     cat: 'Document',
     logo: '/engines/couchbase.svg',
-    desc: 'SQL++ queries with bucket, scope and collection introspection over the native SDK.',
-    tr: 'sdk · 11210',
-    not: 'Agent mode is unavailable, as on every engine but PostgreSQL and SQLite.',
+    desc: 'SQL++ queries with bucket, scope and collection introspection over the documented REST surfaces.',
+    tr: 'http · 8091',
+    not: 'Agent mode is unavailable, as on every engine but PostgreSQL, SQLite and DuckDB.',
   },
   {
     id: 'redis',
@@ -137,6 +137,15 @@ export const engines: Engine[] = [
     desc: 'Key browsing by pattern, type-aware value views and INFO-backed live monitoring.',
     tr: 'resp · 6379',
     not: 'No SQL, and none is pretended — the editor speaks commands here.',
+  },
+  {
+    id: 'libredb',
+    name: 'LibreDB',
+    cat: 'Key-value',
+    logo: '/engines/libredb.svg',
+    desc: 'The embedded ordered key-value store — a file, no server and no wire protocol. Mapped onto the interface by convention rather than by emulating SQL.',
+    tr: 'file · embedded',
+    not: 'No sessions and no index objects exist, so those two panels are absent with their reason rather than answered empty. Maintenance operations are refused, not faked.',
   },
   {
     id: 'cassandra',
@@ -169,4 +178,16 @@ export const engines: Engine[] = [
 
 export const defaultEngineId = 'postgresql';
 
-export const engineReference = (id: string) => `docs/providers/${id}.md`;
+/**
+ * The provider docs are named by the provider's canonical **type-id**, not by
+ * the product name (docs/providers/README.md § Conventions). Two of our ids are
+ * the product name instead, so they need mapping — without it the REFERENCE line
+ * pointed at docs/providers/postgresql.md and sqlserver.md, neither of which
+ * exists. Every other id already is the type-id.
+ */
+const TYPE_ID: Record<string, string> = {
+  postgresql: 'postgres',
+  sqlserver: 'mssql',
+};
+
+export const engineReference = (id: string) => `docs/providers/${TYPE_ID[id] ?? id}.md`;

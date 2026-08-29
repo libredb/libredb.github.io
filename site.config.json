@@ -7,7 +7,7 @@
   "localeLabels": { "en": "English", "tr": "Türkçe" },
   "tagline": "The database editor that deploys next to your data.",
   "description": "LibreDB Studio is the open-source database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and twelve more engines, with SSO and audit built in.",
-  "version": "0.9.66",
+  "version": "0.13.4",
   "license": "MIT",
   "company": "Sekoya Grup Bilişim ve Teknoloji Ltd. Şti., İstanbul",
   "copyrightYear": 2026,

@@ -12,6 +12,7 @@ import monoFont from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-l
 
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import CookieConsent from '../components/layout/CookieConsent.astro';
 import { buildSeo, ogLocale, type SeoInput } from '../lib/seo';
 import { site } from '../lib/site';
 
@@ -114,6 +115,7 @@ const jsonLd = {
       <slot />
     </main>
     <SiteFooter />
+    <CookieConsent />
     <script>
       import '../scripts/theme';
       import '../scripts/reveal';

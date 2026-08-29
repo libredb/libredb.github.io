@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it } from 'bun:test';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { parseHTML } from 'linkedom';
 import site from '../site.config.json' with { type: 'json' };
+import { engines } from '../src/data/engines';
 
 const page = (path: string) => parseHTML(readFileSync(path, 'utf8')).document;
 
@@ -97,9 +98,11 @@ describe('assets are self-hosted', () => {
     }
   });
 
-  it('serves all sixteen engine marks from /engines/', () => {
+  it('serves a mark from /engines/ for every engine, and nothing extra', () => {
     const marks = readdirSync('dist/engines').filter((f) => f.endsWith('.svg'));
-    expect(marks.length).toBe(16);
+    // Derived, not pinned: this broke when LibreDB became the seventeenth engine
+    // and the literal here still said sixteen.
+    expect(marks.sort()).toEqual(engines.map((e) => e.logo.replace('/engines/', '')).sort());
     for (const img of home.querySelectorAll('.hex img')) {
       expect(img.getAttribute('src')).toMatch(/^\/engines\/[a-z]+\.svg$/);
     }

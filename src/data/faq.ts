@@ -10,7 +10,7 @@ export const faq = [
   },
   {
     q: 'Which databases are supported?',
-    a: 'Sixteen engines: PostgreSQL, MySQL, Oracle, SQL Server, SQLite, libSQL, DuckDB, ClickHouse, Apache Druid, Apache Trino, MongoDB, Couchbase, Redis, Cassandra, Elasticsearch and OpenSearch — relational, document, key-value, wide-column, analytical, search and federated query.',
+    a: 'Seventeen engines: PostgreSQL, MySQL, Oracle, SQL Server, SQLite, libSQL, DuckDB, ClickHouse, Apache Druid, Apache Trino, MongoDB, Couchbase, Redis, LibreDB, Cassandra, Elasticsearch and OpenSearch — relational, document, key-value, wide-column, analytical, search and federated query.',
   },
   {
     q: 'Is anything held back from the open-source build?',
@@ -22,7 +22,7 @@ export const faq = [
   },
   {
     q: 'How do I install it?',
-    a: 'One container: docker run -d -p 3000:3000 libredb/libredb-studio. There is also an npx package, a Helm chart, an OpenShift operator bundle, an embeddable npm package and one-click templates for Railway, Dokploy, CapRover, DigitalOcean, Sealos and Fly.io — 27 channels, 22 of them live.',
+    a: 'One container: docker run -d -p 3000:3000 libredb/libredb-studio. There is also an npx package, a Helm chart, a certified chart in Rancher Partner Charts, an embeddable npm package and one-click templates for Railway, Dokploy, CapRover, DigitalOcean, Sealos and Fly.io — 33 channels, 25 of them live.',
   },
   {
     q: 'Does it work on a phone?',

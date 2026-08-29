@@ -34,7 +34,23 @@ const MIN = Number(flag('min', 95));
 const DIST = 'dist';
 const ROUTES = args.includes('--route')
   ? args.filter((a, i) => args[i - 1] === '--route')
-  : ['/', '/blog', '/blog/the-tool-goes-to-the-data', '/faq', '/get-started'];
+  : [
+      '/',
+      '/blog',
+      '/blog/the-tool-goes-to-the-data',
+      '/faq',
+      '/get-started',
+      // Every standalone content page is audited. /playground earns its slot
+      // twice over: it is the only route with an interactive surface built by
+      // script at runtime, so it is the one axe-core findings can appear on
+      // without anyone touching a template.
+      '/playground',
+      '/databases',
+      '/features',
+      '/open-source',
+      '/deploy',
+      '/privacy-policy',
+    ];
 
 if (!existsSync(join(DIST, 'index.html'))) {
   console.error(`No ${DIST}/index.html — run \`bun run build\` first.`);

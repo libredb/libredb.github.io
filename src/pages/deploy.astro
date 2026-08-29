@@ -1,21 +1,382 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
-import DeploySection from '../components/home/DeploySection.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CopyBox from '../components/common/CopyBox.astro';
+import { channels, channelCategories } from '../data/deploy-channels';
 import { deploy } from '../data/home';
+import { site } from '../lib/site';
+
+const groups = channelCategories
+  .map((c) => ({ ...c, items: channels.filter((ch) => ch.category === c.id) }))
+  .filter((g) => g.items.length > 0);
+
+// The four the homepage leads with, pulled out so someone who just wants to run
+// it does not have to read twenty-five cards first.
+const QUICK = ['docker-ghcr', 'npm', 'helm', 'homebrew'];
+const quick = QUICK.map((id) => channels.find((c) => c.id === id)).filter((c) => c !== undefined);
+
+const automated = channels.filter((c) => c.automated).length;
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'Ways to install LibreDB Studio',
+    numberOfItems: channels.length,
+    itemListElement: channels.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      url: c.url,
+    })),
+  },
+];
 ---
 
-<StubPage
+<BaseLayout
   path="/deploy"
   title="Deploy"
-  description="A container, a Helm chart, an OpenShift operator, a one-click template, or an npm package embedded inside your own product — 27 distribution channels, 22 live."
-  eyebrow={deploy.eyebrow}
-  heading="It installs like infrastructure, because it is"
-  intro={deploy.intro}
-  cta={{ label: 'See every install method', href: '/#deploy' }}
-  secondary={{
-    label: 'Every channel ↗',
-    href: 'https://github.com/libredb/libredb-studio/blob/main/docs/DISTRIBUTION.md',
-  }}
+  description="Twenty-five live ways to install LibreDB Studio — Docker, Helm, npx, Homebrew, Snap, winget, Chocolatey, Railway, Fly.io, DigitalOcean and more. Every channel listed here is published today."
+  schema={schema}
 >
-  <DeploySection />
-</StubPage>
+  <section class="dp" aria-labelledby="dp-title">
+    <div class="u-wash dp__wash" aria-hidden="true"></div>
+    <div class="dp__inner u-container">
+      <p class="u-eyebrow">{deploy.eyebrow}</p>
+      <h1 class="dp__title" id="dp-title">
+        {deploy.headline.before}<span class="u-grad-brand">{deploy.headline.gradient}</span>{deploy.headline.after}
+      </h1>
+      <p class="dp__intro">{deploy.intro}</p>
+
+      <!-- The four most people want ---------------------------------------- -->
+      <section class="dp__quick" aria-labelledby="quick-h">
+        <h2 class="u-visually-hidden" id="quick-h">Start here</h2>
+        {
+          quick.map((c) => (
+            <div class="dp__quickitem">
+              <div class="dp__quickhead">
+                <h3>{c.name}</h3>
+                <span class="dp__plat">{c.platforms.join(' · ')}</span>
+              </div>
+              {c.command && <CopyBox command={c.command} />}
+              {c.note && <p class="dp__quicknote">{c.note}</p>}
+            </div>
+          ))
+        }
+      </section>
+
+      <!-- Everything, by category ------------------------------------------ -->
+      <div class="dp__bar">
+        <h2 class="dp__barh">Every live channel</h2>
+        <p class="dp__barnote">
+          <strong>{channels.length}</strong> published today, {automated} of them republished automatically on every release.
+          Channels that are submitted but not yet listed are deliberately absent — this page only shows an install that works
+          right now.
+        </p>
+      </div>
+
+      <ul class="dp__jump">
+        {
+          groups.map((g) => (
+            <li>
+              <a href={`#${g.id}`}>
+                <span class="dp__jumpn">{String(g.items.length).padStart(2, '0')}</span>
+                {g.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        groups.map((g) => (
+          <section class="dp__group" id={g.id} aria-labelledby={`${g.id}-h`}>
+            <div class="dp__grouphead">
+              <h3 class="dp__groupname" id={`${g.id}-h`}>
+                {g.title}
+              </h3>
+              <p class="dp__grouptag">{g.tagline}</p>
+            </div>
+
+            <ul class="dp__list">
+              {g.items.map((c) => (
+                <li class="dp__card">
+                  <div class="dp__cardhead">
+                    <h4 class="dp__name">
+                      <a href={c.url} target="_blank" rel="noreferrer">
+                        {c.name} ↗
+                      </a>
+                    </h4>
+                    {c.automated && (
+                      <span class="dp__auto" title="Republished by CI on every release">
+                        auto
+                      </span>
+                    )}
+                  </div>
+
+                  <p class="dp__plat">{c.platforms.join(' · ')}</p>
+                  {c.command && <code class="dp__cmd">{c.command}</code>}
+                  {c.note && <p class="dp__note">{c.note}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <p class="dp__more">
+        The channel inventory, the update SLA per channel and the drift check that keeps them honest are documented in
+        the repository.
+        <a href={site.links.distribution} target="_blank" rel="noreferrer">Read DISTRIBUTION.md ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dp {
+    position: relative;
+    overflow: hidden;
+  }
+  .dp__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .dp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .dp__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .dp__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dp__quick {
+    display: grid;
+    gap: var(--space-07);
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+  }
+  @media (min-width: 56rem) {
+    .dp__quick {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .dp__quickitem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+    min-width: 0;
+  }
+  .dp__quickhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-04);
+  }
+  .dp__quickhead h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.2;
+  }
+  .dp__quicknote {
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dp__bar {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .dp__barh {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h3-size);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+  }
+  .dp__barnote {
+    margin-top: var(--space-04);
+    max-width: var(--measure-long);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .dp__barnote strong {
+    color: var(--text-primary);
+    font-weight: var(--weight-semibold);
+  }
+
+  .dp__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03);
+    margin: var(--space-07) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dp__jump a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-03);
+    padding: var(--space-03) var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    font: var(--weight-medium) var(--label-size) / 1 var(--font-ui);
+    color: var(--text-secondary);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .dp__jump a:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .dp__jumpn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .dp__group {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+    scroll-margin-top: 96px;
+  }
+  .dp__grouphead {
+    padding-bottom: var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--border);
+  }
+  .dp__groupname {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h4-size);
+    line-height: 1.25;
+    letter-spacing: -0.016em;
+  }
+  .dp__grouptag {
+    margin-top: var(--space-02);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-tertiary);
+  }
+
+  .dp__list {
+    display: grid;
+    gap: var(--space-05);
+    margin: var(--space-06) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .dp__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 80rem) {
+    .dp__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .dp__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    min-width: 0;
+    padding: var(--card-padding-compact);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .dp__cardhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-03);
+  }
+  .dp__name {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--body-m-size);
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+  .dp__name a {
+    color: var(--text-primary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .dp__name a:hover {
+    color: var(--link-hover);
+  }
+  /* "auto" means release CI republishes it — the difference between a channel
+     that tracks the current version and one someone has to remember to push. */
+  .dp__auto {
+    flex: none;
+    padding: 1px var(--space-03);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--accent-500) 16%, transparent);
+    font: var(--weight-medium) 10px / 1.7 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-300);
+  }
+  .dp__plat {
+    font: var(--weight-regular) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .dp__cmd {
+    display: block;
+    overflow-x: auto;
+    padding: var(--space-03) var(--space-04);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-xs);
+    background: var(--console-bg);
+    font: var(--weight-regular) 12px / 1.6 var(--font-mono);
+    color: var(--console-text);
+    white-space: pre;
+  }
+  .dp__note {
+    margin-top: auto;
+    font-size: var(--body-s-size);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dp__more {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .dp__more a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -15,13 +15,13 @@ export const navLinks = [
 
 /* --- hero ----------------------------------------------------------------- */
 export const hero = {
-  badge: 'Open source · MIT · v0.9.66',
+  badge: 'Open source · MIT · v0.13.4',
   /** word-by-word lbWord entrance: line one plain, line two gradient-clipped */
   headline: {
     lineOne: ['You', 'created', 'the', 'database.'],
     lineTwo: ['The', 'editor', 'is', 'already', 'beside', 'it.'],
   },
-  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and twelve more engines, with SSO and audit built in.',
+  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and thirteen more engines, with SSO and audit built in.',
   primaryCta: { label: 'Open live demo', href: 'https://app.libredb.org' },
   secondaryCta: { label: 'Deploy in one click', href: '#deploy' },
   command: 'docker run -p 3000:3000 libredb/libredb-studio',
@@ -134,7 +134,7 @@ export const how = {
 
 /* --- databases ------------------------------------------------------------ */
 export const databases = {
-  eyebrow: 'Sixteen engines',
+  eyebrow: 'Seventeen engines',
   headline: { lineOne: 'One interface.', gradient: 'Different engines.' },
   intro:
     "Relational, document, key-value, analytical, search and federated query — the same tree, editor and grid over each of them, and each engine's real limits declared rather than papered over.",
@@ -142,7 +142,7 @@ export const databases = {
   notDoNote:
     'Stated because the alternative is a feature list that quietly breaks on the fourth engine. Capability flags come from the provider itself — a control that cannot work is hidden, not offered and then failed.',
   footnote:
-    'The claim is the span, not a count — sixteen engines, one interface. Per-engine detail lives in the provider docs.',
+    'The claim is the span, not a count — seventeen engines, one interface. Per-engine detail lives in the provider docs.',
 } as const;
 
 /* --- product demo --------------------------------------------------------- */
@@ -348,8 +348,8 @@ export const openSource = {
     'License and feature scope only, each line with a primary source — the full table lives on the comparison page.',
   stats: [
     { v: '100%', l: 'line coverage, enforced as a CI gate' },
-    { v: '16', l: 'engines — SQL, NoSQL, analytics and search' },
-    { v: '27', l: 'distribution channels, 22 of them live' },
+    { v: '17', l: 'engines — SQL, NoSQL, analytics and search' },
+    { v: '33', l: 'distribution channels, 25 of them live' },
     { v: 'MIT', l: 'license. All of it, nothing held back' },
   ],
 } as const;
@@ -359,7 +359,7 @@ export const deploy = {
   eyebrow: 'Deploy',
   headline: { before: 'It installs like ', gradient: 'infrastructure', after: ', because it is' },
   intro:
-    'A container, a Helm chart, an OpenShift operator, a one-click template, or an npm package embedded inside your own product.',
+    'A container, a Helm chart, a certified Rancher listing, a one-click template, or an npm package embedded inside your own product.',
   tabs: [
     {
       id: 'docker',
@@ -377,7 +377,7 @@ export const deploy = {
       id: 'helm',
       label: 'Helm',
       command: 'helm install studio ./charts/libredb-studio',
-      note: '# an OLM operator bundle ships for OpenShift too',
+      note: '# also a certified chart in Rancher Partner Charts',
     },
     {
       id: 'embed',
@@ -392,12 +392,12 @@ export const deploy = {
       note: '# one click on the platform that already runs your database',
     },
   ],
-  channelsCount: '27',
-  channelsLabel: 'distribution channels — 22 live',
+  channelsCount: '33',
+  channelsLabel: 'distribution channels — 25 live',
   channels: [
     'Docker Hub',
     'Helm chart',
-    'OpenShift operator',
+    'Rancher Partner Charts',
     'npm',
     'Homebrew',
     'Snap',
@@ -471,5 +471,5 @@ export const footer = {
   ],
   legal:
     '© 2026 LibreDB. Developed and commercially supported by Sekoya Grup Bilişim ve Teknoloji Ltd. Şti., İstanbul.',
-  versionChip: '◆ studio 0.9.66',
+  versionChip: '◆ studio 0.13.4',
 } as const;

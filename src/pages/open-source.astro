@@ -1,18 +1,358 @@
 ---
-import StubPage from '../layouts/StubPage.astro';
-import OpenSourceSection from '../components/home/OpenSourceSection.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { openSource } from '../data/home';
+import { licenceGrants, contributing, security } from '../data/open-source';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'SoftwareSourceCode',
+    name: site.name,
+    codeRepository: site.links.github,
+    license: 'https://opensource.org/licenses/MIT',
+    programmingLanguage: 'TypeScript',
+  },
+];
 ---
 
-<StubPage
+<BaseLayout
   path="/open-source"
   title="Open source"
-  description="LibreDB Studio is MIT because it has to go everywhere. No capability moves behind a paid edition to create a reason to upgrade."
-  eyebrow={openSource.eyebrow}
-  heading="Nothing sits behind an enterprise wall"
-  intro={openSource.intro}
-  cta={{ label: 'Read the comparison', href: '/#open-source' }}
-  secondary={{ label: 'GitHub ↗', href: 'https://github.com/libredb/libredb-studio' }}
+  description="LibreDB Studio is MIT — every capability, every engine, no enterprise tier. What the licence permits, how to contribute, and how to report a vulnerability."
+  schema={schema}
 >
-  <OpenSourceSection />
-</StubPage>
+  <section class="os2" aria-labelledby="os2-title">
+    <div class="u-wash os2__wash" aria-hidden="true"></div>
+    <div class="os2__inner u-container">
+      <p class="u-eyebrow">{openSource.eyebrow}</p>
+      <h1 class="os2__title" id="os2-title">
+        {openSource.headline.before}<span class="u-grad-brand">{openSource.headline.gradient}</span>
+      </h1>
+      <p class="os2__intro">{openSource.intro}</p>
+
+      <!-- What the licence permits ------------------------------------------ -->
+      <section class="os2__block" aria-labelledby="lic-h">
+        <div class="os2__blockhead">
+          <p class="os2__kicker">The licence</p>
+          <h2 class="os2__h" id="lic-h">MIT, and what that lets you do</h2>
+          <p class="os2__blocklead">
+            "Open source" is a word several products use for something narrower. This is the unmodified MIT licence over
+            the whole application — so the questions below have short answers.
+          </p>
+        </div>
+
+        <ul class="os2__grants">
+          {
+            licenceGrants.map((g) => (
+              <li>
+                <h3>{g.t}</h3>
+                <p>{g.d}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="os2__fine">
+          The one obligation runs the other way: keep the copyright notice and the licence text with any copy you
+          distribute. There is no warranty — that is the other half of the MIT text, and it is the same half every MIT
+          project ships.
+          <a href={`${site.links.github}/blob/main/LICENSE`} target="_blank" rel="noreferrer">Read the licence ↗</a>
+        </p>
+      </section>
+
+      <!-- Where the line actually is ---------------------------------------- -->
+      <section class="os2__block" aria-labelledby="line-h">
+        <div class="os2__blockhead">
+          <p class="os2__kicker">The commercial line</p>
+          <h2 class="os2__h" id="line-h">What costs money is someone else running it</h2>
+          <p class="os2__blocklead">
+            No capability is moved across the line to create a reason to upgrade. The comparison below is licence and
+            feature scope only — the things a community edition elsewhere tends to withhold.
+          </p>
+        </div>
+
+        <div class="os2__tablewrap">
+          <table class="os2__table">
+            <thead>
+              <tr>{openSource.tableHead.map((h) => <th scope="col">{h}</th>)}</tr>
+            </thead>
+            <tbody>
+              {
+                openSource.rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.cap}</th>
+                    <td class="os2__yes">{r.us}</td>
+                    <td class="os2__no">{r.them}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="os2__fine">{openSource.tableNote}</p>
+      </section>
+
+      <!-- Contributing ------------------------------------------------------ -->
+      <section class="os2__block" aria-labelledby="con-h">
+        <div class="os2__blockhead">
+          <p class="os2__kicker">Contributing</p>
+          <h2 class="os2__h" id="con-h">Four ways in</h2>
+          <p class="os2__blocklead">
+            The project takes issues, proposals and pull requests in the open. A code of conduct applies to all of them.
+          </p>
+        </div>
+
+        <ul class="os2__ways">
+          {
+            contributing.map((c) => (
+              <li>
+                <h3>{c.t}</h3>
+                <p>{c.d}</p>
+                <a href={c.href} target="_blank" rel="noreferrer">
+                  {c.cta}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="os2__fine">
+          <a href={`${site.links.github}/blob/main/CODE_OF_CONDUCT.md`} target="_blank" rel="noreferrer"
+            >Code of conduct ↗</a
+          >
+        </p>
+      </section>
+
+      <!-- Security ---------------------------------------------------------- -->
+      <section class="os2__block os2__block--flag" aria-labelledby="sec-h">
+        <div class="os2__blockhead">
+          <p class="os2__kicker os2__kicker--warn">Security</p>
+          <h2 class="os2__h" id="sec-h">{security.headline}</h2>
+        </div>
+        <p class="os2__seclead">{security.body}</p>
+        <p class="os2__secmail">
+          <a href={`mailto:${security.email}`}>{security.email}</a>
+        </p>
+        <p class="os2__fine">
+          {security.note}
+          <a href={site.links.security} target="_blank" rel="noreferrer">Read the security policy ↗</a>
+        </p>
+      </section>
+
+      <!-- Support the work --------------------------------------------------- -->
+      <p class="os2__more">
+        The work is funded by the company that publishes it, and by sponsors.
+        <a href={site.links.sponsor} target="_blank" rel="noreferrer">Sponsor the project ↗</a>
+        ·
+        <a href={site.links.github} target="_blank" rel="noreferrer">Star the repository ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .os2 {
+    position: relative;
+    overflow: hidden;
+  }
+  .os2__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .os2__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .os2__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .os2__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .os2__block {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .os2__blockhead {
+    max-width: var(--measure-long);
+  }
+  .os2__kicker {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .os2__kicker--warn {
+    color: var(--console-warn);
+  }
+  .os2__h {
+    margin-top: var(--space-03);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h3-size);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+  .os2__blocklead {
+    margin-top: var(--space-04);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .os2__grants,
+  .os2__ways {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .os2__grants,
+    .os2__ways {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .os2__grants li,
+  .os2__ways li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .os2__grants h3,
+  .os2__ways h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .os2__grants p,
+  .os2__ways p {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .os2__ways a {
+    margin-top: auto;
+    padding-top: var(--space-02);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+    color: var(--link);
+  }
+  .os2__ways a:hover {
+    color: var(--link-hover);
+  }
+
+  .os2__tablewrap {
+    margin-top: var(--space-08);
+    overflow-x: auto;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+  }
+  .os2__table {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+    font-size: var(--body-s-size);
+  }
+  .os2__table th,
+  .os2__table td {
+    padding: var(--space-04) var(--space-06);
+    border-bottom: var(--border-width-1) solid var(--border-subtle);
+    text-align: left;
+  }
+  .os2__table tbody tr:last-child th,
+  .os2__table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .os2__table thead th {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    background: var(--background-subtle);
+  }
+  .os2__table tbody th {
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+  }
+  .os2__yes {
+    color: var(--accent-300);
+  }
+  .os2__no {
+    color: var(--text-tertiary);
+  }
+
+  .os2__block--flag {
+    padding: var(--space-08) 0 0;
+  }
+  .os2__seclead {
+    margin-top: var(--space-05);
+    max-width: var(--measure-long);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .os2__secmail {
+    margin-top: var(--space-05);
+    font: var(--weight-medium) 15px / 1 var(--font-mono);
+  }
+  .os2__secmail a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .os2__fine {
+    margin-top: var(--space-06);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-tertiary);
+  }
+  .os2__fine a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .os2__more {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .os2__more a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
