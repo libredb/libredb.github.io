@@ -9,6 +9,7 @@
         "@astrojs/sitemap": "3.7.3",
         "@fontsource-variable/jetbrains-mono": "5.3.0",
         "@fontsource-variable/plus-jakarta-sans": "5.3.0",
+        "@libredb/libredb": "0.2.2",
         "astro": "7.2.9",
       },
       "devDependencies": {
@@ -250,6 +251,8 @@
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.35.4", "", { "os": "win32", "cpu": "x64" }, "sha512-XtmnYhBcrORsJ4XJngyzr/EWP0hRZLAZRFaApdKuviyqF78+ylxh2y06ZmtULAMOnObJ3ucpN0AcwSWnMowTRg=="],
 
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.6.0", "", {}, "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="],
+
+    "@libredb/libredb": ["@libredb/libredb@0.2.2", "", { "bin": { "libredb": "dist/cli/main.js" } }, "sha512-x/7Bc42njLHcG2BCwGHX/UA5wmKG82NkVBlYXj7C4TNy+9LpXKQGZRzhgfORv+wlxMG7WQP4sDEqiM2rZymZUg=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.3", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || ^2.0.0-alpha.4", "@emnapi/runtime": "^1.7.1 || ^2.0.0-alpha.4" } }, "sha512-UMduMbqO5s5zF2NkNacMT/yK5Y5QiKvWr2+50bzIIxFDwVJ2h49b+oyjaCGPhJxd2/gC2x39EHv/gHVuu36x2Q=="],
 

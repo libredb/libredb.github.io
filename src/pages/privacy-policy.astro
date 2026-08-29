@@ -1,0 +1,337 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { VENDOR, VENDOR_ADDRESS_FULL, vendorOrganizationSchema } from '../data/company';
+import { site } from '../lib/site';
+
+const UPDATED = '2026-03-01';
+const updatedLabel = new Date(UPDATED).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const registrationRows = [
+  { label: 'Registered company name', value: VENDOR.legalName },
+  { label: 'Trade name', value: VENDOR.tradeName },
+  { label: 'Registered office', value: VENDOR_ADDRESS_FULL },
+  { label: 'Tax office', value: VENDOR.taxOffice },
+  { label: 'Tax ID (VKN)', value: VENDOR.taxId },
+  { label: 'MERSIS No', value: VENDOR.mersisNo },
+  { label: 'Trade Registry No', value: VENDOR.tradeRegistryNo },
+];
+
+const cookies = [
+  { name: '_ga', provider: 'Google Analytics', purpose: 'Distinguishes unique visitors', duration: '2 years' },
+  { name: '_ga_*', provider: 'Google Analytics', purpose: 'Maintains session state', duration: '2 years' },
+  { name: '_fbp', provider: 'Meta (Facebook) Pixel', purpose: 'Tracks visits across websites', duration: '3 months' },
+  {
+    name: 'fr',
+    provider: 'Meta (Facebook) Pixel',
+    purpose: 'Enables ad delivery and measurement',
+    duration: '3 months',
+  },
+];
+
+const gdprRights = [
+  ['Right to access', 'request a copy of the data we hold about you.'],
+  ['Right to rectification', 'request correction of inaccurate data.'],
+  ['Right to erasure', 'request deletion of your data.'],
+  ['Right to restrict processing', 'request that we limit how we use your data.'],
+  ['Right to data portability', 'request your data in a machine-readable format.'],
+  ['Right to object', 'object to our processing of your data.'],
+  ['Right to withdraw consent', 'withdraw your consent at any time by clearing local storage.'],
+];
+
+const schema = [
+  vendorOrganizationSchema,
+  {
+    '@type': 'WebPage',
+    name: 'Privacy Policy',
+    url: `${site.url}/privacy-policy`,
+    dateModified: UPDATED,
+    publisher: { '@id': VENDOR.schemaId },
+  },
+];
+---
+
+<BaseLayout
+  path="/privacy-policy"
+  title="Privacy Policy"
+  description="How libredb.org handles cookies, analytics data, and your privacy rights under GDPR — and who the data controller is."
+  schema={schema}
+>
+  <section class="pp" aria-labelledby="pp-title">
+    <div class="u-wash pp__wash" aria-hidden="true"></div>
+    <div class="pp__inner u-container">
+      <p class="u-eyebrow">Legal</p>
+      <h1 class="pp__title" id="pp-title">
+        Privacy <span class="u-grad-brand">Policy</span>
+      </h1>
+      <p class="pp__meta">
+        Last updated <time datetime={UPDATED}>{updatedLabel}</time>
+      </p>
+
+      <div class="pp__body prose">
+        <p>
+          LibreDB Studio ("we", "our", or "us") respects your privacy. This Privacy Policy explains how we collect, use,
+          and protect information when you visit our website at <a href={site.url}>libredb.org</a>. LibreDB Studio is an
+          open-source project and this website serves as its landing page.
+        </p>
+
+        <h2 id="controller">Vendor and data controller</h2>
+        <p>
+          LibreDB is a product brand. The company that develops, publishes and commercially supports LibreDB Studio —
+          and the data controller responsible for the processing described in this policy — is {VENDOR.legalName}, a
+          limited liability company registered in Turkiye. The details below are matters of public record and can be
+          verified independently.
+        </p>
+        <dl class="pp__reg">
+          {
+            registrationRows.map((row) => (
+              <div class="pp__reg-row">
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p>
+          Full company information is published at <a href={VENDOR.companyInfoUrl} target="_blank" rel="noreferrer"
+            >{VENDOR.url} ↗</a
+          >.
+        </p>
+
+        <h2 id="collect">Information we collect</h2>
+        <p>
+          We do not require you to create an account or provide personal information to use this website. The only data
+          we collect is through analytics cookies, and only if you give your consent.
+        </p>
+        <p>When you consent to analytics, the following services may collect data:</p>
+
+        <h3>Google Analytics</h3>
+        <p>Google Analytics may collect:</p>
+        <ul>
+          <li>Pages visited and time spent on each page</li>
+          <li>Referring website or source</li>
+          <li>Browser type and operating system</li>
+          <li>Approximate geographic location (country/city level)</li>
+          <li>Device type (desktop, mobile, tablet)</li>
+        </ul>
+
+        <h3>Meta (Facebook) Pixel</h3>
+        <p>When you accept cookies, Meta Pixel may collect:</p>
+        <ul>
+          <li>Pages visited (PageView events)</li>
+          <li>Browser and device information</li>
+          <li>Approximate geographic location</li>
+          <li>Referring URL</li>
+        </ul>
+        <p>
+          This data is processed by Meta under their <a
+            href="https://www.facebook.com/privacy/policy/"
+            target="_blank"
+            rel="noreferrer">Privacy Policy ↗</a
+          >. Meta Pixel is only loaded after you explicitly accept cookies.
+        </p>
+
+        <h2 id="cookies">Cookies</h2>
+        <p>Cookies are small text files stored on your device. Below is a summary of the cookies used on this site:</p>
+        <div class="pp__scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Cookie</th>
+                <th scope="col">Provider</th>
+                <th scope="col">Purpose</th>
+                <th scope="col">Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                cookies.map((c) => (
+                  <tr>
+                    <td>
+                      <code>{c.name}</code>
+                    </td>
+                    <td>{c.provider}</td>
+                    <td>{c.purpose}</td>
+                    <td>{c.duration}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="pp__note">
+          We also store your cookie consent preference in <code>localStorage</code> (key: <code
+            >libredb-cookie-consent</code
+          >). This is not a cookie and is not sent to any server. Your theme preference is stored the same way, under <code
+            >libredb-theme</code
+          >.
+        </p>
+
+        <h2 id="choices">Your choices</h2>
+        <p>When you first visit our site, a cookie consent banner will appear. You can choose to:</p>
+        <ul>
+          <li><strong>Accept</strong> — analytics cookies will be set and Google Analytics will load.</li>
+          <li><strong>Decline</strong> — no analytics cookies will be set and Google Analytics will not load.</li>
+        </ul>
+        <p>
+          You can change your preference at any time by clearing your browser's local storage for this site and
+          reloading the page.
+        </p>
+
+        <h2 id="sharing">Data sharing</h2>
+        <p>
+          If you accept analytics cookies, anonymized usage data is processed by Google Analytics under Google's <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noreferrer">Privacy Policy ↗</a
+          >. We do not sell, rent, or share your personal data with any other third parties.
+        </p>
+
+        <h2 id="retention">Data retention</h2>
+        <p>
+          Google Analytics data is retained for 14 months, after which it is automatically deleted. Your consent
+          preference stored in local storage persists until you clear it manually.
+        </p>
+
+        <h2 id="gdpr">Your rights under GDPR</h2>
+        <p>If you are located in the European Economic Area (EEA), you have the following rights:</p>
+        <ul>
+          {
+            gdprRights.map(([name, detail]) => (
+              <li>
+                <strong>{name}</strong> — {detail}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 id="children">Children's privacy</h2>
+        <p>
+          This website is not directed at children under 16. We do not knowingly collect personal data from children.
+        </p>
+
+        <h2 id="changes">Changes to this policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last
+          updated" date. We encourage you to review this page periodically.
+        </p>
+
+        <h2 id="contact">Contact</h2>
+        <p>
+          For questions about this Privacy Policy, or to exercise your data protection rights, contact the data
+          controller:
+        </p>
+        <address class="pp__address">
+          {VENDOR.legalName}<br />
+          {VENDOR_ADDRESS_FULL}<br />
+          <a href={`mailto:${VENDOR.email}`}>{VENDOR.email}</a>
+        </address>
+        <p>
+          For anything about the software itself — bugs, features, questions — please open an issue on our <a
+            href={`${site.links.github}/issues`}
+            target="_blank"
+            rel="noreferrer">GitHub repository ↗</a
+          >.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pp {
+    position: relative;
+    overflow: hidden;
+  }
+  .pp__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .pp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .pp__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .pp__meta {
+    margin-top: var(--space-04);
+    font: var(--weight-regular) var(--meta-size) / 1.4 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .pp__body {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+
+  /* Registration facts read as a reference table, not as prose. */
+  .pp__reg {
+    display: grid;
+    gap: var(--space-05) var(--space-08);
+    padding: var(--space-06);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--background-subtle);
+  }
+  @media (min-width: 40rem) {
+    .pp__reg {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .pp__reg-row {
+    min-width: 0;
+  }
+  .pp__reg dt {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .pp__reg dd {
+    margin: var(--space-02) 0 0;
+    font-size: var(--body-s-size);
+    line-height: 1.5;
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+  }
+
+  /* The cookie table has four columns and cannot reflow — scroll it, never the page. */
+  .pp__scroll {
+    overflow-x: auto;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+  }
+  .pp__scroll table {
+    min-width: 34rem;
+  }
+  .pp__scroll :global(th),
+  .pp__scroll :global(td) {
+    white-space: nowrap;
+  }
+  .pp__scroll :global(tbody tr:last-child td) {
+    border-bottom: 0;
+  }
+
+  .pp__note {
+    font-size: var(--body-s-size);
+    color: var(--text-tertiary);
+  }
+  .pp__address {
+    font-style: normal;
+    line-height: var(--body-long-line);
+  }
+</style>

@@ -1,0 +1,248 @@
+---
+// Ready-to-run LibreDB commands, grouped by namespace. Every command is one of
+// the five real kv-lens verbs (get/put/delete/prefix/range) — the same grammar
+// as Studio's LibreDBProvider. "Tables" and "collections" are conventions over
+// the keyspace (users:<pk>, articles:<id>), shown here as their key prefixes;
+// the catalog kind is a label, not a separate command dialect.
+interface Group {
+  label: string; // namespace prefix, e.g. "users:*"
+  kind: string; // catalog kind label
+  /** which --console-* hue the kind chip borrows */
+  tone: 'warn' | 'ok' | 'info';
+  note?: string; // optional clarifying line under the group header
+  commands: string[];
+}
+
+const groups: Group[] = [
+  {
+    label: 'users:*',
+    kind: 'relational table',
+    tone: 'warn',
+    note: 'A relational row keeps its primary key both in the key (users:4) and as its id column.',
+    commands: [
+      'prefix users:',
+      'get users:1',
+      'put users:4 {"id":"4","name":"Lin","age":29,"active":true}',
+      'delete users:4',
+    ],
+  },
+  {
+    label: 'articles:*',
+    kind: 'document collection',
+    tone: 'ok',
+    commands: [
+      'prefix articles:',
+      'get articles:a1',
+      'put articles:a3 {"title":"Local-first","published":true}',
+      'delete articles:a2',
+    ],
+  },
+  {
+    label: 'config:*',
+    kind: 'key–value',
+    tone: 'info',
+    commands: ['prefix config:', 'get config:theme', 'put config:theme light', 'range a z', 'delete config:theme'],
+  },
+];
+
+// Database-level "manage" commands (the CLI's inspect/stats/import), each with a
+// use case. Clicking loads the command into the editor — press Run to execute.
+interface AdminCommand {
+  cmd: string;
+  use: string;
+}
+
+const adminCommands: AdminCommand[] = [
+  { cmd: 'inspect', use: 'List namespaces, their kind, and relational schemas (reads the catalog).' },
+  { cmd: 'stats', use: 'One-glance summary: file size on disk + namespace counts by kind.' },
+  {
+    cmd: 'import {"session:a1":"token-abc","session:a2":"token-xyz"}',
+    use: 'Bulk-load many keys (here a new session:* namespace) in one atomic commit.',
+  },
+];
+---
+
+<aside class="sheet" aria-label="Command cheatsheet">
+  <div class="sheet__head">
+    <p class="sheet__eyebrow">Cheatsheet</p>
+    <p class="sheet__lead">Click a command to load it into the editor, then press Run.</p>
+    <p class="sheet__note">
+      LibreDB is an ordered key–value store. Tables and collections are conventions over keys (<code>users:1</code>) —
+      all operated with the same five verbs.
+    </p>
+  </div>
+
+  {
+    groups.map((g) => (
+      <section class="sheet__group">
+        <p class="sheet__label">
+          {g.label}
+          <span class="sheet__kind" data-tone={g.tone}>
+            {g.kind}
+          </span>
+        </p>
+        {g.note && <p class="sheet__grouptext">{g.note}</p>}
+        <ul class="sheet__list">
+          {g.commands.map((cmd) => (
+            <li>
+              <button type="button" class="sheet__cmd" data-cmd={cmd} title={cmd}>
+                {cmd}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <section class="sheet__group">
+    <p class="sheet__label">
+      Manage
+      <span class="sheet__kind" data-tone="admin">admin</span>
+    </p>
+    <ul class="sheet__list sheet__list--spaced">
+      {
+        adminCommands.map((c) => (
+          <li>
+            <button type="button" class="sheet__cmd" data-cmd={c.cmd} title={c.cmd}>
+              {c.cmd}
+            </button>
+            <p class="sheet__use">{c.use}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</aside>
+
+<style>
+  /* Phone: a capped scroll box below the editor, so the full command list stays
+     reachable without pushing Run off the top of a very long page.
+     Desktop: a full-height column beside it. */
+  .sheet {
+    width: 100%;
+    flex: none;
+    max-height: 22rem;
+    overflow-y: auto;
+    background: var(--console-bg);
+    border-top: var(--border-width-1) solid var(--console-border);
+  }
+  @media (min-width: 64rem) {
+    .sheet {
+      width: 19rem;
+      max-height: none;
+      border-top: 0;
+      border-left: var(--border-width-1) solid var(--console-border);
+    }
+  }
+
+  .sheet__head {
+    padding: var(--space-05) var(--space-06);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+  }
+  .sheet__eyebrow {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--console-text-tertiary);
+  }
+  .sheet__lead {
+    margin-top: var(--space-02);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--console-text-secondary);
+  }
+  .sheet__note {
+    margin-top: var(--space-03);
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--console-text-tertiary);
+  }
+  .sheet__note code {
+    font-family: var(--font-mono);
+    color: var(--console-text-soft);
+  }
+
+  .sheet__group {
+    padding: var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+  }
+  .sheet__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+    margin-bottom: var(--space-04);
+    font: var(--weight-regular) 12.5px / 1.4 var(--font-mono);
+    color: var(--console-text-soft);
+  }
+  .sheet__kind {
+    padding: 1px var(--space-03);
+    border-radius: var(--radius-xs);
+    font: var(--weight-medium) 10px / 1.6 var(--font-ui);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .sheet__kind[data-tone='warn'] {
+    background: color-mix(in srgb, var(--console-warn) 15%, transparent);
+    color: var(--console-warn);
+  }
+  .sheet__kind[data-tone='ok'] {
+    background: color-mix(in srgb, var(--console-ok) 15%, transparent);
+    color: var(--accent-300);
+  }
+  .sheet__kind[data-tone='info'] {
+    background: color-mix(in srgb, var(--primary-600) 20%, transparent);
+    color: var(--primary-300);
+  }
+  .sheet__kind[data-tone='admin'] {
+    background: color-mix(in srgb, var(--data-500) 18%, transparent);
+    color: var(--data-300);
+  }
+  .sheet__grouptext {
+    margin-bottom: var(--space-04);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--console-text-tertiary);
+  }
+
+  .sheet__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-02);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sheet__list--spaced {
+    gap: var(--space-05);
+  }
+  .sheet__cmd {
+    display: block;
+    width: 100%;
+    padding: var(--space-03) var(--space-04);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-xs);
+    background: var(--console-surface);
+    font: var(--weight-regular) 12px / 1.4 var(--font-mono);
+    color: var(--console-text);
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .sheet__cmd:hover,
+  .sheet__cmd:focus-visible {
+    border-color: var(--primary-600);
+    color: var(--primary-300);
+  }
+  .sheet__use {
+    margin-top: var(--space-02);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--console-text-tertiary);
+  }
+</style>

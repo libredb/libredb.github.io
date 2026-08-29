@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { contrast } from '../scripts/contrast.mjs';
 
 const stripComments = (css: string) => css.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -99,5 +99,33 @@ describe('WCAG 1.4.3 large text (3:1) for gradient-clipped headlines', () => {
   it('ships a solid-colour fallback where background-clip:text is unsupported', () => {
     const global = readFileSync('src/styles/global.css', 'utf8');
     expect(global).toMatch(/@supports not \(\(background-clip: text\)/);
+  });
+});
+
+describe('--console-text-faint is chrome, never copy', () => {
+  // #3a4265 is 1.93:1 on --console-bg. a11y.css deliberately lifts
+  // --console-text-tertiary and leaves this one alone, because in the prototype
+  // it only paints separators and ghost chrome. The playground port reached for
+  // it for the editor note, the placeholder, the result hint and three activity-log
+  // columns — all text a reader has to read — and dropped /playground to 97.
+  const FAINT = '#3a4265';
+  const CONSOLE_GROUNDS = { 'console-bg': '#0d1020', 'console-surface': '#12162a' };
+
+  it('is genuinely below AA, which is why it may not carry text', () => {
+    for (const [name, bg] of Object.entries(CONSOLE_GROUNDS)) {
+      expect(contrast(FAINT, bg), `${FAINT} on --${name}`).toBeLessThan(4.5);
+    }
+  });
+
+  // The token itself is legitimate where it paints something a reader never has
+  // to read: ProductSection uses it for an aria-hidden "+" and the mock editor's
+  // line-number gutter. CSS cannot tell decorative from readable, so the guard is
+  // scoped to the surfaces that are all readable text.
+  it('is never assigned to `color` in the playground', () => {
+    const dir = 'src/components/playground';
+    const offenders = readdirSync(dir)
+      .filter((f) => f.endsWith('.astro'))
+      .filter((f) => /color:\s*var\(--console-text-faint\)/.test(readFileSync(`${dir}/${f}`, 'utf8')));
+    expect(offenders, 'use --console-text-tertiary for text a reader must read').toEqual([]);
   });
 });

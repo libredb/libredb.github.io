@@ -455,6 +455,7 @@ export const footer = {
         { label: 'Get started', href: '/get-started' },
         { label: 'Security', href: `${gh}/blob/main/SECURITY.md` },
         { label: 'FAQ', href: '/faq' },
+        { label: 'Privacy', href: '/privacy-policy' },
       ],
     },
     {

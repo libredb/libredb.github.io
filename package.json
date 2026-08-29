@@ -34,6 +34,7 @@
     "@astrojs/sitemap": "3.7.3",
     "@fontsource-variable/jetbrains-mono": "5.3.0",
     "@fontsource-variable/plus-jakarta-sans": "5.3.0",
+    "@libredb/libredb": "0.2.2",
     "astro": "7.2.9"
   },
   "devDependencies": {
