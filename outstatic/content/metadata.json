@@ -1,0 +1,34 @@
+{
+  "commit": "",
+  "generated": "2026-08-29T16:50:08.177Z",
+  "metadata": [
+    {
+      "__outstatic": {
+        "commit": "",
+        "hash": "2243263056",
+        "path": "outstatic/content/posts/what-one-interface-costs.md"
+      },
+      "author": {
+        "name": "LibreDB",
+        "picture": ""
+      },
+      "collection": "posts",
+      "coverImage": "",
+      "description": "One tree, one editor and one results grid for relational, document, key-value, analytical, search and federated engines — and the capability flags that stop that promise from breaking on the fourth engine.",
+      "publishedAt": "2026-08-29T09:00:00.000Z",
+      "slug": "what-one-interface-costs",
+      "status": "published",
+      "tags": [
+        {
+          "label": "Engineering",
+          "value": "engineering"
+        },
+        {
+          "label": "Databases",
+          "value": "databases"
+        }
+      ],
+      "title": "What one interface across seventeen engines actually costs"
+    }
+  ]
+}
