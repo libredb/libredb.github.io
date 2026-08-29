@@ -3,8 +3,8 @@
 version: 2
 
 updates:
-  # JavaScript dependencies — managed with Bun (bun.lock is the source of truth;
-  # the deploy/CI workflows run `bun install`). Requires Bun >= 1.1.39.
+  # Astro site — managed with Bun (bun.lock is the source of truth; CI and the
+  # deploy workflow both run `bun install --frozen-lockfile`).
   - package-ecosystem: 'bun'
     directory: '/'
     schedule:
@@ -12,9 +12,34 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: 'chore(deps)'
+    ignore:
+      # astro check and next build both load TypeScript's programmatic API, which
+      # the 7.x native compiler does not ship yet. Unpin only once both support it.
+      # https://github.com/withastro/roadmap/discussions/1321
+      - dependency-name: 'typescript'
+        versions: ['>=7']
     groups:
       # Batch all non-major updates into a single PR to cut review noise.
       # Major bumps still arrive as individual PRs (they need manual review).
+      minor-and-patch:
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Outstatic dashboard — a separate app with its own package.json / bun.lock.
+  - package-ecosystem: 'bun'
+    directory: '/cms'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'chore(cms-deps)'
+    ignore:
+      - dependency-name: 'typescript'
+        versions: ['>=7']
+      # outstatic pins this exact version as a peer dependency.
+      - dependency-name: 'tailwindcss'
+    groups:
       minor-and-patch:
         update-types:
           - 'minor'

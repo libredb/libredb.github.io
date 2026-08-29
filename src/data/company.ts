@@ -2,8 +2,8 @@
 // brand, not a legal entity: the company that develops, publishes and
 // commercially supports it is Sekoya. Partner programmes and certification
 // reviews verify the vendor from the product website, so every surface that
-// names the vendor (status bar, JSON-LD, privacy policy, humans.txt) derives
-// from this file rather than restating it.
+// names the vendor (privacy policy, JSON-LD, humans.txt) derives from this file
+// rather than restating it.
 //
 // The values are ASCII on purpose — no Turkish diacritics. Application forms
 // are frequently ASCII-only and reviewers match the address on the form against
@@ -33,13 +33,10 @@ const VENDOR_ADDRESS = {
   countryCode: 'TR',
 } as const;
 
-/** Street line, for footers that break the address over two lines. */
-export const VENDOR_ADDRESS_STREET = VENDOR_ADDRESS.street;
-
 /** "34768 Umraniye / Istanbul, Turkiye" — the locality half of the address. */
-export const VENDOR_LOCALITY = `${VENDOR_ADDRESS.postalCode} ${VENDOR_ADDRESS.district} / ${VENDOR_ADDRESS.city}, ${VENDOR_ADDRESS.country}`;
+const VENDOR_LOCALITY = `${VENDOR_ADDRESS.postalCode} ${VENDOR_ADDRESS.district} / ${VENDOR_ADDRESS.city}, ${VENDOR_ADDRESS.country}`;
 
-/** Full single-line address, for JSON-LD and the plain-text files. */
+/** Full single-line address, for the policy body and JSON-LD. */
 export const VENDOR_ADDRESS_FULL = `${VENDOR_ADDRESS.street}, ${VENDOR_LOCALITY}`;
 
 /** schema.org PostalAddress for the vendor's registered office. */
@@ -53,12 +50,11 @@ const vendorPostalAddress = {
 } as const;
 
 /**
- * schema.org Organization node for the vendor. Referenced by @id from the
- * WebApplication and LibreDB Organization nodes so a crawler resolves the
+ * schema.org Organization node for the vendor. The privacy policy is the one
+ * page that names the data controller, so it carries the node that resolves the
  * publisher to a legally identified company with a verifiable address.
  */
 export const vendorOrganizationSchema = {
-  '@context': 'https://schema.org',
   '@type': 'Organization',
   '@id': VENDOR.schemaId,
   name: VENDOR.tradeName,

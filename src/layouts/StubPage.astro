@@ -1,0 +1,114 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { SeoInput } from '../lib/seo';
+
+interface Props extends SeoInput {
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  /** where the full treatment lives — usually a homepage anchor */
+  cta: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { eyebrow, heading, intro, cta, secondary, ...seo } = Astro.props;
+const external = (h: string) => /^https?:/i.test(h);
+---
+
+<BaseLayout {...seo}>
+  <section class="stub" aria-labelledby="stub-title">
+    <div class="u-wash stub__wash" aria-hidden="true"></div>
+    <div class="stub__inner u-container">
+      <p class="u-eyebrow">{eyebrow}</p>
+      <h1 class="stub__title" id="stub-title">{heading}</h1>
+      <p class="stub__intro">{intro}</p>
+      <p class="stub__actions">
+        <a class="stub__cta" href={cta.href} {...external(cta.href) ? { target: '_blank', rel: 'noreferrer' } : {}}
+          >{cta.label}</a
+        >
+        {
+          secondary && (
+            <a
+              class="stub__ghost"
+              href={secondary.href}
+              {...(external(secondary.href) ? { target: '_blank', rel: 'noreferrer' } : {})}
+            >
+              {secondary.label}
+            </a>
+          )
+        }
+      </p>
+      <slot />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stub {
+    position: relative;
+    overflow: hidden;
+  }
+  .stub__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .stub__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+    max-width: var(--container-xl);
+  }
+  .stub__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .stub__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .stub__actions {
+    margin-top: var(--stack-body-cta);
+    display: flex;
+    gap: var(--space-04);
+    flex-wrap: wrap;
+  }
+  .stub__cta,
+  .stub__ghost {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .stub__cta {
+    padding: 0 var(--space-07);
+    background: var(--action-primary);
+    color: #fff;
+  }
+  .stub__cta:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+  .stub__ghost {
+    padding: 0 22px;
+    border: var(--border-width-1) solid var(--border-strong);
+    color: var(--text-primary);
+  }
+  .stub__ghost:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+  }
+</style>

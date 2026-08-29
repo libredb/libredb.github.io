@@ -1,0 +1,131 @@
+<!-- @dsCard group="Components" viewport="700x252" subtitle="Button, IconButton, Badge, Tag, Avatar, Card" name="Core" -->
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{padding:20px;background:var(--background)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lbl{font:500 10px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+.grp{margin-bottom:18px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body>
+<div id="root"></div>
+<script type="text/jsx" id="demo-src">
+
+    function isFrame(v) {
+      try { return v === window || (typeof Window !== "undefined" && v instanceof Window) || typeof v.postMessage === "function"; }
+      catch (e) { return true; }
+    }
+    function resolveNS(names) {
+      for (const k of Object.keys(window)) {
+        try {
+          const v = window[k];
+          if (!v || typeof v !== "object" || isFrame(v)) continue;
+          if (names.every(n => typeof v[n] === "function")) return v;
+        } catch (e) { /* cross-origin frame or throwing getter */ }
+      }
+      return {};
+    }
+
+    const NS = resolveNS(["Button","Badge","Tag","Avatar","Card"]);
+    const { Button, IconButton, Badge, Tag, Avatar, AvatarGroup, Card, CardMedia } = NS;
+
+    function Demo() {
+      return (
+        <div>
+          <div className="grp">
+            <p className="lbl">Button — variants</p>
+            <div className="row">
+              <Button>Teklif al</Button>
+              <Button variant="secondary">Projeyi incele</Button>
+              <Button variant="outline">Daha fazla</Button>
+              <Button variant="tertiary">Filtrele</Button>
+              <Button variant="ghost">Vazgeç</Button>
+              <Button variant="destructive">Hesabı sil</Button>
+              <Button variant="link">Tüm hizmetler</Button>
+            </div>
+          </div>
+          <div className="grp">
+            <p className="lbl">Sizes · states · icon buttons</p>
+            <div className="row">
+              <Button size="s">Small</Button>
+              <Button size="m">Medium</Button>
+              <Button size="l">Large</Button>
+              <Button disabled>Disabled</Button>
+              <Button loading>Kaydediliyor</Button>
+              <Button variant="outline" iconRight="→">İncele</Button>
+              <IconButton label="Ayarlar" icon="⚙" variant="outline" />
+              <IconButton label="Yeni" icon="+" variant="filled" shape="circle" />
+            </div>
+          </div>
+          <div className="grp">
+            <p className="lbl">Badge · Tag · Avatar</p>
+            <div className="row">
+              <Badge>Neutral</Badge>
+              <Badge tone="primary">Primary</Badge>
+              <Badge tone="success" dot>Sağlıklı</Badge>
+              <Badge tone="warning" dot>Yük yüksek</Badge>
+              <Badge tone="error" dot>Durdu</Badge>
+              <Badge tone="brand">Yeni</Badge>
+              <Tag>PostgreSQL</Tag>
+              <Tag interactive selected>Finans</Tag>
+              <Tag onRemove={() => {}}>Veri mimarisi</Tag>
+              <Avatar name="Ayşe Yılmaz" size="s" />
+              <Avatar name="Mert Kaya" status="online" tone="data" />
+              <AvatarGroup total={12}>
+                <Avatar name="Ayşe Yılmaz" /><Avatar name="Mert Kaya" tone="data" /><Avatar name="Selin Bulut" />
+              </AvatarGroup>
+            </div>
+          </div>
+          <div>
+            <p className="lbl">Card</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
+              <Card onClick={() => {}} padding="compact" media={<CardMedia ratio="16 / 9" caption="cover 16:9" />}>
+                <Badge tone="primary">Mühendislik</Badge>
+                <div style={{ marginTop: 10, font: "600 15px/1.35 var(--font-heading)" }}>Sıfır kesinti ile şema migrasyonu</div>
+              </Card>
+              <Card padding="compact" selected>
+                <div style={{ font: "600 15px/1.35 var(--font-heading)" }}>Selected</div>
+                <div style={{ marginTop: 8, font: "400 13px/1.6 var(--font-body)", color: "var(--text-secondary)" }}>Brand kenarlık + shadow.m</div>
+              </Card>
+              <Card padding="compact" tone="brand">
+                <div style={{ font: "600 15px/1.35 var(--font-heading)" }}>Görüşme ayarla</div>
+                <div style={{ marginTop: 8, font: "400 13px/1.6 var(--font-body)", opacity: .85 }}>tone="brand" — sayfada bir kez</div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Pending() {
+      return (
+        <div style={{ padding: 24, border: "1px dashed var(--border-strong)", borderRadius: "var(--radius-l)",
+          font: "400 12.5px/1.7 var(--font-mono)", color: "var(--text-tertiary)" }}>
+          Component bundle henüz derlenmedi (_ds_bundle.js).<br />Design System sekmesi derlemeyi tamamladığında bu kart canlı componentleri gösterir.
+        </div>
+      );
+    }
+    const hasBundle = Object.keys(NS).length > 0;
+    ReactDOM.createRoot(document.getElementById("root")).render(hasBundle ? <Demo /> : <Pending />);
+</script>
+<script>
+(function () {
+  function boot() {
+    var src = document.getElementById("demo-src").textContent;
+    try {
+      var code = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+      new Function(code)();
+    } catch (e) {
+      document.getElementById("root").textContent = "Render hatası: " + e.message;
+      throw e;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body></html>

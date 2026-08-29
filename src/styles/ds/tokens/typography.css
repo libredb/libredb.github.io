@@ -1,0 +1,38 @@
+/* Type scale. size / line-height / letter-spacing / weight.
+   Mobile column is the value below the md breakpoint. */
+:root {
+  --weight-light:300; --weight-regular:400; --weight-medium:500;
+  --weight-semibold:600; --weight-bold:700;
+
+  --display-xxl-size:72px; --display-xxl-line:1.02; --display-xxl-tracking:-0.03em;  --display-xxl-size-mobile:40px;
+  --display-xl-size:60px;  --display-xl-line:1.05;  --display-xl-tracking:-0.028em;  --display-xl-size-mobile:36px;
+  --display-l-size:52px;   --display-l-line:1.06;   --display-l-tracking:-0.026em;   --display-l-size-mobile:32px;
+  --display-m-size:44px;   --display-m-line:1.08;   --display-m-tracking:-0.024em;   --display-m-size-mobile:30px;
+
+  --h1-size:40px; --h1-line:1.1;  --h1-tracking:-0.022em; --h1-size-mobile:28px;
+  --h2-size:32px; --h2-line:1.15; --h2-tracking:-0.02em;  --h2-size-mobile:24px;
+  --h3-size:26px; --h3-line:1.2;  --h3-tracking:-0.016em; --h3-size-mobile:21px;
+  --h4-size:22px; --h4-line:1.25; --h4-tracking:-0.012em; --h4-size-mobile:19px;
+  --h5-size:18px; --h5-line:1.3;  --h5-tracking:-0.008em; --h5-size-mobile:17px;
+  --h6-size:16px; --h6-line:1.4;  --h6-tracking:0;        --h6-size-mobile:16px;
+
+  --body-xl-size:20px; --body-xl-line:1.6;  --body-xl-size-mobile:18px;
+  --body-l-size:18px;  --body-l-line:1.6;   --body-l-size-mobile:17px;
+  --body-m-size:16px;  --body-m-line:1.6;
+  --body-s-size:14px;  --body-s-line:1.55;
+  --body-xs-size:12px; --body-xs-line:1.5;
+  --body-long-line:1.75; /* long-form article body */
+
+  --button-l-size:17px; --button-m-size:15px; --button-s-size:13px;
+  --label-size:14px;    --label-line:1.3;
+  --helper-size:13px;   --helper-line:1.45;
+  --caption-size:12px;  --caption-line:1.4;
+  --overline-size:11px; --overline-tracking:0.1em;
+  --eyebrow-size:12px;  --eyebrow-tracking:0.14em;
+  --meta-size:12px;
+
+  /* measure — max line length for readability */
+  --measure-short:520px;
+  --measure-standard:620px;
+  --measure-long:680px;
+}

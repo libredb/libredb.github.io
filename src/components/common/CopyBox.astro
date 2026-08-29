@@ -1,0 +1,68 @@
+---
+interface Props {
+  command: string;
+  /** accessible name for the copy button */
+  label?: string;
+  class?: string;
+}
+const { command, label = 'Copy the command', class: klass } = Astro.props;
+---
+
+<div class:list={['copybox', klass]}>
+  <span class="copybox__prompt" aria-hidden="true">$</span>
+  <code class="copybox__cmd">{command}</code>
+  <button type="button" class="copybox__btn" data-copy={command} aria-label={label}>copy</button>
+</div>
+
+<script>
+  import '../../scripts/copy';
+</script>
+
+<style>
+  .copybox {
+    /* the hero centres its whole column; the command must stay left-aligned */
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+    padding: 13px var(--space-05);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-l);
+    background: var(--console-bg);
+    font: var(--weight-regular) 13px / 1.4 var(--font-mono);
+    color: var(--console-text);
+  }
+  .copybox__prompt {
+    color: var(--console-text-tertiary);
+    flex: none;
+  }
+  .copybox__cmd {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: inherit;
+    color: inherit;
+  }
+  .copybox__btn {
+    flex: none;
+    border: var(--border-width-1) solid var(--console-border);
+    background: var(--console-surface);
+    color: var(--console-text-secondary);
+    border-radius: var(--radius-s);
+    padding: 5px var(--space-04);
+    min-height: 24px;
+    cursor: pointer;
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .copybox__btn:hover {
+    color: var(--console-text);
+    border-color: var(--console-border-strong);
+  }
+</style>

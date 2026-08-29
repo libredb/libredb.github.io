@@ -1,40 +1,33 @@
-# build output
-dist/
-# generated types
-.astro/
-
-# dependencies
 node_modules/
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
+dist/
+.astro/
 .DS_Store
+*.log
 
-# jetbrains setting folder
-.idea/
+# Outstatic companion app
+cms/node_modules/
+cms/.next/
+cms/.env.local
+cms/next-env.d.ts
 
-# Brainstorm visual companion
-.superpowers/
+# local env
+.env
+.env.local
 
-# Session memory (remember plugin) — local tooling state, not project source
+# scratch — session memory (remember plugin), local tooling state
 .remember/
 
-# Playwright MCP output
-.playwright-mcp/
+# JetBrains
+.idea/
 
-docs/designs/_ref
+# Local Netlify folder
+.netlify
 
+.playwright-mcp
+
+# Local-only working material, carried over from this repo's previous .gitignore
+.superpowers/
 .qoder/
 docs/superpowers/
-
-
+docs/designs/_ref
+libredb-org-redesign.md

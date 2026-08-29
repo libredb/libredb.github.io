@@ -1,0 +1,45 @@
+{
+  "title": "Posts",
+  "type": "object",
+  "properties": {
+    "description": {
+      "title": "Description",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "One sentence. Used as the meta description and the card summary.",
+      "required": true
+    },
+    "coverImage": {
+      "title": "Cover image",
+      "fieldType": "Image",
+      "dataType": "image",
+      "description": "Optional 16:9 image for the card and the social preview.",
+      "required": false
+    },
+    "tags": {
+      "title": "Tags",
+      "fieldType": "Tags",
+      "dataType": "array",
+      "description": "Topic labels shown above the title.",
+      "required": false,
+      "values": [
+        {
+          "label": "Engineering",
+          "value": "engineering"
+        },
+        {
+          "label": "Release",
+          "value": "release"
+        },
+        {
+          "label": "Security",
+          "value": "security"
+        },
+        {
+          "label": "Databases",
+          "value": "databases"
+        }
+      ]
+    }
+  }
+}

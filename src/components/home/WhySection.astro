@@ -1,0 +1,249 @@
+---
+import { why } from '../../data/home';
+---
+
+<section id="why" class="why" aria-labelledby="why-title">
+  <div class="u-wash why__wash" aria-hidden="true"></div>
+
+  <div class="why__inner u-container">
+    <div class="why__grid">
+      <div data-rv class="why__prose">
+        <p class="u-eyebrow">{why.eyebrow}</p>
+        <h2 class="why__title" id="why-title">
+          {why.headline.before}<span class="u-grad-data">{why.headline.gradient}</span>{why.headline.after}
+        </h2>
+        {why.body.map((p) => <p class="why__body">{p}</p>)}
+      </div>
+
+      <div data-rv class="why__figure">
+        <div
+          class="why__card"
+          data-switch="why"
+          data-switch-role="radio"
+          data-switch-autoplay="2600"
+          data-switch-pin="9000"
+          data-switch-active="0"
+        >
+          <!-- illustration only: the rows / caption below carry the same
+               information in words, and the inactive node sits at opacity .12 -->
+          <div class="diag" aria-hidden="true">
+            <div class="diag__node diag__node--from">
+              <p class="diag__kicker">YOU</p>
+              <p class="diag__name">Laptop</p>
+              {
+                why.steps.map((s, i) => (
+                  <p class="diag__meta" data-switch-panel={String(i)} hidden={i !== 0}>
+                    {s.from}
+                  </p>
+                ))
+              }
+            </div>
+
+            <div class="diag__wire">
+              <span class="diag__line" aria-hidden="true"></span>
+              {
+                why.steps.map((s, i) => (
+                  <span class="diag__chip" data-switch-panel={String(i)} hidden={i !== 0}>
+                    {s.chip}
+                  </span>
+                ))
+              }
+            </div>
+
+            <div class="diag__net">
+              <p class="diag__kicker">PRIVATE NETWORK</p>
+              <div class="diag__item">
+                <img src="/engines/postgresql.svg" alt="" width="18" height="18" />
+                <span>
+                  <span class="diag__item-name">PostgreSQL</span>
+                  <span class="diag__item-sub">ready · 40 s</span>
+                </span>
+              </div>
+              <div class="diag__item diag__item--studio">
+                <img src="/brand/lb-icon.svg" alt="" width="18" height="18" />
+                <span>
+                  <span class="diag__item-name">Studio</span>
+                  <span class="diag__item-sub">container</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p class="why__status" role="status">
+            {
+              why.steps.map((s, i) => (
+                <span data-switch-panel={String(i)} hidden={i !== 0}>
+                  {s.status}
+                </span>
+              ))
+            }
+          </p>
+
+          <div class="why__rows" aria-label="Ways to reach a database in a private network">
+            {
+              why.steps.map((s, i) => (
+                <button type="button" class="why__row" data-switch-trigger={String(i)}>
+                  <span class="why__num">{`0${i + 1}`}</span>
+                  <span class="why__rowtext">
+                    <span class="why__rowtitle">{s.t}</span>
+                    <span class="why__rowsub">{s.sub}</span>
+                  </span>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <slot name="flow" />
+  </div>
+</section>
+
+<script>
+  import '../../scripts/switcher';
+</script>
+
+<style>
+  .why {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+    background: var(--background-subtle);
+  }
+  .why__wash {
+    background:
+      radial-gradient(640px 420px at 88% 10%, color-mix(in srgb, var(--primary-600) 12%, transparent), transparent 70%),
+      radial-gradient(560px 400px at 4% 96%, color-mix(in srgb, var(--accent-500) 8%, transparent), transparent 70%);
+  }
+  .why__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+  .why__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+    gap: clamp(var(--space-09), 5vw, 72px);
+    align-items: center;
+  }
+  .why__prose {
+    max-width: var(--measure-long);
+  }
+  .why__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .why__body {
+    margin-top: var(--space-06);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .why__body + .why__body {
+    margin-top: var(--space-05);
+  }
+  .why__figure {
+    min-width: 0;
+  }
+
+  .why__card {
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    padding: clamp(18px, 2.2vw, 26px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-05);
+  }
+
+  /* step 04 is the one that works: the wire turns green and Studio lands */
+  .why__card[data-switch-active='3'] .diag__line {
+    background-image: repeating-linear-gradient(90deg, var(--success-text) 0 5px, transparent 5px 10px);
+  }
+  .why__card[data-switch-active='3'] .diag__chip {
+    color: var(--success-text);
+    border-color: var(--success-border);
+  }
+  .why__card[data-switch-active='3'] .diag__item--studio {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .why__card[data-switch-active='3'] .why__status {
+    color: var(--success-text);
+  }
+
+  .why__status {
+    font: var(--weight-regular) 11.5px / 1.5 var(--font-mono);
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+    min-height: 36px;
+  }
+
+  .why__rows {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--border-width-1) solid var(--border);
+    padding-top: var(--space-03);
+  }
+  .why__row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-04);
+    width: 100%;
+    text-align: left;
+    padding: var(--space-04) var(--space-02) var(--space-04) 14px;
+    background: transparent;
+    border: none;
+    border-left: var(--border-width-3) solid var(--border);
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: border-color var(--duration-normal) var(--ease-out);
+  }
+  .why__num {
+    font: var(--weight-semibold) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+  }
+  .why__rowtext {
+    flex: 1;
+    min-width: 0;
+  }
+  .why__rowtitle {
+    display: block;
+    font-size: 13.5px;
+    font-weight: var(--weight-medium);
+    line-height: 1.35;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+  }
+  .why__rowsub {
+    display: block;
+    font-size: var(--body-xs-size);
+    line-height: 1.4;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+  }
+  .why__row[data-state='active'] {
+    border-left-color: var(--primary-600);
+  }
+  .why__row[data-state='active'] .why__num,
+  .why__row[data-state='active'] .why__rowtitle {
+    color: var(--text-primary);
+  }
+  .why__row[data-state='active'] .why__rowsub {
+    color: var(--text-secondary);
+  }
+  .why__card[data-switch-active='3'] .why__row[data-state='active'] {
+    border-left-color: var(--success-text);
+  }
+  .why__row:hover .why__rowtitle {
+    color: var(--text-primary);
+  }
+</style>

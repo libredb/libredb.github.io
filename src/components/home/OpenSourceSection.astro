@@ -1,0 +1,165 @@
+---
+import { openSource } from '../../data/home';
+---
+
+<section id="open-source" class="os" aria-labelledby="os-title">
+  <div class="u-wash os__wash" aria-hidden="true"></div>
+
+  <div class="os__inner u-container">
+    <div data-rv class="os__head">
+      <p class="u-eyebrow">{openSource.eyebrow}</p>
+      <h2 class="os__title" id="os-title">
+        {openSource.headline.before}<span class="u-grad-brand">{openSource.headline.gradient}</span>
+      </h2>
+      <p class="os__intro">{openSource.intro}</p>
+    </div>
+
+    <div data-rv class="os__tablewrap">
+      <table class="os__table">
+        <caption class="u-visually-hidden">
+          What ships in the MIT build compared with typical community editions
+        </caption>
+        <thead>
+          <tr>{openSource.tableHead.map((h) => <th scope="col">{h}</th>)}</tr>
+        </thead>
+        <tbody>
+          {
+            openSource.rows.map((r) => (
+              <tr>
+                <th scope="row">{r.cap}</th>
+                <td class="os__yes">
+                  <span aria-hidden="true">✓</span> {r.us}
+                </td>
+                <td class="os__no">{r.them}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="os__note">{openSource.tableNote}</p>
+
+    <ul data-rv class="os__stats">
+      {
+        openSource.stats.map((s) => (
+          <li class="os__stat">
+            <span class="os__statv u-grad-brand">{s.v}</span>
+            <span class="os__statl">{s.l}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .os {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+  }
+  .os__wash {
+    background:
+      radial-gradient(560px 380px at 12% 100%, color-mix(in srgb, var(--accent-500) 9%, transparent), transparent 70%),
+      radial-gradient(560px 380px at 88% 100%, color-mix(in srgb, var(--data-500) 9%, transparent), transparent 70%);
+  }
+  .os__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+  .os__head {
+    max-width: var(--measure-long);
+  }
+  .os__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .os__intro {
+    margin-top: var(--stack-title-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .os__tablewrap {
+    margin-top: 44px;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    overflow-x: auto;
+  }
+  .os__table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .os__table thead th {
+    padding: var(--space-04) var(--space-06);
+    background: var(--background-subtle);
+    border-bottom: var(--border-width-1) solid var(--border);
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .os__table tbody th,
+  .os__table tbody td {
+    padding: 15px var(--space-06);
+    border-bottom: var(--border-width-1) solid var(--border-subtle);
+    font-size: 14.5px;
+    line-height: 1.5;
+    font-weight: var(--weight-regular);
+    background: var(--surface);
+    vertical-align: top;
+  }
+  .os__table tbody th {
+    font-weight: var(--weight-medium);
+  }
+  .os__table tbody tr:last-child th,
+  .os__table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .os__yes {
+    color: var(--success-text);
+  }
+  .os__no {
+    color: var(--text-tertiary);
+  }
+
+  .os__note {
+    margin-top: 14px;
+    font: var(--weight-regular) 12.5px / 1.6 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  .os__stats {
+    margin: 56px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .os__stat {
+    padding-top: var(--card-padding);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .os__statv {
+    display: block;
+    font: var(--weight-semibold) clamp(30px, 3vw, var(--h1-size)) / 1.05 var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  .os__statl {
+    display: block;
+    margin-top: var(--space-03);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+</style>

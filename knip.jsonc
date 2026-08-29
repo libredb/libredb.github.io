@@ -1,0 +1,39 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+
+  // Astro reaches source three ways knip has to be told about: page/route
+  // modules, the layout that pulls in the global client scripts, and the
+  // standalone Node tools under scripts/ that are run by hand or by a script.
+  "entry": [
+    "src/pages/**/*.{astro,ts}",
+    "src/layouts/**/*.astro",
+    "tests/**/*.ts",
+    "scripts/og/build-og.mjs",
+    "scripts/logo-contrast-report.mjs",
+    "scripts/contrast.mjs",
+  ],
+  "project": ["src/**/*.{astro,ts}", "scripts/**/*.mjs", "tests/**/*.ts"],
+
+  // A type or const used only inside its own file is a `export` that could be
+  // dropped, not dead code. Flagging those would be churn, not signal.
+  "ignoreExportsUsedInFile": true,
+
+  "ignoreDependencies": [
+    // Loaded by secretlint through .secretlintrc.json, never imported.
+    "@secretlint/secretlint-rule-preset-recommend",
+    // scripts/og/build-og.mjs imports sharp, which ships as an astro transitive
+    // dependency. Declaring it directly would pin a second copy of a ~30MB
+    // native package for one manually-run card generator.
+    "sharp",
+  ],
+
+  "ignore": [
+    // FALSE POSITIVE, not dead code: both are imported by the bundled
+    // `<script>` at the bottom of src/layouts/BaseLayout.astro. knip's Astro
+    // parser stops at that file's `<script type="application/ld+json" is:inline
+    // set:html={...} />` tag and never sees the imports below it. Verified by
+    // deleting that one tag locally — knip then resolves both files.
+    "src/scripts/reveal.ts",
+    "src/scripts/theme.ts",
+  ],
+}

@@ -1,0 +1,20 @@
+/* Soft corner language: control 8px, card 12px, modal 16px, media 24px. */
+:root {
+  --radius-none:0;
+  --radius-xs:4px;   /* badge */
+  --radius-s:6px;    /* chip, small control */
+  --radius-m:8px;    /* button, input, select */
+  --radius-l:12px;   /* card */
+  --radius-xl:16px;  /* modal, sheet */
+  --radius-2xl:24px; /* section media */
+  --radius-pill:999px;
+  --radius-circle:50%;
+
+  --border-width-0:0;
+  --border-width-1:1px;
+  --border-width-2:2px;
+  --border-width-3:3px; /* active tab / emphasis rail */
+
+  --focus-ring-width:2px;
+  --focus-ring-offset:2px;
+}

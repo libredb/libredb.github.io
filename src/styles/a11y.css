@@ -1,0 +1,75 @@
+/* -----------------------------------------------------------------------------
+   Accessibility overrides.
+
+   PITFALLS C3: where design fidelity and WCAG 1.4.3 AA (4.5:1 for normal text)
+   collide, accessibility wins and the deviation is reported. Every value below
+   is the MINIMUM lift that clears 4.5:1 on the darkest/lightest surface the
+   token is actually painted on — computed with scripts/contrast.mjs and locked
+   by tests/contrast.test.ts. The design system in src/styles/ds/ stays a
+   byte-identical copy of design-system/; nothing there is edited.
+
+   Reported to design in DECISIONS.md § "Contrast lifts".
+   -------------------------------------------------------------------------- */
+
+/* ORDER MATTERS. `:root` and `[data-theme='dark']` have the SAME specificity
+   (0,1,0), so whichever is declared last wins. Light must come first, exactly as
+   tokens/theme.css orders them — writing the dark block first silently painted
+   the dark theme with the light value and dropped the footer headings to 4.06.
+   Locked by tests/contrast.test.ts. */
+:root {
+  /* light theme; was #7b8199 — 3.86 on white, 3.67 on --background-subtle
+     now #6c728a — 4.76 on white, 4.52 on --background-subtle */
+  --text-tertiary: #6c728a;
+}
+
+[data-theme='dark'] {
+  /* was #767e9e — 4.40 on --surface, 4.01 on --surface-elevated (both fail)
+     now #7f87a7 — 5.46 / 5.21 / 4.97 / 4.52 on background / subtle / surface / elevated */
+  --text-tertiary: #7f87a7;
+}
+
+:root,
+[data-theme='dark'] {
+  /* console ramp; was #5b6382 — 2.90–3.25 across the console surfaces.
+     now #7a82a1 — 4.52–5.06. Carries the `$` prompt, `#` comments and row
+     counts, i.e. real information, so it has to clear AA. */
+  --console-text-tertiary: #7a82a1;
+}
+
+/* -----------------------------------------------------------------------------
+   Gradient headline stops.
+
+   axe-core SKIPS elements painted with `background-clip: text; color: transparent`,
+   so Lighthouse will never flag an unreadable gradient headline — these were
+   measured by hand with scripts/contrast.mjs against every ground they sit on.
+   Every clipped headline on this site is large text (>= 26px), so the bar is
+   WCAG 1.4.3 large-text 3:1.
+
+   Failing as designed:
+     --gradient-brand #4f46e5 on dark --background-subtle .... 2.94
+     --gradient-data  #10b981 on light --background-subtle ... 2.41
+     --gradient-data  #10b981 / #3b82f6 on the CTA panel ..... 2.62 / 1.81
+
+   Fix: one scale step in the safe direction per theme. The DECORATIVE gradients
+   (--gradient-brand on the CTA panel, the section rules, the hexagon rings) keep
+   their design values untouched — only clipped TEXT uses these.
+   -------------------------------------------------------------------------- */
+:root {
+  /* light: the design values already clear 3:1 (5.97 / 5.11) */
+  --gradient-brand-text: var(--gradient-brand);
+  /* light: emerald->blue one step darker — 3.58 / 4.91 (was 2.41 / 3.49) */
+  --gradient-data-text: linear-gradient(135deg, var(--accent-600), var(--data-600));
+}
+
+[data-theme='dark'] {
+  /* dark: indigo->purple one step lighter — 4.13 / 4.67 (was 2.94 / 3.43) */
+  --gradient-brand-text: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+  /* dark: the design values already clear 3:1 (7.28 / 5.02) */
+  --gradient-data-text: var(--gradient-data);
+}
+
+/* On the CTA panel the ground IS the brand gradient, so the clipped phrase needs
+   light stops in both themes — 5.26/4.36 and 4.45/3.69. */
+.cta__panel {
+  --gradient-data-text: linear-gradient(135deg, var(--accent-300), var(--data-300));
+}

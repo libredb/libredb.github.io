@@ -1,0 +1,176 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { approaches, closing, consequences } from '../data/compare';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'TechArticle',
+    headline: 'How LibreDB Studio compares',
+    description:
+      'Three ways to reach a database — a desktop client, a hosted editor, or a tool deployed beside the data — and what each shape costs you.',
+    url: `${site.url}/compare`,
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<BaseLayout
+  path="/compare"
+  title="How it compares"
+  description="Desktop client, hosted SQL editor, or deployed beside the data: the three shapes a database tool can take, what each is good at, and what each one costs you."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="cmp-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="u-eyebrow">How it compares</p>
+      <h1 class="doc__title" id="cmp-title">Three ways to reach a database</h1>
+      <p class="doc__intro">
+        Comparing feature checkboxes with other editors would go stale in a quarter and would not be why anyone
+        switches. The difference that lasts is structural: where the tool runs relative to the data. There are three
+        answers, each good at something, and each with a bill attached.
+      </p>
+
+      <!-- The three shapes ---------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="app-h">
+        <div class="doc__head">
+          <p class="doc__kicker">The shapes</p>
+          <h2 class="doc__h" id="app-h">What each approach is, and what it costs</h2>
+        </div>
+        <div class="cmp__approaches">
+          {
+            approaches.map((a) => (
+              <article class:list={['cmp__approach', a.id === 'beside' && 'cmp__approach--ours']}>
+                <h3>{a.name}</h3>
+                <p class="cmp__examples">{a.examples}</p>
+                <p class="cmp__strength">
+                  <span class="cmp__tag cmp__tag--good">Good at</span>
+                  {a.strength}
+                </p>
+                <p class="cmp__cost">
+                  <span class="cmp__tag cmp__tag--cost">Costs you</span>
+                  {a.cost}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Consequences --------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="con-h">
+        <div class="doc__head">
+          <p class="doc__kicker">In practice</p>
+          <h2 class="doc__h" id="con-h">What the choice changes on an ordinary Tuesday</h2>
+          <p class="doc__lead">
+            Two columns rather than a row per product: these follow from where the tool runs, so every desktop client
+            shares the left column no matter which one you use.
+          </p>
+        </div>
+
+        <div class="doc__tablewrap">
+          <table class="doc__table">
+            <thead>
+              <tr>
+                <th scope="col">The task</th>
+                <th scope="col">On your laptop</th>
+                <th scope="col">Beside the data</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                consequences.map((c) => (
+                  <tr>
+                    <th scope="row">{c.question}</th>
+                    <td data-label="On your laptop">{c.desktop}</td>
+                    <td class="cmp__ours" data-label="Beside the data">
+                      {c.beside}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- The honest closing ---------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="close-h">
+        <div class="doc__head">
+          <p class="doc__kicker">To be fair</p>
+          <h2 class="doc__h" id="close-h">{closing.headline}</h2>
+        </div>
+        <p class="doc__lead">{closing.body}</p>
+        <p class="doc__fine">
+          The editor itself is MIT and free, so the way to settle this is to run it rather than read about it.
+          <a href="/get-started">Get started in about ten seconds →</a> · <a href="/playground"
+            >Try it with no install →</a
+          >
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cmp__approaches {
+    display: grid;
+    gap: var(--space-06);
+    margin-top: var(--space-08);
+  }
+  @media (min-width: 60rem) {
+    .cmp__approaches {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .cmp__approach {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  /* Ours is marked, but by a border rather than by making the other two look
+     broken. The page argues its case in the body text or not at all. */
+  .cmp__approach--ours {
+    border-color: var(--border-strong);
+    border-top: 2px solid var(--primary-600);
+  }
+  .cmp__approach h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .cmp__examples {
+    font: var(--weight-medium) var(--overline-size) / 1.5 var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+  }
+  .cmp__strength,
+  .cmp__cost {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .cmp__tag {
+    display: block;
+    margin-bottom: var(--space-02);
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cmp__tag--good {
+    color: var(--accent-300);
+  }
+  .cmp__tag--cost {
+    color: var(--console-warn);
+  }
+  .cmp__ours {
+    color: var(--text-primary);
+  }
+</style>

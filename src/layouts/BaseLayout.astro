@@ -1,0 +1,125 @@
+---
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+
+// The @font-face rules live inside the render-blocking stylesheet, so the browser
+// only discovers the files after that CSS parses. Importing the two latin subsets
+// gives us their hashed URLs at build time so they can be preloaded alongside it.
+// The other subsets stay on-demand — the site is English, but the vendor's legal
+// name still carries Turkish diacritics and those live in latin-ext.
+import bodyFont from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import monoFont from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import CookieConsent from '../components/layout/CookieConsent.astro';
+import { buildSeo, type SeoInput } from '../lib/seo';
+import { site } from '../lib/site';
+
+interface Props extends SeoInput {
+  /** JSON-LD graph nodes appended to the page */
+  schema?: unknown[];
+  bodyClass?: string;
+}
+
+const { schema = [], bodyClass, ...seoInput } = Astro.props;
+const seo = buildSeo(seoInput);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${site.url}/#organization`,
+      name: site.name,
+      url: site.url,
+      logo: `${site.url}/brand/lb-logo-h-light.svg`,
+      sameAs: [site.links.github, site.links.x, site.links.linkedin, site.links.youtube],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#website`,
+      url: site.url,
+      name: site.name,
+      description: site.description,
+      inLanguage: 'en',
+      publisher: { '@id': `${site.url}/#organization` },
+    },
+    ...schema,
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <link rel="canonical" href={seo.canonical} />
+    {seo.noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={seo.type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:url" content={seo.canonical} />
+    <meta property="og:image" content={seo.image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    {seo.publishedTime && <meta property="article:published_time" content={seo.publishedTime} />}
+    {seo.modifiedTime && <meta property="article:modified_time" content={seo.modifiedTime} />}
+    {seo.authors.map((a) => <meta property="article:author" content={a} />)}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={seo.image} />
+
+    <link rel="preload" as="font" type="font/woff2" href={bodyFont} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={monoFont} crossorigin />
+
+    <link rel="icon" href="/brand/lb-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/brand/lb-icon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0b0d18" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — blog`} href={`${site.url}/rss.xml`} />
+
+    <script is:inline>
+      // Runs before first paint: no theme flash, and `html.js` is the switch the
+      // scroll-reveal CSS waits on so a no-JS reader never meets hidden content.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var t = 'dark';
+        try {
+          var stored = localStorage.getItem('libredb-theme');
+          if (stored === 'light' || stored === 'dark') t = stored;
+        } catch (e) {
+          /* private mode — fall through to dark */
+        }
+        d.setAttribute('data-theme', t);
+      })();
+    </script>
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body class={bodyClass}>
+    <a class="u-skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+    <CookieConsent />
+    <script>
+      import '../scripts/theme';
+      import '../scripts/reveal';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { architecture, fitFor, intro, meta, notFor, reliability, sample } from '../data/libredb-database';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'SoftwareSourceCode',
+    name: 'LibreDB',
+    description: intro,
+    programmingLanguage: 'TypeScript',
+    codeRepository: meta.repo,
+    license: 'https://opensource.org/licenses/MIT',
+    softwareVersion: meta.version,
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+
+/**
+ * `<pre>` is raw text to the Astro parser, so an expression that returns markup
+ * inside one does not survive the compile. The sample is emitted as an escaped
+ * string through set:html for that reason — and escaped rather than trusted,
+ * because the day this snippet gains a `<` is not the day anyone will remember
+ * why it was safe without it.
+ */
+const escaped = sample.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+---
+
+<BaseLayout
+  path="/libredb-database"
+  title="LibreDB — the embeddable database"
+  description="A small, readable, embeddable multi-model database in TypeScript. One ordered key-value core, three lenses, zero dependencies, and crash recovery proven by deterministic simulation testing."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="db-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="u-eyebrow">The database</p>
+      <h1 class="doc__title" id="db-title">Multi-model without the magic</h1>
+      <p class="doc__intro">{intro}</p>
+      <p class="db__status">{meta.status} · v{meta.version}</p>
+
+      <!-- The three lenses, in one file ---------------------------------------- -->
+      <section class="doc__block" aria-labelledby="use-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Three lenses, one file</p>
+          <h2 class="doc__h" id="use-h">The same database, three shapes</h2>
+          <p class="doc__lead">
+            Not three databases behind one wrapper — three typed views of a single store, in the same file, in the same
+            transaction.
+          </p>
+        </div>
+        <pre class="db__pre"><code set:html={escaped} /></pre>
+        <p class="doc__fine">
+          <code>bun add @libredb/libredb</code> — ESM only, zero runtime dependencies, targeting Bun and Node 22+. Also on
+          <a href={meta.jsr} target="_blank" rel="noreferrer">JSR ↗</a> and any npm CDN, with a browser entry that imports
+          nothing from <code>node:</code>.
+        </p>
+      </section>
+
+      <!-- Architecture --------------------------------------------------------- -->
+      <section class="doc__block" id="architecture" aria-labelledby="arch-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Architecture</p>
+          <h2 class="doc__h" id="arch-h">One core, three lenses</h2>
+        </div>
+        <ul class="doc__cards">
+          {
+            architecture.map((a) => (
+              <li class="doc__card">
+                <h3>{a.title}</h3>
+                <p>{a.detail}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Reliability ---------------------------------------------------------- -->
+      <section class="doc__block" id="reliability" aria-labelledby="rel-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Reliability</p>
+          <h2 class="doc__h" id="rel-h">Crash recovery you can check for yourself</h2>
+        </div>
+        <ul class="doc__cards">
+          {
+            reliability.map((r) => (
+              <li class="doc__card">
+                <h3>{r.title}</h3>
+                <p>{r.detail}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="doc__fine">
+          The precise durability contract and a walkthrough of the simulation harness are in the repository.
+          <a href={meta.reliabilityDocs} target="_blank" rel="noreferrer">RELIABILITY.md ↗</a>
+        </p>
+      </section>
+
+      <!-- Fit ------------------------------------------------------------------ -->
+      <section class="doc__block" aria-labelledby="fit-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Fit</p>
+          <h2 class="doc__h" id="fit-h">What it is for, and what it refuses</h2>
+          <p class="doc__lead">
+            These limits are deliberate v1 scope, not gaps left quiet. The project's own position is that its strength
+            comes from what it declines to do — so the second list is published at the same size as the first.
+          </p>
+        </div>
+        <div class="db__fit">
+          <section class="db__fitcol" aria-labelledby="for-h">
+            <h3 class="db__fith" id="for-h">Reach for it when you want to</h3>
+            <ul>{fitFor.map((f) => <li>{f}</li>)}</ul>
+          </section>
+          <section class="db__fitcol db__fitcol--not" aria-labelledby="not-h">
+            <h3 class="db__fith" id="not-h">Do not use it yet when you need</h3>
+            <ul>{notFor.map((f) => <li>{f}</li>)}</ul>
+          </section>
+        </div>
+        <p class="doc__fine">
+          <a href={meta.manifesto} target="_blank" rel="noreferrer">The manifesto ↗</a> · <a
+            href={meta.repo}
+            target="_blank"
+            rel="noreferrer">Source on GitHub ↗</a
+          > · <a href={meta.npm} target="_blank" rel="noreferrer">npm ↗</a> · <a href="/playground"
+            >Run it in your browser →</a
+          >
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .db__status {
+    margin-top: var(--space-05);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  /* The console palette, not the page theme: a code block that flips with the
+     site theme reads as a screenshot of the wrong app. Same choice as the
+     compose file on /docker-compose. */
+  .db__pre {
+    margin-top: var(--space-08);
+    padding: var(--space-06);
+    overflow-x: auto;
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-l);
+    background: var(--console-bg);
+    color: var(--console-text-soft);
+    font: 13px / 1.7 var(--font-mono);
+    tab-size: 2;
+  }
+
+  .db__fit {
+    display: grid;
+    gap: var(--space-06);
+    margin-top: var(--space-08);
+  }
+  @media (min-width: 48rem) {
+    .db__fit {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .db__fitcol {
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-left: 2px solid var(--accent-300);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .db__fitcol--not {
+    border-left-color: var(--console-warn);
+  }
+  .db__fith {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .db__fitcol ul {
+    margin: var(--space-04) 0 0;
+    padding-left: var(--space-06);
+    display: grid;
+    gap: var(--space-03);
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .db__fitcol li {
+    text-wrap: pretty;
+  }
+</style>

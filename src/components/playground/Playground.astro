@@ -1,0 +1,351 @@
+---
+import Cheatsheet from './Cheatsheet.astro';
+---
+
+<div class="pg" data-pg-root>
+  <section class="pg__main">
+    <div class="pg__toolbar">
+      <div class="pg__ident">
+        <span class="pg__hash" aria-hidden="true">#</span>
+        <span class="pg__name">playground.libredb</span>
+        <span class="pg__badge" data-pg-badge>detecting…</span>
+      </div>
+      <button type="button" class="pg__reset" data-pg-reset>↺ Reset sandbox</button>
+    </div>
+
+    <!-- Shown only when the worker reports it could not take the OPFS lock. -->
+    <p class="pg__banner" data-pg-banner hidden>
+      Persistence is disabled for this session (OPFS unavailable or this is a second tab) — running in-memory. Your
+      changes will not survive a reload.
+    </p>
+
+    <div class="pg__editor">
+      <label class="u-visually-hidden" for="pg-input">Command input</label>
+      <textarea
+        id="pg-input"
+        class="pg__input"
+        data-pg-input
+        rows="2"
+        spellcheck="false"
+        autocapitalize="off"
+        autocomplete="off"
+        placeholder="Type a command and press ⌘/Ctrl+Enter — or pick one from the cheatsheet. Try: prefix users:"
+      ></textarea>
+      <div class="pg__editorbar">
+        <span class="pg__editornote">Runs entirely in your browser · no backend · no signup</span>
+        <button type="button" class="pg__run" data-pg-run>▶ Run</button>
+      </div>
+    </div>
+
+    <!-- Command echo + timing. Also the screen-reader announcer for every run. -->
+    <div class="pg__status" data-pg-status hidden aria-live="polite"></div>
+
+    <div class="pg__grid" data-pg-grid role="region" aria-label="Query results"></div>
+
+    <!-- Activity log: one entry per run (time · status · command · summary · ms · source) -->
+    <div class="pg__log" data-pg-log role="region" aria-label="Activity log"></div>
+  </section>
+
+  <Cheatsheet />
+</div>
+
+<script>
+  import '../../scripts/playground/client.ts';
+</script>
+
+<style>
+  /* Two layouts, not one layout flipped.
+     Phone: the box grows to its content and the page scrolls. A viewport-height
+     console here would have to divide ~600px between an editor, a result grid and
+     ~50 cheatsheet commands, and the cheatsheet — `flex: none` with a ~1200px
+     intrinsic height — simply eats the whole box, collapsing the editor to zero.
+     Desktop: side by side, and only then is a fixed-height console affordable. */
+  .pg {
+    display: flex;
+    flex-direction: column;
+    background: var(--console-bg);
+    color: var(--console-text);
+  }
+  .pg__main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  @media (min-width: 64rem) {
+    .pg {
+      flex-direction: row;
+      min-height: 0;
+      height: clamp(30rem, 74vh, 46rem);
+    }
+    .pg__main {
+      flex: 1;
+      min-height: 0;
+    }
+  }
+
+  /* --- toolbar ------------------------------------------------------------ */
+  .pg__toolbar {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-03);
+    padding: var(--space-04) var(--space-06);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+  }
+  .pg__ident {
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+    font: var(--weight-regular) 12.5px / 1 var(--font-mono);
+  }
+  .pg__hash {
+    color: var(--primary-300);
+  }
+  .pg__badge {
+    padding: 2px var(--space-03);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-xs);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--console-text-tertiary);
+  }
+  /* The badge earns a colour only once the worker has answered the handshake. */
+  .pg__badge[data-mode='opfs'] {
+    border-color: color-mix(in srgb, var(--console-ok) 45%, transparent);
+    color: var(--accent-300);
+  }
+  .pg__badge[data-mode='memory'] {
+    border-color: color-mix(in srgb, var(--console-warn) 45%, transparent);
+    color: var(--console-warn);
+  }
+  .pg__reset {
+    padding: var(--space-03) var(--space-05);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-xs);
+    background: var(--console-surface);
+    font: var(--weight-regular) 12px / 1 var(--font-ui);
+    color: var(--console-text-secondary);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .pg__reset:hover:not(:disabled),
+  .pg__reset:focus-visible:not(:disabled) {
+    border-color: var(--action-destructive);
+    color: var(--action-destructive-hover);
+  }
+  .pg__reset:disabled {
+    opacity: var(--disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  .pg__banner {
+    flex: none;
+    padding: var(--space-03) var(--space-06);
+    border-bottom: var(--border-width-1) solid color-mix(in srgb, var(--console-warn) 40%, transparent);
+    background: color-mix(in srgb, var(--console-warn) 10%, transparent);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--console-warn);
+  }
+
+  /* --- editor ------------------------------------------------------------- */
+  .pg__editor {
+    flex: none;
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    background: var(--console-surface);
+  }
+  /* `rows` sizes for the typed command; the placeholder is longer and wraps to
+     three lines on a narrow screen, so the box needs a floor or it clips. */
+  .pg__input {
+    display: block;
+    width: 100%;
+    min-height: 5.5rem;
+    resize: vertical;
+    padding: var(--space-04) var(--space-06);
+    border: 0;
+    background: transparent;
+    font: var(--weight-regular) 13px / 1.6 var(--font-mono);
+    color: var(--console-text);
+  }
+  .pg__input::placeholder {
+    color: var(--console-text-tertiary);
+  }
+  .pg__input:focus-visible {
+    outline: var(--focus-ring-width) solid var(--primary-600);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+  }
+  .pg__editorbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-04);
+    padding: var(--space-03) var(--space-06);
+    border-top: var(--border-width-1) solid var(--console-border);
+  }
+  .pg__editornote {
+    font-size: 11.5px;
+    color: var(--console-text-tertiary);
+  }
+  .pg__run {
+    flex: none;
+    padding: var(--space-03) var(--space-06);
+    border: 0;
+    border-radius: var(--radius-xs);
+    background: var(--action-primary);
+    font: var(--weight-medium) 12.5px / 1 var(--font-ui);
+    color: #fff;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .pg__run:hover:not(:disabled) {
+    background: var(--action-primary-hover);
+  }
+  .pg__run:disabled {
+    opacity: var(--disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* --- result surfaces ---------------------------------------------------- */
+  .pg__status {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-03);
+    padding: var(--space-02) var(--space-06);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    font: var(--weight-regular) 11.5px / 1.6 var(--font-mono);
+  }
+  /* On a phone the grid has no flex parent to stretch into, so it needs a floor
+     of its own — otherwise an empty result collapses the console to a seam. */
+  .pg__grid {
+    min-height: 14rem;
+    overflow: auto;
+  }
+  @media (min-width: 64rem) {
+    .pg__grid {
+      flex: 1;
+      min-height: 0;
+    }
+  }
+  .pg__log {
+    flex: none;
+    max-height: 12rem;
+    overflow: auto;
+    padding: var(--space-03) var(--space-06);
+    border-top: var(--border-width-1) solid var(--console-border);
+    font: var(--weight-regular) 12px / 1.6 var(--font-mono);
+  }
+</style>
+
+<!-- The grid rows, log lines and status spans are built by client.ts at runtime,
+     so Astro's scope hash never reaches them — these rules must be global. They
+     are namespaced `pg-` and only ever appear inside this component. -->
+<style is:global>
+  @keyframes pg-result-in {
+    from {
+      opacity: 0;
+      transform: translateY(2px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pg-result-in {
+    animation: pg-result-in var(--duration-normal) var(--ease-out) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pg-result-in {
+      animation: none;
+    }
+  }
+
+  .pg-hint {
+    padding: var(--space-05) var(--space-06);
+    font-size: 13px;
+    color: var(--console-text-tertiary);
+  }
+
+  .pg-status__cmd {
+    color: var(--console-text);
+  }
+  .pg-status__meta[data-level='ok'] {
+    color: var(--console-text-tertiary);
+  }
+  .pg-status__meta[data-level='warn'] {
+    color: var(--console-warn);
+  }
+  .pg-status__meta[data-level='error'] {
+    color: var(--error-text);
+  }
+
+  .pg-grid__table {
+    width: 100%;
+    border-collapse: collapse;
+    font: var(--weight-regular) 12.5px / 1.5 var(--font-mono);
+  }
+  .pg-grid__table th {
+    padding: var(--space-03) var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    font-weight: var(--weight-medium);
+    text-align: left;
+    color: var(--console-text-secondary);
+  }
+  .pg-grid__table td {
+    padding: var(--space-02) var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    color: var(--console-text);
+  }
+  .pg-grid__table tbody tr:hover {
+    background: var(--console-row-alt);
+  }
+
+  .pg-log__line {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-03);
+  }
+  .pg-log__time,
+  .pg-log__dur {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--console-text-tertiary);
+  }
+  .pg-log__stat {
+    flex: none;
+  }
+  .pg-log__stat[data-level='ok'] {
+    color: var(--accent-300);
+  }
+  .pg-log__stat[data-level='warn'] {
+    color: var(--console-warn);
+  }
+  .pg-log__stat[data-level='error'] {
+    color: var(--error-text);
+  }
+  .pg-log__cmd {
+    flex: 1;
+    min-width: 0;
+    color: var(--console-text);
+  }
+  .pg-log__summary {
+    flex: none;
+    max-width: 40%;
+    color: var(--console-text-tertiary);
+  }
+  .pg-log__src {
+    flex: none;
+    color: var(--console-text-secondary);
+  }
+  .pg-log__cmd,
+  .pg-log__summary {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+</style>

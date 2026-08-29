@@ -20,11 +20,11 @@ interface ActivityEntry {
 
 const MAX_LOG_ENTRIES = 50;
 
-// The playground lives under Astro's <ClientRouter/> (View Transitions), so this
-// bundled module script only executes on the initial full load — never when Astro
-// swaps the DOM during a client-side navigation into /playground. Bind to the
-// astro:page-load lifecycle (mirroring src/scripts/studio.ts) so init() runs
-// against the freshly swapped-in DOM every visit, and tear the worker down on exit.
+// This site serves plain document navigations — no <ClientRouter/>, so every
+// visit to /playground is a full load and this module runs exactly once against
+// a DOM that is never swapped underneath it. The `pgReady` guard is still worth
+// keeping: it makes a second import (or a re-run under a future router) a no-op
+// rather than a second worker holding a second OPFS lock.
 let teardown: (() => void) | null = null;
 
 function start(): void {
@@ -41,13 +41,10 @@ function stop(): void {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
 else start();
-document.addEventListener('astro:page-load', start);
 
-// Release the worker + exclusive OPFS lock when leaving the page. astro:before-swap
-// covers client-side navigation (pagehide does NOT fire during View Transitions);
-// pagehide covers a real unload. Skip bfcache (persisted) so a back/forward restore
-// keeps the live worker.
-document.addEventListener('astro:before-swap', stop);
+// Release the worker + its exclusive OPFS lock when leaving the page. Skip bfcache
+// (persisted) so a back/forward restore keeps the live worker instead of waking to
+// a closed database.
 window.addEventListener('pagehide', (e) => {
   if (!e.persisted) stop();
 });
@@ -162,10 +159,11 @@ function init(root: HTMLElement): () => void {
     status.hidden = false;
     status.replaceChildren();
     const cmd = document.createElement('span');
-    cmd.className = 'text-fg';
+    cmd.className = 'pg-status__cmd';
     cmd.textContent = `▸ ${command}`;
     const meta = document.createElement('span');
-    meta.className = level === 'warn' ? 'text-warn' : level === 'error' ? 'text-bad' : 'text-faint';
+    meta.className = 'pg-status__meta';
+    meta.dataset.level = level;
     meta.textContent = `· ${summary} · ${ms < 1 ? '<1' : ms.toFixed(1)} ms`;
     status.append(cmd, meta);
     retrigger(status); // replay the fade even when the text is identical
@@ -241,7 +239,7 @@ function retrigger(el: HTMLElement): void {
 function renderHint(grid: HTMLElement, message: string): void {
   grid.replaceChildren();
   const p = document.createElement('p');
-  p.className = 'p-4 text-[13px] text-faint';
+  p.className = 'pg-hint';
   p.textContent = message;
   grid.append(p);
 }
@@ -250,19 +248,19 @@ function renderGrid(grid: HTMLElement, columns: string[], rows: Array<Record<str
   grid.replaceChildren();
   if (rows.length === 0) {
     const empty = document.createElement('p');
-    empty.className = 'p-4 text-[13px] text-faint pg-result-in';
+    empty.className = 'pg-hint pg-result-in';
     empty.textContent = 'No rows.';
     grid.append(empty);
     return;
   }
 
   const table = document.createElement('table');
-  table.className = 'w-full border-collapse font-mono text-[12.5px] pg-result-in';
+  table.className = 'pg-grid__table pg-result-in';
 
   const headRow = document.createElement('tr');
   for (const c of columns) {
     const th = document.createElement('th');
-    th.className = 'border-b border-edge px-3 py-2 text-left font-medium text-muted';
+    th.scope = 'col';
     th.textContent = c;
     headRow.append(th);
   }
@@ -273,10 +271,8 @@ function renderGrid(grid: HTMLElement, columns: string[], rows: Array<Record<str
   const tbody = document.createElement('tbody');
   for (const r of rows) {
     const tr = document.createElement('tr');
-    tr.className = 'hover:bg-panel/60';
     for (const c of columns) {
       const td = document.createElement('td');
-      td.className = 'border-b border-edge px-3 py-1.5 text-fg';
       td.textContent = String(r[c] ?? '');
       tr.append(td);
     }
@@ -296,17 +292,17 @@ function logActivity(host: HTMLElement | null, entry: ActivityEntry): void {
   const now = new Date();
 
   const line = document.createElement('div');
-  line.className = 'flex items-baseline gap-2 leading-relaxed';
+  line.className = 'pg-log__line';
   line.title = now.toLocaleString();
 
   const icon = entry.level === 'warn' ? '⚠' : entry.level === 'error' ? '✗' : '✓';
-  const color = entry.level === 'warn' ? 'text-warn' : entry.level === 'error' ? 'text-bad' : 'text-ok';
-  const time = span('shrink-0 text-faint tabular-nums', now.toTimeString().slice(0, 8));
-  const stat = span(`shrink-0 ${color}`, icon);
-  const cmd = span('min-w-0 flex-1 truncate text-fg', entry.command);
-  const summary = span('shrink-0 max-w-[40%] truncate text-faint', entry.summary);
-  const dur = span('shrink-0 text-faint tabular-nums', `${entry.ms < 1 ? '<1' : entry.ms.toFixed(1)} ms`);
-  const src = span('shrink-0 text-dim', entry.source);
+  const time = span('pg-log__time', now.toTimeString().slice(0, 8));
+  const stat = span('pg-log__stat', icon);
+  stat.dataset.level = entry.level;
+  const cmd = span('pg-log__cmd', entry.command);
+  const summary = span('pg-log__summary', entry.summary);
+  const dur = span('pg-log__dur', `${entry.ms < 1 ? '<1' : entry.ms.toFixed(1)} ms`);
+  const src = span('pg-log__src', entry.source);
 
   line.append(time, stat, cmd, summary, dur, src);
   host.prepend(line);

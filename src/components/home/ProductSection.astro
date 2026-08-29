@@ -1,0 +1,740 @@
+---
+import { product, demoSql, demoRows, demoTree, erTables, erPaths, healthStats, slowQueries } from '../../data/home';
+import { site } from '../../lib/site';
+---
+
+<section id="product" class="pd" aria-labelledby="pd-title">
+  <div class="u-wash pd__wash" aria-hidden="true"></div>
+
+  <div class="pd__inner u-container">
+    <div data-rv class="pd__head">
+      <p class="u-eyebrow">{product.eyebrow}</p>
+      <h2 class="pd__title" id="pd-title">{product.headline}</h2>
+      <p class="pd__intro">{product.intro}</p>
+    </div>
+
+    <div class="pd__stage" data-switch="demo" data-switch-role="tab" data-switch-active="tour">
+      <div class="pd__bar">
+        <div class="pd__tabs" role="tablist" aria-label="Product views">
+          {
+            product.tabs.map((t) => (
+              <button type="button" class="pd__tab" data-switch-trigger={t.id}>
+                {t.label}
+              </button>
+            ))
+          }
+        </div>
+        <button type="button" class="pd__replay" data-sql-replay>{product.replay}</button>
+      </div>
+
+      <div data-rv class="pd__win">
+        <div class="pd__chrome">
+          <span class="pd__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+          {
+            product.tabs.map((t) => (
+              <span class="pd__chip" data-switch-panel={t.id} hidden={t.id !== 'tour'}>
+                {t.chip}
+              </span>
+            ))
+          }
+          <span class="pd__plus" aria-hidden="true">+</span>
+          <span class="pd__spacer"></span>
+          <span class="pd__conn"><span class="pd__live" aria-hidden="true"></span>{product.connection}</span>
+        </div>
+
+        <!-- product tour -->
+        <div class="pd__panel pd__panel--tour" data-switch-panel="tour">
+          <iframe src={site.links.demoTour} title="LibreDB Studio live tour" loading="lazy" referrerpolicy="no-referrer"
+          ></iframe>
+        </div>
+
+        <!-- SQL editor -->
+        <div class="pd__panel pd__editor" data-switch-panel="editor" hidden data-sql>
+          <div class="ed__tree">
+            <p class="ed__filter">⌘K filter tables…</p>
+            {
+              demoTree.map((n) =>
+                n.kind === 'schema' ? (
+                  <p class="ed__schema">{n.label}</p>
+                ) : n.kind === 'table' ? (
+                  <p class="ed__table" data-active={'active' in n && n.active ? 'true' : undefined}>
+                    <>
+                      <span>{n.label}</span>
+                      <span class="ed__count">{'count' in n ? n.count : ''}</span>
+                    </>
+                  </p>
+                ) : (
+                  <p class="ed__col">
+                    {n.label} <span data-tone={'tone' in n ? n.tone : 'plain'}>{'type' in n ? n.type : ''}</span>
+                  </p>
+                ),
+              )
+            }
+          </div>
+
+          <div class="ed__main">
+            <div class="ed__code">
+              <p class="ed__gutter" aria-hidden="true">1<br />2<br />3<br />4<br />5<br />6<br />7</p>
+              <pre
+                class="ed__pre"><code>{demoSql.map(([tone, text]) => (
+                <span data-sql-chunk data-tone={tone}>{text}</span>
+              ))}<span class="ed__caret" data-sql-caret hidden /></code></pre>
+            </div>
+
+            <div class="ed__results">
+              <div class="ed__restabs">
+                <span class="ed__restab" data-active="true">Results</span>
+                <span class="ed__restab">History</span>
+                <span class="ed__restab">Saved</span>
+                <span class="pd__spacer"></span>
+                <span class="ed__status" data-sql-status>50 rows · 14 ms</span>
+              </div>
+              <div class="ed__grid" data-sql-results data-state="visible">
+                <div class="ed__row ed__row--head">
+                  <span>id</span><span>email</span><span>total_cents</span><span>created_at</span>
+                </div>
+                {
+                  demoRows.map((r) => (
+                    <div class="ed__row">
+                      <>
+                        <span class="ed__dim">{r.id}</span>
+                        <span>{r.email}</span>
+                        <span>{r.total}</span>
+                        <span>{r.at}</span>
+                      </>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ER diagram -->
+        <div class="pd__panel pd__er" data-switch-panel="diagram" hidden>
+          <div class="er__canvas">
+            <svg viewBox="0 0 660 360" class="er__svg" aria-hidden="true">
+              {
+                erPaths.map((p) => (
+                  <path
+                    d={p.d}
+                    stroke="var(--primary-600)"
+                    stroke-width="1.5"
+                    stroke-dasharray="3 5"
+                    style={`animation:lbFlow ${p.dur} linear infinite`}
+                  />
+                ))
+              }
+            </svg>
+            {
+              erTables.map((t) => (
+                <div class="er__table" style={`left:${t.left}px;top:${t.top}px;width:${t.width}px`}>
+                  <p class="er__name">{t.name}</p>
+                  {t.cols.map((c) => (
+                    <p class="er__col">
+                      <span>{c.n}</span>
+                      <span data-tone={c.tone}>{c.t}</span>
+                    </p>
+                  ))}
+                </div>
+              ))
+            }
+            <p class="er__note">{product.diagramNote}</p>
+          </div>
+        </div>
+
+        <!-- health -->
+        <div class="pd__panel pd__health" data-switch-panel="health" hidden>
+          <div class="hl__stats">
+            {
+              healthStats.map((s) => (
+                <div class="hl__stat">
+                  <p class="hl__label">{s.label}</p>
+                  <p class="hl__value">{s.value}</p>
+                  <span class="hl__bar" aria-hidden="true">
+                    <span style={`width:${s.fill}%`} />
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+          <div class="hl__slow">
+            <p class="hl__label">{slowQueries.title}</p>
+            {
+              slowQueries.rows.map((r) => (
+                <p class="hl__row">
+                  <span class="hl__sql">{r.sql}</span>
+                  <span class="hl__track" aria-hidden="true">
+                    <span data-tone={r.tone} style={`width:${r.fill}%`} />
+                  </span>
+                  <span class="hl__ms">{r.ms}</span>
+                </p>
+              ))
+            }
+            <p class="hl__note">{slowQueries.note}</p>
+          </div>
+        </div>
+
+        <!-- mobile -->
+        <div class="pd__panel pd__mobile" data-switch-panel="mobile" hidden>
+          <div class="mb__phone">
+            <iframe
+              src={site.links.demoMobile}
+              title="LibreDB Studio on mobile"
+              loading="lazy"
+              referrerpolicy="no-referrer"></iframe>
+          </div>
+          <div class="mb__copy">
+            <p class="mb__eyebrow">{product.mobile.eyebrow}</p>
+            <p class="mb__title">{product.mobile.title}</p>
+            <p class="mb__body">{product.mobile.body}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/switcher';
+  import '../../scripts/sql-typing';
+</script>
+
+<style>
+  .pd {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+  }
+  .pd__wash {
+    background:
+      radial-gradient(600px 400px at 6% 4%, color-mix(in srgb, var(--primary-600) 10%, transparent), transparent 70%),
+      radial-gradient(640px 420px at 96% 92%, color-mix(in srgb, var(--data-500) 8%, transparent), transparent 70%);
+  }
+  .pd__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+  .pd__head {
+    max-width: var(--measure-standard);
+  }
+  .pd__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .pd__intro {
+    margin-top: var(--stack-title-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .pd__bar {
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+  }
+  .pd__tabs {
+    display: flex;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+  }
+  .pd__tab {
+    height: 36px;
+    padding: 0 var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font: var(--weight-medium) 13px / 1 var(--font-ui);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .pd__tab[data-state='active'] {
+    background: var(--surface-brand);
+    color: var(--text-brand);
+    border-color: var(--primary-600);
+  }
+  .pd__replay {
+    margin-left: auto;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: var(--space-03);
+    min-height: 36px;
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .pd__replay:hover {
+    color: var(--text-primary);
+  }
+
+  .pd__win {
+    margin-top: var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--console-bg);
+    box-shadow: var(--shadow-l);
+  }
+  .pd__chrome {
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+    height: 44px;
+    padding: 0 14px;
+    border-bottom: var(--border-width-1) solid var(--console-border-subtle);
+  }
+  .pd__dots {
+    display: flex;
+    gap: 5px;
+  }
+  .pd__dots > span {
+    width: 9px;
+    height: 9px;
+    border-radius: var(--radius-circle);
+    background: var(--console-dot);
+  }
+  .pd__chip {
+    padding: 5px var(--space-04);
+    border-radius: var(--radius-s);
+    background: var(--console-chip);
+    font: var(--weight-regular) 11.5px / 1 var(--font-mono);
+    color: var(--console-text);
+  }
+  .pd__plus {
+    font: var(--weight-regular) 13px / 1 var(--font-mono);
+    color: var(--console-text-faint);
+  }
+  .pd__spacer {
+    flex: 1;
+  }
+  .pd__conn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font: var(--weight-regular) 11px / 1 var(--font-mono);
+    color: var(--console-text-secondary);
+    white-space: nowrap;
+  }
+  .pd__live {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-circle);
+    background: var(--console-ok);
+    animation: lbPulse 2s ease-in-out infinite;
+  }
+
+  .pd__panel--tour {
+    height: 620px;
+    background: var(--console-bg);
+  }
+  .pd__panel--tour iframe,
+  .mb__phone iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--console-bg);
+  }
+
+  /* --- SQL editor ---------------------------------------------------------- */
+  .pd__editor {
+    display: grid;
+    grid-template-columns: minmax(0, 224px) minmax(0, 1fr);
+  }
+  .ed__tree {
+    border-right: var(--border-width-1) solid var(--console-border-subtle);
+    background: var(--console-deep);
+    padding: var(--space-04);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ed__filter {
+    margin-bottom: var(--space-03);
+    padding: var(--space-02) 9px;
+    border: var(--border-width-1) solid var(--console-border-subtle);
+    border-radius: var(--radius-s);
+    font: var(--weight-regular) 10.5px / 1 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+  .ed__schema {
+    padding: 5px var(--space-03);
+    font: var(--weight-regular) 11.5px / 1.4 var(--font-mono);
+    color: var(--console-text-secondary);
+  }
+  .ed__table {
+    padding: 5px var(--space-03) 5px var(--space-06);
+    font: var(--weight-regular) 11.5px / 1.4 var(--font-mono);
+    color: var(--console-text-secondary);
+    display: flex;
+    justify-content: space-between;
+  }
+  .ed__table[data-active] {
+    border-radius: 5px;
+    background: var(--console-chip);
+    color: var(--console-text);
+  }
+  .ed__count {
+    color: var(--console-text-tertiary);
+  }
+  .ed__col {
+    padding: 2px var(--space-03) 2px 34px;
+    font: var(--weight-regular) 10.5px / 1.6 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+  .ed__col [data-tone='key'] {
+    color: var(--console-keyword);
+  }
+  .ed__col [data-tone='fk'] {
+    color: var(--console-string);
+  }
+  .ed__col [data-tone='plain'] {
+    color: var(--console-text-tertiary);
+  }
+
+  .ed__main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ed__code {
+    display: flex;
+    min-height: 196px;
+  }
+  .ed__gutter {
+    flex: none;
+    padding: 14px var(--space-04);
+    font: var(--weight-regular) 12.5px / 1.75 var(--font-mono);
+    color: var(--console-text-faint);
+    text-align: right;
+    user-select: none;
+  }
+  .ed__pre {
+    flex: 1;
+    margin: 0;
+    padding: 14px var(--space-04);
+    font: var(--weight-regular) 13px / 1.75 var(--font-mono);
+    overflow: auto;
+    min-width: 0;
+  }
+  .ed__pre code {
+    white-space: pre-wrap;
+    font: inherit;
+  }
+  .ed__pre [data-tone='kw'] {
+    color: var(--console-keyword);
+  }
+  .ed__pre [data-tone='pl'] {
+    color: var(--console-text);
+  }
+  .ed__pre [data-tone='str'] {
+    color: var(--console-string);
+  }
+  .ed__pre [data-tone='num'] {
+    color: var(--console-number);
+  }
+  .ed__pre [data-tone='cm'] {
+    color: var(--console-comment);
+  }
+  .ed__caret {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    margin-bottom: -3px;
+    background: var(--console-keyword);
+    animation: lbCaret 1s steps(1) infinite;
+  }
+
+  .ed__results {
+    border-top: var(--border-width-1) solid var(--console-border-subtle);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .ed__restabs {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 9px 14px;
+    font: var(--weight-medium) var(--overline-size) / 1 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+  .ed__restab[data-active] {
+    color: var(--console-text);
+    border-bottom: var(--border-width-2) solid var(--primary-600);
+    padding-bottom: 7px;
+    margin-bottom: -9px;
+  }
+  .ed__status {
+    color: var(--console-text-tertiary);
+  }
+  .ed__grid {
+    border-top: var(--border-width-1) solid var(--console-border-subtle);
+    opacity: 1;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+  .ed__grid[data-state='pending'] {
+    opacity: 0;
+  }
+  .ed__row {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr) 110px 180px;
+    padding: var(--space-02) 14px;
+    font: var(--weight-regular) 11.5px / 1.5 var(--font-mono);
+    color: var(--console-text-soft);
+  }
+  .ed__row--head {
+    padding: 7px 14px;
+    font-weight: var(--weight-medium);
+    font-size: var(--overline-size);
+    color: var(--console-text-secondary);
+    border-bottom: var(--border-width-1) solid var(--console-border-subtle);
+  }
+  /* the design stripes the 2nd and 4th DATA rows; the header is sibling #1,
+     so those are overall positions 3 and 5 */
+  .ed__row:nth-of-type(odd):not(.ed__row--head) {
+    background: var(--console-row-alt);
+  }
+  .ed__row:last-child {
+    padding-bottom: var(--space-04);
+  }
+  .ed__dim {
+    color: var(--console-text-secondary);
+  }
+
+  /* --- ER diagram ---------------------------------------------------------- */
+  .pd__er {
+    position: relative;
+    min-height: 420px;
+    padding: var(--space-07);
+    overflow: auto;
+  }
+  .er__canvas {
+    position: relative;
+    width: 660px;
+    height: 360px;
+    margin: 0 auto;
+  }
+  .er__svg {
+    position: absolute;
+    inset: 0;
+    width: 660px;
+    height: 360px;
+    fill: none;
+    pointer-events: none;
+  }
+  .er__table {
+    position: absolute;
+    background: var(--console-surface);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .er__name {
+    padding: var(--space-03) 11px;
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    font: var(--weight-medium) 11.5px / 1 var(--font-mono);
+    color: var(--console-text);
+  }
+  .er__col {
+    padding: 5px 11px;
+    font: var(--weight-regular) 10.5px / 1.5 var(--font-mono);
+    color: var(--console-text-secondary);
+    display: flex;
+    justify-content: space-between;
+  }
+  .er__col:last-of-type {
+    padding-bottom: 9px;
+  }
+  .er__col [data-tone='key'] {
+    color: var(--console-keyword);
+  }
+  .er__col [data-tone='fk'] {
+    color: var(--console-string);
+  }
+  .er__col [data-tone='plain'] {
+    color: var(--console-text-tertiary);
+  }
+  .er__note {
+    position: absolute;
+    left: var(--space-07);
+    bottom: 0;
+    font: var(--weight-regular) 11px / 1.5 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+
+  /* --- health -------------------------------------------------------------- */
+  .pd__health {
+    min-height: 420px;
+    padding: var(--space-07);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-06);
+  }
+  .hl__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .hl__stat,
+  .hl__slow {
+    background: var(--console-surface);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: 10px;
+    padding: var(--space-05);
+  }
+  .hl__slow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+  }
+  .hl__label {
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--console-text-tertiary);
+  }
+  .hl__value {
+    margin-top: var(--space-04);
+    font: var(--weight-semibold) 26px / 1 var(--font-mono);
+    color: var(--console-text);
+  }
+  .hl__bar {
+    display: block;
+    margin-top: var(--space-04);
+    height: 6px;
+    border-radius: 3px;
+    background: var(--console-border-subtle);
+    overflow: hidden;
+  }
+  .hl__bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent-500), var(--data-500));
+  }
+  .hl__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+    font: var(--weight-regular) 11.5px / 1.4 var(--font-mono);
+  }
+  .hl__sql {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--console-text-soft);
+  }
+  .hl__track {
+    flex: none;
+    width: 180px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--console-border-subtle);
+  }
+  .hl__track > span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+  }
+  .hl__track [data-tone='warn'] {
+    background: var(--console-warn);
+  }
+  .hl__track [data-tone='info'] {
+    background: var(--console-info);
+  }
+  .hl__track [data-tone='ok'] {
+    background: var(--console-ok);
+  }
+  .hl__ms {
+    flex: none;
+    width: 64px;
+    text-align: right;
+    color: var(--console-text-secondary);
+  }
+  .hl__note {
+    margin-top: var(--space-01);
+    font: var(--weight-regular) 10.5px / 1.5 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+
+  /* --- mobile -------------------------------------------------------------- */
+  .pd__mobile {
+    min-height: 620px;
+    padding: var(--space-08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(var(--space-07), 4vw, 56px);
+    flex-wrap: wrap;
+    background: var(--console-bg);
+  }
+  .mb__phone {
+    flex: none;
+    width: 340px;
+    height: 556px;
+    max-width: 100%;
+    border: 1.5px solid var(--console-border-strong);
+    border-radius: 30px;
+    overflow: hidden;
+    background: var(--console-deep);
+    box-shadow: var(--shadow-l);
+  }
+  .mb__copy {
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+  }
+  .mb__eyebrow {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--console-text-secondary);
+  }
+  .mb__title {
+    font: var(--weight-semibold) 22px / 1.3 var(--font-heading);
+    letter-spacing: -0.012em;
+    color: var(--console-text);
+  }
+  .mb__body {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--console-text-secondary);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 767px) {
+    .pd__editor {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ed__tree {
+      border-right: none;
+      border-bottom: var(--border-width-1) solid var(--console-border-subtle);
+    }
+    .ed__row {
+      grid-template-columns: 84px minmax(0, 1fr);
+      row-gap: 2px;
+    }
+    .ed__row > span:nth-child(n + 3) {
+      display: none;
+    }
+  }
+</style>

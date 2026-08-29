@@ -1,0 +1,374 @@
+/* -----------------------------------------------------------------------------
+   Reference-page chrome.
+
+   The five pages a reviewer reads rather than skims — /support, /security,
+   /platform, /libredb-database and /compare — are the same document: a hero, a
+   run of titled blocks, and inside them cards, tables and definition rows. They
+   were written first as five scoped <style> blocks and came out near-identical,
+   which is four copies of every future fix. This is the shared half; a page
+   keeps a scoped block only for what is genuinely its own.
+
+   Prefix is `doc-`. It sits alongside the `u-` utilities rather than inside
+   src/styles/ds/, which is a byte-identical copy of design-system/ and is never
+   edited here.
+
+   RULE: every SINGLE-COLUMN prose block needs an explicit max-width. The
+   two-column card grids get a readable line length for free; a one-column block
+   inherits the container instead, and on a 1433px viewport that came out at 90
+   and 108 characters a line against the 52-66 the rest of the page holds. Wide
+   is not a layout decision here, it is an unset one — if a new block below has
+   one column of running text, cap it.
+   -------------------------------------------------------------------------- */
+
+.doc {
+  position: relative;
+  overflow: hidden;
+}
+
+.doc__wash {
+  background: radial-gradient(
+    700px 420px at 50% -10%,
+    color-mix(in srgb, var(--primary-600) 10%, transparent),
+    transparent 70%
+  );
+}
+
+.doc__inner {
+  position: relative;
+  padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+}
+
+/* --- hero ----------------------------------------------------------------- */
+.doc__title {
+  margin-top: var(--stack-eyebrow-title);
+  max-width: var(--measure-long);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  text-wrap: balance;
+}
+
+.doc__intro {
+  margin-top: var(--stack-title-body);
+  max-width: var(--measure-long);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* --- blocks --------------------------------------------------------------- */
+.doc__block {
+  margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+  padding-top: var(--space-08);
+  border-top: var(--border-width-1) solid var(--border);
+}
+
+.doc__head {
+  max-width: var(--measure-long);
+}
+
+.doc__kicker {
+  font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.doc__kicker--warn {
+  color: var(--console-warn);
+}
+
+.doc__h {
+  margin-top: var(--space-03);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: var(--h3-size);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.doc__lead {
+  margin-top: var(--space-04);
+  max-width: var(--measure-long);
+  font-size: var(--body-m-size);
+  line-height: var(--body-long-line);
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+.doc__lead strong {
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+/* --- cards ---------------------------------------------------------------- */
+.doc__cards {
+  display: grid;
+  gap: var(--space-06);
+  margin: var(--space-08) 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 48rem) {
+  .doc__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .doc__cards--three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.doc__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  padding: var(--card-padding);
+  border: var(--border-width-1) solid var(--border-subtle);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+}
+.doc__card h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: var(--h5-size);
+  line-height: 1.3;
+}
+.doc__card p {
+  font-size: var(--body-s-size);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+.doc__card a {
+  margin-top: auto;
+  padding-top: var(--space-02);
+  font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+  color: var(--link);
+}
+.doc__card a:hover {
+  color: var(--link-hover);
+}
+
+/* --- panel: one block that has to be found in a glance down the page ------ */
+.doc__panel {
+  margin-top: clamp(var(--space-09), 5vw, var(--space-10));
+  padding: var(--card-padding);
+  border: var(--border-width-1) solid var(--border-subtle);
+  border-left: 2px solid var(--primary-600);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  max-width: var(--measure-long);
+}
+.doc__panel h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: var(--h5-size);
+  line-height: 1.3;
+}
+.doc__panel p {
+  margin-top: var(--space-03);
+  font-size: var(--body-s-size);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+.doc__panel strong {
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+.doc__panel a {
+  color: var(--link);
+}
+.doc__panel a:hover {
+  color: var(--link-hover);
+}
+
+/* --- tables --------------------------------------------------------------- */
+.doc__tablewrap {
+  margin-top: var(--space-08);
+  overflow-x: auto;
+  border: var(--border-width-1) solid var(--border-subtle);
+  border-radius: var(--radius-l);
+}
+
+.doc__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-s-size);
+  text-align: left;
+}
+.doc__table th,
+.doc__table td {
+  padding: var(--space-04) var(--space-06);
+  border-bottom: var(--border-width-1) solid var(--border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+.doc__table tbody tr:last-child th,
+.doc__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.doc__table thead th {
+  font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  background: var(--background-subtle);
+}
+.doc__table tbody th {
+  font-weight: var(--weight-medium);
+  color: var(--text-primary);
+}
+.doc__table td {
+  color: var(--text-secondary);
+}
+.doc__nowrap {
+  white-space: nowrap;
+}
+@media (min-width: 48rem) {
+  .doc__table {
+    min-width: 40rem;
+  }
+}
+
+/* Below the breakpoint each row becomes a card. A 40rem table in a 360px
+   viewport puts the row header on screen and the cell that explains it off
+   screen, which is the one thing the table exists to show.
+
+   The stacked cells label themselves from `data-label`, not from nth-of-type:
+   a column inserted into the markup would silently relabel every cell after it,
+   and the wrong label is worse than none. */
+@media (max-width: 47.99rem) {
+  .doc__tablewrap {
+    border: 0;
+    border-radius: 0;
+    overflow-x: visible;
+  }
+  .doc__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .doc__table,
+  .doc__table tbody,
+  .doc__table tr,
+  .doc__table th,
+  .doc__table td {
+    display: block;
+  }
+  .doc__table tr {
+    margin-bottom: var(--space-04);
+    padding: var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+  }
+  .doc__table tbody th,
+  .doc__table tbody td {
+    padding: 0;
+    border-bottom: 0;
+  }
+  .doc__table tbody td {
+    margin-top: var(--space-03);
+  }
+  .doc__table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: var(--space-01);
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+}
+
+/* --- definition rows ------------------------------------------------------ */
+/* Capped, because a full-width single column is not a layout — it is a line
+   length. Measured on a 1433px viewport these rows ran to 90 characters while
+   every other block on the same page sat between 52 and 66, which is the range
+   --measure-long exists to hold. The cap is the label column plus its gap plus
+   that measure, so the prose lands inside it rather than beside it. */
+.doc__defs {
+  margin: var(--space-08) 0 0;
+  display: grid;
+  gap: var(--space-05);
+  max-width: calc(12rem + var(--space-06) + var(--measure-long) + 2 * var(--card-padding));
+}
+.doc__def {
+  display: grid;
+  gap: var(--space-02);
+  padding: var(--card-padding);
+  border: var(--border-width-1) solid var(--border-subtle);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+}
+@media (min-width: 48rem) {
+  .doc__def {
+    grid-template-columns: 12rem 1fr;
+    gap: var(--space-06);
+    align-items: baseline;
+  }
+}
+.doc__def dt {
+  font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.doc__def dd {
+  margin: 0;
+  font-size: var(--body-s-size);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* --- plain link list ------------------------------------------------------ */
+.doc__list {
+  display: grid;
+  gap: var(--space-03);
+  margin: var(--space-08) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--body-s-size);
+  line-height: 1.7;
+}
+
+/* --- footnote ------------------------------------------------------------- */
+.doc__fine {
+  margin-top: var(--space-06);
+  max-width: var(--measure-long);
+  font-size: var(--body-s-size);
+  line-height: 1.7;
+  color: var(--text-tertiary);
+}
+.doc__fine strong {
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+.doc__fine code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--text-secondary);
+}
+
+/* Underlined links inside running prose; the card/list links above are not
+   underlined because their whole line is the link. */
+.doc__def a,
+.doc__list a,
+.doc__fine a,
+.doc__intro a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.doc__def a:hover,
+.doc__list a:hover,
+.doc__fine a:hover,
+.doc__intro a:hover {
+  color: var(--link-hover);
+}

@@ -1,0 +1,52 @@
+/* -----------------------------------------------------------------------------
+   Console palette — site-level extension of the design system.
+
+   The prototype paints its terminal chrome, code boxes and the mock IDE with a
+   fixed dark palette that does NOT flip with [data-theme]: a terminal is a
+   terminal in both themes. The design system has no tokens for that surface, so
+   the values below are lifted verbatim from design/Home.dc.html and named here.
+
+   Rule: components never write these hex values, they reference --console-*.
+   Values that DO have a design-system token (#a5b4fc = --primary-300, #6ee7b7 =
+   --accent-300, #93c5fd = --data-300, #10b981 = --accent-500, #3b82f6 =
+   --data-500, #0b0d18 = --neutral-1000) are aliased to the token, not restated.
+   See DECISIONS.md § "Console palette".
+   -------------------------------------------------------------------------- */
+:root {
+  --console-bg: #0d1020; /* code box + demo body            */
+  --console-surface: #12162a; /* title bar, mock cards           */
+  --console-deep: #0b0e1c; /* editor sidebar, phone frame     */
+  --console-chip: #161a30; /* address chip                    */
+  --console-row-alt: #0f1326; /* zebra row                       */
+  --console-border: #262b45; /* hairline between console parts  */
+  --console-border-subtle: #1c2138;
+  --console-border-strong: #3a416a;
+  --console-dot: #2a3050; /* traffic-light dots (demo frame) */
+  --console-dot-strong: #3a416a; /* traffic-light dots (hero frame) */
+
+  --console-text: #dfe4f8;
+  --console-text-soft: #c3c9e0;
+  --console-text-secondary: #8b93b8;
+  --console-text-tertiary: #5b6382;
+  --console-text-faint: #3a4265;
+
+  --console-keyword: var(--primary-300);
+  --console-string: var(--accent-300);
+  --console-number: var(--data-300);
+  --console-comment: var(--console-text-tertiary);
+  --console-ok: var(--accent-500);
+  --console-warn: #f59e0b; /* amber — the one value with no DS scale */
+  --console-info: var(--data-500);
+}
+
+:root {
+  /* hero browser-frame ring: 1px gradient border, 135°. The middle stop
+     (#8b5cf6) has no design-system token — kept verbatim from the prototype. */
+  --frame-ring: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-600) 60%, transparent),
+    color-mix(in srgb, #8b5cf6 35%, transparent) 45%,
+    color-mix(in srgb, var(--accent-500) 45%, transparent)
+  );
+  --frame-void: #030303; /* the demo iframe's own background */
+}

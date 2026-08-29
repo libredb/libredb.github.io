@@ -1,0 +1,146 @@
+---
+import { cta } from '../../data/home';
+import { site } from '../../lib/site';
+---
+
+<section id="cta" class="cta" aria-labelledby="cta-title">
+  <div class="cta__inner u-container">
+    <div data-rv class="cta__panel">
+      <img class="cta__texture" aria-hidden="true" src="/hero-bg-a.png" alt="" loading="lazy" />
+      <span class="cta__tint" aria-hidden="true"></span>
+
+      <img class="cta__mark" src="/brand/lb-icon-white.svg" alt="" width="44" height="44" loading="lazy" />
+      <h2 class="cta__title" id="cta-title">
+        {cta.headline.before}<span class="u-grad-data">{cta.headline.gradient}</span>{cta.headline.after}
+      </h2>
+      <p class="cta__body">{cta.body}</p>
+
+      <div class="cta__actions">
+        <a class="cta__primary" href={cta.primary.href} target="_blank" rel="noreferrer">{cta.primary.label}</a>
+        <a class="cta__secondary" href={cta.secondary.href}>{cta.secondary.label}</a>
+      </div>
+
+      <a class="cta__repo" href={site.links.github} target="_blank" rel="noreferrer">{cta.repoLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__inner {
+    padding-block: clamp(56px, 9vh, 104px);
+  }
+  .cta__panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-2xl);
+    background: var(--gradient-brand);
+    padding: clamp(var(--space-10), 7vw, 88px) clamp(var(--space-07), 5vw, var(--space-11));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .cta__texture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+    mix-blend-mode: luminosity;
+    pointer-events: none;
+  }
+  .cta__tint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary-900) 40%, transparent),
+      /* #4c1d95 sits between --secondary-900 and --secondary-950; kept verbatim */
+      color-mix(in srgb, #4c1d95 30%, transparent)
+    );
+    pointer-events: none;
+  }
+  .cta__mark,
+  .cta__title,
+  .cta__body,
+  .cta__actions,
+  .cta__repo {
+    position: relative;
+  }
+
+  .cta__title {
+    margin-top: var(--space-07);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.024em;
+    color: #fff;
+    text-wrap: balance;
+  }
+  .cta__body {
+    margin-top: 14px;
+    max-width: 520px;
+    font-size: 16.5px;
+    line-height: 1.65;
+    /* .9 → contrast 5.68:1 at the purple end of the panel (scripts/contrast.mjs) */
+    color: rgb(255 255 255 / 0.9);
+    text-wrap: pretty;
+  }
+  .cta__actions {
+    margin-top: var(--space-08);
+    display: flex;
+    gap: var(--space-04);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cta__primary,
+  .cta__secondary {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .cta__primary {
+    padding: 0 var(--space-07);
+    background: var(--neutral-0);
+    color: var(--primary-900);
+  }
+  .cta__primary:hover {
+    background: var(--primary-50);
+    color: var(--primary-900);
+  }
+  .cta__primary:active {
+    transform: scale(var(--press-scale));
+  }
+  .cta__secondary {
+    padding: 0 22px;
+    border: var(--border-width-1) solid rgb(255 255 255 / 0.55);
+    color: #fff;
+  }
+  .cta__secondary:hover {
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+  }
+  .cta__secondary:active {
+    transform: scale(var(--press-scale));
+  }
+
+  .cta__repo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    margin-top: 22px;
+    font: var(--weight-medium) 12.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    /* lifted from .75 → .82: .75 measured 4.39:1 over the panel's purple end */
+    color: rgb(255 255 255 / 0.82);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .cta__repo:hover {
+    color: #fff;
+  }
+</style>

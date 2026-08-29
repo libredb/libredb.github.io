@@ -1,0 +1,437 @@
+---
+import { hero } from '../../data/home';
+import BrowserFrame from '../common/BrowserFrame.astro';
+import CopyBox from '../common/CopyBox.astro';
+
+/** lbWord stagger, matching the prototype: 70ms between words, second line
+ *  starts at 340ms. */
+const line1 = hero.headline.lineOne.map((w, i) => ({ w, delay: (i * 0.07).toFixed(2) }));
+const line2 = hero.headline.lineTwo.map((w, i) => ({ w, delay: (0.34 + i * 0.07).toFixed(2) }));
+
+/** Two separate bundles, 439KB and 276KB. Only one is ever fetched — the inline
+ *  script below picks it. Authored sizes: 1920x1080 and 422x950. */
+const DEMO_DESKTOP = '/demo/libredb-studio-demo.html';
+const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
+---
+
+<section id="top" class="hero" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <img src="/hero-bg-f.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+    <span class="hero__veil hero__veil--radial"></span>
+    <span class="hero__veil hero__veil--fade"></span>
+  </div>
+
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <p class="hero__badge">
+        <span class="hero__dot" aria-hidden="true"></span>
+        <span>{hero.badge}</span>
+      </p>
+
+      <h1 class="hero__title" id="hero-title">
+        {
+          /* the space between words is emitted explicitly: adjacent {map} output
+             leaves no text node at all, so the words would render welded together */
+          line1.map(({ w, delay }, i) => (
+            <Fragment>
+              {i ? ' ' : null}
+              <span style={`--d:${delay}s`}>{w}</span>
+            </Fragment>
+          ))
+        }
+        <br />
+        {
+          line2.map(({ w, delay }, i) => (
+            <Fragment>
+              {i ? ' ' : null}
+              <span class="u-grad-brand" style={`--d:${delay}s`}>
+                {w}
+              </span>
+            </Fragment>
+          ))
+        }
+      </h1>
+
+      <p class="hero__sub">{hero.sub}</p>
+
+      <div class="hero__actions">
+        <a class="hero__cta" href={hero.primaryCta.href} target="_blank" rel="noreferrer">
+          {hero.primaryCta.label}
+        </a>
+        <a class="hero__ghost" href={hero.secondaryCta.href}>
+          {hero.secondaryCta.label}
+          <span class="hero__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="hero__command">
+        <CopyBox command={hero.command} label="Copy the docker run command" />
+        <p class="hero__note">{hero.commandNote}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outside .hero__inner on purpose: the tour is authored at 1920x1080 and
+       scales itself to min(width/1920, height/1080), so every pixel of width it
+       is given comes back as legibility. Inside the hero's 1160px column it was
+       stuck at 52% scale. Its own container is why this is not `100vw`, which
+       would overflow by the width of the scrollbar. -->
+  <div class="hero__demo">
+    <BrowserFrame address={hero.frameAddress} ring dots="strong">
+      <div class="hero__stage" data-demo-stage>
+        <div class="hero__crop">
+          <iframe
+            class="hero__iframe"
+            title="LibreDB Studio product tour"
+            loading="lazy"
+            data-demo
+            data-demo-desktop={DEMO_DESKTOP}
+            data-demo-mobile={DEMO_MOBILE}></iframe>
+        </div>
+        <button class="hero__expand" type="button" data-demo-expand aria-label="Expand the product tour">
+          <span class="hero__expand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5"></path>
+            </svg>
+          </span>
+          <span class="hero__expand-label">Expand</span>
+        </button>
+      </div>
+    </BrowserFrame>
+    <noscript>
+      <iframe class="hero__noscript-frame" src={DEMO_DESKTOP} title="LibreDB Studio product tour"></iframe>
+    </noscript>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    border-bottom: var(--border-width-1) solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+  /* the aurora plate is a dark-theme device; the light theme keeps a flat canvas */
+  :global([data-theme='light']) .hero__bg {
+    opacity: 0;
+  }
+  .hero__bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  .hero__veil {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  .hero__veil--radial {
+    background: radial-gradient(
+      58% 52% at 50% 44%,
+      color-mix(in srgb, var(--neutral-1000) var(--hero-veil-core, 50%), transparent) 0%,
+      color-mix(in srgb, var(--neutral-1000) var(--hero-veil-mid, 18%), transparent) 55%,
+      transparent 100%
+    );
+  }
+  .hero__veil--fade {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--neutral-1000) 28%, transparent) 0%,
+      transparent 22%,
+      transparent 62%,
+      var(--neutral-1000) 100%
+    );
+  }
+
+  .hero__inner {
+    position: relative;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: clamp(52px, 8vh, 88px) clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop)) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-03);
+    padding: var(--space-02) var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font: var(--weight-medium) 11.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    animation: lbWord var(--hero-in, 0.6s) var(--ease-out) both;
+  }
+  .hero__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-circle);
+    background: var(--accent-500);
+    animation: lbPulse 2s ease-in-out infinite;
+  }
+
+  .hero__title {
+    margin-top: 26px;
+    font-family: var(--font-heading);
+    font-weight: var(--weight-bold);
+    font-size: clamp(40px, 5.2vw, 72px);
+    line-height: 1.07;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+    max-width: 980px;
+  }
+  .hero__title span {
+    display: inline-block;
+    animation: lbWord 0.6s var(--ease-out) var(--d, 0s) both;
+  }
+
+  .hero__sub {
+    margin-top: 22px;
+    max-width: 660px;
+    font-size: clamp(var(--body-m-size), 1.4vw, var(--body-l-size));
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+    animation: lbWord 0.7s var(--ease-out) 0.85s both;
+  }
+
+  .hero__actions {
+    margin-top: 34px;
+    display: flex;
+    gap: var(--space-04);
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: lbWord 0.7s var(--ease-out) 1s both;
+  }
+  .hero__cta,
+  .hero__ghost {
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .hero__cta {
+    padding: 0 var(--space-07);
+    background: var(--action-primary);
+    color: #fff;
+  }
+  .hero__cta:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+  .hero__cta:active {
+    transform: scale(var(--press-scale));
+  }
+
+  .hero__ghost {
+    gap: var(--space-03);
+    padding: 0 22px;
+    border: var(--border-width-1) solid var(--border-strong);
+    color: var(--text-primary);
+  }
+  .hero__ghost:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+  }
+  .hero__ghost:active {
+    transform: scale(var(--press-scale));
+  }
+  .hero__arrow {
+    display: inline-block;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+  .hero__ghost:hover .hero__arrow {
+    transform: translateX(4px);
+  }
+
+  .hero__command {
+    margin-top: var(--space-08);
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    animation: lbWord 0.7s var(--ease-out) 1.12s both;
+  }
+  .hero__note {
+    font: var(--weight-regular) var(--body-xs-size) / 1.5 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  .hero__demo {
+    position: relative;
+    max-width: 1440px;
+    margin: clamp(44px, 7vh, 72px) auto 0;
+    padding: 0 clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop)) clamp(56px, 8vh, 88px);
+    animation: lbWord 0.8s var(--ease-out) 1.25s both;
+  }
+  /* The tour paints a 1920x1080 stage, and inside it an app card at
+     (92.5, 104) sized 1735x976 — a 16:9 card, inset because the stage reserves
+     104px at the top for its own tab strip and then fits 1080px of content into
+     the 976px left over (976/1080 = 0.9037, the scale baked into the card).
+     That inset is 9.6% of the frame spent on chrome we already draw ourselves,
+     so the stage below crops to the card: the iframe is sized 1920/1735 larger
+     than the window and offset by the card's origin. It is CSS width, not a
+     transform — the tour reads its own innerWidth, so it repaints at the larger
+     size instead of being rasterised and stretched. */
+  /* Two boxes, because a fullscreen element cannot be sized: Chrome's UA rule
+     forces `inset: 0; margin: 0; width/height: 100% !important` on it. So the
+     stage is only the centring container that goes fullscreen, and the crop —
+     an ordinary child, sizeable — carries the ratio. */
+  .hero__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--frame-void);
+  }
+  .hero__crop {
+    --stage-w: 1920;
+    --card-w: 1735;
+    --card-x: 92.5;
+    --card-y: 104;
+
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--frame-void);
+  }
+  .hero__iframe {
+    position: absolute;
+    display: block;
+    border: 0;
+    background: var(--frame-void);
+    width: calc(100% * var(--stage-w) / var(--card-w));
+    height: calc(100% * var(--stage-w) / var(--card-w));
+    left: calc(-100% * var(--card-x) / var(--card-w));
+    /* `top` resolves against the box height, so the card's y offset — a
+       fraction of the width — is converted through the 16:9 ratio. */
+    top: calc(-100% * var(--card-y) / var(--card-w) * 16 / 9);
+  }
+  /* Fullscreen keeps the same crop — only the box grows. The tour still scales
+     to the box, so this is worth roughly +8% on a 1440px laptop and reaches life
+     size at 1920px, where the card finally gets its authored 1920 pixels. */
+  .hero__stage:fullscreen .hero__crop {
+    width: min(100vw, calc(100vh * 16 / 9));
+  }
+  .hero__stage::backdrop {
+    background: var(--frame-void);
+  }
+
+  .hero__expand {
+    position: absolute;
+    z-index: 2;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border: var(--border-width-1) solid color-mix(in srgb, var(--neutral-0) 16%, transparent);
+    border-radius: var(--radius-full, 999px);
+    background: color-mix(in srgb, var(--neutral-1000) 72%, transparent);
+    backdrop-filter: blur(10px);
+    color: var(--neutral-0);
+    font: 500 12px/1 var(--font-ui, inherit);
+    cursor: pointer;
+    /* Present for keyboards and screen readers at all times; it only fades in
+       for a pointer so it never sits on top of the tour it is describing. */
+    opacity: 0;
+    transition:
+      opacity var(--duration-fast, 0.15s) var(--ease-out),
+      background var(--duration-fast, 0.15s) var(--ease-out);
+  }
+  .hero__stage:hover .hero__expand,
+  .hero__expand:focus-visible {
+    opacity: 1;
+  }
+  .hero__expand:hover {
+    background: color-mix(in srgb, var(--neutral-1000) 88%, transparent);
+  }
+  .hero__expand-icon {
+    display: inline-flex;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__expand {
+      transition: none;
+    }
+  }
+  /* Coarse pointers have no hover to reveal it, so it stays visible. */
+  @media (hover: none) {
+    .hero__expand {
+      opacity: 1;
+    }
+  }
+
+  .hero__noscript-frame {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    background: var(--frame-void);
+  }
+
+  /* 1023px is the site's own "not desktop" line — SiteHeader switches to the
+     hamburger here too. Below it the 1920x1080 tour was unreadable: at 390px it
+     rendered as a 333x187 strip at 17% scale with 168px of black above and
+     below. The phone bundle is authored at 422x950, and its width is derived
+     from a capped height so the browser chrome hugs the demo instead of framing
+     a narrow strip in a wide bar. */
+  @media (max-width: 1023px) {
+    .hero__demo {
+      /* 422px is the bundle's own box, and it caps its scale at 1 — past that
+         width every extra pixel is empty gutter, and the 422:950 ratio was
+         turning a tablet's width into a 2226px-tall hero. Narrower than that,
+         the frame simply takes what the viewport has. */
+      max-width: calc(422px + 2 * 16px);
+      padding-inline: 16px;
+    }
+    /* The phone bundle draws its own bezel around a 390x844 screen inside a
+       422x950 box, and caps its scale at 1 so it never upscales past life size.
+       Nothing to crop here — the bezel is the point — so the stage matches the
+       bundle's own box exactly and the frame gets all the width there is. */
+    .hero__crop {
+      aspect-ratio: 422 / 950;
+    }
+    .hero__stage:fullscreen .hero__crop {
+      width: min(100vw, calc(100vh * 422 / 950));
+    }
+    .hero__iframe {
+      position: static;
+      width: 100%;
+      height: 100%;
+      left: auto;
+      top: auto;
+    }
+  }
+</style>
+
+<script>
+  import '../../scripts/hero-demo';
+</script>

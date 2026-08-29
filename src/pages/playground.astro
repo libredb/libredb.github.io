@@ -1,14 +1,141 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import StudioShell from '../components/studio/StudioShell.astro';
-import Playground from '../components/studio/Playground.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrowserFrame from '../components/common/BrowserFrame.astro';
+import Playground from '../components/playground/Playground.astro';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'WebApplication',
+    name: 'LibreDB Playground',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web browser',
+    url: `${site.url}/playground`,
+    description: 'A real LibreDB database running entirely in the browser, backed by OPFS.',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+];
 ---
 
-<Layout
-  title="Playground — run LibreDB in your browser | LibreDB"
+<BaseLayout
+  path="/playground"
+  title="Playground"
   description="Run a real LibreDB database entirely in your browser, backed by OPFS. Preloaded sample data, clickable commands, zero backend, no signup."
+  schema={schema}
 >
-  <StudioShell active="playground" standalone>
-    <Playground />
-  </StudioShell>
-</Layout>
+  <section class="pgp" aria-labelledby="pgp-title">
+    <div class="u-wash pgp__wash" aria-hidden="true"></div>
+    <div class="pgp__inner u-container">
+      <p class="u-eyebrow">Playground</p>
+      <h1 class="pgp__title" id="pgp-title">
+        A real database, running in <span class="u-grad-brand">this tab</span>
+      </h1>
+      <p class="pgp__intro">
+        Not a recording and not a hosted sandbox — an actual LibreDB store opened inside your browser, persisted to
+        OPFS. It is seeded with three namespaces on first load. Nothing you type leaves the machine.
+      </p>
+
+      <BrowserFrame class="pgp__frame" address="playground.libredb — local, in this browser">
+        <Playground />
+      </BrowserFrame>
+
+      <ul class="pgp__notes">
+        <li>
+          <strong>Persistence is per browser.</strong> Writes survive a reload through OPFS. A second tab cannot take the
+          lock, so it falls back to in-memory and says so.
+        </li>
+        <li>
+          <strong>Five verbs, one grammar.</strong> get, put, delete, prefix and range — the same commands Studio's LibreDB
+          provider issues. Tables and collections are conventions over the keyspace.
+        </li>
+        <li>
+          <strong>Reset wipes it.</strong> The reset button asks twice, then rebuilds the seed from scratch.
+        </li>
+      </ul>
+
+      <p class="pgp__more">
+        This is the embedded engine, not the IDE. To drive Postgres, MySQL or Mongo through the full Studio, <a
+          href={site.links.demo}
+          target="_blank"
+          rel="noreferrer">open the live demo ↗</a
+        > or <a href="/#deploy">deploy your own</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pgp {
+    position: relative;
+    overflow: hidden;
+  }
+  .pgp__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .pgp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .pgp__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .pgp__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .pgp__frame {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+  }
+  .pgp__notes {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-09) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .pgp__notes {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .pgp__notes li {
+    padding-top: var(--space-05);
+    border-top: var(--border-width-1) solid var(--border);
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .pgp__notes strong {
+    display: block;
+    color: var(--text-primary);
+    font-weight: var(--weight-semibold);
+  }
+  .pgp__more {
+    margin-top: var(--space-09);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .pgp__more a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

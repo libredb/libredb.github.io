@@ -1,0 +1,81 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 1 && (
+    <nav class="toc" aria-labelledby="toc-title">
+      <p class="toc__title" id="toc-title">
+        On this page
+      </p>
+      <ol class="toc__list">
+        {items.map((h) => (
+          <li class="toc__item" data-depth={h.depth}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<script>
+  import '../../scripts/toc';
+</script>
+
+<style>
+  .toc {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    padding-left: var(--space-05);
+    border-left: var(--border-width-1) solid var(--border);
+  }
+  .toc__title {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .toc__list {
+    margin: var(--space-05) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-02);
+  }
+  .toc__item[data-depth='3'] {
+    padding-left: var(--space-04);
+  }
+  .toc__item a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    font-size: var(--body-s-size);
+    line-height: 1.4;
+    color: var(--text-tertiary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .toc__item a:hover {
+    color: var(--text-primary);
+  }
+  .toc__item[data-current] a {
+    color: var(--text-brand);
+  }
+
+  @media (max-width: 1023px) {
+    .toc {
+      position: static;
+      padding: var(--space-05) 0 0;
+      border-left: none;
+      border-top: var(--border-width-1) solid var(--border);
+    }
+  }
+</style>

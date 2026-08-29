@@ -2,6 +2,10 @@ name: Deploy to GitHub Pages
 
 # Production deploy is gated on publishing a GitHub release.
 # Build verification on PRs / main pushes lives in ci.yml.
+#
+# NOTE for CMS authors: saving a post in the Outstatic dashboard commits Markdown
+# to main, which runs ci.yml but does NOT publish. Cut a release (or run this
+# workflow from the Actions tab) to put new posts live.
 on:
   release:
     types: [published]
@@ -64,8 +68,7 @@ jobs:
         with:
           path: ./dist
           # Without this the action tars ./dist with --exclude=.[^/]*, which drops
-          # public/.well-known/ - the domain verification files served from there
-          # (Flathub, security.txt) would 404 in production.
+          # public/.well-known/ — anything served from there would 404 in production.
           include-hidden-files: true
 
   deploy:

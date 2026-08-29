@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { faq } from '../data/faq';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  path="/faq"
+  title="FAQ"
+  description="What LibreDB Studio is, which engines it speaks, what ships in the MIT build, and how it installs."
+  schema={schema}
+>
+  <section class="faq" aria-labelledby="faq-title">
+    <div class="u-wash faq__wash" aria-hidden="true"></div>
+    <div class="faq__inner u-container">
+      <p class="u-eyebrow">Frequently asked</p>
+      <h1 class="faq__title" id="faq-title">
+        The short answers, with <span class="u-grad-brand">nothing softened</span>
+      </h1>
+      <p class="faq__intro">
+        Every answer below is the same claim the product makes elsewhere on this site. Where a limit exists, it is
+        stated rather than left for you to find.
+      </p>
+
+      <dl class="faq__list">
+        {
+          faq.map((f, i) => (
+            <div class="faq__item">
+              <dt class="faq__q">
+                <span class="faq__n">{String(i + 1).padStart(2, '0')}</span>
+                {f.q}
+              </dt>
+              <dd class="faq__a">{f.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="faq__more">
+        Still unanswered? The architecture notes and provider docs live in the repository.
+        <a href={site.links.docs} target="_blank" rel="noreferrer">Read the docs ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq {
+    position: relative;
+    overflow: hidden;
+  }
+  .faq__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .faq__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .faq__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .faq__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .faq__list {
+    margin: clamp(var(--space-09), 5vw, var(--space-11)) 0 0;
+    max-width: var(--measure-long);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .faq__item {
+    padding-block: var(--space-07);
+    border-bottom: var(--border-width-1) solid var(--border-subtle);
+  }
+  .faq__q {
+    display: flex;
+    gap: var(--space-04);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.4;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  .faq__n {
+    flex: none;
+    font: var(--weight-semibold) 10.5px / 1.9 var(--font-mono);
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+  .faq__a {
+    margin: var(--space-04) 0 0 34px;
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .faq__more {
+    margin-top: var(--space-09);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+</style>

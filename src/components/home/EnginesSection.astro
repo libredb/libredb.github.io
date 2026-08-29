@@ -1,0 +1,285 @@
+---
+import { databases } from '../../data/home';
+import { engines, defaultEngineId, engineReference } from '../../data/engines';
+---
+
+<section id="databases" class="db" aria-labelledby="db-title">
+  <span class="db__rule" aria-hidden="true"></span>
+  <div class="u-wash db__wash" aria-hidden="true"></div>
+
+  <div class="db__inner u-container" data-switch="engines" data-switch-role="tab" data-switch-active={defaultEngineId}>
+    <div data-rv class="db__head">
+      <div>
+        <p class="u-eyebrow">{databases.eyebrow}</p>
+        <h2 class="db__title" id="db-title">
+          {databases.headline.lineOne}<br /><span class="u-grad-data">{databases.headline.gradient}</span>
+        </h2>
+      </div>
+      <p class="db__intro">{databases.intro}</p>
+    </div>
+
+    <div data-rv class="db__grid" role="tablist" aria-label="Supported database engines">
+      {
+        engines.map((e) => (
+          <button type="button" class="hex" data-switch-trigger={e.id}>
+            <span class="hex__ring">
+              <span class="hex__plate">
+                <img src={e.logo} alt="" width="36" height="36" loading="lazy" />
+              </span>
+            </span>
+            <span class="hex__name">{e.name}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="db__detail">
+      {
+        engines.map((e) => (
+          <div class="db__panel" data-switch-panel={e.id} hidden={e.id !== defaultEngineId}>
+            <article class="db__card">
+              <div class="db__cardhead">
+                <span class="hex__plate hex__plate--sm">
+                  <img src={e.logo} alt="" width="24" height="24" loading="lazy" />
+                </span>
+                <h3 class="db__name">{e.name}</h3>
+                <span class="db__cat">{e.cat}</span>
+              </div>
+              <p class="db__desc">{e.desc}</p>
+              <dl class="db__specs">
+                <dt>TRANSPORT</dt>
+                <dd>{e.tr}</dd>
+                <dt>REFERENCE</dt>
+                <dd>{engineReference(e.id)}</dd>
+              </dl>
+            </article>
+
+            <article class="db__card">
+              <h4 class="db__notdo">{databases.notDoTitle}</h4>
+              <p class="db__notdotext">{e.not}</p>
+              <p class="db__notdonote">{databases.notDoNote}</p>
+            </article>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="db__foot">{databases.footnote}</p>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/switcher';
+</script>
+
+<style>
+  .db {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+    background: var(--background-subtle);
+  }
+  .db__rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-data);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .db__wash {
+    background: radial-gradient(
+      720px 420px at 50% -8%,
+      color-mix(in srgb, var(--primary-600) 9%, transparent),
+      transparent 70%
+    );
+  }
+  .db__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+
+  .db__head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+    gap: clamp(var(--space-07), 4vw, var(--space-11));
+    align-items: end;
+  }
+  .db__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.024em;
+  }
+  .db__intro {
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .db__grid {
+    margin-top: 52px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    gap: var(--space-08) var(--space-04);
+    justify-items: center;
+  }
+
+  .hex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+  .hex:hover {
+    transform: translateY(var(--hover-lift));
+  }
+  .hex:active {
+    transform: scale(var(--press-scale));
+  }
+  .hex__ring {
+    width: 88px;
+    height: 100px;
+    display: grid;
+    place-items: center;
+    background: var(--border-strong);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .hex__plate {
+    width: 84px;
+    height: 96px;
+    display: grid;
+    place-items: center;
+    background: var(--neutral-0);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+  .hex__plate--sm {
+    flex: none;
+    width: 46px;
+    height: 52px;
+  }
+  .hex__plate img {
+    object-fit: contain;
+  }
+  .hex__name {
+    font: var(--weight-medium) 11px / 1.3 var(--font-mono);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: center;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .hex[data-state='active'] .hex__ring {
+    background: var(--gradient-brand);
+  }
+  .hex[data-state='active'] .hex__name {
+    color: var(--text-brand);
+  }
+
+  .db__detail {
+    margin-top: 44px;
+  }
+  .db__panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+    gap: 14px;
+  }
+  .db__card {
+    background: var(--surface);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    padding: var(--space-08);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .db__cardhead {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .db__name {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.014em;
+  }
+  .db__cat {
+    padding: 5px 9px;
+    border-radius: var(--radius-xs);
+    background: var(--surface-brand);
+    color: var(--text-brand);
+    font: var(--weight-semibold) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .db__desc {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .db__specs {
+    margin: auto 0 0;
+    padding-top: var(--space-05);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: var(--space-04) var(--space-05);
+    align-items: baseline;
+  }
+  .db__specs dt {
+    font: var(--weight-semibold) 10.5px / 1.5 var(--font-mono);
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+  .db__specs dd {
+    margin: 0;
+    font: var(--weight-regular) 13.5px / 1.5 var(--font-mono);
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .db__notdo {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .db__notdotext {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+  .db__notdonote {
+    margin-top: auto;
+    padding-top: var(--space-05);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .db__foot {
+    margin-top: var(--space-07);
+    font: var(--weight-regular) 12.5px / 1.6 var(--font-mono);
+    color: var(--text-tertiary);
+    max-width: var(--measure-long);
+  }
+</style>

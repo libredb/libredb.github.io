@@ -1,0 +1,247 @@
+---
+/**
+ * Cookie consent banner + the analytics it gates.
+ *
+ * Nothing that tracks is loaded until Accept is clicked. Declining stores the
+ * decision so the banner does not return, and loads nothing. The stored key is
+ * `libredb-cookie-consent`, which is the key /privacy-policy documents — change
+ * one and change the other.
+ *
+ * Three deliberate departures from the previous site's version:
+ *
+ *  1. No `<noscript>` Meta pixel. That version shipped a 1x1 tracking image
+ *     outside the consent gate, so a visitor without JavaScript was tracked and
+ *     had no way to refuse — consent cannot be collected without JavaScript, so
+ *     the honest resolution is to track nobody in that case.
+ *  2. No View-Transition plumbing. This site serves plain document navigations,
+ *     so there is no DOM swap to re-bind to and no cross-navigation `window`
+ *     state to carry: every page load configures GA once and counts once.
+ *  3. The banner is `hidden` until it is shown, rather than translated off
+ *     screen. A visually-offscreen dialog keeps its buttons in the tab order,
+ *     so a keyboard user tabs into "Accept" on a banner nobody can see.
+ */
+---
+
+<div class="cc" id="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite" hidden>
+  <div class="cc__inner u-container">
+    <p class="cc__text">
+      <span class="cc__com" aria-hidden="true">--</span> We use cookies to analyse site traffic and improve your experience.
+      See our <a href="/privacy-policy">Privacy Policy</a> for details.
+    </p>
+    <div class="cc__actions">
+      <button type="button" class="cc__decline" id="cookie-decline">Decline</button>
+      <button type="button" class="cc__accept" id="cookie-accept">Accept</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var GA_ID = 'G-Q59L35YFPW';
+    var META_PIXEL_ID = '25949277121347381';
+    var STORAGE_KEY = 'libredb-cookie-consent';
+
+    var banner = document.getElementById('cookie-consent');
+    if (!banner) return;
+
+    // Private browsing and "block site data" make localStorage throw on access,
+    // not return null. Treat an unreadable store as "not decided" and an
+    // unwritable one as a decision we simply cannot remember — never as a crash
+    // that would leave the banner stuck on screen.
+    function read() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+    function write(v) {
+      try {
+        localStorage.setItem(STORAGE_KEY, v);
+      } catch (e) {
+        /* nothing to do — the decision holds for this page only */
+      }
+    }
+
+    function loadGA() {
+      if (window.__libredbGA) return;
+      window.__libredbGA = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag =
+        window.gtag ||
+        function () {
+          window.dataLayer.push(arguments);
+        };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
+    }
+
+    function loadMetaPixel() {
+      if (window.fbq) return;
+      /* oxlint-disable no-unused-expressions -- canonical Meta Pixel vendor snippet; do not rewrite */
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      /* oxlint-enable no-unused-expressions */
+      window.fbq('init', META_PIXEL_ID);
+    }
+
+    /** The only place anything third-party is fetched. Reached on Accept, or on a
+        later page load once Accept is already stored — never otherwise. */
+    function enableAnalytics() {
+      loadGA(); // `config` counts this page view
+      loadMetaPixel();
+      if (window.fbq) window.fbq('track', 'PageView');
+    }
+
+    function show() {
+      banner.hidden = false;
+      // Reveal first, animate on the next frame — a transform transition cannot
+      // run in the same frame the element stops being `display: none`.
+      requestAnimationFrame(function () {
+        banner.classList.add('is-open');
+      });
+    }
+
+    function hide() {
+      banner.classList.remove('is-open');
+      var done = function () {
+        banner.hidden = true;
+        banner.removeEventListener('transitionend', done);
+      };
+      banner.addEventListener('transitionend', done);
+      // Reduced motion skips the transition, so transitionend never fires.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) done();
+    }
+
+    var consent = read();
+    if (consent === 'declined') return; // nothing loaded, banner stays hidden
+    if (consent === 'accepted') {
+      enableAnalytics();
+      return;
+    }
+
+    // Undecided: offer the choice, a beat after the page has settled.
+    setTimeout(show, 1000);
+
+    document.getElementById('cookie-accept').addEventListener('click', function () {
+      write('accepted');
+      hide();
+      enableAnalytics();
+    });
+    document.getElementById('cookie-decline').addEventListener('click', function () {
+      write('declined');
+      hide();
+    });
+  })();
+</script>
+
+<style>
+  .cc {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: var(--z-toast);
+    border-top: var(--border-width-1) solid var(--border);
+    background: var(--surface-elevated);
+    box-shadow: var(--shadow-xl);
+    transform: translateY(100%);
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+  .cc.is-open {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc {
+      transition: none;
+    }
+  }
+
+  .cc__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-05);
+    padding-block: var(--space-05);
+  }
+  @media (min-width: 40rem) {
+    .cc__inner {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .cc__text {
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  /* The SQL comment marker the rest of the site uses for asides. */
+  .cc__com {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .cc__text a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .cc__text a:hover {
+    color: var(--link-hover);
+  }
+
+  .cc__actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-04);
+  }
+  .cc__accept,
+  .cc__decline {
+    height: var(--touch-target-min);
+    padding: 0 var(--space-06);
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) var(--label-size) / 1 var(--font-ui);
+    cursor: pointer;
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .cc__accept {
+    border: 0;
+    background: var(--action-primary);
+    color: #fff;
+    font-weight: var(--weight-semibold);
+  }
+  .cc__accept:hover {
+    background: var(--action-primary-hover);
+  }
+  .cc__decline {
+    border: var(--border-width-1) solid var(--border-strong);
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .cc__decline:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+</style>

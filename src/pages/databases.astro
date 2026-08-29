@@ -1,0 +1,337 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { engines, engineReference, type EngineCategory } from '../data/engines';
+import { databases } from '../data/home';
+import { site } from '../lib/site';
+
+// The homepage shows one engine at a time behind a hexagon tablist — good for a
+// first impression, useless for the question this page exists to answer: "is my
+// engine in here, and what exactly does it not do?" So this renders all seventeen
+// at once, grouped, with every limit visible without a click.
+const ORDER: EngineCategory[] = ['SQL', 'Analytics', 'Federated', 'Document', 'Key-value', 'Wide-column', 'Search'];
+
+const BLURBS: Record<EngineCategory, string> = {
+  SQL: 'Pooled connections, catalog introspection, visual EXPLAIN and ER diagrams.',
+  Analytics: 'Columnar and in-process engines — scan-heavy queries and file-backed tables.',
+  Federated: 'One query across several underlying systems; the catalog is the federation.',
+  Document: 'Collections and nested documents, with the grid flattening what it can.',
+  'Key-value': 'Ordered keyspaces. Tables and collections are conventions over the keys.',
+  'Wide-column': 'Partition-and-clustering-key stores, where a scan is a decision, not a default.',
+  Search: 'Index-first engines queried through their own DSL as well as SQL where offered.',
+};
+
+const groups = ORDER.map((cat) => ({
+  cat,
+  blurb: BLURBS[cat],
+  items: engines.filter((e) => e.cat === cat),
+})).filter((g) => g.items.length > 0);
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'Database engines supported by LibreDB Studio',
+    numberOfItems: engines.length,
+    itemListElement: engines.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: e.name,
+      description: e.desc,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  path="/databases"
+  title="Databases"
+  description="The seventeen engines LibreDB Studio speaks — PostgreSQL, MySQL, Oracle, MongoDB, Redis, ClickHouse and more — each with its transport and the capability it deliberately does not have."
+  schema={schema}
+>
+  <section class="dbp" aria-labelledby="dbp-title">
+    <div class="u-wash dbp__wash" aria-hidden="true"></div>
+    <div class="dbp__inner u-container">
+      <p class="u-eyebrow">{databases.eyebrow}</p>
+      <h1 class="dbp__title" id="dbp-title">
+        One interface. <span class="u-grad-data">Different engines.</span>
+      </h1>
+      <p class="dbp__intro">{databases.intro}</p>
+
+      <ul class="dbp__counts">
+        {
+          groups.map((g) => (
+            <li>
+              <a href={`#cat-${g.cat.toLowerCase().replace(/[^a-z]/g, '-')}`}>
+                <span class="dbp__count">{String(g.items.length).padStart(2, '0')}</span>
+                {g.cat}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        groups.map((g) => {
+          const anchor = `cat-${g.cat.toLowerCase().replace(/[^a-z]/g, '-')}`;
+          return (
+            <section class="dbp__group" id={anchor} aria-labelledby={`${anchor}-h`}>
+              <div class="dbp__grouphead">
+                <h2 class="dbp__groupname" id={`${anchor}-h`}>
+                  {g.cat}
+                </h2>
+                <p class="dbp__groupblurb">{g.blurb}</p>
+              </div>
+
+              <ul class="dbp__list">
+                {g.items.map((e) => (
+                  <li class="dbp__engine">
+                    <div class="dbp__id">
+                      <span class="dbp__plate">
+                        <img src={e.logo} alt="" width="28" height="28" loading="lazy" decoding="async" />
+                      </span>
+                      <h3 class="dbp__name">{e.name}</h3>
+                    </div>
+
+                    <p class="dbp__desc">{e.desc}</p>
+
+                    <dl class="dbp__specs">
+                      <div>
+                        <dt>Transport</dt>
+                        <dd>{e.tr}</dd>
+                      </div>
+                      <div>
+                        <dt>Reference</dt>
+                        <dd>
+                          <code>{engineReference(e.id)}</code>
+                        </dd>
+                      </div>
+                    </dl>
+
+                    <p class="dbp__not">
+                      <span class="dbp__notlabel">Does not do</span>
+                      {e.not}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })
+      }
+
+      <p class="dbp__foot">
+        {databases.notDoNote}
+      </p>
+      <p class="dbp__more">
+        {databases.footnote}
+        <a href={site.links.docs} target="_blank" rel="noreferrer">Read the provider docs ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dbp {
+    position: relative;
+    overflow: hidden;
+  }
+  .dbp__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--data-500) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .dbp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .dbp__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .dbp__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* Category jump strip — seventeen engines is enough to need one. */
+  .dbp__counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dbp__counts a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-03);
+    padding: var(--space-03) var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    font: var(--weight-medium) var(--label-size) / 1 var(--font-ui);
+    color: var(--text-secondary);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .dbp__counts a:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .dbp__count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .dbp__group {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    scroll-margin-top: 96px;
+  }
+  .dbp__grouphead {
+    padding-bottom: var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--border);
+  }
+  .dbp__groupname {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h3-size);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+  }
+  .dbp__groupblurb {
+    margin-top: var(--space-02);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-tertiary);
+  }
+
+  .dbp__list {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-07) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .dbp__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 80rem) {
+    .dbp__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .dbp__engine {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .dbp__id {
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+  }
+  .dbp__plate {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-m);
+    background: var(--background-subtle);
+  }
+  .dbp__name {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.2;
+  }
+  .dbp__desc {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dbp__specs {
+    display: grid;
+    gap: var(--space-03);
+    margin: 0;
+    padding-top: var(--space-04);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+  }
+  .dbp__specs dt {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .dbp__specs dd {
+    margin: 2px 0 0;
+    font: var(--weight-regular) 12.5px / 1.5 var(--font-mono);
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+  }
+  .dbp__specs code {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* The honest-limit line is the point of the page — it gets its own block, not
+     a footnote, and the same weight on every card. */
+  .dbp__not {
+    margin-top: auto;
+    padding-top: var(--space-04);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .dbp__notlabel {
+    display: block;
+    margin-bottom: var(--space-02);
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--console-warn);
+  }
+
+  .dbp__foot,
+  .dbp__more {
+    margin-top: var(--space-09);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .dbp__more {
+    margin-top: var(--space-05);
+  }
+  .dbp__more a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

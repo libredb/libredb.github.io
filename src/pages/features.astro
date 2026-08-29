@@ -1,0 +1,307 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/common/Icon.astro';
+import { features, featuresSection } from '../data/home';
+import { featureDetails } from '../data/features';
+import { site } from '../lib/site';
+
+// The homepage prints the six one-liners. This page pairs each with the detail
+// from the product's own documentation — including, for every one of them, the
+// boundary that documentation states. A feature page that lists only what a
+// thing does is the kind of page this product's copy exists in opposition to.
+const detailFor = (n: string) => featureDetails.find((d) => d.n === n);
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: 'LibreDB Studio features',
+    numberOfItems: features.length,
+    itemListElement: features.map((f, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: f.t,
+      description: f.d,
+    })),
+  },
+];
+---
+
+<BaseLayout
+  path="/features"
+  title="Features"
+  description="Schema-aware SQL editor, visual EXPLAIN, ER diagrams, an AI that knows your schema, a live health dashboard and the database agent — what each one does, and where each one stops."
+  schema={schema}
+>
+  <section class="ft" aria-labelledby="ft-title">
+    <div class="u-wash ft__wash" aria-hidden="true"></div>
+    <div class="ft__inner u-container">
+      <p class="u-eyebrow">{featuresSection.eyebrow}</p>
+      <h1 class="ft__title" id="ft-title">
+        {featuresSection.headline.before}<span class="u-grad-brand">{featuresSection.headline.gradient}</span>
+      </h1>
+      <p class="ft__intro">
+        Six things ship in every build, on every engine that can support them — nothing here is held behind an edition.
+        Each one below is followed by the limit the product's own documentation states for it.
+      </p>
+
+      <ol class="ft__toc">
+        {
+          features.map((f) => (
+            <li>
+              <a href={`#f-${f.n}`}>
+                <span class="ft__tocn">{f.n}</span>
+                {f.t}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+
+      {
+        features.map((f) => {
+          const d = detailFor(f.n);
+          return (
+            <article class="ft__item" id={`f-${f.n}`} aria-labelledby={`f-${f.n}-h`}>
+              <div class="ft__head">
+                <span class="ft__icon" aria-hidden="true">
+                  <Icon name={f.icon} size={22} />
+                </span>
+                <p class="ft__n">{f.n}</p>
+                <h2 class="ft__name" id={`f-${f.n}-h`}>
+                  {f.t}
+                </h2>
+              </div>
+
+              <div class="ft__body">
+                <p class="ft__lead">{f.d}</p>
+                {d && <p class="ft__detail">{d.body}</p>}
+
+                {d && (
+                  <ul class="ft__points">
+                    {d.points.map((p) => (
+                      <li>{p}</li>
+                    ))}
+                  </ul>
+                )}
+
+                {d && (
+                  <p class="ft__limit">
+                    <span class="ft__limitlabel">Where it stops</span>
+                    {d.limit}
+                  </p>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+
+      <p class="ft__more">
+        Everything above is in the MIT build. The behaviour, the limits and the file that implements each one are
+        documented in the repository.
+        <a href={site.links.docs} target="_blank" rel="noreferrer">Read the docs ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ft {
+    position: relative;
+    overflow: hidden;
+  }
+  .ft__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .ft__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .ft__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .ft__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .ft__toc {
+    display: grid;
+    gap: var(--space-02);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+    max-width: var(--measure-long);
+  }
+  @media (min-width: 48rem) {
+    .ft__toc {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-02) var(--space-06);
+    }
+  }
+  .ft__toc a {
+    display: flex;
+    gap: var(--space-04);
+    padding: var(--space-03) 0;
+    font-size: var(--body-s-size);
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .ft__toc a:hover {
+    color: var(--text-primary);
+  }
+  .ft__tocn {
+    flex: none;
+    font: var(--weight-semibold) 10.5px / 1.9 var(--font-mono);
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+
+  .ft__item {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+    scroll-margin-top: 96px;
+  }
+  @media (min-width: 64rem) {
+    .ft__item {
+      display: grid;
+      grid-template-columns: 18rem 1fr;
+      gap: var(--space-09);
+    }
+  }
+  .ft__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-03) var(--space-04);
+    align-content: start;
+  }
+  .ft__icon {
+    display: grid;
+    place-items: center;
+    grid-row: span 2;
+    width: 44px;
+    height: 44px;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-m);
+    background: var(--background-subtle);
+    color: var(--text-brand);
+  }
+  .ft__n {
+    align-self: end;
+    font: var(--weight-semibold) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+  .ft__name {
+    align-self: start;
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h4-size);
+    line-height: 1.25;
+    letter-spacing: -0.016em;
+    text-wrap: balance;
+  }
+
+  .ft__body {
+    max-width: var(--measure-long);
+  }
+  @media (max-width: 63.99rem) {
+    .ft__body {
+      margin-top: var(--space-06);
+    }
+  }
+  .ft__lead {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+  .ft__detail {
+    margin-top: var(--space-05);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .ft__points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    margin: var(--space-06) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ft__points li {
+    position: relative;
+    padding-left: var(--space-06);
+    font-size: var(--body-s-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .ft__points li::before {
+    content: '';
+    position: absolute;
+    top: 0.6em;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-circle);
+    background: var(--primary-600);
+  }
+
+  /* Every feature ends on its boundary, with the same weight as the capability
+     list above it — that symmetry is the claim the page is making. */
+  .ft__limit {
+    margin-top: var(--space-07);
+    padding: var(--space-05) var(--space-06);
+    border-left: var(--border-width-3) solid var(--console-warn);
+    border-radius: 0 var(--radius-m) var(--radius-m) 0;
+    background: var(--background-subtle);
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .ft__limitlabel {
+    display: block;
+    margin-bottom: var(--space-02);
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--console-warn);
+  }
+
+  .ft__more {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .ft__more a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

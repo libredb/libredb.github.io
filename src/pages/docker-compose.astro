@@ -1,0 +1,503 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import composeYaml from '../data/docker-compose.example.yml?raw';
+import { composeGroups, composeQuickStart } from '../data/compose';
+import { site } from '../lib/site';
+
+const rawUrl = `${site.url}/docker-compose.example.yml`;
+const ghUrl = `${site.links.github}/blob/main/docker-compose.example.yml`;
+
+/**
+ * A three-token YAML pass, run at build time.
+ *
+ * The site loads no highlighter — Shiki would ship a whole theme that fights the
+ * console palette, for a file that is two thirds comments. Comments are exactly
+ * what a reader came for, so the only distinction worth drawing is
+ * comment / key / value, and that is a regex.
+ *
+ * It emits a string rather than nested elements because `<pre>` is raw-text in
+ * the Astro parser: an expression that returns markup inside one does not
+ * survive it. Everything here comes from a file in this repo, but it is escaped
+ * anyway — the alternative is a highlighter that stops being safe the day the
+ * compose file gains a `<`.
+ */
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const tok = (c: string, s: string) => `<span class="dc__t dc__t--${c}">${esc(s)}</span>`;
+
+const highlight = (line: string): string => {
+  if (line.trim().startsWith('#')) return tok('com', line);
+
+  const kv = /^(\s*-?\s*)([\w.$-]+:)(.*)$/.exec(line);
+  if (!kv) return esc(line);
+
+  const [, indent, key, tail] = kv;
+  // A trailing comment needs two spaces in front of the #, or the # inside a
+  // URL fragment and the one in `${VAR:-#...}` would swallow the rest of a line.
+  const trail = / {2,}#.*$/.exec(tail);
+  const value = trail ? tail.slice(0, trail.index) : tail;
+  return esc(indent) + tok('key', key) + (value ? tok('val', value) : '') + (trail ? tok('com', trail[0]) : '');
+};
+
+const body = composeYaml.replace(/\n$/, '');
+const lineCount = body.split('\n').length;
+const highlighted = body.split('\n').map(highlight).join('\n');
+
+const schema = [
+  {
+    '@type': 'TechArticle',
+    headline: 'LibreDB Studio docker-compose.yml',
+    description:
+      'The full docker-compose.example.yml for self-hosting LibreDB Studio, with every supported environment variable.',
+    proficiencyLevel: 'Beginner',
+    about: { '@type': 'SoftwareApplication', name: 'LibreDB Studio', applicationCategory: 'DeveloperApplication' },
+  },
+];
+---
+
+<BaseLayout
+  path="/docker-compose"
+  title="Docker Compose"
+  description="The complete LibreDB Studio docker-compose.yml, ready to copy. Pulls the published ghcr.io image, documents every environment variable, and downloads with one curl."
+  schema={schema}
+>
+  <section class="dc" aria-labelledby="dc-title">
+    <div class="u-wash dc__wash" aria-hidden="true"></div>
+    <div class="dc__inner u-container">
+      <p class="u-eyebrow">Docker Compose</p>
+      <h1 class="dc__title" id="dc-title">
+        The whole compose file, <span class="u-grad-brand">nothing to assemble</span>
+      </h1>
+      <p class="dc__intro">
+        One service, the published <code>ghcr.io</code> image, and every environment variable Studio reads — active ones set,
+        rarely-used ones sitting commented where you can find them. It is the same file that lives in the repository; this
+        page just saves you the clone.
+      </p>
+
+      <!-- Quick start ------------------------------------------------------ -->
+      <h2 class="dc__h2" id="dc-quickstart">Quick start</h2>
+      <p class="dc__lede">
+        Four lines from an empty directory to a login screen. The third writes the two secrets the file refuses to start
+        without.
+      </p>
+      <div class="dc__box">
+        <div class="dc__boxbar">
+          <span class="dc__boxname">bash</span>
+          <button
+            type="button"
+            class="dc__copy"
+            data-copy={composeQuickStart}
+            aria-label="Copy the quick start commands">copy</button
+          >
+        </div>
+        <pre class="dc__pre dc__pre--sh"><code>{composeQuickStart}</code></pre>
+      </div>
+      <p class="dc__after">
+        Studio is now on <code>http://localhost:3000</code>. Sign in with <code>admin@libredb.org</code> and the password
+        you just wrote, then point it at a database on the same network.
+      </p>
+
+      <!-- The file --------------------------------------------------------- -->
+      <h2 class="dc__h2" id="dc-file">The full file</h2>
+      <p class="dc__lede">
+        <code>docker-compose.example.yml</code> — {lineCount} lines. Read the comments; they carry the parts that are easy
+        to get wrong.
+      </p>
+      <div class="dc__box">
+        <div class="dc__boxbar">
+          <span class="dc__boxname">docker-compose.example.yml</span>
+          <div class="dc__boxacts">
+            <a class="dc__dl" href="/docker-compose.example.yml" download="docker-compose.yml">download</a>
+            <button type="button" class="dc__copy" data-copy={composeYaml} aria-label="Copy the whole compose file"
+              >copy</button
+            >
+          </div>
+        </div>
+        <pre class="dc__pre dc__pre--tall"><code set:html={highlighted} /></pre>
+      </div>
+
+      <!-- Environment reference -------------------------------------------- -->
+      <h2 class="dc__h2" id="dc-env">Every environment variable</h2>
+      <p class="dc__lede">
+        Grouped as the file groups them. <strong>Set</strong> means the line ships uncommented and is already in force;
+        <strong>commented</strong> means it is there for you to uncomment. Secrets come from <code>.env</code> through
+        <code>{'${VAR}'}</code> interpolation and are never written into the compose file.
+      </p>
+
+      {
+        composeGroups.map((g) => (
+          <section class="dc__grp" aria-labelledby={`env-${g.id}`}>
+            <h3 class="dc__grph" id={`env-${g.id}`}>
+              {g.title}
+            </h3>
+            <p class="dc__grpnote">{g.note}</p>
+            <div class="dc__tw">
+              <table class="dc__table">
+                <thead>
+                  <tr>
+                    <th scope="col">Variable</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">In the file</th>
+                    <th scope="col">What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.vars.map((v) => (
+                    <tr>
+                      <th scope="row">
+                        <code>{v.name}</code>
+                      </th>
+                      <td class="dc__def">{v.def}</td>
+                      <td>
+                        <span class="dc__state" data-state={v.state}>
+                          {v.state === 'active' ? 'set' : 'commented'}
+                        </span>
+                      </td>
+                      <td class="dc__desc">{v.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))
+      }
+
+      <!-- Onward ----------------------------------------------------------- -->
+      <div class="dc__links">
+        <a class="dc__link" href={ghUrl} target="_blank" rel="noreferrer">View on GitHub ↗</a>
+        <a class="dc__link" href={rawUrl}>Raw file</a>
+        <a class="dc__link" href="/deploy">All twenty-five install channels</a>
+        <a class="dc__link" href="/get-started">Get started</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import '../scripts/copy';
+</script>
+
+<style>
+  .dc {
+    position: relative;
+    overflow: hidden;
+  }
+  .dc__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .dc__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .dc__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .dc__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dc__h2 {
+    margin-top: clamp(var(--space-11), 7vh, var(--space-12));
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h3-size);
+    line-height: var(--h3-line);
+    letter-spacing: var(--h3-tracking);
+  }
+  .dc__lede,
+  .dc__after {
+    margin-top: var(--space-04);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .dc__after {
+    margin-top: var(--space-05);
+  }
+  .dc__lede strong {
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+  .dc__intro code,
+  .dc__lede code,
+  .dc__after code {
+    font: var(--weight-regular) 0.92em / 1 var(--font-mono);
+    color: var(--text-primary);
+  }
+
+  /* --- code boxes -------------------------------------------------------- */
+  .dc__box {
+    margin-top: var(--space-06);
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-l);
+    background: var(--console-bg);
+    overflow: hidden;
+  }
+  .dc__boxbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-04);
+    padding: var(--space-03) var(--space-04) var(--space-03) var(--space-05);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+    background: var(--console-surface);
+  }
+  .dc__boxname {
+    font: var(--weight-regular) 11.5px / 1 var(--font-mono);
+    color: var(--console-text-tertiary);
+  }
+  .dc__boxacts {
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+  }
+  .dc__copy,
+  .dc__dl {
+    flex: none;
+    border: var(--border-width-1) solid var(--console-border);
+    background: var(--console-bg);
+    color: var(--console-text-secondary);
+    border-radius: var(--radius-s);
+    padding: 5px var(--space-04);
+    min-height: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .dc__copy:hover,
+  .dc__dl:hover {
+    color: var(--console-text);
+    border-color: var(--console-border-strong);
+  }
+
+  .dc__pre {
+    margin: 0;
+    padding: var(--space-05);
+    overflow: auto;
+    font: var(--weight-regular) 12.5px / 1.65 var(--font-mono);
+    color: var(--console-text);
+    /* long ${...} defaults must scroll, not wrap into unreadable YAML */
+    white-space: pre;
+    tab-size: 2;
+  }
+  .dc__pre--tall {
+    max-height: 34rem;
+  }
+  .dc__t--com {
+    color: var(--console-comment);
+  }
+  .dc__t--key {
+    color: var(--console-keyword);
+  }
+  .dc__t--val {
+    color: var(--console-text-soft);
+  }
+
+  /* --- environment tables ------------------------------------------------- */
+  .dc__grp {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-10));
+  }
+  .dc__grph {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .dc__grpnote {
+    margin-top: var(--space-03);
+    max-width: var(--measure-long);
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .dc__tw {
+    margin-top: var(--space-06);
+    overflow-x: auto;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+  }
+  @media (min-width: 48rem) {
+    .dc__table {
+      min-width: 44rem;
+    }
+  }
+  .dc__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+  .dc__table th,
+  .dc__table td {
+    padding: var(--space-04) var(--space-05);
+    vertical-align: top;
+  }
+  .dc__table thead th {
+    background: var(--surface);
+    font-weight: var(--weight-semibold);
+    font-size: var(--body-xs-size);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+  .dc__table tbody tr + tr th,
+  .dc__table tbody tr + tr td {
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .dc__table tbody th {
+    font-weight: var(--weight-regular);
+  }
+  .dc__table tbody th code {
+    font: var(--weight-medium) 12.5px / 1.5 var(--font-mono);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  .dc__def {
+    font: var(--weight-regular) 12.5px / 1.5 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .dc__desc {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    min-width: 20rem;
+    text-wrap: pretty;
+  }
+  .dc__state {
+    display: inline-block;
+    border-radius: var(--radius-s);
+    padding: 3px var(--space-03);
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dc__state[data-state='active'] {
+    background: color-mix(in srgb, var(--accent-500) 16%, transparent);
+    color: var(--text-primary);
+  }
+  .dc__state[data-state='commented'] {
+    background: var(--surface);
+    color: var(--text-tertiary);
+  }
+
+  /* Below the breakpoint the four columns become one stack per variable. A
+     44rem-wide table in a 360px viewport is a sideways scroll for every single
+     row — the name is on screen and the sentence explaining it is not. */
+  @media (max-width: 47.99rem) {
+    .dc__tw {
+      border: 0;
+      border-radius: 0;
+      overflow-x: visible;
+    }
+    .dc__table thead {
+      /* the column names read as noise once each cell is labelled in place */
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .dc__table,
+    .dc__table tbody,
+    .dc__table tr,
+    .dc__table th,
+    .dc__table td {
+      display: block;
+    }
+    .dc__table tr {
+      border: var(--border-width-1) solid var(--border);
+      border-radius: var(--radius-l);
+      padding: var(--space-05);
+    }
+    .dc__table tr + tr {
+      margin-top: var(--space-04);
+    }
+    .dc__table tbody tr + tr th,
+    .dc__table tbody tr + tr td {
+      border-top: 0;
+    }
+    .dc__table th,
+    .dc__table td {
+      padding: 0;
+    }
+    .dc__table tbody th code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    /* default and state sit on one line under the name */
+    .dc__def {
+      display: inline;
+      margin-right: var(--space-04);
+    }
+    .dc__def::before {
+      content: 'default ';
+      color: var(--text-tertiary);
+      font-family: var(--font-ui);
+    }
+    .dc__state {
+      vertical-align: 1px;
+    }
+    .dc__table td:has(.dc__state) {
+      display: inline;
+    }
+    .dc__def,
+    .dc__desc {
+      margin-top: var(--space-03);
+    }
+    .dc__desc {
+      min-width: 0;
+    }
+  }
+
+  /* --- onward links ------------------------------------------------------- */
+  .dc__links {
+    margin-top: clamp(var(--space-11), 7vh, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-04);
+  }
+  .dc__link {
+    border: var(--border-width-1) solid var(--border-strong);
+    border-radius: var(--radius-m);
+    padding: 10px var(--space-06);
+    font-size: var(--body-s-size);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out);
+  }
+  .dc__link:hover {
+    background: var(--surface);
+    color: var(--text-primary);
+  }
+</style>

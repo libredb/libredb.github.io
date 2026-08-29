@@ -1,0 +1,26 @@
+# Netlify configuration — the TEST site only.
+#
+# Production is GitHub Pages at libredb.org and never reads this file, so
+# nothing here can affect it. Netlify is where main lands on every push
+# (.github/workflows/deploy-test.yml) so a change can be looked at on a real
+# host before a release publishes it.
+#
+# There is no [build] block on purpose: the workflow builds with bun and
+# uploads dist/ with `--no-build`, so Netlify is a host here and not a build
+# service. Giving it a build command would mean two build definitions that can
+# disagree about what the site is.
+
+# Keep the test site out of the index.
+#
+# Netlify only sends X-Robots-Tag automatically on deploy PREVIEWS. This is a
+# production deploy of the test site, so it gets nothing by default, and the
+# site's robots.txt says `Allow: /` because that file is written for
+# libredb.org. Every page's canonical already points at libredb.org, which
+# would let Google consolidate — but consolidation is a request, and a header
+# is not. Without this, a second copy of the whole site is crawlable, competing
+# for the same queries and spending crawl budget on a host nobody should land
+# on.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
