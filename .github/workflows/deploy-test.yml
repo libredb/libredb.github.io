@@ -1,0 +1,120 @@
+name: Deploy test site (Netlify)
+
+# The TEST environment. Every push to main lands on Netlify so a change can be
+# looked at on a real host before it is released.
+#
+# Production is a different workflow with a different trigger: deploy.yml puts
+# the same dist/ on GitHub Pages at libredb.org, and only when a release is
+# published. Nothing here touches production, and merging to main never
+# publishes — that separation is the point of having two workflows.
+#
+# This job builds and deploys, and deliberately does NOT run the gate: ci.yml
+# already runs typecheck, format, lint, knip, tests, Lighthouse and the secret
+# scan on the same push, in parallel. Repeating it here would double the work to
+# protect a test host from a state its own build step already fails on — the
+# only thing that can break this deploy is `bun run build`, and that is the step
+# that is here.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push wins. On a test host the freshest commit is the only one anyone
+# wants to look at, so an in-flight deploy of an older commit is cancelled
+# rather than raced. (deploy.yml does the opposite for production, where a
+# half-finished deploy must never be interrupted.)
+concurrency:
+  group: netlify-test
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy to Netlify
+    runs-on: ubuntu-latest
+    environment:
+      name: netlify-test
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+
+      # Fail here with a sentence, rather than fifty lines into the CLI with
+      # "site not found". A missing secret is the likeliest way this breaks, and
+      # it breaks identically for someone who forked the repo.
+      - name: Check credentials are configured
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          missing=""
+          [ -n "$NETLIFY_AUTH_TOKEN" ] || missing="$missing NETLIFY_AUTH_TOKEN"
+          [ -n "$NETLIFY_SITE_ID" ] || missing="$missing NETLIFY_SITE_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing — set them under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build website
+        run: bun run build
+
+      # The token goes through the environment, never through argv: a command
+      # line is readable from the process list on the runner, and the CLI reads
+      # both of these from the environment anyway.
+      #
+      # netlify-cli is pinned exactly, like every action above. Dependabot does
+      # not see a version inside a `bunx` call, so this is a manual bump — the
+      # alternative, a devDependency, would add the CLI's very large install to
+      # every CI run for the sake of one job.
+      - name: Deploy to Netlify
+        id: deploy
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          set -o pipefail
+          bunx netlify-cli@26.1.0 deploy \
+            --dir=dist \
+            --no-build \
+            --prod \
+            --json \
+            --message "main@${GITHUB_SHA::7} — ${GITHUB_WORKFLOW}" \
+            | tee deploy.json
+          # The summary must never be the reason a good deploy reports failure,
+          # so the URL is best-effort and the step's exit status stays the CLI's.
+          url=$(node -e "try{process.stdout.write(require('./deploy.json').url||'')}catch{}")
+          echo "url=${url:-https://libredb-website.netlify.app}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy summary
+        if: always()
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          pages_built=0
+          [ -d dist ] && pages_built=$(find dist -name '*.html' | wc -l | tr -d ' ')
+          {
+            echo "## 🧪 Test deploy — \`${{ job.status }}\`"
+            echo ""
+            echo "| Item | Value |"
+            echo "| --- | --- |"
+            echo "| Site | ${URL:-n/a} |"
+            echo "| Pages built | $pages_built |"
+            echo "| Commit | \`${GITHUB_SHA::7}\` |"
+            echo ""
+            echo "Production is unaffected: libredb.org publishes from \`deploy.yml\` on a released tag."
+          } >> "$GITHUB_STEP_SUMMARY"

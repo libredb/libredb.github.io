@@ -59,10 +59,56 @@ describe('the domain has one source of truth', () => {
     expect([...site.routes].sort()).toEqual(routes.sort());
   });
 
-  it('keeps the deploy workflow on a Node version astro and lighthouse both accept', () => {
+  it('keeps every workflow on a Node version astro and lighthouse both accept', () => {
     // astro@7 needs >= 22.12, lighthouse@13 needs >= 22.19 — pin, do not drift on lts/*
-    const workflow = stripYaml(readFileSync('.github/workflows/deploy.yml', 'utf8'));
-    expect(workflow).toMatch(/node-version:\s*'?24'?/);
-    expect(workflow, "'lts/*' drifts and can drop below the floor").not.toContain('lts/*');
+    // Checked across all workflows, not just deploy.yml: the floor applies to
+    // whichever one happens to run the build, and a new workflow is exactly
+    // where a stale `lts/*` gets copied in from a template.
+    for (const file of readdirSync('.github/workflows').filter((f) => f.endsWith('.yml'))) {
+      const workflow = stripYaml(readFileSync(`.github/workflows/${file}`, 'utf8'));
+      if (!workflow.includes('node-version:')) continue;
+      expect(workflow, `${file} pins the wrong Node`).toMatch(/node-version:\s*'?24'?/);
+      expect(workflow, `${file}: 'lts/*' drifts and can drop below the floor`).not.toContain('lts/*');
+    }
+  });
+});
+
+/**
+ * Two deploys, two environments, and they must never fire on the same event.
+ * The test site is a place to look at main before it ships; production is gated
+ * on a published release. If a trigger leaked from one into the other, merging
+ * a pull request would publish libredb.org — and nothing about the merge would
+ * say so.
+ */
+describe('the test and production deploys stay separate', () => {
+  const netlify = readFileSync('.github/workflows/deploy-test.yml', 'utf8');
+  const pages = readFileSync('.github/workflows/deploy.yml', 'utf8');
+  /** The `on:` block only, so a trigger word inside a comment is not a match. */
+  const triggers = (src: string) => src.slice(src.indexOf('\non:')).split(/\njobs:/)[0];
+
+  it('publishes production only from a released tag', () => {
+    expect(triggers(pages), 'production must not deploy on a push').not.toMatch(/^\s*push:/m);
+    expect(triggers(pages)).toMatch(/release:/);
+  });
+
+  it('publishes the test site only from main', () => {
+    expect(triggers(netlify), 'the test site must not deploy on a release').not.toMatch(/release:/);
+    expect(triggers(netlify)).toMatch(/branches:\s*\[main\]/);
+  });
+
+  it('sends the test deploy somewhere that is not the production host', () => {
+    // Scoped to the deploy step, not the whole file. A misconfigured
+    // NETLIFY_SITE_ID cannot be caught here, but a production host written into
+    // the command can — while the header comment and the job summary both
+    // mention libredb.org on purpose, to say what this workflow is NOT doing.
+    const step = netlify.slice(netlify.indexOf('name: Deploy to Netlify'), netlify.indexOf('name: Deploy summary'));
+    expect(step, 'the deploy command names the production domain').not.toContain(site.domain);
+    expect(step, 'the deploy is not marked --prod on the test site').toContain('--prod');
+  });
+
+  it('reads the Netlify credentials from the environment, never from argv', () => {
+    // A token passed as a flag is readable from the runner's process list.
+    expect(netlify, 'the auth token is on a command line').not.toMatch(/--auth[= ]/);
+    expect(netlify).toMatch(/NETLIFY_AUTH_TOKEN:\s*\$\{\{\s*secrets\.NETLIFY_AUTH_TOKEN\s*\}\}/);
   });
 });
