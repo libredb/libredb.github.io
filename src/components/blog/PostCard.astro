@@ -8,11 +8,11 @@ interface Props {
   featured?: boolean;
 }
 const { post, featured = false } = Astro.props;
-const { title, description, publishedAt, tags, lang, coverImage } = post.data;
+const { title, description, publishedAt, tags, coverImage } = post.data;
 const href = `/blog/${post.id}`;
 ---
 
-<article class:list={['pcard', featured && 'pcard--featured']} lang={lang}>
+<article class:list={['pcard', featured && 'pcard--featured']}>
   {
     coverImage && (
       <a class="pcard__media" href={href} tabindex="-1" aria-hidden="true">
@@ -22,7 +22,7 @@ const href = `/blog/${post.id}`;
   }
   <div class="pcard__body">
     <p class="pcard__meta">
-      <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt, lang)}</time>
+      <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt)}</time>
       {
         tags.length > 0 && (
           <span class="pcard__sep" aria-hidden="true">

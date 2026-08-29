@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import site from '../site.config.json' with { type: 'json' };
 
 /** Assertions are about configuration, not the prose explaining it. */
@@ -36,20 +36,24 @@ describe('the domain has one source of truth', () => {
   });
 
   it('lists every shipped route in site.config.json', () => {
-    const built = [
-      '/',
-      '/features',
-      '/databases',
-      '/deploy',
-      '/open-source',
-      '/get-started',
-      '/playground',
-      '/faq',
-      '/blog',
-      '/rss.xml',
-      '/404',
-    ];
-    expect([...site.routes].sort()).toEqual(built.sort());
+    // Read from dist rather than a second hand-kept list. The literal this
+    // replaced had already fallen behind /privacy-policy, so the test passed
+    // while the inventory it guards was wrong — which is the only thing the
+    // inventory is for.
+    const built: string[] = [];
+    const walk = (dir: string, prefix = '') => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        if (entry.isDirectory()) walk(`${dir}/${entry.name}`, `${prefix}/${entry.name}`);
+        else if (entry.name === 'index.html') built.push(prefix || '/');
+        else if (entry.name === '404.html') built.push('/404');
+        else if (entry.name === 'rss.xml') built.push(`${prefix}/rss.xml`);
+      }
+    };
+    walk('dist');
+
+    // Blog posts and the raw compose file are content, not routes of the site.
+    const routes = built.filter((r) => !r.startsWith('/blog/'));
+    expect([...site.routes].sort()).toEqual(routes.sort());
   });
 
   it('keeps the deploy workflow on a Node version astro and lighthouse both accept', () => {

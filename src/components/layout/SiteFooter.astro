@@ -5,7 +5,7 @@ import { site } from '../../lib/site';
 const isExternal = (h: string) => /^https?:/i.test(h);
 ---
 
-<footer class="ftr" lang="en">
+<footer class="ftr">
   <div class="ftr__inner">
     <div class="ftr__cols">
       <div class="ftr__brand">
@@ -34,7 +34,7 @@ const isExternal = (h: string) => /^https?:/i.test(h);
     </div>
 
     <div class="ftr__base">
-      <span class="ftr__legal" lang="tr">{footer.legal}</span>
+      <span class="ftr__legal">{footer.legal}</span>
       <span class="ftr__version">{footer.versionChip}</span>
     </div>
   </div>

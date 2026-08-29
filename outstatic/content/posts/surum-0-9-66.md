@@ -1,13 +1,12 @@
 ---
 title: Sürüm 0.9.66 — on altı motor, tek arayüz
-status: published
+status: draft
 author:
   name: LibreDB
   picture: ''
 slug: surum-0-9-66
 description: On altı veritabanı motoru, aynı ağaç, aynı editör ve aynı ızgara. Bu sürümde neyin geldiğini ve her motorun neyi yapmadığını anlatıyoruz.
 coverImage: ''
-lang: tr
 tags:
   - value: release
     label: Release

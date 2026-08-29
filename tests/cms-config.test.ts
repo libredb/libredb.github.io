@@ -52,17 +52,17 @@ describe('Outstatic wiring', () => {
     // description / coverImage / tags are NOT built in — a fresh collection ships
     // `properties: {}` and the editor would never be shown them.
     const props = json('outstatic/content/posts/schema.json').properties;
-    for (const key of ['description', 'coverImage', 'lang', 'tags']) {
+    for (const key of ['description', 'coverImage', 'tags']) {
       expect(props[key], `${key} is missing from the collection schema`).toBeTruthy();
       expect(props[key].fieldType).toBeTruthy();
       expect(props[key].dataType).toBeTruthy();
     }
   });
 
-  it('offers exactly the languages the site knows how to render', () => {
-    const lang = json('outstatic/content/posts/schema.json').properties.lang;
-    expect(lang.fieldType).toBe('Select');
-    expect(lang.values.map((v: { value: string }) => v.value).sort()).toEqual(Object.keys(site.localeLabels).sort());
+  it('offers the editor no language field — the site is English only', () => {
+    // A Select left in the collection would keep writing `lang:` into new posts,
+    // which the Astro schema no longer knows about and nothing would render.
+    expect(json('outstatic/content/posts/schema.json').properties.lang).toBeUndefined();
   });
 
   it('keeps the CMS app out of the Astro typecheck', () => {

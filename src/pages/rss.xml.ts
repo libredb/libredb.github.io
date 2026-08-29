@@ -21,6 +21,6 @@ export async function GET(context: APIContext) {
       categories: post.data.tags.map((t) => t.label),
       author: post.data.author.name || site.name,
     })),
-    customData: `<language>${site.defaultLocale}</language>`,
+    customData: '<language>en</language>',
   });
 }

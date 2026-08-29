@@ -21,3 +21,9 @@ outstatic/content
 # references inside tokens/theme.css. tests/ds-integrity.test.ts asserts every
 # file is byte-identical to its source — reformatting here would break that.
 src/styles/ds
+
+# Verbatim copy of libredb-studio's docker-compose.example.yml. It is served at
+# /docker-compose.example.yml and shown byte-for-byte on /docker-compose, so it
+# must stay identical to the upstream file — reformatting it would silently make
+# the mirror a paraphrase.
+src/data/docker-compose.example.yml

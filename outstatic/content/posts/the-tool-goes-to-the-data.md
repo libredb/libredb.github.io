@@ -7,7 +7,6 @@ author:
 slug: the-tool-goes-to-the-data
 description: Why a database IDE belongs in the network beside the database, and what that constraint forces the architecture to look like.
 coverImage: ''
-lang: en
 tags:
   - value: engineering
     label: Engineering

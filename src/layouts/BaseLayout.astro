@@ -6,14 +6,15 @@ import '../styles/global.css';
 // The @font-face rules live inside the render-blocking stylesheet, so the browser
 // only discovers the files after that CSS parses. Importing the two latin subsets
 // gives us their hashed URLs at build time so they can be preloaded alongside it.
-// latin-ext (Turkish diacritics) and the other subsets stay on-demand.
+// The other subsets stay on-demand — the site is English, but the vendor's legal
+// name still carries Turkish diacritics and those live in latin-ext.
 import bodyFont from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import monoFont from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import CookieConsent from '../components/layout/CookieConsent.astro';
-import { buildSeo, ogLocale, type SeoInput } from '../lib/seo';
+import { buildSeo, type SeoInput } from '../lib/seo';
 import { site } from '../lib/site';
 
 interface Props extends SeoInput {
@@ -42,7 +43,7 @@ const jsonLd = {
       url: site.url,
       name: site.name,
       description: site.description,
-      inLanguage: seo.locale,
+      inLanguage: 'en',
       publisher: { '@id': `${site.url}/#organization` },
     },
     ...schema,
@@ -51,7 +52,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={seo.locale} data-theme="dark">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,7 +70,7 @@ const jsonLd = {
     <meta property="og:image" content={seo.image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content={ogLocale(seo.locale)} />
+    <meta property="og:locale" content="en_US" />
     {seo.publishedTime && <meta property="article:published_time" content={seo.publishedTime} />}
     {seo.modifiedTime && <meta property="article:modified_time" content={seo.modifiedTime} />}
     {seo.authors.map((a) => <meta property="article:author" content={a} />)}
@@ -109,7 +110,7 @@ const jsonLd = {
   </head>
 
   <body class={bodyClass}>
-    <a class="u-skip-link" href="#main" lang="en">Skip to content</a>
+    <a class="u-skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main" tabindex="-1">
       <slot />

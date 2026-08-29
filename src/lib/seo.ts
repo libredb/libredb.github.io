@@ -7,7 +7,6 @@ export interface SeoInput {
   /** site-relative or absolute image used for og:image / twitter:image */
   image?: string;
   type?: 'website' | 'article';
-  locale?: string;
   publishedTime?: string;
   modifiedTime?: string;
   authors?: string[];
@@ -20,7 +19,6 @@ export interface Seo {
   canonical: string;
   image: string;
   type: 'website' | 'article';
-  locale: string;
   publishedTime?: string;
   modifiedTime?: string;
   authors: string[];
@@ -37,16 +35,9 @@ export function buildSeo(input: SeoInput): Seo {
     canonical: canonicalUrl(input.path),
     image: canonicalUrl(input.image ?? DEFAULT_IMAGE),
     type: input.type ?? 'website',
-    locale: input.locale ?? site.defaultLocale,
     publishedTime: input.publishedTime,
     modifiedTime: input.modifiedTime,
     authors: input.authors ?? [],
     noindex: input.noindex ?? false,
   };
-}
-
-/** BCP-47-ish og:locale (en → en_US, tr → tr_TR). */
-export function ogLocale(locale: string): string {
-  const map: Record<string, string> = { en: 'en_US', tr: 'tr_TR' };
-  return map[locale] ?? 'en_US';
 }

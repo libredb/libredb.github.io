@@ -48,7 +48,6 @@ const posts = defineCollection({
     description: text(),
     coverImage: text(),
     tags: list(tag).default([]),
-    lang: z.preprocess((v) => (v === null || v === undefined || v === '' ? 'en' : v), z.enum(['en', 'tr'])),
   }),
 });
 

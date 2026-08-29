@@ -46,13 +46,22 @@ describe('landmarks and document shape', () => {
     expect(home.querySelector('#main')).toBeTruthy();
   });
 
-  it('sets lang per page, following the CMS document language', () => {
-    expect(home.documentElement.getAttribute('lang')).toBe('en');
-    expect(post.documentElement.getAttribute('lang')).toBe('en');
-    const tr = page('dist/blog/surum-0-9-66/index.html');
-    expect(tr.documentElement.getAttribute('lang')).toBe('tr');
-    // the Turkish company line inside an English page carries its own lang
-    expect(home.querySelector('.ftr__legal')?.getAttribute('lang')).toBe('tr');
+  it('declares one language, on every page', () => {
+    // The site is English only. `lang` is set once, on <html>, and nothing below
+    // it overrides — a stray lang="tr" would hand a screen reader a Turkish
+    // voice for English copy, and turn text-transform:uppercase "Light" into
+    // "LIGHT" with a dotted capital I.
+    for (const [name, doc] of [
+      ['home', home],
+      ['blog', blog],
+      ['post', post],
+    ] as const) {
+      expect(doc.documentElement.getAttribute('lang'), `${name}: html lang`).toBe('en');
+      const overrides = [...doc.querySelectorAll('[lang]')]
+        .filter((el) => el.tagName.toLowerCase() !== 'html')
+        .map((el) => el.getAttribute('lang'));
+      expect(overrides, `${name}: nothing below <html> declares its own language`).toEqual([]);
+    }
   });
 });
 
@@ -147,13 +156,12 @@ describe('SEO surface', () => {
     }
   });
 
-  it('publishes a sitemap and an RSS feed with both posts', () => {
+  it('publishes a sitemap and an RSS feed carrying every published post', () => {
     const rss = readFileSync('dist/rss.xml', 'utf8');
-    expect(rss).toContain('<item>');
-    expect((rss.match(/<item>/g) ?? []).length).toBe(2);
+    const items = (rss.match(/<item>/g) ?? []).length;
+    expect(items).toBe(readdirSync('dist/blog', { withFileTypes: true }).filter((e) => e.isDirectory()).length);
     expect(rss).toContain(`${site.url}/blog/the-tool-goes-to-the-data`);
-    // the Turkish title must survive the XML round-trip intact
-    expect(rss).toContain('Sürüm 0.9.66');
+    expect(rss).toContain('<language>en</language>');
 
     const sitemap = readFileSync('dist/sitemap-0.xml', 'utf8');
     expect(sitemap).toContain(`${site.url}/`);

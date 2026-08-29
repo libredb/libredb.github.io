@@ -49,6 +49,7 @@ const ROUTES = args.includes('--route')
       '/features',
       '/open-source',
       '/deploy',
+      '/docker-compose',
       '/privacy-policy',
     ];
 

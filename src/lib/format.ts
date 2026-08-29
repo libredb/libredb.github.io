@@ -1,21 +1,13 @@
 /**
- * Date formatting.
+ * Date formatting — the long form, 12 March 2026.
  *
- * The design system mandates Turkish conventions for Turkish copy
- * (12.03.2026) — so the formatter is locale-driven, never hard-coded.
- * English pages get the long form (12 March 2026).
+ * en-GB is named explicitly rather than left to the runtime default: the site is
+ * English everywhere, and a build machine set to another locale must not change
+ * what a page says.
  */
-export function formatDate(value: Date | string, locale: string): string {
+export function formatDate(value: Date | string): string {
   const d = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(d.getTime())) return '';
-  if (locale === 'tr') {
-    return new Intl.DateTimeFormat('tr-TR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      timeZone: 'UTC',
-    }).format(d);
-  }
   return new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',
     month: 'long',

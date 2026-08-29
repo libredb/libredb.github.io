@@ -16,17 +16,6 @@
       "description": "Optional 16:9 image for the card and the social preview.",
       "required": false
     },
-    "lang": {
-      "title": "Language",
-      "fieldType": "Select",
-      "dataType": "string",
-      "description": "Sets lang on the article so casing and hyphenation are correct.",
-      "required": true,
-      "values": [
-        { "label": "English", "value": "en" },
-        { "label": "Türkçe", "value": "tr" }
-      ]
-    },
     "tags": {
       "title": "Tags",
       "fieldType": "Tags",
@@ -34,10 +23,22 @@
       "description": "Topic labels shown above the title.",
       "required": false,
       "values": [
-        { "label": "Engineering", "value": "engineering" },
-        { "label": "Release", "value": "release" },
-        { "label": "Security", "value": "security" },
-        { "label": "Databases", "value": "databases" }
+        {
+          "label": "Engineering",
+          "value": "engineering"
+        },
+        {
+          "label": "Release",
+          "value": "release"
+        },
+        {
+          "label": "Security",
+          "value": "security"
+        },
+        {
+          "label": "Databases",
+          "value": "databases"
+        }
       ]
     }
   }

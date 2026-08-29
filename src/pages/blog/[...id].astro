@@ -18,18 +18,14 @@ export const getStaticPaths = (async () => {
 type Props = { post: CollectionEntry<'posts'> };
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, publishedAt, author, tags, lang, coverImage } = post.data;
+const { title, description, publishedAt, author, tags, coverImage } = post.data;
 
 const all = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
 );
 const others = all.filter((p) => p.id !== post.id).slice(0, 2);
 
-const tocLabel = lang === 'tr' ? 'Bu sayfada' : 'On this page';
-const backLabel = lang === 'tr' ? 'Tüm yazılar' : 'All posts';
-const moreLabel = lang === 'tr' ? 'Devamı' : 'Keep reading';
 const minutes = readingTime(post.body ?? '');
-const readLabel = lang === 'tr' ? `${minutes} dakikalık okuma` : `${minutes} min read`;
 
 const schema = [
   {
@@ -37,7 +33,7 @@ const schema = [
     headline: title,
     description,
     datePublished: publishedAt.toISOString(),
-    inLanguage: lang,
+    inLanguage: 'en',
     author: { '@type': 'Organization', name: author.name || site.name },
     publisher: { '@id': `${site.url}/#organization` },
     mainEntityOfPage: `${site.url}/blog/${post.id}`,
@@ -50,15 +46,14 @@ const schema = [
   title={title}
   description={description}
   type="article"
-  locale={lang}
   image={coverImage || undefined}
   publishedTime={publishedAt.toISOString()}
   authors={[author.name || site.name]}
   schema={schema}
 >
-  <article class="post" lang={lang}>
+  <article class="post">
     <div class="post__inner u-container">
-      <p class="post__back"><a href="/blog">← {backLabel}</a></p>
+      <p class="post__back"><a href="/blog">← All posts</a></p>
 
       <header class="post__head">
         {
@@ -73,9 +68,9 @@ const schema = [
         <h1 class="post__title">{title}</h1>
         <p class="post__lede">{description}</p>
         <p class="post__meta">
-          <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt, lang)}</time>
+          <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt)}</time>
           <span aria-hidden="true">·</span>
-          <span>{readLabel}</span>
+          <span>{`${minutes} min read`}</span>
           {
             author.name && (
               <>
@@ -93,19 +88,19 @@ const schema = [
 
       <div class="post__grid">
         <div class="post__body prose"><Content /></div>
-        <TableOfContents headings={headings} label={tocLabel} />
+        <TableOfContents headings={headings} />
       </div>
 
       {
         others.length > 0 && (
-          <aside class="post__more" aria-label={moreLabel}>
-            <p class="post__morelabel">{moreLabel}</p>
+          <aside class="post__more" aria-label="Keep reading">
+            <p class="post__morelabel">Keep reading</p>
             <ul class="post__morelist">
               {others.map((p) => (
-                <li lang={p.data.lang}>
+                <li>
                   <a href={`/blog/${p.id}`}>
                     <span class="post__moretitle">{p.data.title}</span>
-                    <span class="post__moredate">{formatDate(p.data.publishedAt, p.data.lang)}</span>
+                    <span class="post__moredate">{formatDate(p.data.publishedAt)}</span>
                   </a>
                 </li>
               ))}

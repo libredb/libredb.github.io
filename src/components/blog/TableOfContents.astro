@@ -3,9 +3,8 @@ import type { MarkdownHeading } from 'astro';
 
 interface Props {
   headings: MarkdownHeading[];
-  label?: string;
 }
-const { headings, label = 'On this page' } = Astro.props;
+const { headings } = Astro.props;
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
@@ -13,7 +12,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
   items.length > 1 && (
     <nav class="toc" aria-labelledby="toc-title">
       <p class="toc__title" id="toc-title">
-        {label}
+        On this page
       </p>
       <ol class="toc__list">
         {items.map((h) => (

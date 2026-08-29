@@ -441,7 +441,7 @@ export const footer = {
     {
       title: 'Deploy',
       links: [
-        { label: 'Docker', href: '/#deploy' },
+        { label: 'Docker Compose', href: '/docker-compose' },
         { label: 'Helm chart', href: '/#deploy' },
         { label: 'One-click templates', href: '/#deploy' },
         { label: 'npm package', href: '/#deploy' },
@@ -469,7 +469,6 @@ export const footer = {
       ],
     },
   ],
-  legal:
-    '© 2026 LibreDB',
+  legal: '© 2026 LibreDB',
   versionChip: '◆ studio 0.13.4',
 } as const;

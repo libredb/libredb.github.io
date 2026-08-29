@@ -26,7 +26,6 @@ const schema = z.looseObject({
   description: text(),
   coverImage: text(),
   tags: list(tag).default([]),
-  lang: z.preprocess((v) => (v === null || v === undefined || v === '' ? 'en' : v), z.enum(['en', 'tr'])),
 });
 
 const base = {
@@ -35,7 +34,6 @@ const base = {
   slug: 'hello',
   publishedAt: new Date('2026-08-29T10:00:00.000Z'),
   description: 'A description.',
-  lang: 'en',
 };
 
 describe('Outstatic frontmatter tolerance (PITFALLS A2)', () => {
@@ -87,11 +85,6 @@ describe('Outstatic frontmatter tolerance (PITFALLS A2)', () => {
     expect(out.publishedAt.getUTCFullYear()).toBe(2026);
   });
 
-  it('defaults a missing language rather than failing the build', () => {
-    const out = schema.parse({ ...base, lang: '' });
-    expect(out.lang).toBe('en');
-  });
-
   it('still rejects genuinely broken content', () => {
     expect(() => schema.parse({ ...base, status: 'archived' })).toThrow();
     expect(() => schema.parse({ ...base, publishedAt: 'not-a-date' })).toThrow();
@@ -104,7 +97,7 @@ describe('Outstatic frontmatter tolerance (PITFALLS A2)', () => {
 
   it('keeps this fixture schema in step with src/content.config.ts', () => {
     const src = readFileSync('src/content.config.ts', 'utf8');
-    const keys = ['title', 'status', 'slug', 'publishedAt', 'author', 'description', 'coverImage', 'tags', 'lang'];
+    const keys = ['title', 'status', 'slug', 'publishedAt', 'author', 'description', 'coverImage', 'tags'];
     for (const key of keys) {
       expect(src, key + ' missing from the real schema').toMatch(new RegExp('\\b' + key + ':'));
     }
@@ -127,7 +120,6 @@ describe('content integrity', () => {
       'slug',
       'description',
       'coverImage',
-      'lang',
       'tags',
       'publishedAt',
       'name',
@@ -153,12 +145,27 @@ describe('content integrity', () => {
     }
   });
 
-  it('keeps Turkish diacritics intact in the Turkish post', () => {
-    const tr = readFileSync(dir + '/surum-0-9-66.md', 'utf8');
-    const diacritics = ['ğ', 'ü', 'ş', 'ı', 'ö', 'ç'];
-    for (const ch of diacritics) {
-      expect(tr.includes(ch), 'Turkish post lost a diacritic').toBe(true);
+  it('publishes English only', () => {
+    // The site declares one language on <html> and offers the editor no language
+    // field, so a post in another language would be read out in an English voice
+    // and hyphenated by English rules. The check is on the title and description
+    // because those are what leave the page — cards, RSS, search results.
+    const turkish = /[\u011f\u011e\u0131\u0130\u015f\u015e\u00e7\u00c7\u00f6\u00d6\u00fc\u00dc]/;
+    for (const file of files) {
+      const front = readFileSync(dir + '/' + file, 'utf8').split('---')[1] ?? '';
+      if (!/^status: published$/m.test(front)) continue;
+      for (const key of ['title', 'description']) {
+        const value = new RegExp('^' + key + ': (.*)$', 'm').exec(front)?.[1] ?? '';
+        expect(turkish.test(value), `${file}: ${key} is not English`).toBe(false);
+      }
     }
-    expect(tr).toMatch(/^lang: tr$/m);
+  });
+
+  it('declares no per-post language, in any post', () => {
+    // Outstatic keeps writing whatever the collection schema offers. A `lang:`
+    // reappearing here means the Select came back in schema.json.
+    for (const file of files) {
+      expect(readFileSync(dir + '/' + file, 'utf8'), `${file} still carries a lang key`).not.toMatch(/^lang:/m);
+    }
   });
 });
