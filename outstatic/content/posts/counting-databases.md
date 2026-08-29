@@ -1,6 +1,6 @@
 ---
 title: 'How many databases? Sixteen, twenty-six, or forty-two'
-status: draft
+status: published
 author:
   name: LibreDB
   picture: ''
