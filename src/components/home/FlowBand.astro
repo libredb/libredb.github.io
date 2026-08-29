@@ -1,0 +1,214 @@
+---
+import { flowBand } from '../../data/home';
+const modes = ['out', 'in'] as const;
+---
+
+<div data-rv class="flow" slot="flow">
+  <div class="flow__prose">
+    <span class="flow__rule" aria-hidden="true"></span>
+    <p class="flow__title">
+      {flowBand.headline.before}<span class="u-grad-brand">{flowBand.headline.gradient}</span>{flowBand.headline.after}
+    </p>
+    <p class="flow__body">{flowBand.body}</p>
+  </div>
+
+  <div class="flow__figure">
+    <div
+      class="flow__card"
+      data-switch="flow"
+      data-switch-role="radio"
+      data-switch-autoplay="3600"
+      data-switch-pin="9000"
+      data-switch-active="out"
+    >
+      <div class="flow__toggles" aria-label="Which direction travels">
+        <button type="button" class="flow__toggle" data-switch-trigger="out">{flowBand.toggles.out}</button>
+        <button type="button" class="flow__toggle" data-switch-trigger="in">{flowBand.toggles.in}</button>
+      </div>
+
+      <!-- illustration only: the rows / caption below carry the same
+           information in words, and the inactive node sits at opacity .12 -->
+      <div class="diag" aria-hidden="true">
+        <div class="diag__net">
+          <p class="diag__kicker">PRIVATE NETWORK</p>
+          <div class="diag__item">
+            <img src="/engines/postgresql.svg" alt="" width="18" height="18" />
+            <span>
+              <span class="diag__item-name">PostgreSQL</span>
+              <span class="diag__item-sub">{flowBand.dbMeta}</span>
+            </span>
+          </div>
+          <div class="diag__item diag__item--studio">
+            <img src="/brand/lb-icon.svg" alt="" width="18" height="18" />
+            <span>
+              <span class="diag__item-name">Studio</span>
+              <span class="diag__item-sub">container</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="diag__wire">
+          <span class="diag__line" aria-hidden="true"></span>
+          {
+            modes.map((m) => (
+              <span class="diag__chip" data-switch-panel={m} hidden={m !== 'out'}>
+                {flowBand[m].chip}
+              </span>
+            ))
+          }
+        </div>
+
+        <div class="diag__dest">
+          {
+            modes.map((m) => (
+              <div data-switch-panel={m} hidden={m !== 'out'}>
+                <p class="diag__kicker">{flowBand[m].destKicker}</p>
+                <p class="diag__name">{flowBand[m].destTitle}</p>
+                <p class="diag__meta">{flowBand[m].destSub}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="flow__caption" role="status">
+        {
+          modes.map((m) => (
+            <span data-switch-panel={m} hidden={m !== 'out'}>
+              {flowBand[m].caption}
+            </span>
+          ))
+        }
+      </p>
+
+      <div class="flow__specs">
+        {flowBand.specs.map((s) => <span class="flow__spec">{s}</span>)}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .flow {
+    margin-top: var(--space-11);
+    padding-top: 44px;
+    border-top: var(--border-width-1) solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+    gap: clamp(var(--space-09), 5vw, 72px);
+    align-items: center;
+  }
+  .flow__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .flow__rule {
+    width: 56px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--gradient-brand);
+  }
+  .flow__title {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(26px, 3.4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+    max-width: 760px;
+    text-wrap: balance;
+  }
+  .flow__body {
+    max-width: var(--measure-standard);
+    font-size: var(--body-m-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .flow__figure {
+    min-width: 0;
+  }
+
+  .flow__card {
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    padding: clamp(18px, 2.2vw, 26px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-05);
+  }
+
+  .flow__toggles {
+    display: flex;
+    gap: var(--space-03);
+  }
+  .flow__toggle {
+    padding: 7px var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-secondary);
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-ui);
+    min-height: 30px;
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out);
+  }
+  .flow__toggle[data-state='active'] {
+    background: var(--surface-brand);
+    color: var(--text-brand);
+    border-color: var(--primary-600);
+  }
+
+  /* "Tool → data" is the working direction: green wire, Studio lands, specs light */
+  .flow__card[data-switch-active='in'] .diag__line {
+    background-image: repeating-linear-gradient(90deg, var(--success-text) 0 5px, transparent 5px 10px);
+    animation-name: lbDashXR;
+  }
+  .flow__card[data-switch-active='in'] .diag__chip {
+    color: var(--success-text);
+    border-color: var(--success-border);
+  }
+  .flow__card[data-switch-active='in'] .diag__item--studio {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .flow__card[data-switch-active='in'] .flow__caption {
+    color: var(--success-text);
+  }
+  .flow__card[data-switch-active='in'] .flow__spec {
+    color: var(--text-brand);
+    border-color: var(--primary-600);
+  }
+  .flow__card .diag__item--studio {
+    transform: translateX(14px);
+  }
+
+  .flow__caption {
+    font: var(--weight-regular) 11.5px / 1.5 var(--font-mono);
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+    min-height: 36px;
+  }
+
+  .flow__specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03);
+    border-top: var(--border-width-1) solid var(--border);
+    padding-top: 14px;
+  }
+  .flow__spec {
+    padding: var(--space-02) var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-s);
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    color: var(--text-tertiary);
+    transition:
+      color var(--duration-normal) var(--ease-out),
+      border-color var(--duration-normal) var(--ease-out);
+  }
+</style>

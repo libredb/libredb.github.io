@@ -1,0 +1,12 @@
+{
+  "name": "LibreDB Studio",
+  "short_name": "LibreDB",
+  "description": "The database editor that deploys next to your data.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d18",
+  "theme_color": "#0b0d18",
+  "icons": [
+    { "src": "/brand/lb-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

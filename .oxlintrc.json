@@ -11,5 +11,13 @@
   "rules": {
     "no-underscore-dangle": "off"
   },
-  "ignorePatterns": ["dist/**", ".astro/**", "node_modules/**", "public/**"]
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "public/**",
+    "cms/.next/**",
+    "design/**",
+    "design-system/**"
+  ]
 }

@@ -1,261 +1,251 @@
-@import 'tailwindcss';
+/* -----------------------------------------------------------------------------
+   Global entry point.
 
-/* ============================================================
-   LibreDB Studio — IDE design system
-   The website is the product: a database IDE shell rendering
-   marketing content as "query result sets".
-   Tokens extracted from docs/designs/LibreDBStudio-*.html
-   ============================================================ */
-@theme {
-  /* Mono-first: the whole site is JetBrains Mono */
-  --font-sans: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+   src/styles/ds/ is a VERBATIM copy of design-system/ (tests/ds-integrity.test.ts
+   fails the build if the two drift). Every token file is imported here in the
+   same order as design-system/styles.css, with ONE deliberate exception:
 
-  /* Surfaces */
-  --color-canvas: #0a0a0c; /* app background */
-  --color-panel: #0c0c0f; /* panels, cards, editor */
-  --color-raised: #16181d; /* hover / elevated rows */
-  --color-ok-tint: #0d1410; /* success-tinted surface */
+     tokens/fonts.css is NOT imported.
 
-  /* Borders */
-  --color-edge: #1d1d22; /* default hairline */
-  --color-edge-strong: #27272d; /* divider */
-  --color-line: #3f3f46; /* emphasis (zinc-700) */
+   That file @imports Geist from Google Fonts and sets --font-* to Geist. The
+   handoff overrides those faces with Plus Jakarta Sans + JetBrains Mono, so
+   importing it would cost a render-blocking request for a family the site never
+   paints. The six --font-* variables it owns are redefined below instead, and
+   the faces are self-hosted via @fontsource-variable (imported in BaseLayout).
+   See DECISIONS.md § "Fonts".
+   -------------------------------------------------------------------------- */
+@import './ds/tokens/colors.css';
+@import './ds/tokens/theme.css';
+@import './ds/tokens/typography.css';
+@import './ds/tokens/spacing.css';
+@import './ds/tokens/shape.css';
+@import './ds/tokens/elevation.css';
+@import './ds/tokens/motion.css';
+@import './ds/tokens/layout.css';
+@import './ds/tokens/base.css';
+@import './console.css';
+@import './a11y.css';
+@import './diagram.css';
+@import './prose.css';
 
-  /* Text */
-  --color-fg: #e4e4e7; /* primary (zinc-200) */
-  --color-bright: #fafafa; /* headings / white */
-  --color-muted: #a1a1aa; /* zinc-400 */
-  --color-dim: #71717a; /* zinc-500 (labels) */
-  --color-faint: #52525b; /* zinc-600 */
-
-  /* Accent / semantic */
-  --color-primary: #2f6feb; /* blue — buttons, links, active */
-  --color-primary-bright: #4b86f7; /* hover */
-  --color-ok: #4ade80; /* true / online / strings */
-  --color-bad: #f87171; /* false / destructive */
-  --color-warn: #fbbf24; /* partial / MIT / numbers */
-  --color-ai: #a78bfa; /* AI features */
-  --color-keyword: #f07178; /* SQL keyword (salmon) */
-
-  /* Motion */
-  --animate-blink: blink 1.1s steps(2) infinite;
-  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-  @keyframes pulse-dot {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.35;
-    }
-  }
+/* --- font override (replaces ds/tokens/fonts.css) ------------------------- */
+:root {
+  --font-sans:
+    'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-ui: var(--font-sans);
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-  }
-  body {
-    background: var(--color-canvas);
-    color: var(--color-fg);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-  /* Sharp by default (brutalist-leaning); selective rounding via utilities */
-  ::selection {
-    background: rgba(47, 111, 235, 0.35);
-    color: #fff;
-  }
-  /* IDE-style keyboard focus ring — the accent means "interactive" */
-  :focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+/* --- document ------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  /* sticky header (64px) + breathing room, so #anchors do not land under it */
+  scroll-padding-top: 88px;
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* PITFALLS C2 — the UA rule [hidden]{display:none} loses to any component that
+   declares display:flex/grid. Every JS panel toggle in this site uses [hidden],
+   so it has to win outright. */
+[hidden] {
+  display: none !important;
+}
+
+/* --- keyframes (names and values lifted from the prototype) --------------- */
+@keyframes lbFlow {
+  to {
+    stroke-dashoffset: -16;
   }
 }
-
-/* Custom scrollbar — matches the IDE chrome */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-canvas);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-edge-strong);
-  border: 2px solid var(--color-canvas);
-  border-radius: 6px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-line);
-}
-
-/* SQL syntax highlighting for the query editors */
-.sql-kw {
-  color: var(--color-keyword);
-} /* SELECT, FROM, WHERE, ORDER BY */
-.sql-fn {
-  color: var(--color-primary);
-} /* table/identifier accent */
-.sql-str {
-  color: var(--color-ok);
-} /* 'strings' */
-.sql-num {
-  color: var(--color-warn);
-} /* numbers */
-.sql-com {
-  color: var(--color-faint);
-  font-style: italic;
-}
-.sql-punc {
-  color: var(--color-fg);
-}
-
-/* Blinking caret used in query editors */
-.caret {
-  display: inline-block;
-  width: 8px;
-  height: 1.05em;
-  background: var(--color-primary);
-  vertical-align: -2px;
-  animation: var(--animate-blink);
-}
-
-/* ============================================================
-   Studio layout — progressive enhancement
-   • Default (no-JS, any width): sections stack & the page scrolls.
-   • JS + desktop (.studio.js @ lg): viewport-locked IDE, single
-     section per page is always shown (no swap).
-   ============================================================ */
-.studio-section {
-  display: block;
-}
-.caret-icon {
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-
-/* Explorer row — active state driven by a single class so SSR + JS stay in sync.
-   Inactive rows sit dimmed; the active row carries full brightness + accent tick. */
-.exp-row {
-  color: var(--color-muted);
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-.exp-row:hover {
-  background: color-mix(in srgb, var(--color-raised) 60%, transparent);
-  color: var(--color-fg);
-}
-.exp-row.active {
-  background: var(--color-raised);
-  color: var(--color-bright);
-  box-shadow: inset 2px 0 0 var(--color-primary);
-}
-/* Expand carets whisper at rest, surface on hover/active */
-.exp-row .caret-icon {
-  opacity: 0.35;
-}
-.exp-row:hover .caret-icon,
-.exp-row.active .caret-icon {
-  opacity: 1;
-}
-
-/* RUN re-run shimmer on the active result pane */
-@keyframes studio-rerun-fade {
-  0% {
-    opacity: 0.35;
+@keyframes lbDashY {
+  to {
+    background-position: 0 20px;
   }
-  100% {
+}
+@keyframes lbDashX {
+  to {
+    background-position: 20px 0;
+  }
+}
+@keyframes lbDashXR {
+  to {
+    background-position: -20px 0;
+  }
+}
+@keyframes lbCaret {
+  0%,
+  55% {
     opacity: 1;
   }
-}
-.studio-results.is-rerunning {
-  animation: studio-rerun-fade 0.5s ease;
-}
-@media (prefers-reduced-motion: reduce) {
-  .studio-results.is-rerunning {
-    animation: none;
-  }
-}
-
-/* Playground: fade+slide the result in on each run so an instant query is still perceptible */
-@keyframes pg-result-in {
-  0% {
+  56%,
+  100% {
     opacity: 0;
-    transform: translateY(4px);
   }
+}
+@keyframes lbPulse {
+  0%,
   100% {
+    opacity: 0.45;
+  }
+  50% {
     opacity: 1;
-    transform: translateY(0);
   }
 }
-.pg-result-in {
-  animation: pg-result-in 0.18s ease-out;
-}
-@media (prefers-reduced-motion: reduce) {
-  .pg-result-in {
-    animation: none;
+@keyframes lbUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
-
-/* Accordion (native <details>) */
-summary {
-  list-style: none;
-  cursor: pointer;
-}
-summary::-webkit-details-marker {
-  display: none;
-}
-details[open] > summary .caret-icon {
-  transform: rotate(90deg);
-}
-details[open] > summary .faq-sign::before {
-  content: '−';
-}
-.faq-sign::before {
-  content: '+';
-}
-
-@media (min-width: 1024px) {
-  .studio.js {
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
+@keyframes lbWord {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(8px);
   }
-  .studio.js .studio-pane {
-    min-height: 0;
-    overflow: hidden;
-  }
-  .studio.js .studio-section {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 0;
-  }
-  .studio.js .studio-results {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
 
-/* Reduced motion: stop decorative blink/pulse and forced smooth scrolling */
+/* --- scroll reveal --------------------------------------------------------
+   Content is visible by default; the reveal only arms itself once JS has run
+   (html.js), so a no-JS reader never meets an invisible section. */
+.js [data-rv] {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+  transition-delay: var(--rv-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-rv].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- utilities ------------------------------------------------------------ */
+.u-container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-inline: auto;
+  padding-inline: clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop));
+}
+
+.u-section {
+  padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+}
+
+.u-eyebrow {
+  font: var(--weight-semibold) var(--eyebrow-size) / 1 var(--font-mono);
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--text-brand);
+}
+
+.u-grad-brand,
+.u-grad-data {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* --gradient-*-text are contrast-tuned variants of the two brand gradients;
+   see a11y.css. The decorative gradients keep their design values. */
+.u-grad-brand {
+  background-image: var(--gradient-brand-text);
+}
+.u-grad-data {
+  background-image: var(--gradient-data-text);
+}
+
+/* if background-clip:text is unavailable the text would render transparent */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .u-grad-brand,
+  .u-grad-data {
+    background-image: none;
+    color: var(--text-brand);
+  }
+}
+
+/* Windows/Firefox render clipped text with no fallback colour if the gradient
+   fails to paint; forced-colors mode must not swallow the headline. */
+@media (forced-colors: active) {
+  .u-grad-brand,
+  .u-grad-data {
+    color: CanvasText;
+    background-image: none;
+  }
+}
+
+.u-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.u-skip-link {
+  position: absolute;
+  left: var(--space-05);
+  top: var(--space-05);
+  z-index: var(--z-tooltip);
+  padding: var(--space-04) var(--space-06);
+  border-radius: var(--radius-m);
+  background: var(--action-primary);
+  color: #fff;
+  font: var(--weight-medium) var(--button-m-size) / 1 var(--font-ui);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.u-skip-link:focus-visible {
+  transform: translateY(0);
+  color: #fff;
+}
+
+/* --- reduced motion -------------------------------------------------------
+   tokens/motion.css already zeroes every duration token; this collapses the
+   keyframe animations the prototype drives directly. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .caret,
-  .animate-pulse-dot {
-    animation: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-rv] {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -1,14 +1,42 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import StudioShell from '../components/studio/StudioShell.astro';
-import SectionShell from '../components/studio/SectionShell.astro';
-import HomeSection from '../components/sections/HomeSection.astro';
-import { sectionById } from '../data/sections';
-const home = sectionById['home'];
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import WhySection from '../components/home/WhySection.astro';
+import FlowBand from '../components/home/FlowBand.astro';
+import HowSection from '../components/home/HowSection.astro';
+import EnginesSection from '../components/home/EnginesSection.astro';
+import ProductSection from '../components/home/ProductSection.astro';
+import FeaturesSection from '../components/home/FeaturesSection.astro';
+import OpenSourceSection from '../components/home/OpenSourceSection.astro';
+import DeploySection from '../components/home/DeploySection.astro';
+import CtaBand from '../components/home/CtaBand.astro';
+import { site } from '../lib/site';
+import { engines } from '../data/engines';
+
+const schema = [
+  {
+    '@type': 'SoftwareApplication',
+    name: site.name,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web browser, Docker, Kubernetes',
+    description: site.description,
+    softwareVersion: site.version,
+    url: site.url,
+    license: 'https://opensource.org/licenses/MIT',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    featureList: engines.map((e) => e.name),
+  },
+];
 ---
 
-<Layout title={home.pageTitle} description={home.pageDescription}>
-  <StudioShell active="home" standalone>
-    <SectionShell section={home} active><HomeSection /></SectionShell>
-  </StudioShell>
-</Layout>
+<BaseLayout path="/" schema={schema}>
+  <Hero />
+  <WhySection><FlowBand slot="flow" /></WhySection>
+  <HowSection />
+  <EnginesSection />
+  <ProductSection />
+  <FeaturesSection />
+  <OpenSourceSection />
+  <DeploySection />
+  <CtaBand />
+</BaseLayout>

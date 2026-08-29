@@ -1,0 +1,85 @@
+---
+interface Props {
+  address: string;
+  /** gradient hairline ring around the frame (hero) vs a plain hairline (demo) */
+  ring?: boolean;
+  dots?: 'strong' | 'soft';
+  class?: string;
+}
+const { address, ring = false, dots = 'soft', class: klass } = Astro.props;
+---
+
+<div class:list={['frame', ring && 'frame--ring', klass]}>
+  <div class="frame__body">
+    <div class="frame__bar">
+      <span class="frame__dots" aria-hidden="true" data-tone={dots}>
+        <span></span><span></span><span></span>
+      </span>
+      <span class="frame__address">{address}</span>
+      <span class="frame__spacer" aria-hidden="true"></span>
+    </div>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .frame__body {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--console-bg);
+  }
+  .frame--ring {
+    padding: 1px;
+    border-radius: 17px;
+    background: var(--frame-ring);
+    box-shadow: var(--shadow-xl);
+  }
+  .frame:not(.frame--ring) {
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--console-bg);
+    box-shadow: var(--shadow-l);
+  }
+
+  .frame__bar {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    background: var(--console-surface);
+    border-bottom: var(--border-width-1) solid var(--console-border);
+  }
+  .frame__dots {
+    flex: none;
+    display: flex;
+    gap: var(--space-02);
+  }
+  .frame__dots > span {
+    width: 9px;
+    height: 9px;
+    border-radius: var(--radius-circle);
+    background: var(--console-dot-strong);
+  }
+  .frame__dots[data-tone='soft'] > span {
+    background: var(--console-dot);
+  }
+  .frame__address {
+    flex: 1;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: var(--space-02) var(--space-04);
+    border-radius: var(--radius-s);
+    background: var(--console-bg);
+    font: var(--weight-regular) 11px / 1.4 var(--font-mono);
+    color: var(--console-text-secondary);
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .frame__spacer {
+    flex: none;
+    width: 45px;
+  }
+</style>

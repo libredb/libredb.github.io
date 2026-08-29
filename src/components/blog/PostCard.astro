@@ -1,0 +1,118 @@
+---
+import { formatDate, isoDate } from '../../lib/format';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  /** the first card on the index gets the wider treatment */
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+const { title, description, publishedAt, tags, lang, coverImage } = post.data;
+const href = `/blog/${post.id}`;
+---
+
+<article class:list={['pcard', featured && 'pcard--featured']} lang={lang}>
+  {
+    coverImage && (
+      <a class="pcard__media" href={href} tabindex="-1" aria-hidden="true">
+        <img src={coverImage} alt="" loading="lazy" />
+      </a>
+    )
+  }
+  <div class="pcard__body">
+    <p class="pcard__meta">
+      <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt, lang)}</time>
+      {
+        tags.length > 0 && (
+          <span class="pcard__sep" aria-hidden="true">
+            ·
+          </span>
+        )
+      }
+      {tags.map((t) => <span class="pcard__tag">{t.label}</span>)}
+    </p>
+    <h2 class="pcard__title"><a href={href}>{title}</a></h2>
+    <p class="pcard__desc">{description}</p>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    transition:
+      transform var(--duration-normal) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+  .pcard:hover {
+    transform: translateY(var(--hover-lift));
+    box-shadow: var(--shadow-l);
+  }
+  .pcard__media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .pcard__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pcard__body {
+    padding: var(--card-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-04);
+  }
+  .pcard__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+    font: var(--weight-medium) var(--meta-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+  }
+  .pcard__tag {
+    color: var(--text-brand);
+  }
+  .pcard__title {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h4-size);
+    line-height: var(--h4-line);
+    letter-spacing: var(--h4-tracking);
+    text-wrap: balance;
+  }
+  .pcard__title a {
+    color: var(--text-primary);
+  }
+  /* one link surface: the whole card is clickable through the title */
+  .pcard__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .pcard {
+    position: relative;
+  }
+  .pcard__desc {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .pcard--featured .pcard__title {
+    font-size: var(--h3-size);
+    line-height: var(--h3-line);
+  }
+  .pcard--featured .pcard__desc {
+    font-size: var(--body-m-size);
+  }
+</style>

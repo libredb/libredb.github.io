@@ -1,0 +1,259 @@
+---
+import { deploy } from '../../data/home';
+import { site } from '../../lib/site';
+---
+
+<section id="deploy" class="dp" aria-labelledby="dp-title">
+  <div class="u-wash dp__wash" aria-hidden="true"></div>
+
+  <div class="dp__inner u-container">
+    <div class="dp__col">
+      <div data-rv>
+        <p class="u-eyebrow">{deploy.eyebrow}</p>
+        <h2 class="dp__title" id="dp-title">
+          {deploy.headline.before}<span class="u-grad-brand">{deploy.headline.gradient}</span>{deploy.headline.after}
+        </h2>
+        <p class="dp__intro">{deploy.intro}</p>
+      </div>
+
+      <div class="dp__switch" data-switch="deploy" data-switch-role="tab" data-switch-active="docker">
+        <div class="dp__tabs" role="tablist" aria-label="Install methods">
+          {
+            deploy.tabs.map((t) => (
+              <button type="button" class="dp__tab" data-switch-trigger={t.id}>
+                {t.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="dp__box">
+          {
+            deploy.tabs.map((t) => (
+              <div class="dp__panel" data-switch-panel={t.id} hidden={t.id !== 'docker'}>
+                {'command' in t && t.command ? (
+                  <p class="dp__cmd">
+                    <span class="dp__prompt" aria-hidden="true">
+                      ${' '}
+                    </span>
+                    {t.command}
+                  </p>
+                ) : null}
+                {'platforms' in t && t.platforms ? (
+                  <p class="dp__platforms">
+                    {t.platforms.map((p) => (
+                      <span class="dp__platform">{p}</span>
+                    ))}
+                  </p>
+                ) : null}
+                <p class="dp__note">{t.note}</p>
+                {'command' in t && t.command ? (
+                  <button
+                    type="button"
+                    class="dp__copy"
+                    data-copy={t.command}
+                    aria-label={`Copy the ${t.label} command`}
+                  >
+                    copy
+                  </button>
+                ) : null}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <aside data-rv class="dp__channels" aria-label="Distribution channels">
+      <p class="dp__count">
+        <span class="dp__countn">{deploy.channelsCount}</span>
+        <span class="dp__countl">{deploy.channelsLabel}</span>
+      </p>
+      <ul class="dp__chips">
+        {deploy.channels.map((c) => <li class="dp__chip">{c}</li>)}
+      </ul>
+      <p class="dp__foot">
+        {deploy.channelsNote}{' '}
+        <a href={site.links.distribution} target="_blank" rel="noreferrer">{deploy.channelsLink}</a>
+      </p>
+    </aside>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/switcher';
+  import '../../scripts/copy';
+</script>
+
+<style>
+  .dp {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+    background: var(--background-subtle);
+  }
+  .dp__wash {
+    background: radial-gradient(
+      640px 440px at 92% 8%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .dp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
+    gap: clamp(var(--space-09), 5vw, 72px);
+    align-items: start;
+  }
+  .dp__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .dp__intro {
+    margin-top: var(--stack-title-body);
+    max-width: 520px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .dp__switch {
+    margin-top: var(--space-08);
+  }
+  .dp__tabs {
+    display: flex;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+  }
+  .dp__tab {
+    height: 34px;
+    padding: 0 15px;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font: var(--weight-medium) 12.5px / 1 var(--font-ui);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .dp__tab[data-state='active'] {
+    background: var(--surface-brand);
+    color: var(--text-brand);
+    border-color: var(--primary-600);
+  }
+
+  .dp__box {
+    margin-top: 14px;
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: var(--radius-l);
+    background: var(--console-bg);
+    padding: 18px var(--space-06);
+    min-height: 96px;
+    font: var(--weight-regular) 13px / 1.85 var(--font-mono);
+    color: var(--console-text);
+    overflow: auto;
+  }
+  .dp__panel {
+    position: relative;
+    padding-right: 64px;
+  }
+  .dp__prompt {
+    color: var(--console-text-tertiary);
+  }
+  .dp__note {
+    color: var(--console-text-tertiary);
+  }
+  .dp__platforms {
+    display: flex;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+    padding: var(--space-01) 0;
+  }
+  .dp__platform {
+    padding: 7px 13px;
+    border: var(--border-width-1) solid var(--console-border);
+    border-radius: 7px;
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-mono);
+    color: var(--console-text-soft);
+  }
+  .dp__platforms + .dp__note {
+    margin-top: var(--space-03);
+  }
+  .dp__copy {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: var(--border-width-1) solid var(--console-border);
+    background: var(--console-surface);
+    color: var(--console-text-secondary);
+    border-radius: var(--radius-s);
+    padding: 5px var(--space-04);
+    min-height: 24px;
+    cursor: pointer;
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .dp__copy:hover {
+    color: var(--console-text);
+    border-color: var(--console-border-strong);
+  }
+
+  .dp__channels {
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    padding: clamp(var(--space-07), 3vw, var(--space-08));
+  }
+  .dp__count {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-04);
+  }
+  .dp__countn {
+    font: var(--weight-semibold) var(--h1-size) / 1 var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  .dp__countl {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+  .dp__chips {
+    margin: var(--space-06) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: var(--space-03);
+    flex-wrap: wrap;
+  }
+  .dp__chip {
+    padding: 7px var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-s);
+    background: var(--background);
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-mono);
+    color: var(--text-secondary);
+  }
+  .dp__foot {
+    margin-top: var(--space-07);
+    padding-top: var(--space-06);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+    font-size: var(--label-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+</style>

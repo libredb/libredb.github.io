@@ -1,0 +1,37 @@
+/* Primitive color scales. Never reference these directly in a component —
+   go through the semantic tokens in theme.css. */
+:root {
+  /* Primary — Indigo. From the brand mark's hexagon frame + data rows. */
+  --primary-50:#eef2ff;  --primary-100:#e0e7ff; --primary-200:#c7d2fe;
+  --primary-300:#a5b4fc; --primary-400:#818cf8; --primary-500:#6366f1;
+  --primary-600:#4f46e5; --primary-700:#4338ca; --primary-800:#3730a3;
+  --primary-900:#312e81; --primary-950:#1e1b4b;
+
+  /* Secondary — Purple. Gradient end-stop of the brand mark. */
+  --secondary-50:#faf5ff;  --secondary-100:#f3e8ff; --secondary-200:#e9d5ff;
+  --secondary-300:#d8b4fe; --secondary-400:#c084fc; --secondary-500:#a855f7;
+  --secondary-600:#9333ea; --secondary-700:#7e22ce; --secondary-800:#6b21a8;
+  --secondary-900:#581c87; --secondary-950:#3b0764;
+
+  /* Accent — Emerald. Chevron gradient start. */
+  --accent-50:#ecfdf5;  --accent-100:#d1fae5; --accent-200:#a7f3d0;
+  --accent-300:#6ee7b7; --accent-400:#34d399; --accent-500:#10b981;
+  --accent-600:#059669; --accent-700:#047857; --accent-800:#065f46;
+  --accent-900:#064e3b; --accent-950:#022c22;
+
+  /* Data — Blue. Chevron gradient end. Used for data viz + info states. */
+  --data-50:#eff6ff;  --data-100:#dbeafe; --data-200:#bfdbfe;
+  --data-300:#93c5fd; --data-400:#60a5fa; --data-500:#3b82f6;
+  --data-600:#2563eb; --data-700:#1d4ed8; --data-800:#1e40af;
+  --data-900:#1e3a8a; --data-950:#172554;
+
+  /* Neutral — slightly cool. 0 → 1000. */
+  --neutral-0:#ffffff;   --neutral-50:#f8f9fc;  --neutral-100:#f1f3f9;
+  --neutral-200:#e4e7ef; --neutral-300:#cdd2e0; --neutral-400:#a3aac2;
+  --neutral-500:#7b8199; --neutral-600:#5b6178; --neutral-700:#434860;
+  --neutral-800:#2b2f44; --neutral-900:#191c2c; --neutral-1000:#0b0d18;
+
+  /* Brand gradients — mark, one accent surface, graphic device. Never a page bg. */
+  --gradient-brand: linear-gradient(135deg, #4f46e5, #9333ea);
+  --gradient-data: linear-gradient(135deg, #10b981, #3b82f6);
+}

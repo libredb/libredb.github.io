@@ -1,0 +1,14 @@
+/* LibreDB Studio — webfonts.
+   Geist and Geist Mono are served from Google Fonts. No licensed binaries are
+   bundled; if you need self-hosted files, drop the .woff2 into assets/fonts/
+   and swap the src below. */
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=swap");
+
+:root {
+  --font-sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-sans);
+  --font-heading: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-ui: var(--font-sans);
+}

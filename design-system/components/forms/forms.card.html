@@ -1,0 +1,110 @@
+<!-- @dsCard group="Components" viewport="700x380" subtitle="FormField, Input, Textarea, Select, Checkbox, Radio, Switch" name="Forms" -->
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{padding:20px;background:var(--background)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lbl{font:500 10px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+.grp{margin-bottom:18px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body>
+<div id="root"></div>
+<script type="text/jsx" id="demo-src">
+
+    function isFrame(v) {
+      try { return v === window || (typeof Window !== "undefined" && v instanceof Window) || typeof v.postMessage === "function"; }
+      catch (e) { return true; }
+    }
+    function resolveNS(names) {
+      for (const k of Object.keys(window)) {
+        try {
+          const v = window[k];
+          if (!v || typeof v !== "object" || isFrame(v)) continue;
+          if (names.every(n => typeof v[n] === "function")) return v;
+        } catch (e) { /* cross-origin frame or throwing getter */ }
+      }
+      return {};
+    }
+
+    const NS = resolveNS(["Input","Select","Checkbox","Radio","Switch","FormField"]);
+    const { FormField, Input, Textarea, Select, Checkbox, Radio, Switch } = NS;
+
+    function Demo() {
+      const [tel, setTel] = React.useState("0532 11");
+      const [ok, setOk] = React.useState(false);
+      const [cycle, setCycle] = React.useState("y");
+      const [auto, setAuto] = React.useState(true);
+
+      return (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <FormField label="Şirket adı" htmlFor="co" helper="Ticari unvanı yazmanız yeterli.">
+              <Input id="co" placeholder="Örn. Pixelon Teknoloji" />
+            </FormField>
+            <FormField label="Telefon" htmlFor="tel" required error="Telefon numarası 10 haneli olmalı: 5XX XXX XX XX">
+              <Input id="tel" invalid value={tel} onChange={(e) => setTel(e.target.value)} />
+            </FormField>
+            <FormField label="Alan adı" htmlFor="dom" success="Alan adı müsait">
+              <Input id="dom" valid prefix="https://" suffix=".com.tr" defaultValue="libredb" />
+            </FormField>
+            <FormField label="Vergi numarası" htmlFor="vkn" helper="Sistemden gelir, düzenlenemez.">
+              <Input id="vkn" readOnly disabled value="—" />
+            </FormField>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <FormField label="Hizmet" htmlFor="svc" required>
+              <Select id="svc" options={["Veri mimarisi", "Migrasyon", "Yönetilen DB", "Danışmanlık"]} defaultValue="Migrasyon" />
+            </FormField>
+            <FormField label="Proje özeti" htmlFor="brief" helper="Teknik detay gerekmez." counter="0 / 500">
+              <Textarea id="brief" rows={2} placeholder="Kısaca ihtiyacınızı yazın" />
+            </FormField>
+            <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+              <Checkbox id="c1" checked label="Saatlik yedek" onChange={() => {}} />
+              <Checkbox id="c2" indeterminate label="Bazı bölgeler seçili" onChange={() => {}} />
+              <Checkbox id="c3" disabled label="Legacy destek (yakında)" onChange={() => {}} />
+              <Checkbox id="c4" checked={ok} invalid={!ok} onChange={(e) => setOk(e.target.checked)}
+                label={<span>KVKK Aydınlatma Metni'ni okudum, onay veriyorum.</span>} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+              <Radio id="r1" name="cycle" checked={cycle === "m"} onChange={() => setCycle("m")} label="Aylık" />
+              <Radio id="r2" name="cycle" checked={cycle === "y"} onChange={() => setCycle("y")} label="Yıllık" description="%20 indirim" />
+            </div>
+            <Switch id="sw" checked={auto} onChange={(e) => setAuto(e.target.checked)}
+              label="Otomatik büyütme" description="Disk %80'e ulaştığında kapasite iki katına çıkar." />
+          </div>
+        </div>
+      );
+    }
+
+    function Pending() {
+      return (
+        <div style={{ padding: 24, border: "1px dashed var(--border-strong)", borderRadius: "var(--radius-l)",
+          font: "400 12.5px/1.7 var(--font-mono)", color: "var(--text-tertiary)" }}>
+          Component bundle henüz derlenmedi (_ds_bundle.js).<br />Design System sekmesi derlemeyi tamamladığında bu kart canlı componentleri gösterir.
+        </div>
+      );
+    }
+    const hasBundle = Object.keys(NS).length > 0;
+    ReactDOM.createRoot(document.getElementById("root")).render(hasBundle ? <Demo /> : <Pending />);
+</script>
+<script>
+(function () {
+  function boot() {
+    var src = document.getElementById("demo-src").textContent;
+    try {
+      var code = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+      new Function(code)();
+    } catch (e) {
+      document.getElementById("root").textContent = "Render hatası: " + e.message;
+      throw e;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body></html>

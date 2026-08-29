@@ -1,0 +1,379 @@
+---
+import { how } from '../../data/home';
+---
+
+<section id="how" class="how" aria-labelledby="how-title">
+  <div class="how__inner u-container">
+    <div data-rv class="how__head">
+      <p class="u-eyebrow">{how.eyebrow}</p>
+      <h2 class="how__title" id="how-title">
+        {how.headline.before}<span class="u-grad-brand">{how.headline.gradient}</span>
+      </h2>
+    </div>
+
+    <div class="how__grid">
+      <!-- the diagram is decorative: every claim it draws is written out in the
+           numbered steps beside it, so screen readers are not told it twice -->
+      <div class="how__scene" data-arch aria-hidden="true">
+        <div class="scene__cluster">
+          <p class="scene__kicker">YOUR CLUSTER</p>
+          <div class="scene__row">
+            <div class="scene__box" data-layer="1">
+              <img src="/engines/postgresql.svg" alt="" width="22" height="22" />
+              <span>
+                <span class="scene__name">PostgreSQL</span>
+                <span class="scene__sub">ready · 40 s</span>
+              </span>
+            </div>
+            <span class="scene__wire" data-layer="2"></span>
+            <div class="scene__box scene__box--studio" data-layer="2">
+              <img src="/brand/lb-icon.svg" alt="" width="22" height="22" />
+              <span>
+                <span class="scene__name">Studio</span>
+                <span class="scene__sub">container</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <span class="scene__drop" data-layer="3"></span>
+        <div class="scene__clients" data-layer="3">
+          <span class="scene__chip"><span class="scene__glyph">⌘</span> Browser tab</span>
+          <span class="scene__chip"><span class="scene__glyph">▯</span> Phone</span>
+        </div>
+
+        <span class="scene__drop" data-layer="4"></span>
+        <div class="scene__team" data-layer="4">
+          <span class="scene__avatars">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="scene__tag">OIDC SSO</span>
+          <span class="scene__tag">RBAC</span>
+          <span class="scene__tag">audit log</span>
+        </div>
+
+        <div class="scene__term">
+          {
+            how.terminal.map((l, i) => (
+              <p class="scene__line" data-tone={l.tone} data-layer={String(i + 1)}>
+                <span class="scene__prompt" data-prompt={l.prompt}>
+                  {l.prompt}
+                </span>{' '}
+                {l.text}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+
+      <ol class="how__steps">
+        {
+          how.steps.map((s) => (
+            <li class="step" data-astep={s.n.replace(/^0/, '')}>
+              <p class="step__n">{s.n}</p>
+              <h3 class="step__t">{s.t}</h3>
+              <p class="step__d">{s.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/arch-steps';
+</script>
+
+<style>
+  .how {
+    border-bottom: var(--border-width-1) solid var(--border);
+  }
+  .how__inner {
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+  .how__head {
+    max-width: var(--measure-standard);
+  }
+  .how__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .how__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+    gap: clamp(var(--space-09), 5vw, 88px);
+    margin-top: var(--space-10);
+  }
+
+  /* --- sticky scene -------------------------------------------------------- */
+  .how__scene {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    padding: clamp(var(--space-06), 2.5vw, var(--space-08));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .scene__cluster {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius-l);
+    padding: 18px;
+  }
+  .scene__kicker {
+    font: var(--weight-semibold) 9.5px / 1 var(--font-mono);
+    letter-spacing: 0.13em;
+    color: var(--text-tertiary);
+  }
+  .scene__row {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+  }
+  .scene__box {
+    flex: none;
+    width: 148px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+    padding: var(--space-04);
+    background: var(--surface-elevated);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-m);
+  }
+  .scene__box--studio {
+    border-color: var(--primary-600);
+  }
+  .scene__box img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+  .scene__name {
+    display: block;
+    font: var(--weight-medium) 12.5px / 1.25 var(--font-ui);
+  }
+  .scene__sub {
+    display: block;
+    font: var(--weight-regular) 10px / 1.3 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .scene__wire {
+    flex: 1;
+    height: 2px;
+    margin: 0 var(--space-02);
+    background-image: repeating-linear-gradient(90deg, var(--primary-500) 0 5px, transparent 5px 10px);
+    animation: lbDashX 1s linear infinite;
+  }
+  .scene__drop {
+    display: block;
+    width: 2px;
+    height: 26px;
+    margin: 0 auto;
+    background-image: repeating-linear-gradient(180deg, var(--primary-500) 0 5px, transparent 5px 10px);
+    animation: lbDashY 1s linear infinite;
+  }
+  .scene__clients {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-04);
+  }
+  .scene__chip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+    padding: var(--space-04) 14px;
+    background: var(--surface-elevated);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-m);
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-ui);
+    color: var(--text-secondary);
+  }
+  .scene__glyph {
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .scene__team {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-04);
+    flex-wrap: wrap;
+  }
+  .scene__avatars {
+    display: flex;
+  }
+  .scene__avatars > span {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-circle);
+    border: var(--border-width-2) solid var(--surface);
+  }
+  .scene__avatars > span:nth-child(1) {
+    background: var(--primary-300);
+  }
+  .scene__avatars > span:nth-child(2) {
+    background: var(--secondary-300);
+    margin-left: -7px;
+  }
+  .scene__avatars > span:nth-child(3) {
+    background: var(--data-300);
+    margin-left: -7px;
+  }
+  .scene__avatars > span:nth-child(4) {
+    background: var(--neutral-300);
+    margin-left: -7px;
+  }
+  .scene__tag {
+    padding: 5px var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-s);
+    font: var(--weight-medium) 10.5px / 1 var(--font-mono);
+    color: var(--text-secondary);
+  }
+
+  .scene__term {
+    margin-top: var(--space-02);
+    border-radius: var(--radius-m);
+    background: var(--console-bg);
+    border: var(--border-width-1) solid var(--console-border);
+    padding: 14px var(--space-05);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font: var(--weight-regular) var(--body-xs-size) / 1.5 var(--font-mono);
+  }
+  .scene__line {
+    color: var(--console-text-secondary);
+  }
+  .scene__line[data-tone='bright'] {
+    color: var(--console-text);
+  }
+  .scene__prompt {
+    color: var(--console-text-tertiary);
+  }
+  .scene__prompt[data-prompt='→'],
+  .scene__prompt[data-prompt='✓'] {
+    color: var(--console-string);
+  }
+
+  /* layers fade in as the reader walks the steps */
+  [data-layer] {
+    opacity: 0.14;
+    transform: translateY(8px);
+    transition:
+      opacity var(--duration-media) var(--ease-out),
+      transform var(--duration-media) var(--ease-out);
+  }
+  .scene__wire[data-layer],
+  .scene__drop[data-layer],
+  .scene__line[data-layer] {
+    transform: none;
+  }
+
+  .how__scene[data-arch-step='1'] [data-layer='1'],
+  .how__scene[data-arch-step='2'] [data-layer='1'],
+  .how__scene[data-arch-step='2'] [data-layer='2'],
+  .how__scene[data-arch-step='3'] [data-layer='1'],
+  .how__scene[data-arch-step='3'] [data-layer='2'],
+  .how__scene[data-arch-step='3'] [data-layer='3'],
+  .how__scene[data-arch-step='4'] [data-layer='1'],
+  .how__scene[data-arch-step='4'] [data-layer='2'],
+  .how__scene[data-arch-step='4'] [data-layer='3'],
+  .how__scene[data-arch-step='4'] [data-layer='4'] {
+    opacity: 1;
+    transform: none;
+  }
+  /* no JS: draw the whole thing rather than a ghost */
+  :global(html:not(.js)) [data-layer] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* --- steps --------------------------------------------------------------- */
+  .how__steps {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .step {
+    padding: 10vh 0 14vh 26px;
+    border-left: var(--border-width-3) solid var(--border);
+    transition: border-color var(--duration-normal) var(--ease-out);
+  }
+  .step:first-child {
+    padding-top: 8vh;
+  }
+  .step:last-child {
+    padding-bottom: 10vh;
+  }
+  .step[data-state='active'] {
+    border-left-color: var(--primary-600);
+  }
+
+  .step__n {
+    font: var(--weight-semibold) var(--body-xs-size) / 1 var(--font-mono);
+    letter-spacing: 0.14em;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+  }
+  .step__t {
+    margin-top: var(--space-04);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.014em;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+  }
+  .step__d {
+    margin-top: var(--space-04);
+    max-width: 440px;
+    font-size: var(--body-m-size);
+    line-height: 1.65;
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal) var(--ease-out);
+    text-wrap: pretty;
+  }
+  .step[data-state='active'] .step__n,
+  .step[data-state='active'] .step__t {
+    color: var(--text-primary);
+  }
+  .step[data-state='active'] .step__d {
+    color: var(--text-secondary);
+  }
+  :global(html:not(.js)) .step__n,
+  :global(html:not(.js)) .step__t {
+    color: var(--text-primary);
+  }
+  :global(html:not(.js)) .step__d {
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 1023px) {
+    .how__scene {
+      position: static;
+    }
+    .step {
+      padding-block: var(--space-08) var(--space-09);
+    }
+    .step:first-child {
+      padding-top: var(--space-08);
+    }
+    .step:last-child {
+      padding-bottom: var(--space-08);
+    }
+  }
+</style>

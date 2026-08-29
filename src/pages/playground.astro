@@ -1,14 +1,17 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import StudioShell from '../components/studio/StudioShell.astro';
-import Playground from '../components/studio/Playground.astro';
+import StubPage from '../layouts/StubPage.astro';
+import ProductSection from '../components/home/ProductSection.astro';
 ---
 
-<Layout
-  title="Playground — run LibreDB in your browser | LibreDB"
-  description="Run a real LibreDB database entirely in your browser, backed by OPFS. Preloaded sample data, clickable commands, zero backend, no signup."
+<StubPage
+  path="/playground"
+  title="Playground"
+  description="Open a real LibreDB Studio against a seeded demo database — the SQL editor, the grid, ER diagrams and the health dashboard, with nothing to install."
+  eyebrow="Playground"
+  heading="Try it against a real database, in a browser tab"
+  intro="The playground is a live Studio wired to a seeded demo instance. Run queries, open the ER diagram, read the health panel — the same build you would deploy next to your own data."
+  cta={{ label: 'Open live demo', href: 'https://app.libredb.org' }}
+  secondary={{ label: 'Deploy your own', href: '/#deploy' }}
 >
-  <StudioShell active="playground" standalone>
-    <Playground />
-  </StudioShell>
-</Layout>
+  <ProductSection />
+</StubPage>

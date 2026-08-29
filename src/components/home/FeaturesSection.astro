@@ -1,0 +1,125 @@
+---
+import { featuresSection, features } from '../../data/home';
+import Icon from '../common/Icon.astro';
+---
+
+<section id="features" class="ft" aria-labelledby="ft-title">
+  <span class="ft__rule" aria-hidden="true"></span>
+
+  <div class="ft__inner u-container">
+    <div data-rv class="ft__head">
+      <p class="u-eyebrow">{featuresSection.eyebrow}</p>
+      <h2 class="ft__title" id="ft-title">
+        {featuresSection.headline.before}<span class="u-grad-brand">{featuresSection.headline.gradient}</span>
+      </h2>
+    </div>
+
+    <ul data-rv class="ft__grid">
+      {
+        features.map((f) => (
+          <li class="fcard">
+            <div class="fcard__top">
+              <span class="fcard__icon">
+                <Icon name={f.icon} />
+              </span>
+              <span class="fcard__n">{f.n}</span>
+            </div>
+            <h3 class="fcard__t">{f.t}</h3>
+            <p class="fcard__d">{f.d}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ft {
+    position: relative;
+    overflow: hidden;
+    border-bottom: var(--border-width-1) solid var(--border);
+    background: var(--background-subtle);
+  }
+  .ft__rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-brand);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .ft__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 10vh, 112px);
+  }
+  .ft__head {
+    max-width: var(--measure-standard);
+  }
+  .ft__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.2vw, var(--h1-size));
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  .ft__grid {
+    margin: 44px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 14px;
+  }
+  .fcard {
+    background: var(--surface);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    padding: var(--card-padding);
+    transition:
+      transform var(--duration-normal) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+  .fcard:hover {
+    transform: translateY(var(--hover-lift));
+    box-shadow: var(--shadow-l);
+  }
+  .fcard__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .fcard__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--surface-brand);
+    color: var(--text-brand);
+  }
+  .fcard__n {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+  .fcard__t {
+    margin-top: var(--space-05);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: 17.5px;
+    line-height: 1.3;
+    letter-spacing: -0.008em;
+  }
+  .fcard__d {
+    margin-top: var(--space-03);
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+</style>

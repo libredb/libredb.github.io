@@ -1,0 +1,18 @@
+---
+import StubPage from '../layouts/StubPage.astro';
+import EnginesSection from '../components/home/EnginesSection.astro';
+import { databases } from '../data/home';
+---
+
+<StubPage
+  path="/databases"
+  title="Databases"
+  description="Sixteen engines behind one interface — relational, document, key-value, analytical, search and federated query, each with its real limits declared."
+  eyebrow={databases.eyebrow}
+  heading="One interface. Different engines."
+  intro={databases.intro}
+  cta={{ label: 'Browse the engines', href: '/#databases' }}
+  secondary={{ label: 'Provider docs', href: 'https://github.com/libredb/libredb-studio/tree/main/docs' }}
+>
+  <EnginesSection />
+</StubPage>

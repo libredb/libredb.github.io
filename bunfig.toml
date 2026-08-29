@@ -1,7 +1,11 @@
 # Reproducible installs: `bun add` records exact versions (no ^ ranges) instead
-# of caret ranges, so new dependencies can't silently float to a newer minor.
-# Existing dependencies in package.json are all pinned exact to match; Dependabot
-# proposes version bumps explicitly. Mirrors the sibling libredb-database repo,
-# relaxed for a website.
+# of caret ranges, so a new dependency can't silently float to a newer minor.
+# Every dependency in package.json is pinned exact to match; Dependabot proposes
+# version bumps explicitly. Mirrors the sibling libredb-website repo.
 [install]
 exact = true
+
+[test]
+# Replaces vitest's `globalSetup`: fails fast with an actionable message when
+# `dist/` is missing, instead of letting the dist suite fail confusingly.
+preload = ["./tests/setup.ts"]

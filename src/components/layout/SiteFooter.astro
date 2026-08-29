@@ -1,0 +1,122 @@
+---
+import { footer } from '../../data/home';
+import { site } from '../../lib/site';
+
+const isExternal = (h: string) => /^https?:/i.test(h);
+---
+
+<footer class="ftr" lang="en">
+  <div class="ftr__inner">
+    <div class="ftr__cols">
+      <div class="ftr__brand">
+        <div class="ftr__logo" role="img" aria-label={site.name}></div>
+        <p class="ftr__blurb">{footer.blurb}</p>
+      </div>
+
+      {
+        footer.groups.map((g) => (
+          <nav class="ftr__group" aria-label={g.title}>
+            <h2 class="ftr__title">{g.title}</h2>
+            <div class="ftr__links">
+              {g.links.map((l) => (
+                <a
+                  class="ftr__link"
+                  href={l.href}
+                  {...(isExternal(l.href) ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="ftr__base">
+      <span class="ftr__legal" lang="tr">{footer.legal}</span>
+      <span class="ftr__version">{footer.versionChip}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    border-top: var(--border-width-1) solid var(--border);
+    background: var(--background);
+  }
+  .ftr__inner {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: clamp(var(--space-10), 7vh, 72px) clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop)) var(--space-08);
+  }
+  .ftr__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: clamp(var(--space-08), 4vw, var(--space-10));
+  }
+  .ftr__brand {
+    min-width: 220px;
+  }
+  .ftr__logo {
+    width: 148px;
+    height: 30px;
+    background-image: var(--logo-h);
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .ftr__blurb {
+    margin-top: 18px;
+    max-width: 260px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .ftr__title {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .ftr__links {
+    margin-top: var(--space-05);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-02);
+  }
+  .ftr__link {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    font: var(--weight-regular) var(--label-size) / 1.4 var(--font-body);
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .ftr__link:hover {
+    color: var(--text-primary);
+  }
+
+  .ftr__base {
+    margin-top: var(--space-10);
+    padding-top: var(--space-07);
+    border-top: var(--border-width-1) solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-06);
+    flex-wrap: wrap;
+  }
+  .ftr__legal {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .ftr__version {
+    font: var(--weight-medium) 11.5px / 1 var(--font-mono);
+    color: var(--text-secondary);
+    padding: var(--space-02) var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-s);
+  }
+</style>

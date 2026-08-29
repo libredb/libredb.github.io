@@ -1,0 +1,50 @@
+{
+  "name": "LibreDB Studio",
+  "shortName": "LibreDB",
+  "url": "https://libredb.org",
+  "domain": "libredb.org",
+  "defaultLocale": "en",
+  "localeLabels": { "en": "English", "tr": "Türkçe" },
+  "tagline": "The database editor that deploys next to your data.",
+  "description": "LibreDB Studio is the open-source database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and twelve more engines, with SSO and audit built in.",
+  "version": "0.9.66",
+  "license": "MIT",
+  "company": "Sekoya Grup Bilişim ve Teknoloji Ltd. Şti., İstanbul",
+  "copyrightYear": 2026,
+  "repo": {
+    "owner": "libredb",
+    "site": "libredb.github.io",
+    "product": "libredb-studio",
+    "branch": "main"
+  },
+  "links": {
+    "github": "https://github.com/libredb/libredb-studio",
+    "demo": "https://app.libredb.org",
+    "docs": "https://github.com/libredb/libredb-studio/tree/main/docs",
+    "security": "https://github.com/libredb/libredb-studio/blob/main/SECURITY.md",
+    "distribution": "https://github.com/libredb/libredb-studio/blob/main/docs/DISTRIBUTION.md",
+    "sponsor": "https://github.com/sponsors/libredb",
+    "x": "https://x.com/libredb",
+    "linkedin": "https://www.linkedin.com/company/libredb",
+    "youtube": "https://www.youtube.com/@libredb",
+    "demoTour": "https://libredb-demo.netlify.app/",
+    "demoMobile": "https://libredb-mobile.netlify.app/"
+  },
+  "routes": [
+    "/",
+    "/features",
+    "/databases",
+    "/deploy",
+    "/open-source",
+    "/get-started",
+    "/playground",
+    "/faq",
+    "/blog",
+    "/rss.xml",
+    "/404"
+  ],
+  "cms": {
+    "contentPath": "outstatic/content",
+    "collections": ["posts"]
+  }
+}

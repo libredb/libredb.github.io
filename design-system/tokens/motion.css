@@ -1,0 +1,31 @@
+/* Motion directs attention; it never decorates. Exits are shorter than entrances. */
+:root {
+  --duration-instant:80ms;  /* state color change */
+  --duration-fast:150ms;    /* hover, focus, tap */
+  --duration-normal:240ms;  /* dropdown, accordion, card lift */
+  --duration-slow:360ms;    /* modal, drawer, page transition */
+  --duration-media:400ms;   /* image zoom */
+
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-in:cubic-bezier(.55,0,1,.45);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+  --stagger:60ms;
+  --reveal-distance:20px;
+  --hover-lift:-4px;
+  --press-scale:0.98;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant:0ms; --duration-fast:0ms; --duration-normal:0ms;
+    --duration-slow:0ms; --duration-media:0ms;
+    --reveal-distance:0px; --hover-lift:0px; --press-scale:1;
+  }
+}
+
+@keyframes ldb-spin { to { transform: rotate(360deg); } }
+@keyframes ldb-shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+@keyframes ldb-marquee { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+@keyframes ldb-reveal { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }

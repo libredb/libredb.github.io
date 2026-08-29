@@ -1,0 +1,21 @@
+---
+import StubPage from '../layouts/StubPage.astro';
+import DeploySection from '../components/home/DeploySection.astro';
+import { deploy } from '../data/home';
+---
+
+<StubPage
+  path="/deploy"
+  title="Deploy"
+  description="A container, a Helm chart, an OpenShift operator, a one-click template, or an npm package embedded inside your own product — 27 distribution channels, 22 live."
+  eyebrow={deploy.eyebrow}
+  heading="It installs like infrastructure, because it is"
+  intro={deploy.intro}
+  cta={{ label: 'See every install method', href: '/#deploy' }}
+  secondary={{
+    label: 'Every channel ↗',
+    href: 'https://github.com/libredb/libredb-studio/blob/main/docs/DISTRIBUTION.md',
+  }}
+>
+  <DeploySection />
+</StubPage>

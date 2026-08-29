@@ -1,0 +1,18 @@
+---
+import StubPage from '../layouts/StubPage.astro';
+import FeaturesSection from '../components/home/FeaturesSection.astro';
+import { featuresSection } from '../data/home';
+---
+
+<StubPage
+  path="/features"
+  title="Features"
+  description="Schema-aware SQL editor, visual EXPLAIN, ER diagrams, an AI that knows your schema, a live health dashboard and the database agent — all in the MIT build."
+  eyebrow={featuresSection.eyebrow}
+  heading="Everything a database IDE owes you"
+  intro="Six things ship in every build, on every engine that can support them. Nothing here is held behind an edition."
+  cta={{ label: 'See the feature cards', href: '/#features' }}
+  secondary={{ label: 'Open live demo', href: 'https://app.libredb.org' }}
+>
+  <FeaturesSection />
+</StubPage>

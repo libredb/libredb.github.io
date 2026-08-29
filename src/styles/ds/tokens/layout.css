@@ -1,0 +1,30 @@
+:root {
+  --bp-xs:0px;      /* mobile */
+  --bp-sm:480px;    /* large mobile */
+  --bp-md:768px;    /* tablet */
+  --bp-lg:1024px;   /* laptop */
+  --bp-xl:1280px;   /* desktop */
+  --bp-2xl:1536px;  /* large desktop */
+
+  --container-xs:480px;   /* form, login */
+  --container-s:640px;    /* legal, KVKK */
+  --container-m:768px;    /* article body */
+  --container-l:1024px;   /* content + media */
+  --container-xl:1280px;  /* default page */
+
+  --grid-columns-desktop:12; --grid-gutter-desktop:24px;
+  --grid-columns-tablet:8;   --grid-gutter-tablet:20px;
+  --grid-columns-mobile:4;   --grid-gutter-mobile:16px;
+
+  --touch-target-min:44px;
+
+  --z-base:0;
+  --z-raised:10;
+  --z-sticky:100;
+  --z-header:200;
+  --z-dropdown:300;
+  --z-overlay:400;
+  --z-modal:500;
+  --z-toast:600;
+  --z-tooltip:700;
+}

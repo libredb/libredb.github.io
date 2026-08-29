@@ -1,0 +1,112 @@
+<!-- @dsCard group="Components" viewport="700x420" subtitle="Alert, Toast, Dialog, Tooltip, Accordion, Spinner, Skeleton, EmptyState" name="Feedback" -->
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{padding:20px;background:var(--background)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lbl{font:500 10px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+.grp{margin-bottom:18px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body>
+<div id="root"></div>
+<script type="text/jsx" id="demo-src">
+
+    function isFrame(v) {
+      try { return v === window || (typeof Window !== "undefined" && v instanceof Window) || typeof v.postMessage === "function"; }
+      catch (e) { return true; }
+    }
+    function resolveNS(names) {
+      for (const k of Object.keys(window)) {
+        try {
+          const v = window[k];
+          if (!v || typeof v !== "object" || isFrame(v)) continue;
+          if (names.every(n => typeof v[n] === "function")) return v;
+        } catch (e) { /* cross-origin frame or throwing getter */ }
+      }
+      return {};
+    }
+
+    const NS = resolveNS(["Alert","Toast","Dialog","Tooltip","Accordion","EmptyState"]);
+    const { Alert, Toast, Dialog, Tooltip, Accordion, Spinner, ProgressBar, Skeleton, EmptyState } = NS;
+    const BTN = resolveNS(["Button","Badge","Card"]);
+    const Button = BTN.Button || (({ children }) => <span>{children}</span>);
+
+    function Demo() {
+      const [open, setOpen] = React.useState(true);
+
+      return (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <p className="lbl">Alert</p>
+            <Alert tone="info" title="Planlı bakım">14 Mart 02:00–04:00 arasında yazma işlemleri kısa süre duracak.</Alert>
+            <Alert tone="warning" title="Disk %82 dolu" action={<Button size="s" variant="outline">Kapasiteyi artır</Button>}>
+              Otomatik büyütme kapalı. Kapasiteyi artırın veya arşivleme kuralı ekleyin.
+            </Alert>
+            <Alert tone="error" title="Replikasyon durdu">Yedek düğüm 6 dakikadır geride. Nöbetçi ekip bilgilendirildi.</Alert>
+            <p className="lbl" style={{ marginTop: 8 }}>Toast</p>
+            <Toast tone="success" onDismiss={() => {}}>Değişiklikler kaydedildi</Toast>
+            <Toast loading>Rapor hazırlanıyor…</Toast>
+            <p className="lbl" style={{ marginTop: 8 }}>Loading</p>
+            <div className="row"><Spinner size="s" /><Spinner /><Spinner size="l" /><Tooltip label="Son 24 saat"><span style={{ font: "400 12px/1 var(--font-mono)", color: "var(--text-tertiary)", borderBottom: "1px dashed var(--border-strong)" }}>tooltip · hover</span></Tooltip></div>
+            <ProgressBar value={68} label="Veri aktarılıyor" />
+            <Skeleton lines={2} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <p className="lbl">Dialog</p>
+            <div style={{ position: "relative", height: 232, borderRadius: "var(--radius-l)", background: "var(--background-subtle)", border: "1px solid var(--border)", overflow: "hidden" }}>
+              <Dialog open={open} size="s" tone="destructive" title="Kümeyi kalıcı olarak sil"
+                description="staging-orders kümesi ve tüm yedekleri silinecek. Bu işlem geri alınamaz."
+                onClose={() => setOpen(false)}
+                footer={<><Button variant="outline" onClick={() => setOpen(false)}>Vazgeç</Button><Button variant="destructive">Kalıcı olarak sil</Button></>} />
+              {!open && (
+                <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+                  <Button variant="outline" onClick={() => setOpen(true)}>Dialog'u aç</Button>
+                </div>
+              )}
+            </div>
+            <p className="lbl" style={{ marginTop: 4 }}>Accordion · EmptyState</p>
+            <Accordion items={[
+              { question: "Verimiz Türkiye'de mi kalır?", answer: "Evet. Tüm yönetilen kümeler İstanbul bölgesinde çalışır, yedekler yurt dışına çıkmaz." },
+              { question: "Sözleşme süresi ne kadar?", answer: "Asgari 12 ay." }
+            ]} />
+            <EmptyState code="404" title="Bu sayfa taşınmış olabilir"
+              description="Aradığınız adres artık geçerli değil."
+              action={<Button size="s">Anasayfa</Button>}
+              secondaryAction={<Button size="s" variant="outline">Site içi ara</Button>} />
+          </div>
+        </div>
+      );
+    }
+
+    function Pending() {
+      return (
+        <div style={{ padding: 24, border: "1px dashed var(--border-strong)", borderRadius: "var(--radius-l)",
+          font: "400 12.5px/1.7 var(--font-mono)", color: "var(--text-tertiary)" }}>
+          Component bundle henüz derlenmedi (_ds_bundle.js).<br />Design System sekmesi derlemeyi tamamladığında bu kart canlı componentleri gösterir.
+        </div>
+      );
+    }
+    const hasBundle = Object.keys(NS).length > 0;
+    ReactDOM.createRoot(document.getElementById("root")).render(hasBundle ? <Demo /> : <Pending />);
+</script>
+<script>
+(function () {
+  function boot() {
+    var src = document.getElementById("demo-src").textContent;
+    try {
+      var code = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+      new Function(code)();
+    } catch (e) {
+      document.getElementById("root").textContent = "Render hatası: " + e.message;
+      throw e;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body></html>

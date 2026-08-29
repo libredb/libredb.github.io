@@ -1,0 +1,243 @@
+---
+import { navLinks } from '../../data/home';
+import { site } from '../../lib/site';
+
+/** Anchor links only work on the homepage, so prefix them when we are elsewhere. */
+const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const href = (h: string) => (h.startsWith('#') && !onHome ? `/${h}` : h);
+---
+
+<!-- The site chrome is always English. Without this, a Turkish article page
+     (html lang="tr") applies Turkish casing to it and text-transform:uppercase
+     renders "Light" as "LIGHT" with a dotted capital I. -->
+<header class="hdr" lang="en">
+  <div class="hdr__inner">
+    <a class="hdr__logo" href="/" aria-label={site.name}></a>
+
+    <nav class="hdr__nav" aria-label="Primary">
+      {
+        navLinks.map((l) => (
+          <a class="hdr__link" href={href(l.href)}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hdr__actions">
+      <a class="hdr__gh" href={site.links.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+      <button type="button" class="hdr__theme" data-theme-toggle aria-label="Switch to light theme">Light</button>
+      <a class="hdr__cta" href={site.links.demo} target="_blank" rel="noreferrer">Live demo</a>
+    </div>
+
+    <button type="button" class="hdr__burger" data-nav-toggle aria-expanded="false" aria-controls="site-nav-panel">
+      <span class="u-visually-hidden">Open menu</span>
+      <span class="hdr__burger-bars" aria-hidden="true"><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<!-- PITFALLS C1: kept a sibling of <header> so a fixed panel is never trapped by
+     a containing block the header creates. -->
+<div class="navpanel" id="site-nav-panel" lang="en" hidden>
+  <nav class="navpanel__nav" aria-label="Primary, mobile">
+    {
+      navLinks.map((l) => (
+        <a class="navpanel__link" href={href(l.href)}>
+          {l.label}
+        </a>
+      ))
+    }
+    <a class="navpanel__link" href="/blog">Blog</a>
+  </nav>
+  <div class="navpanel__actions">
+    <a class="hdr__gh" href={site.links.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+    <button type="button" class="hdr__theme" data-theme-toggle aria-label="Switch to light theme"> Light </button>
+    <a class="hdr__cta" href={site.links.demo} target="_blank" rel="noreferrer">Live demo</a>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/nav';
+</script>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: var(--background);
+    border-bottom: var(--border-width-1) solid var(--border);
+    transition: box-shadow var(--duration-fast) var(--ease-out);
+  }
+  .hdr[data-scrolled] {
+    box-shadow: var(--shadow-s);
+  }
+
+  .hdr__inner {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop));
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-06);
+  }
+
+  .hdr__logo {
+    flex: none;
+    width: 132px;
+    height: 26px;
+    background-image: var(--logo-h);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+  }
+
+  .hdr__nav {
+    display: flex;
+    gap: var(--space-01);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hdr__link {
+    padding: var(--space-03) 11px;
+    border-radius: var(--radius-s);
+    font: var(--weight-medium) var(--label-size) / 1 var(--font-ui);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .hdr__link:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+  }
+
+  .hdr__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: none;
+  }
+
+  .hdr__gh {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    font: var(--weight-medium) 12.5px / 1 var(--font-mono);
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .hdr__gh:hover {
+    color: var(--text-primary);
+  }
+
+  .hdr__theme {
+    padding: var(--space-03) var(--space-02);
+    min-width: 44px;
+    min-height: 38px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: var(--weight-medium) var(--body-xs-size) / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .hdr__theme:hover {
+    color: var(--text-primary);
+  }
+
+  .hdr__cta {
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 var(--space-05);
+    border-radius: var(--radius-m);
+    background: var(--action-primary);
+    color: #fff;
+    font: var(--weight-medium) var(--label-size) / 1 var(--font-ui);
+    white-space: nowrap;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .hdr__cta:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+  .hdr__cta:active {
+    transform: scale(var(--press-scale));
+  }
+
+  /* --- burger + mobile panel ---------------------------------------------- */
+  .hdr__burger {
+    display: none;
+    margin-left: auto;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    align-items: center;
+    justify-content: center;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-m);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .hdr__burger-bars {
+    display: grid;
+    gap: 5px;
+    width: 18px;
+  }
+  .hdr__burger-bars > span {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .navpanel {
+    position: fixed;
+    inset: 64px 0 0;
+    z-index: var(--z-overlay);
+    background: var(--background);
+    border-top: var(--border-width-1) solid var(--border);
+    padding: var(--space-08) clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop));
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-09);
+  }
+  .navpanel__nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .navpanel__link {
+    padding: var(--space-04) 0;
+    border-bottom: var(--border-width-1) solid var(--border-subtle);
+    font: var(--weight-medium) var(--h5-size) / 1.4 var(--font-ui);
+    color: var(--text-primary);
+  }
+  .navpanel__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-06);
+  }
+
+  @media (max-width: 1023px) {
+    .hdr__nav,
+    .hdr__actions {
+      display: none;
+    }
+    .hdr__burger {
+      display: inline-flex;
+    }
+  }
+  @media (min-width: 1024px) {
+    .navpanel {
+      display: none;
+    }
+  }
+</style>

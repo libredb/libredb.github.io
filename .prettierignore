@@ -3,14 +3,21 @@ dist
 .astro
 node_modules
 bun.lock
-
-# Internal design/plan artifacts (HTML mockups + agent plan files whose fenced
-# code blocks aren't valid JS). Not shipped source — don't format.
-docs
+cms/.next
 
 # Served verbatim — Prettier must not reflow static assets
 public
 
-# Verbatim copy synced from libredb-studio by scripts/sync-docker-compose.mjs.
-# Formatting it here would fight the sync step on every build.
-src/data/docker-compose.example.yml
+# Design handoff artifacts (HTML mockups and reference material, not shipped
+# source). Reformatting them would fight the handoff they were exported from.
+design
+design-system
+
+# CMS-authored content. Outstatic writes this Markdown; formatting it here would
+# produce a diff on the next save from the dashboard.
+outstatic/content
+
+# Vendored verbatim from design-system/ so Vite can resolve the relative url()
+# references inside tokens/theme.css. tests/ds-integrity.test.ts asserts every
+# file is byte-identical to its source — reformatting here would break that.
+src/styles/ds

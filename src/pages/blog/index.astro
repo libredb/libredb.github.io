@@ -1,0 +1,161 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import { site } from '../../lib/site';
+
+const posts = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+---
+
+<BaseLayout
+  path="/blog"
+  title="Blog"
+  description="Engineering writing from the team building LibreDB Studio — architecture decisions, release notes and what each database engine can and cannot do."
+>
+  <section class="blog" aria-labelledby="blog-title">
+    <div class="u-wash blog__wash" aria-hidden="true"></div>
+    <div class="blog__inner u-container">
+      <header class="blog__head">
+        <p class="u-eyebrow">Blog</p>
+        <h1 class="blog__title" id="blog-title">
+          Notes from building a database IDE that <span class="u-grad-brand">ships everywhere</span>
+        </h1>
+        <p class="blog__intro">
+          Architecture decisions, release notes and honest capability write-ups. Everything here is also in the
+          repository — this is where we explain the why.
+        </p>
+        <p class="blog__feed">
+          <a href="/rss.xml">RSS feed →</a>
+          <span aria-hidden="true">·</span>
+          <a href={site.links.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+        </p>
+      </header>
+
+      {
+        posts.length === 0 ? (
+          <div class="blog__empty">
+            <p class="blog__emptytitle">No posts published yet</p>
+            <p class="blog__emptybody">
+              The first write-up is being drafted. In the meantime the architecture notes live in the repository's docs
+              folder.
+            </p>
+            <a class="blog__emptycta" href={site.links.docs} target="_blank" rel="noreferrer">
+              Read the docs ↗
+            </a>
+          </div>
+        ) : (
+          <div class="blog__grid">
+            {posts.map((post, i) => (
+              <PostCard post={post} featured={i === 0} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog {
+    position: relative;
+    overflow: hidden;
+  }
+  .blog__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .blog__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-tablet), 9vh, 96px) clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .blog__head {
+    max-width: var(--measure-long);
+  }
+  .blog__title {
+    margin-top: var(--stack-eyebrow-title);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .blog__intro {
+    margin-top: var(--stack-title-body);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .blog__feed {
+    margin-top: var(--space-06);
+    display: flex;
+    align-items: center;
+    gap: var(--space-04);
+    font: var(--weight-medium) 12.5px / 1 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .blog__feed a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: var(--text-secondary);
+  }
+  .blog__feed a:hover {
+    color: var(--text-primary);
+  }
+
+  .blog__grid {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+    gap: var(--space-05);
+  }
+  .blog__grid > :global(.pcard--featured) {
+    grid-column: 1 / -1;
+  }
+
+  .blog__empty {
+    margin-top: var(--space-10);
+    padding: clamp(var(--space-09), 6vw, var(--space-12)) var(--card-padding);
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-04);
+  }
+  .blog__emptytitle {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h4-size);
+    color: var(--text-primary);
+  }
+  .blog__emptybody {
+    max-width: var(--measure-short);
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .blog__emptycta {
+    margin-top: var(--space-03);
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-m);
+    background: var(--action-primary);
+    color: #fff;
+    font: var(--weight-medium) var(--button-m-size) / 1 var(--font-ui);
+  }
+  .blog__emptycta:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+</style>

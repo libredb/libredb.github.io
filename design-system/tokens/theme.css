@@ -1,0 +1,92 @@
+/* Semantic tokens. These are the only color tokens a component should use.
+   Light is the default; [data-theme="dark"] on any ancestor flips the scope. */
+:root {
+  --background:#ffffff;
+  --background-subtle:#f8f9fc;
+  --surface:#ffffff;
+  --surface-elevated:#ffffff;
+  --surface-inverse:#0b0d18;
+  --surface-brand:#eef2ff;
+  --surface-brand-hover:#dce3fd;
+  --surface-hover:#f1f3f9;
+
+  --border:#e4e7ef;
+  --border-subtle:#eef0f6;
+  --border-strong:#cdd2e0;
+
+  --text-primary:#0e1020;
+  --text-secondary:#4a5069;
+  --text-tertiary:#7b8199;
+  --text-disabled:#b3b9cc;
+  --text-inverse:#ffffff;
+  --text-brand:#4338ca;
+
+  --link:#4f46e5;
+  --link-hover:#3730a3;
+  --link-visited:#9333ea;
+  --focus-ring:#4f46e5;
+
+  --action-primary:#4f46e5;
+  --action-primary-hover:#4338ca;
+  --action-primary-active:#3730a3;
+  --action-tertiary:#f1f3f9;
+  --action-tertiary-hover:#e4e7ef;
+  --action-destructive:#dc2626;
+  --action-destructive-hover:#b91c1c;
+
+  --success-bg:#ecfdf5; --success-border:#a7f3d0; --success-text:#047857;
+  --warning-bg:#fffbeb; --warning-border:#fde68a; --warning-text:#b45309;
+  --error-bg:#fef2f2;   --error-border:#fecaca;   --error-text:#b91c1c;
+  --info-bg:#eff6ff;    --info-border:#bfdbfe;    --info-text:#1d4ed8;
+
+  --disabled-opacity:0.38;
+
+  /* brand mark as a background-image, swaps with the theme */
+  --logo-h:url("../assets/lb-logo-h-dark.svg");
+  --logo-v:url("../assets/lb-logo-v-dark.svg");
+  --logo-icon:url("../assets/lb-icon.svg");
+}
+
+[data-theme="dark"] {
+  --background:#0b0d18;
+  --background-subtle:#101321;
+  --surface:#141829;
+  --surface-elevated:#1b2038;
+  --surface-inverse:#ffffff;
+  --surface-brand:#252163;
+  --surface-brand-hover:#312c7d;
+  --surface-hover:#232842;
+
+  --border:#262b45;
+  --border-subtle:#1c2138;
+  --border-strong:#3a416a;
+
+  --text-primary:#f2f4fb;
+  --text-secondary:#a8b0cc;
+  --text-tertiary:#767e9e;
+  --text-disabled:#4b5272;
+  --text-inverse:#0b0d18;
+  --text-brand:#c7d2fe;
+
+  --link:#a5b4fc;
+  --link-hover:#c7d2fe;
+  --link-visited:#d8b4fe;
+  --focus-ring:#818cf8;
+
+  --action-primary:#4f46e5;
+  --action-primary-hover:#6366f1;
+  --action-primary-active:#4338ca;
+  --action-tertiary:#1b2038;
+  --action-tertiary-hover:#272d4b;
+  --action-destructive:#dc2626;
+  --action-destructive-hover:#ef4444;
+
+  --success-bg:#052e21; --success-border:#0f5c43; --success-text:#6ee7b7;
+  --warning-bg:#33220a; --warning-border:#6b4712; --warning-text:#fcd34d;
+  --error-bg:#3a0f13;   --error-border:#7a1f26;   --error-text:#fca5a5;
+  --info-bg:#0d1f3d;    --info-border:#1d3f75;    --info-text:#93c5fd;
+
+  --logo-h:url("../assets/lb-logo-h-light.svg");
+  --logo-v:url("../assets/lb-logo-v-light.svg");
+  --logo-icon:url("../assets/lb-icon.svg");
+}

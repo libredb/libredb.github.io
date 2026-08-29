@@ -1,0 +1,25 @@
+/* 4px base. Up to 24px in steps of 4, then 8s and 16s. No in-between values. */
+:root {
+  --space-0:0;      --space-01:2px;  --space-02:4px;  --space-03:8px;
+  --space-04:12px;  --space-05:16px; --space-06:20px; --space-07:24px;
+  --space-08:32px;  --space-09:40px; --space-10:48px; --space-11:64px;
+  --space-12:80px;  --space-13:96px; --space-14:120px; --space-15:160px;
+
+  --section-y-mobile:48px;
+  --section-y-tablet:64px;
+  --section-y-desktop:80px;
+  --section-y-wide:96px;
+  --hero-y:120px;
+
+  --gutter-mobile:20px;
+  --gutter-tablet:32px;
+  --gutter-desktop:48px;
+  --gutter-wide:64px;
+
+  --card-padding:24px;
+  --card-padding-compact:16px;
+  --stack-eyebrow-title:12px;
+  --stack-title-body:16px;
+  --stack-body-cta:32px;
+  --field-gap:20px;
+}

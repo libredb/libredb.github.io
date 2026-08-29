@@ -1,0 +1,97 @@
+<!-- @dsCard group="Components" viewport="700x270" subtitle="Tabs (3 variants), Breadcrumb, Pagination" name="Navigation" -->
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{padding:20px;background:var(--background)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lbl{font:500 10px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 10px}
+.grp{margin-bottom:18px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body>
+<div id="root"></div>
+<script type="text/jsx" id="demo-src">
+
+    function isFrame(v) {
+      try { return v === window || (typeof Window !== "undefined" && v instanceof Window) || typeof v.postMessage === "function"; }
+      catch (e) { return true; }
+    }
+    function resolveNS(names) {
+      for (const k of Object.keys(window)) {
+        try {
+          const v = window[k];
+          if (!v || typeof v !== "object" || isFrame(v)) continue;
+          if (names.every(n => typeof v[n] === "function")) return v;
+        } catch (e) { /* cross-origin frame or throwing getter */ }
+      }
+      return {};
+    }
+
+    const NS = resolveNS(["Tabs","Breadcrumb","Pagination"]);
+    const { Tabs, Breadcrumb, Pagination } = NS;
+
+    function Demo() {
+      const [tab, setTab] = React.useState("Genel bakış");
+      const [f, setF] = React.useState("Tümü");
+      const [cycle, setCycle] = React.useState("m");
+      const [page, setPage] = React.useState(3);
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div>
+            <p className="lbl">Tabs — underline</p>
+            <Tabs items={["Genel bakış", "Teknoloji", "Sonuçlar"]} value={tab} onChange={setTab} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 20, alignItems: "end" }}>
+            <div>
+              <p className="lbl">Tabs — pills</p>
+              <Tabs variant="pills" items={["Tümü", "Veri", "Platform", "Kamu"]} value={f} onChange={setF} />
+            </div>
+            <div>
+              <p className="lbl">Tabs — contained</p>
+              <Tabs variant="contained" items={[{ value: "m", label: "Aylık" }, { value: "y", label: "Yıllık" }]} value={cycle} onChange={setCycle} />
+            </div>
+          </div>
+          <div>
+            <p className="lbl">Breadcrumb</p>
+            <Breadcrumb items={[{ label: "Anasayfa", href: "#" }, { label: "Hizmetler", href: "#" }, { label: "Veri migrasyonu" }]} />
+          </div>
+          <div>
+            <p className="lbl">Pagination</p>
+            <Pagination page={page} total={12} onChange={setPage} />
+          </div>
+        </div>
+      );
+    }
+
+    function Pending() {
+      return (
+        <div style={{ padding: 24, border: "1px dashed var(--border-strong)", borderRadius: "var(--radius-l)",
+          font: "400 12.5px/1.7 var(--font-mono)", color: "var(--text-tertiary)" }}>
+          Component bundle henüz derlenmedi (_ds_bundle.js).<br />Design System sekmesi derlemeyi tamamladığında bu kart canlı componentleri gösterir.
+        </div>
+      );
+    }
+    const hasBundle = Object.keys(NS).length > 0;
+    ReactDOM.createRoot(document.getElementById("root")).render(hasBundle ? <Demo /> : <Pending />);
+</script>
+<script>
+(function () {
+  function boot() {
+    var src = document.getElementById("demo-src").textContent;
+    try {
+      var code = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+      new Function(code)();
+    } catch (e) {
+      document.getElementById("root").textContent = "Render hatası: " + e.message;
+      throw e;
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body></html>

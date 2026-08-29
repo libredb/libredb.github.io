@@ -1,0 +1,18 @@
+---
+import StubPage from '../layouts/StubPage.astro';
+import OpenSourceSection from '../components/home/OpenSourceSection.astro';
+import { openSource } from '../data/home';
+---
+
+<StubPage
+  path="/open-source"
+  title="Open source"
+  description="LibreDB Studio is MIT because it has to go everywhere. No capability moves behind a paid edition to create a reason to upgrade."
+  eyebrow={openSource.eyebrow}
+  heading="Nothing sits behind an enterprise wall"
+  intro={openSource.intro}
+  cta={{ label: 'Read the comparison', href: '/#open-source' }}
+  secondary={{ label: 'GitHub ↗', href: 'https://github.com/libredb/libredb-studio' }}
+>
+  <OpenSourceSection />
+</StubPage>
