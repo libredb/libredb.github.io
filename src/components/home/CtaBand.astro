@@ -1,6 +1,7 @@
 ---
 import { cta } from '../../data/home';
 import { site } from '../../lib/site';
+import DemoCta from '../common/DemoCta.astro';
 ---
 
 <section id="cta" class="cta" aria-labelledby="cta-title">
@@ -16,7 +17,7 @@ import { site } from '../../lib/site';
       <p class="cta__body">{cta.body}</p>
 
       <div class="cta__actions">
-        <a class="cta__primary" href={cta.primary.href} target="_blank" rel="noreferrer">{cta.primary.label}</a>
+        <DemoCta id="band-demo" variant="onbrand" href={cta.primary.href} label={cta.primary.label} />
         <a class="cta__secondary" href={cta.secondary.href}>{cta.secondary.label}</a>
       </div>
 
@@ -31,7 +32,8 @@ import { site } from '../../lib/site';
   }
   .cta__panel {
     position: relative;
-    overflow: hidden;
+    /* not overflow:hidden — that clipped the demo panel hanging off the primary
+       button. The two decorative layers round themselves instead. */
     border-radius: var(--radius-2xl);
     background: var(--gradient-brand);
     padding: clamp(var(--space-10), 7vw, 88px) clamp(var(--space-07), 5vw, var(--space-11));
@@ -43,6 +45,7 @@ import { site } from '../../lib/site';
   .cta__texture {
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -53,6 +56,7 @@ import { site } from '../../lib/site';
   .cta__tint {
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background: linear-gradient(
       135deg,
       color-mix(in srgb, var(--primary-900) 40%, transparent),
@@ -90,12 +94,14 @@ import { site } from '../../lib/site';
   }
   .cta__actions {
     margin-top: var(--space-08);
+    /* the panel is clipped by .cta__panel's overflow:hidden otherwise */
+    position: relative;
+    z-index: 2;
     display: flex;
     gap: var(--space-04);
     flex-wrap: wrap;
     justify-content: center;
   }
-  .cta__primary,
   .cta__secondary {
     display: inline-flex;
     align-items: center;
@@ -103,18 +109,6 @@ import { site } from '../../lib/site';
     border-radius: var(--radius-m);
     font: var(--weight-medium) 15px / 1 var(--font-ui);
     transition: background var(--duration-fast) var(--ease-out);
-  }
-  .cta__primary {
-    padding: 0 var(--space-07);
-    background: var(--neutral-0);
-    color: var(--primary-900);
-  }
-  .cta__primary:hover {
-    background: var(--primary-50);
-    color: var(--primary-900);
-  }
-  .cta__primary:active {
-    transform: scale(var(--press-scale));
   }
   .cta__secondary {
     padding: 0 22px;

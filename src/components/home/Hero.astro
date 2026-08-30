@@ -2,6 +2,7 @@
 import { hero } from '../../data/home';
 import BrowserFrame from '../common/BrowserFrame.astro';
 import CopyBox from '../common/CopyBox.astro';
+import DemoCta from '../common/DemoCta.astro';
 
 /** lbWord stagger, matching the prototype: 70ms between words, second line
  *  starts at 340ms. */
@@ -55,9 +56,7 @@ const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
       <p class="hero__sub">{hero.sub}</p>
 
       <div class="hero__actions">
-        <a class="hero__cta" href={hero.primaryCta.href} target="_blank" rel="noreferrer">
-          {hero.primaryCta.label}
-        </a>
+        <DemoCta id="hero-demo" href={hero.primaryCta.href} label={hero.primaryCta.label} />
         <a class="hero__ghost" href={hero.secondaryCta.href}>
           {hero.secondaryCta.label}
           <span class="hero__arrow" aria-hidden="true">→</span>
@@ -219,13 +218,17 @@ const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
 
   .hero__actions {
     margin-top: 34px;
+    /* the sibling blocks each carry an entrance animation, so each one opens its
+       own stacking context; without a z-index here the demo panel that hangs off
+       the primary button would paint underneath the command box below it */
+    position: relative;
+    z-index: 2;
     display: flex;
     gap: var(--space-04);
     flex-wrap: wrap;
     justify-content: center;
     animation: lbWord 0.7s var(--ease-out) 1s both;
   }
-  .hero__cta,
   .hero__ghost {
     display: inline-flex;
     align-items: center;
@@ -236,19 +239,6 @@ const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
       background var(--duration-fast) var(--ease-out),
       color var(--duration-fast) var(--ease-out);
   }
-  .hero__cta {
-    padding: 0 var(--space-07);
-    background: var(--action-primary);
-    color: #fff;
-  }
-  .hero__cta:hover {
-    background: var(--action-primary-hover);
-    color: #fff;
-  }
-  .hero__cta:active {
-    transform: scale(var(--press-scale));
-  }
-
   .hero__ghost {
     gap: var(--space-03);
     padding: 0 22px;

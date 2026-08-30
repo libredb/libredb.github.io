@@ -30,6 +30,22 @@ export const hero = {
   frameAddress: 'studio.internal — live product tour',
 } as const;
 
+/**
+ * The live demo runs one shared account whose credentials are published on purpose.
+ * It is a normal user, not an admin — the maintenance toolkit and the audit trail
+ * are admin-only, so what is reachable with these two strings is the editor, the
+ * agent and the panels, and nothing that can be used to take the instance apart.
+ *
+ * This lives on the website rather than inside Studio: a self-hosted install must
+ * never render a demo banner it has no use for, and putting the pair in the login
+ * page would ship marketing copy into everyone's deployment.
+ */
+export const demoAccount = {
+  email: 'demo@libredb.org',
+  password: 'Demo2026',
+  note: 'Shared account — nothing you leave in it stays private.',
+} as const;
+
 /* --- why it exists -------------------------------------------------------- */
 export const why = {
   eyebrow: 'Why it exists',

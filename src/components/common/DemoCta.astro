@@ -1,0 +1,281 @@
+---
+import { demoAccount } from '../../data/home';
+
+interface Props {
+  href: string;
+  label: string;
+  /** `solid` is the indigo hero button; `onbrand` is the white one on the CTA gradient. */
+  variant?: 'solid' | 'onbrand';
+  /** distinguishes the two instances on the home page for aria-controls */
+  id: string;
+  class?: string;
+}
+const { href, label, variant = 'solid', id, class: klass } = Astro.props;
+const panelId = `${id}-panel`;
+
+/* The credentials hang off the button that needs them rather than sitting in the
+   page. Three things follow from that: they cost the layout nothing, so nothing
+   below the hero gets pushed around; they appear at the moment of intent instead
+   of at every visitor; and the copy gesture is one reach from the click that
+   opens the demo. */
+const rows = [
+  { column: 'email', value: demoAccount.email },
+  { column: 'password', value: demoAccount.password },
+] as const;
+---
+
+<div class:list={['dcta', `dcta--${variant}`, klass]} data-demo-cta>
+  <a class="dcta__go" href={href} target="_blank" rel="noreferrer">{label}</a>
+
+  <button
+    class="dcta__more"
+    type="button"
+    data-demo-cta-toggle
+    aria-expanded="false"
+    aria-controls={panelId}
+    aria-label="Show the demo sign-in details"
+  >
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </button>
+
+  <div class="dcta__panel" id={panelId} data-demo-cta-panel hidden>
+    <ul class="dcta__rows">
+      {
+        rows.map(({ column, value }) => (
+          <li>
+            <button
+              type="button"
+              class="dcta__row"
+              data-copy={value}
+              data-copy-flash
+              aria-label={`Copy the demo ${column} ${value}`}
+            >
+              <span class="dcta__col">{column}</span>
+              <span class="dcta__value">{value}</span>
+
+              <span class="dcta__hint" aria-hidden="true">
+                ⧉
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="dcta__note">{demoAccount.note}</p>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/copy';
+  import '../../scripts/demo-cta';
+</script>
+
+<style>
+  .dcta {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    height: 48px;
+    border-radius: var(--radius-m);
+  }
+
+  .dcta__go,
+  .dcta__more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    cursor: pointer;
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .dcta__go {
+    padding: 0 var(--space-06) 0 var(--space-07);
+    border-radius: var(--radius-m) 0 0 var(--radius-m);
+  }
+  .dcta__more {
+    /* the divider is the button's own inset edge, so the two halves stay one pill */
+    width: 40px;
+    border-radius: 0 var(--radius-m) var(--radius-m) 0;
+    box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.22);
+  }
+  .dcta__more svg {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+  .dcta.is-open .dcta__more svg {
+    transform: rotate(180deg);
+  }
+  .dcta__go:active,
+  .dcta__more:active {
+    transform: scale(var(--press-scale));
+  }
+  .dcta__go:focus-visible,
+  .dcta__more:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary-500));
+    outline-offset: 2px;
+  }
+
+  .dcta--solid .dcta__go,
+  .dcta--solid .dcta__more {
+    background: var(--action-primary);
+    color: #fff;
+  }
+  .dcta--solid .dcta__go:hover,
+  .dcta--solid .dcta__more:hover {
+    background: var(--action-primary-hover);
+    color: #fff;
+  }
+
+  .dcta--onbrand .dcta__go,
+  .dcta--onbrand .dcta__more {
+    background: var(--neutral-0);
+    color: var(--primary-900);
+  }
+  .dcta--onbrand .dcta__go:hover,
+  .dcta--onbrand .dcta__more:hover {
+    background: var(--primary-50);
+    color: var(--primary-900);
+  }
+  .dcta--onbrand .dcta__more {
+    box-shadow: inset 1px 0 0 rgb(76 29 149 / 0.18);
+  }
+
+  /* ---- the panel ---------------------------------------------------------
+     Out of flow on purpose: in the hero it floats over the docker command box
+     instead of shoving it down the page. It follows the site theme rather than
+     the console palette — a floating menu that stays dark on a light page reads
+     as a rendering fault, not a design.                                     */
+  .dcta__panel {
+    position: absolute;
+    top: calc(100% + var(--space-03));
+    left: 50%;
+    z-index: 20;
+    width: max-content;
+    max-width: min(300px, calc(100vw - 2 * var(--gutter-mobile)));
+    padding: var(--space-03);
+    transform: translateX(-50%);
+    text-align: left;
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    background: var(--surface-elevated);
+    box-shadow: var(--shadow-l);
+    animation: dcta-in var(--duration-fast) var(--ease-out) both;
+  }
+  .dcta__panel[hidden] {
+    display: none;
+  }
+  @keyframes dcta-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -4px);
+    }
+  }
+
+  .dcta__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    list-style: none;
+  }
+  .dcta__row {
+    /* one line per credential: label, value, affordance. The two-line version
+       read as a form field and doubled the panel's height. */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: var(--space-04);
+    width: 100%;
+    min-height: 28px;
+    padding: 5px var(--space-03);
+    border: 0;
+    border-radius: var(--radius-s);
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .dcta__row:hover {
+    background: var(--surface-hover);
+  }
+  .dcta__row:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary-500));
+    outline-offset: -2px;
+  }
+  .dcta__col {
+    /* both labels sized off the longer one so the two values line up */
+    min-width: 5.5ch;
+    font: var(--weight-regular) 10px / 1.4 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .dcta__value {
+    font: var(--weight-medium) 13px / 1.4 var(--font-mono);
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+  .dcta__hint {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+  .dcta__row:hover .dcta__hint,
+  .dcta__row:focus-visible .dcta__hint {
+    opacity: 1;
+  }
+  /* no hover on touch: show the affordance always rather than never */
+  @media (hover: none) {
+    .dcta__hint {
+      opacity: 1;
+    }
+  }
+
+  /* Confirmation that does not blank the value the reader came for: the row
+     tints and the glyph is replaced by a word. The script only toggles the
+     class — the paint is here. */
+  .dcta__row.is-copied {
+    background: color-mix(in srgb, var(--accent-500) 12%, transparent);
+  }
+  .dcta__row.is-copied .dcta__hint,
+  .dcta__row.is-copyfailed .dcta__hint {
+    opacity: 1;
+    font-size: 0; /* hides ⧉ so ::before can speak in its place */
+  }
+  .dcta__row.is-copied .dcta__hint::before {
+    content: 'copied';
+    color: var(--accent-700);
+  }
+  .dcta__row.is-copyfailed .dcta__hint::before {
+    content: 'press ⌘C';
+    color: var(--text-secondary);
+  }
+  .dcta__row.is-copied .dcta__hint::before,
+  .dcta__row.is-copyfailed .dcta__hint::before {
+    font: var(--weight-medium) 10px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .dcta__note {
+    margin-top: 5px;
+    padding: 6px var(--space-03) 1px;
+    border-top: var(--border-width-1) solid var(--border);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--text-tertiary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dcta__panel,
+    .dcta__more svg,
+    .dcta__row,
+    .dcta__hint {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
