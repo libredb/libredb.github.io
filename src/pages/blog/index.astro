@@ -12,7 +12,7 @@ const posts = (await getCollection('posts', ({ data }) => data.status === 'publi
 <BaseLayout
   path="/blog"
   title="Blog"
-  description="Engineering writing from the team building LibreDB Studio — architecture decisions, release notes and what each database engine can and cannot do."
+  description="A dated record of the discussions, notes and decisions behind LibreDB Studio, and continuing writing on databases, SQL and NoSQL, LLMs and agents."
 >
   <section class="blog" aria-labelledby="blog-title">
     <div class="u-wash blog__wash" aria-hidden="true"></div>
@@ -20,11 +20,11 @@ const posts = (await getCollection('posts', ({ data }) => data.status === 'publi
       <header class="blog__head">
         <p class="u-eyebrow">Blog</p>
         <h1 class="blog__title" id="blog-title">
-          Notes from building a database IDE that <span class="u-grad-brand">ships everywhere</span>
+          Notes, arguments and <span class="u-grad-brand">the decisions they turned into</span>
         </h1>
         <p class="blog__intro">
-          Architecture decisions, release notes and honest capability write-ups. Everything here is also in the
-          repository — this is where we explain the why.
+          A dated record of what we discussed, what broke afterwards and what we chose to do about it — kept as written
+          rather than tidied up. It continues into the work in front of us: databases, SQL and NoSQL, LLMs and agents.
         </p>
         <p class="blog__feed">
           <a href="/rss.xml">RSS feed →</a>
