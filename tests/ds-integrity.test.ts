@@ -31,6 +31,28 @@ describe('design system', () => {
     }
   });
 
+  it('ships the brand marks verbatim — public/brand/ byte-identical to design-system/assets/', () => {
+    // public/brand/ is a second copy of the same nine marks, served as static
+    // files because a component cannot import out of design-system/ at runtime.
+    // Nothing guarded it until a third copy appeared at public/logo.svg, so the
+    // same hash rule now covers every copy.
+    for (const file of readdirSync(join(SOURCE, 'assets'))) {
+      expect(digest(join('public/brand', file)), `${file} drifted from design-system/assets/`).toBe(
+        digest(join(SOURCE, 'assets', file)),
+      );
+    }
+  });
+
+  it('serves /logo.svg, which external sites reference, from the same mark', () => {
+    // Sites we do not control link https://libredb.org/logo.svg directly. A
+    // static host cannot 301 an image, so the path has to be a real file rather
+    // than a redirect to /brand/lb-icon.svg. That makes it a copy, and a copy is
+    // exactly what drifts — hence this check.
+    expect(digest('public/logo.svg'), 'public/logo.svg drifted from the icon it copies').toBe(
+      digest(join(SOURCE, 'assets/lb-icon.svg')),
+    );
+  });
+
   it('imports every token file except fonts.css, which the handoff overrides', () => {
     const global = readFileSync('src/styles/global.css', 'utf8');
     const tokens = readdirSync(join(SOURCE, 'tokens')).filter((f) => f.endsWith('.css'));
