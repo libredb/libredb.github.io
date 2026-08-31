@@ -59,7 +59,9 @@ export const supporters: Supporter[] = [
     name: 'Tailscale',
     role: 'The Community on GitHub plan behind the private network maintainers use to reach the database probe hosts, so testing against real engines does not mean exposing database ports to the internet.',
     href: 'https://tailscale.com/opensource',
-    since: '2026-09-01'
+    logo: '/brand/supporters/tailscale.png',
+    logoSize: { w: 520, h: 139 },
+    since: '2026-09-01',
   },
   {
     name: 'BrowserStack',
