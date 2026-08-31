@@ -18,10 +18,10 @@ import { faq } from '../src/data/faq';
  * data file together; docs/CHANNELS.md § "Coverage snapshot" is the number to
  * copy from.
  */
-const SCORECARD = { total: 33, live: 25, pending: 7, deprecated: 1 };
+const SCORECARD = { total: 33, live: 26, pending: 6, deprecated: 1 };
 
 /** Channels that exist in the inventory but are NOT live, so must never appear. */
-const NOT_LIVE = ['OperatorHub', 'OpenShift', 'CasaOS', 'Easypanel', 'Portainer', 'Umbrel', 'AppImageHub', 'Flathub'];
+const NOT_LIVE = ['OperatorHub', 'OpenShift', 'CasaOS', 'Easypanel', 'Portainer', 'Umbrel', 'Flathub'];
 
 describe('the deploy data holds every live channel and only live channels', () => {
   it('has exactly as many entries as the scorecard has live channels', () => {
@@ -34,7 +34,7 @@ describe('the deploy data holds every live channel and only live channels', () =
       containers: 2,
       'kubernetes-operators': 2,
       'package-managers': 5,
-      'os-desktop': 2,
+      'os-desktop': 3,
       'paas-catalogs': 8,
       'deploy-recipes': 3,
       'cloud-marketplaces': 1,

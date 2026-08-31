@@ -10,7 +10,7 @@ const groups = channelCategories
   .filter((g) => g.items.length > 0);
 
 // The four the homepage leads with, pulled out so someone who just wants to run
-// it does not have to read twenty-five cards first.
+// it does not have to read twenty-six cards first.
 const QUICK = ['docker-ghcr', 'npm', 'helm', 'homebrew'];
 const quick = QUICK.map((id) => channels.find((c) => c.id === id)).filter((c) => c !== undefined);
 
@@ -34,7 +34,7 @@ const schema = [
 <BaseLayout
   path="/deploy"
   title="Deploy"
-  description="Twenty-five live ways to install LibreDB Studio — Docker, Helm, npx, Homebrew, Snap, winget, Chocolatey, Railway, Fly.io, DigitalOcean and more. Every channel listed here is published today."
+  description="Twenty-six live ways to install LibreDB Studio — Docker, Helm, npx, Homebrew, Snap, winget, Chocolatey, Railway, Fly.io, DigitalOcean and more. Every channel listed here is published today."
   schema={schema}
 >
   <section class="dp" aria-labelledby="dp-title">

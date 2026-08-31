@@ -366,7 +366,7 @@ export const openSource = {
   stats: [
     { v: '100%', l: 'line coverage, enforced as a CI gate' },
     { v: '17', l: 'engines — SQL, NoSQL, analytics and search' },
-    { v: '33', l: 'distribution channels, 25 of them live' },
+    { v: '33', l: 'distribution channels, 26 of them live' },
     { v: 'MIT', l: 'license. All of it, nothing held back' },
   ],
 } as const;
@@ -410,7 +410,7 @@ export const deploy = {
     },
   ],
   channelsCount: '33',
-  channelsLabel: 'distribution channels — 25 live',
+  channelsLabel: 'distribution channels — 26 live',
   channels: [
     'Docker Hub',
     'Helm chart',

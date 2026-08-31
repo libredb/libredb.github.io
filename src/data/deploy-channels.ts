@@ -8,8 +8,8 @@
  * RULE: only `status: live` channels appear here. A channel that is `pending`
  * (submitted, not yet listed) or `deprecated` must never be shown — the page
  * would be promising an install that does not exist yet. As of the transcription
- * below, channels.yaml holds 33 channels: 25 live, 7 pending, 1 deprecated. The
- * 25 live ones are all present.
+ * below, channels.yaml holds 33 channels: 26 live, 6 pending, 1 deprecated. The
+ * 26 live ones are all present.
  *
  * When channels.yaml changes, re-transcribe rather than adding by hand — the
  * scorecard in docs/CHANNELS.md is the number to reconcile against.
@@ -206,7 +206,7 @@ export const channels: Channel[] = [
     automated: false,
   },
 
-  // --- OS / desktop (2 live) ---
+  // --- OS / desktop (3 live) ---
   {
     id: 'appimage',
     name: 'Desktop app — AppImage & .deb',
@@ -224,6 +224,15 @@ export const channels: Channel[] = [
     url: 'https://github.com/libredb/libredb-studio/releases/latest',
     note: 'Native server packages, attached to every release.',
     automated: true,
+  },
+  {
+    id: 'appimagehub',
+    name: 'AppImageHub',
+    category: 'os-desktop',
+    platforms: ['Linux'],
+    url: 'https://appimage.github.io/LibreDB_Studio/',
+    note: 'The catalog AppImage Pool and Zap read. It resolves the latest release itself, so the listing follows every release without a submission.',
+    automated: false,
   },
 
   // --- PaaS catalogs (8 live) ---

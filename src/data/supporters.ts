@@ -15,10 +15,18 @@
  * list actually being applied to, not a wish list. When a sheet moves out of
  * § D, the row here moves with it.
  *
- * `supporters` is empty and that is the honest state: no programme has accepted
- * the project yet. It stays empty until an acceptance lands. This is the same
- * rule /deploy applies to distribution channels — a submitted application is
- * not a listing.
+ * `supporters` holds only accepted programmes. It stayed empty until one
+ * landed, which is the same rule /deploy applies to distribution channels — a
+ * submitted application is not a listing. The bar is an acceptance or a covered
+ * cost, so a self-serve free tier that any public repository gets (Codecov,
+ * Grafana Cloud, Semgrep, GitGuardian, Socket) does not qualify and is not here:
+ * nobody granted the project anything, and naming them would inflate the page
+ * with support that was never given.
+ *
+ * Tailscale, accepted 2026-09-01, is the first entry. BrowserStack followed the
+ * same day, and is the first whose `badge` is not optional: their programme
+ * validates the exact sentence in README.md before it will approve an
+ * application, so the wording is a condition of the grant rather than a thank-you.
  */
 
 /** A programme or company whose support the project has accepted. */
@@ -30,6 +38,12 @@ export interface Supporter {
   href: string;
   /** Path under public/brand/supporters/. Text-only until a logo is supplied. */
   logo?: string;
+  /**
+   * Intrinsic pixel size of `logo`, so the image reserves its box before it
+   * loads instead of shifting the card under it. Aspect ratios differ per
+   * vendor, so this cannot be derived from the CSS height cap.
+   */
+  logoSize?: { w: number; h: number };
   /** ISO date the acceptance landed — the day the entry went live. */
   since?: string;
   /**
@@ -40,7 +54,21 @@ export interface Supporter {
   badge?: string;
 }
 
-export const supporters: Supporter[] = [];
+export const supporters: Supporter[] = [
+  {
+    name: 'Tailscale',
+    role: 'The Community on GitHub plan behind the private network maintainers use to reach the database probe hosts, so testing against real engines does not mean exposing database ports to the internet.',
+    href: 'https://tailscale.com/opensource',
+    since: '2026-09-01'
+  },
+  {
+    name: 'BrowserStack',
+    role: 'Live, Automate and Percy across real browsers and devices. The product is a browser application, so a browser bug is a product bug — and CI can only see desktop Chromium. Safari, older WebKit and mobile layout need hardware.',
+    href: 'https://www.browserstack.com/open-source',
+    since: '2026-09-01',
+    badge: 'This project is tested with BrowserStack.',
+  },
+];
 
 export const supportersPage = {
   eyebrow: 'Supporters',

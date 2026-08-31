@@ -44,7 +44,19 @@ import { site } from '../lib/site';
             <ul class="sup__list">
               {supporters.map((s) => (
                 <li>
-                  {s.logo && <img class="sup__logo" src={s.logo} alt={s.name} loading="lazy" decoding="async" />}
+                  {/* alt="" on purpose: the <h3> right below carries the name,
+                      so a described logo would announce the supporter twice. */}
+                  {s.logo && (
+                    <img
+                      class="sup__logo"
+                      src={s.logo}
+                      alt=""
+                      width={s.logoSize?.w}
+                      height={s.logoSize?.h}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
                   <h3>
                     <a href={s.href} target="_blank" rel="noreferrer">
                       {s.name} ↗
@@ -246,10 +258,17 @@ import { site } from '../lib/site';
   .sup__list a:hover {
     color: var(--link-hover);
   }
+  /* Supporter marks are the vendor's own lockup, cropped but never recoloured,
+     so several arrive with their background baked in. Rounding and outlining
+     the box makes that read as a deliberate tile against --surface in both
+     themes rather than a stray rectangle. */
   .sup__logo {
     align-self: flex-start;
-    max-height: 32px;
+    height: 32px;
     width: auto;
+    max-width: 100%;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-s);
   }
   .sup__badge {
     font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);

@@ -22,7 +22,7 @@ export const faq = [
   },
   {
     q: 'How do I install it?',
-    a: 'One container: docker run -p 3000:3000 libredb/libredb-studio. There is also an npx package, a Helm chart, a certified chart in Rancher Partner Charts, an embeddable npm package and one-click templates for Railway, Dokploy, CapRover, DigitalOcean, Sealos and Fly.io — 33 channels, 25 of them live.',
+    a: 'One container: docker run -p 3000:3000 libredb/libredb-studio. There is also an npx package, a Helm chart, a certified chart in Rancher Partner Charts, an embeddable npm package and one-click templates for Railway, Dokploy, CapRover, DigitalOcean, Sealos and Fly.io — 33 channels, 26 of them live.',
   },
   {
     q: 'Does it work on a phone?',
