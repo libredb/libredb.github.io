@@ -29,6 +29,8 @@ const DESCRIPTIONS: Record<string, string> = {
   '/get-started': 'From nothing to a running Studio, by container or by npx.',
   '/playground': 'Run the LibreDB database in the browser, with no install.',
   '/open-source': 'What the MIT licence permits, how to contribute, and how to report a vulnerability.',
+  '/supporters':
+    'The companies and open-source programmes covering the infrastructure around the project, what a supporter is promised, and why a place there cannot be bought.',
   '/security': 'What the application enforces, where it enforces it, and the documented limits it stops at.',
   '/support': 'The vendor of record, the supported Kubernetes and runtime versions, and how to reach support.',
   '/platform': 'LibreDB Platform: multi-tenant database access governance for teams. Commercial, beta, self-hosted.',

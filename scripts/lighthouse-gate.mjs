@@ -48,6 +48,7 @@ const ROUTES = args.includes('--route')
       '/databases',
       '/features',
       '/open-source',
+      '/supporters',
       '/deploy',
       '/docker-compose',
       '/libredb-database',

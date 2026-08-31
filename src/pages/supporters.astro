@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { supporters, supportersPage as p } from '../data/supporters';
+import { VENDOR } from '../data/company';
+import { site } from '../lib/site';
+---
+
+<BaseLayout
+  path="/supporters"
+  title="Supporters"
+  description="The companies and open-source programmes that cover the infrastructure around LibreDB Studio — what the support pays for, what a supporter is promised in return, and why a place here cannot be bought."
+>
+  <section class="sup" aria-labelledby="sup-title">
+    <div class="u-wash sup__wash" aria-hidden="true"></div>
+    <div class="sup__inner u-container">
+      <p class="u-eyebrow">{p.eyebrow}</p>
+      <h1 class="sup__title" id="sup-title">
+        {p.headline.before}<span class="u-grad-brand">{p.headline.gradient}</span>
+      </h1>
+      <p class="sup__intro">{p.intro}</p>
+
+      <!-- Current supporters ------------------------------------------------- -->
+      <section class="sup__block" aria-labelledby="cur-h">
+        <div class="sup__blockhead">
+          <p class="sup__kicker">{p.empty.kicker}</p>
+          {
+            supporters.length === 0 ? (
+              <>
+                <h2 class="sup__h" id="cur-h">
+                  {p.empty.headline}
+                </h2>
+                <p class="sup__blocklead">{p.empty.body}</p>
+              </>
+            ) : (
+              <h2 class="sup__h" id="cur-h">
+                Supporting the project today
+              </h2>
+            )
+          }
+        </div>
+
+        {
+          supporters.length > 0 && (
+            <ul class="sup__list">
+              {supporters.map((s) => (
+                <li>
+                  {s.logo && <img class="sup__logo" src={s.logo} alt={s.name} loading="lazy" decoding="async" />}
+                  <h3>
+                    <a href={s.href} target="_blank" rel="noreferrer">
+                      {s.name} ↗
+                    </a>
+                  </h3>
+                  <p>{s.role}</p>
+                  {s.badge && <p class="sup__badge">{s.badge}</p>}
+                  {s.since && (
+                    <p class="sup__since">
+                      Since <time datetime={s.since}>{s.since}</time>
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <!-- What support pays for ---------------------------------------------- -->
+      <section class="sup__block" aria-labelledby="need-h">
+        <div class="sup__blockhead">
+          <p class="sup__kicker">{p.needsHead.kicker}</p>
+          <h2 class="sup__h" id="need-h">{p.needsHead.headline}</h2>
+          <p class="sup__blocklead">{p.needsHead.lead}</p>
+        </div>
+
+        <ul class="sup__cards">
+          {
+            p.needs.map((n) => (
+              <li>
+                <h3>{n.t}</h3>
+                <p>{n.d}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- What a supporter is promised ---------------------------------------- -->
+      <section class="sup__block" aria-labelledby="att-h">
+        <div class="sup__blockhead">
+          <p class="sup__kicker">{p.attributionHead.kicker}</p>
+          <h2 class="sup__h" id="att-h">{p.attributionHead.headline}</h2>
+          <p class="sup__blocklead">{p.attributionHead.lead}</p>
+        </div>
+
+        <ul class="sup__cards">
+          {
+            p.attribution.map((a) => (
+              <li>
+                <h3>{a.t}</h3>
+                <p>{a.d}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- The limit ------------------------------------------------------------ -->
+      <section class="sup__block sup__block--flag" aria-labelledby="lim-h">
+        <div class="sup__blockhead">
+          <p class="sup__kicker sup__kicker--warn">The limit</p>
+          <h2 class="sup__h" id="lim-h">{p.limitHead}</h2>
+        </div>
+        <p class="sup__limit">{p.limit}</p>
+      </section>
+
+      <!-- Who pays for the rest ------------------------------------------------ -->
+      <section class="sup__block" aria-labelledby="fund-h">
+        <div class="sup__blockhead">
+          <p class="sup__kicker">{p.funding.kicker}</p>
+          <h2 class="sup__h" id="fund-h">{p.cta.headline}</h2>
+          <p class="sup__blocklead">{p.funding.body}</p>
+        </div>
+        <p class="sup__fine">
+          {p.cta.body}
+          <a href={`mailto:${VENDOR.email}`}>{VENDOR.email}</a>
+          ·
+          <a href={site.links.sponsor} target="_blank" rel="noreferrer">GitHub Sponsors ↗</a>
+          ·
+          <a href="/open-source">How the project is licensed and run</a>
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sup {
+    position: relative;
+    overflow: hidden;
+  }
+  .sup__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .sup__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .sup__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .sup__intro {
+    margin-top: var(--stack-title-body);
+    max-width: var(--measure-long);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .sup__block {
+    margin-top: clamp(var(--space-10), 6vw, var(--space-12));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .sup__blockhead {
+    max-width: var(--measure-long);
+  }
+  .sup__kicker {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .sup__kicker--warn {
+    color: var(--console-warn);
+  }
+  .sup__h {
+    margin-top: var(--space-03);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h3-size);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+  .sup__blocklead {
+    margin-top: var(--space-04);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .sup__cards,
+  .sup__list {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .sup__cards,
+    .sup__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .sup__cards li,
+  .sup__list li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .sup__cards h3,
+  .sup__list h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .sup__cards p,
+  .sup__list p {
+    font-size: var(--body-s-size);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .sup__list a {
+    color: var(--link);
+  }
+  .sup__list a:hover {
+    color: var(--link-hover);
+  }
+  .sup__logo {
+    align-self: flex-start;
+    max-height: 32px;
+    width: auto;
+  }
+  .sup__badge {
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .sup__since {
+    margin-top: auto;
+    padding-top: var(--space-02);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  .sup__block--flag {
+    padding: var(--space-08) 0 0;
+  }
+  /* Single-column prose: without an explicit measure this runs the full
+     container width. See the rule at the top of doc.css. */
+  .sup__limit {
+    margin-top: var(--space-05);
+    max-width: var(--measure-long);
+    font-size: var(--body-m-size);
+    line-height: var(--body-long-line);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .sup__fine {
+    margin-top: var(--space-06);
+    max-width: var(--measure-long);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-tertiary);
+  }
+  .sup__fine a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
