@@ -63,28 +63,20 @@ export const supporters: Supporter[] = [
     name: 'Tailscale',
     role: 'The Community on GitHub plan behind the private network maintainers use to reach the database probe hosts, so testing against real engines does not mean exposing database ports to the internet.',
     href: 'https://tailscale.com/opensource',
-    logo: '/brand/supporters/tailscale.png',
-    logoSize: { w: 520, h: 139 },
-    since: '2026-08-30',
+    since: '2026-08-30'
   },
   {
     name: 'BrowserStack',
     role: 'Live, Automate and Percy across real browsers and devices. The product is a browser application, so a browser bug is a product bug — and CI can only see desktop Chromium. Safari, older WebKit and mobile layout need hardware.',
     href: 'https://www.browserstack.com/open-source',
     since: '2026-08-31',
-    badge: 'This project is tested with BrowserStack.',
+    badge: 'This project is tested with BrowserStack.'
   },
   {
     name: 'Docker',
     role: 'The Docker-Sponsored Open Source programme on the libredb namespace, which removes pull rate limits for everyone pulling the public image. GHCR remains the canonical registry; this is what keeps the Docker Hub mirror usable without an account.',
     href: 'https://www.docker.com/community/open-source/',
-    since: '2026-09-01',
-    // No `badge`: Docker awards the Sponsored OSS mark on the Hub namespace
-    // itself, so unlike BrowserStack there is no wording for this project to
-    // place. The condition attached to it lives on the Hub pages rather than
-    // here — the approval email withholds the badge from projects whose Hub
-    // pages lack a detailed description, a source link, contributing
-    // guidelines and a link to the organisation's website.
+    since: '2026-09-01'
   },
 ];
 
