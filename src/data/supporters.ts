@@ -27,6 +27,10 @@
  * same day, and is the first whose `badge` is not optional: their programme
  * validates the exact sentence in README.md before it will approve an
  * application, so the wording is a condition of the grant rather than a thank-you.
+ * Docker-Sponsored Open Source landed the same day and is the opposite case, which
+ * is why `badge` is deliberately empty on it: Docker awards the mark on its own
+ * namespace, so there is no wording here to keep true. It is not unconditional
+ * either — the condition simply lives on a surface this repository does not own.
  */
 
 /** A programme or company whose support the project has accepted. */
@@ -61,14 +65,26 @@ export const supporters: Supporter[] = [
     href: 'https://tailscale.com/opensource',
     logo: '/brand/supporters/tailscale.png',
     logoSize: { w: 520, h: 139 },
-    since: '2026-09-01',
+    since: '2026-08-30',
   },
   {
     name: 'BrowserStack',
     role: 'Live, Automate and Percy across real browsers and devices. The product is a browser application, so a browser bug is a product bug — and CI can only see desktop Chromium. Safari, older WebKit and mobile layout need hardware.',
     href: 'https://www.browserstack.com/open-source',
-    since: '2026-09-01',
+    since: '2026-08-31',
     badge: 'This project is tested with BrowserStack.',
+  },
+  {
+    name: 'Docker',
+    role: 'The Docker-Sponsored Open Source programme on the libredb namespace, which removes pull rate limits for everyone pulling the public image. GHCR remains the canonical registry; this is what keeps the Docker Hub mirror usable without an account.',
+    href: 'https://www.docker.com/community/open-source/',
+    since: '2026-09-01',
+    // No `badge`: Docker awards the Sponsored OSS mark on the Hub namespace
+    // itself, so unlike BrowserStack there is no wording for this project to
+    // place. The condition attached to it lives on the Hub pages rather than
+    // here — the approval email withholds the badge from projects whose Hub
+    // pages lack a detailed description, a source link, contributing
+    // guidelines and a link to the organisation's website.
   },
 ];
 
