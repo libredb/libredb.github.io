@@ -19,8 +19,18 @@
  *   - routes interest to the vendor's address instead.
  *
  * Restore the link in the same change that makes the host serve, and not
- * before. A dead link on the page that asks for money is the most expensive
- * dead link on the site.
+ * before. A dead link on the page that names the eventual paid product is the
+ * most expensive dead link on the site.
+ *
+ * PRICE DISCIPLINE (2026-09-01). The beta is issued at NO CHARGE, and every
+ * surface here must say so in the same breath as the word "licence". This page
+ * once carried three sentences of sales vocabulary — "no online checkout yet",
+ * "a licence is arranged directly", "plan tiers" — around a motion that does
+ * not exist, while the tiers row underneath said "not for sale yet". Nothing
+ * was untrue on its own; together they contradicted each other, and a reviewer
+ * who opens this page is exactly who notices. If a price ever appears, change
+ * ALL of these together: this file, the "Getting it" lead in platform.astro,
+ * and the Licence section of llms.txt.ts.
  *
  * SOURCE OF TRUTH: libredb-platform → README.md and docs/product-map.md.
  */
@@ -64,7 +74,7 @@ export const capabilities: Capability[] = [
   {
     name: 'Licensing',
     detail:
-      'Per-organisation licences during the beta, self-hosted, with plan tiers configurable at runtime. There is no online checkout yet — a licence is arranged directly.',
+      'Per-organisation licence keys, self-hosted, with plan tiers configurable at runtime. The beta licence is issued at no charge; there is nothing to buy.',
   },
 ];
 
@@ -84,8 +94,8 @@ export const tiers = [
   },
   {
     tier: 'LibreDB Platform',
-    line: 'Beta · self-hosted · not for sale yet',
+    line: 'Beta · self-hosted · not sold yet',
     detail:
-      'Governance on top of that editor for an organisation that has to answer who reached which data, and when. It is not sold today and there is no plan to sell it within the next year; it is here so the line between free and not-free is visible rather than implied.',
+      'Governance on top of that editor for an organisation that has to answer who reached which data, and when. It is issued at no charge today and there is no plan to sell it within the next year; it is here so the part that is intended to cost money one day is visible rather than hidden.',
   },
 ];

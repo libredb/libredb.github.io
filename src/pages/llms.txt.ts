@@ -95,9 +95,9 @@ ${engineList}
 
 ## Licence
 
-${site.license}. Every capability, every engine, no paid tier of the editor. The
-commercial product is LibreDB Platform, which is governance on top of it and is
-described at ${site.url}/platform.
+${site.license}. Every capability, every engine, no paid tier of the editor.
+LibreDB Platform is governance on top of it, issued at no charge during the beta
+and not sold today, described at ${site.url}/platform.
 `;
 };
 
