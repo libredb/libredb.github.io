@@ -471,6 +471,11 @@ export const footer = {
         { label: 'Open source', href: '/open-source' },
         { label: 'Supporters', href: '/supporters' },
         { label: 'Security model', href: '/security' },
+        // The label is fixed, not chosen: the SignPath Foundation terms require
+        // the term "Code signing policy" to appear on the project's home page,
+        // as a section header or a link. This is that link, and the footer is on
+        // every page, so the download page carries it too.
+        { label: 'Code signing policy', href: '/code-signing-policy' },
         { label: 'Vendor support', href: '/support' },
         { label: 'LibreDB Platform', href: '/platform' },
         { label: 'Privacy', href: '/privacy-policy' },

@@ -32,6 +32,8 @@ const DESCRIPTIONS: Record<string, string> = {
   '/supporters':
     'The companies and open-source programmes covering the infrastructure around the project, what a supporter is promised, and why a place there cannot be bought.',
   '/security': 'What the application enforces, where it enforces it, and the documented limits it stops at.',
+  '/code-signing-policy':
+    'Who may change the source, who approves a release for signing, and what the software sends over the network.',
   '/support': 'The vendor of record, the supported Kubernetes and runtime versions, and how to reach support.',
   '/platform':
     'LibreDB Platform: multi-tenant database access governance for teams. Beta, self-hosted, not currently sold.',

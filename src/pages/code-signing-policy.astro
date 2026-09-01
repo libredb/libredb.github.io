@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  ATTRIBUTION_LINKS,
+  PRIVACY_STATEMENT,
+  SIGNING_ACTIVE,
+  codeSigningPage as p,
+  roles,
+} from '../data/code-signing';
+import { site } from '../lib/site';
+
+const schema = [
+  {
+    '@type': 'WebPage',
+    name: 'Code signing policy',
+    description:
+      'Who is trusted to change the source, who approves a release for signing, and what the software sends over the network.',
+    url: `${site.url}/code-signing-policy`,
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<BaseLayout
+  path="/code-signing-policy"
+  title="Code signing policy"
+  description="The code signing policy for LibreDB Studio — the Authors, Reviewers and Approvers, how a release is approved for signing, and what the software sends over the network."
+  schema={schema}
+>
+  <section class="doc" aria-labelledby="cs-title">
+    <div class="u-wash doc__wash" aria-hidden="true"></div>
+    <div class="doc__inner u-container">
+      <p class="u-eyebrow">{p.eyebrow}</p>
+      <h1 class="doc__title" id="cs-title">
+        {p.headline.before}<span class="u-grad-brand">{p.headline.gradient}</span>
+      </h1>
+      <p class="doc__intro">{p.intro}</p>
+
+      <!-- Current state ------------------------------------------------------ -->
+      <section class="doc__block" aria-labelledby="st-h">
+        <div class="doc__head">
+          <p class:list={['doc__kicker', !SIGNING_ACTIVE && 'doc__kicker--warn']}>{p.status.kicker}</p>
+          <h2 class="doc__h" id="st-h">{p.status.headline}</h2>
+        </div>
+        <p class="doc__lead">{p.status.body}</p>
+        <p class="doc__fine">
+          <a href={p.status.href} target="_blank" rel="noreferrer">{p.status.linkLabel} ↗</a>
+        </p>
+      </section>
+
+      <!-- Team roles --------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="rl-h">
+        <div class="doc__head">
+          <p class="doc__kicker">{p.rolesHead.kicker}</p>
+          <h2 class="doc__h" id="rl-h">{p.rolesHead.headline}</h2>
+          <p class="doc__lead">{p.rolesHead.lead}</p>
+        </div>
+        <ul class="cs__roles">
+          {
+            roles.map((r) => (
+              <li>
+                <h3>{r.role}</h3>
+                <p class="cs__def">{r.definition}</p>
+                <ul class="cs__members" aria-label={`${r.role}: members`}>
+                  {r.members.map((m) => (
+                    <li>
+                      <a href={`https://github.com/${m}`} target="_blank" rel="noreferrer">
+                        {m}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p class="cs__enf">{r.enforcement}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Release approval --------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="pr-h">
+        <div class="doc__head">
+          <p class="doc__kicker">{p.processHead.kicker}</p>
+          <h2 class="doc__h" id="pr-h">{p.processHead.headline}</h2>
+        </div>
+        <ul class="doc__cards">
+          {
+            p.process.map((s) => (
+              <li class="doc__card">
+                <h3>{s.t}</h3>
+                <p>{s.d}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Privacy ------------------------------------------------------------ -->
+      <section class="doc__block" aria-labelledby="pv-h">
+        <div class="doc__head">
+          <p class="doc__kicker">{p.privacyHead.kicker}</p>
+          <h2 class="doc__h" id="pv-h">{p.privacyHead.headline}</h2>
+        </div>
+        <blockquote class="cs__quote">{PRIVACY_STATEMENT}.</blockquote>
+        <p class="doc__lead">{p.privacyNote}</p>
+        <p class="doc__fine">
+          The site's own cookie and analytics handling is a separate matter, covered in the
+          <a href="/privacy-policy">privacy policy</a>. Where those guarantees stop is set out in the
+          <a href="/security">security model</a>.
+        </p>
+      </section>
+
+      <!-- Attribution. The wording is fixed by the grant, and so is its layout:
+           no line break may fall immediately before the comma or inside a link
+           label, because HTML collapses a newline to a space and the sentence
+           would render as "SignPath.io , certificate by". ------------------- -->
+      {
+        SIGNING_ACTIVE && (
+          <section class="doc__block" aria-labelledby="at-h">
+            <div class="doc__head">
+              <p class="doc__kicker">{p.attributionHead.kicker}</p>
+              <h2 class="doc__h" id="at-h">
+                {p.attributionHead.headline}
+              </h2>
+            </div>
+            <p class="cs__attr">
+              Free code signing provided by{' '}
+              <a href={ATTRIBUTION_LINKS['SignPath.io']} target="_blank" rel="noreferrer">
+                SignPath.io
+              </a>
+              , certificate by{' '}
+              <a href={ATTRIBUTION_LINKS['SignPath Foundation']} target="_blank" rel="noreferrer">
+                SignPath Foundation
+              </a>
+            </p>
+          </section>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* The roles are the part a reviewer reads line by line, so each one is a
+     bordered block rather than a table row: the definition and the enforcement
+     are full sentences, and a table would either clip them or force a scroll. */
+  .cs__roles {
+    display: grid;
+    gap: var(--space-06);
+    margin: var(--space-08) 0 0;
+    padding: 0;
+    list-style: none;
+    max-width: calc(var(--measure-long) + var(--space-07) + 2 * var(--card-padding));
+  }
+  .cs__roles > li {
+    display: grid;
+    gap: var(--space-03);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-left: 2px solid var(--accent-300);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .cs__roles h3 {
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: var(--h5-size);
+    line-height: 1.3;
+  }
+  .cs__def {
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+  .cs__enf {
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  /* Handles, so they are set in the same face GitHub sets them in — a member
+     list read as prose invites a reader to guess at a display name. */
+  .cs__members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-02) var(--space-04);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cs__members a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px; /* WCAG 2.5.8 target size */
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .cs__members a:hover {
+    color: var(--text-primary);
+  }
+  .cs__quote {
+    margin: var(--space-08) 0 var(--space-06);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-left: 2px solid var(--border);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    font-size: var(--body-s-size);
+    line-height: 1.7;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+  .cs__attr {
+    margin-top: var(--space-08);
+    font-size: var(--body-size);
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+</style>

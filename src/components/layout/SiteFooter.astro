@@ -1,5 +1,6 @@
 ---
 import { footer } from '../../data/home';
+import { ATTRIBUTION_LINKS, SIGNING_ACTIVE } from '../../data/code-signing';
 import { site } from '../../lib/site';
 
 const isExternal = (h: string) => /^https?:/i.test(h);
@@ -46,6 +47,29 @@ const isExternal = (h: string) => /^https?:/i.test(h);
       </nav>
       <span class="ftr__version">{footer.versionChip}</span>
     </div>
+
+    {
+      /* Required wording, not a thank-you: the SignPath Foundation terms fix
+         this sentence and require it on the home and download pages. The footer
+         is on both. It renders only once signing is actually live — see
+         data/code-signing.ts, where SIGNING_ACTIVE explains why.
+
+         No line break may fall immediately before the comma or inside a link
+         label: HTML collapses a newline to a space, which would otherwise
+         render as "SignPath.io , certificate by". */
+      SIGNING_ACTIVE && (
+        <p class="ftr__signing">
+          Free code signing provided by{' '}
+          <a href={ATTRIBUTION_LINKS['SignPath.io']} target="_blank" rel="noreferrer">
+            SignPath.io
+          </a>
+          , certificate by{' '}
+          <a href={ATTRIBUTION_LINKS['SignPath Foundation']} target="_blank" rel="noreferrer">
+            SignPath Foundation
+          </a>
+        </p>
+      )
+    }
   </div>
 </footer>
 
@@ -138,6 +162,12 @@ const isExternal = (h: string) => /^https?:/i.test(h);
   }
   .ftr__sociallink:hover {
     color: var(--text-primary);
+  }
+  .ftr__signing {
+    margin-top: var(--space-05);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
   }
   .ftr__version {
     font: var(--weight-medium) 11.5px / 1 var(--font-mono);
