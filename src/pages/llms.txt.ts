@@ -33,7 +33,8 @@ const DESCRIPTIONS: Record<string, string> = {
     'The companies and open-source programmes covering the infrastructure around the project, what a supporter is promised, and why a place there cannot be bought.',
   '/security': 'What the application enforces, where it enforces it, and the documented limits it stops at.',
   '/support': 'The vendor of record, the supported Kubernetes and runtime versions, and how to reach support.',
-  '/platform': 'LibreDB Platform: multi-tenant database access governance for teams. Beta, self-hosted, not currently sold.',
+  '/platform':
+    'LibreDB Platform: multi-tenant database access governance for teams. Beta, self-hosted, not currently sold.',
   '/compare': 'Desktop client, hosted editor, or deployed beside the data — what each approach costs you.',
   '/faq': 'The questions asked before adopting it.',
   '/blog': 'Release notes and engineering writing.',
