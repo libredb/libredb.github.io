@@ -53,6 +53,7 @@ const ROUTES = args.includes('--route')
       '/docker-compose',
       '/libredb-database',
       '/security',
+      '/code-signing-policy',
       '/support',
       '/platform',
       '/compare',
