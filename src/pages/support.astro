@@ -19,7 +19,7 @@ const schema = [
   vendorOrganizationSchema,
   {
     '@type': 'Service',
-    name: `Commercial support for ${site.name}`,
+    name: `Vendor support for ${site.name}`,
     serviceType: 'Software support',
     provider: { '@id': VENDOR.schemaId },
     areaServed: 'Worldwide',
@@ -37,19 +37,19 @@ const channels = [
 
 <BaseLayout
   path="/support"
-  title="Commercial support"
-  description="Who stands behind LibreDB Studio, on which Kubernetes distributions and runtime versions, and how to reach them. Sekoya Tech provides commercial support on every platform listed."
+  title="Vendor support"
+  description="Who stands behind LibreDB Studio, on which Kubernetes distributions and runtime versions, and how to reach them. Sekoya Tech supports it on every platform listed, at no charge."
   schema={schema}
 >
   <section class="doc" aria-labelledby="sup-title">
     <div class="u-wash doc__wash" aria-hidden="true"></div>
     <div class="doc__inner u-container">
-      <p class="u-eyebrow">Commercial support</p>
+      <p class="u-eyebrow">Vendor support</p>
       <h1 class="doc__title" id="sup-title">Who stands behind LibreDB Studio</h1>
       <p class="doc__intro">
-        The software is MIT and free. Support is a service on top of it, never a paywall in front of it — no capability
-        is withheld from anyone who does not buy it. This page states which company provides that service, on which
-        platforms and versions, and how to reach it.
+        The software is MIT and free, and so is the support behind it: there is no paid tier, no support contract to
+        buy and no capability withheld from anyone who does not pay. What this page states is who is answerable for the
+        software, on which platforms and versions, and how to reach them.
       </p>
 
       <!-- The vendor of record. First thing a certification reviewer looks for,
@@ -57,7 +57,7 @@ const channels = [
       <section class="doc__panel" aria-labelledby="ven-h">
         <h2 id="ven-h">The vendor of record</h2>
         <p>
-          LibreDB Studio is developed, published and commercially supported by <strong>{VENDOR.legalName}</strong> ({
+          LibreDB Studio is developed, published and supported by <strong>{VENDOR.legalName}</strong> ({
             VENDOR.tradeName
           }), a company registered in Türkiye. LibreDB is the product brand; {VENDOR.tradeName} is the legal entity behind
           the commitment on this page.
@@ -70,8 +70,10 @@ const channels = [
 
       <p class="doc__lead sup__commit">
         <strong
-          >{VENDOR.tradeName} provides commercial support for {site.name} on every platform and runtime version listed below.</strong
-        > Support is available in English and Turkish.
+          >{VENDOR.tradeName} supports {site.name} on every platform and runtime version listed below, at no
+          charge.</strong
+        > Support is available in English and Turkish. Nothing on this page is sold; it is the commitment the publisher
+        stands behind, published so a certification reviewer can check it.
       </p>
 
       <!-- Platforms ---------------------------------------------------------- -->

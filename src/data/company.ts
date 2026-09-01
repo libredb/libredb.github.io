@@ -1,6 +1,6 @@
 // Single source of truth for the vendor behind LibreDB. "LibreDB" is a product
 // brand, not a legal entity: the company that develops, publishes and
-// commercially supports it is Sekoya. Partner programmes and certification
+// supports it is Sekoya. Partner programmes and certification
 // reviews verify the vendor from the product website, so every surface that
 // names the vendor (privacy policy, JSON-LD, humans.txt) derives from this file
 // rather than restating it.

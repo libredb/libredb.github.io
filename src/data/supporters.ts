@@ -165,7 +165,7 @@ export const supportersPage = {
 
   funding: {
     kicker: 'Who pays for the rest',
-    body: 'LibreDB Studio is developed and published by Sekoya Tech, which funds its maintenance and sells optional commercial support for it. GitHub Sponsors donations supplement that. There is no venture funding, and no feature is withheld from the MIT build to create a reason to pay.',
+    body: 'LibreDB Studio is developed and published by Sekoya Tech, which funds its maintenance and supports it at no charge. Nothing here is sold: no paid edition, no support contract, no add-ons, and LibreDB Platform — the separate product intended to carry a price one day — is not on sale either. GitHub Sponsors donations supplement the work, and no feature is withheld from the MIT build to create a reason to pay.',
   },
 
   cta: {

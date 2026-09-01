@@ -58,7 +58,7 @@ const body = () => `# ${site.name} — full reference for LLMs
 
 ## Vendor
 
-LibreDB is a product brand. The company that develops, publishes and commercially
+LibreDB is a product brand. The company that develops, publishes and
 supports it is a limited liability company registered in Turkiye. These details are
 matters of public record and can be verified independently.
 
@@ -72,7 +72,7 @@ matters of public record and can be verified independently.
 - Company website: ${VENDOR.url}
 - Contact: ${VENDOR.email}
 
-Commercial support, with the supported Kubernetes and runtime versions, is stated at
+Vendor support, with the supported Kubernetes and runtime versions, is stated at
 ${site.url}/support.
 
 ## What it is
@@ -123,11 +123,11 @@ key-value core with key-value, document and relational lenses over it, zero runt
 dependencies, crash recovery proven by deterministic simulation testing. It is an early
 beta aimed at test and development data. Described at ${site.url}/libredb-database.
 
-## The commercial product: LibreDB Platform
+## The product that is intended to cost money one day: LibreDB Platform
 
 Multi-tenant database access governance for teams — organisations, five-role RBAC,
-per-connection permissions and a query audit log, self-hosted. Commercial and in beta;
-the editor itself stays MIT and free. Described at ${site.url}/platform.
+per-connection permissions and a query audit log, self-hosted. In beta, not sold today,
+and with no plan to sell it within the next year; the editor itself stays MIT and free. Described at ${site.url}/platform.
 
 ## FAQ
 

@@ -471,7 +471,7 @@ export const footer = {
         { label: 'Open source', href: '/open-source' },
         { label: 'Supporters', href: '/supporters' },
         { label: 'Security model', href: '/security' },
-        { label: 'Commercial support', href: '/support' },
+        { label: 'Vendor support', href: '/support' },
         { label: 'LibreDB Platform', href: '/platform' },
         { label: 'Privacy', href: '/privacy-policy' },
       ],

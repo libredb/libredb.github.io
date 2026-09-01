@@ -1,5 +1,11 @@
 /**
- * The commercial support statement.
+ * The vendor support statement.
+ *
+ * Nothing here is sold. The publisher supports the software at no charge, and
+ * this page exists because partner programmes require a named entity to be
+ * answerable for it - not because there is a service to buy. Do not reintroduce
+ * "commercial support" wording: it described an offering that does not exist,
+ * and a support page that overstates is worse evidence than one that does not.
  *
  * This page is evidence, not marketing. Partner programmes — SUSE Ready for
  * Rancher, Red Hat's community operator catalog, the cloud marketplaces — all

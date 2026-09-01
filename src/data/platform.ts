@@ -1,5 +1,6 @@
 /**
- * LibreDB Platform — the commercial, governed form of Studio.
+ * LibreDB Platform — the governed form of Studio, and the only thing on this
+ * site that is intended to cost money one day.
  *
  * Why this page exists: without it the site never says that a paid product
  * exists, which leaves the open-core story with a hole in it. "Studio is free
@@ -83,8 +84,8 @@ export const tiers = [
   },
   {
     tier: 'LibreDB Platform',
-    line: 'Commercial · beta · self-hosted · licensed',
+    line: 'Beta · self-hosted · not for sale yet',
     detail:
-      'Governance on top of that editor for an organisation that has to answer who reached which data, and when. It funds the open-source work.',
+      'Governance on top of that editor for an organisation that has to answer who reached which data, and when. It is not sold today and there is no plan to sell it within the next year; it is here so the line between free and not-free is visible rather than implied.',
   },
 ];
