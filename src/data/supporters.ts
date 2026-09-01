@@ -23,11 +23,11 @@
  * nobody granted the project anything, and naming them would inflate the page
  * with support that was never given.
  *
- * Tailscale, accepted 2026-09-01, is the first entry. BrowserStack followed the
- * same day, and is the first whose `badge` is not optional: their programme
+ * Tailscale, accepted 2026-08-30, is the first entry. BrowserStack followed on
+ * 2026-08-31, and is the first whose `badge` is not optional: their programme
  * validates the exact sentence in README.md before it will approve an
  * application, so the wording is a condition of the grant rather than a thank-you.
- * Docker-Sponsored Open Source landed the same day and is the opposite case, which
+ * Docker-Sponsored Open Source landed on 2026-09-01 and is the opposite case, which
  * is why `badge` is deliberately empty on it: Docker awards the mark on its own
  * namespace, so there is no wording here to keep true. It is not unconditional
  * either — the condition simply lives on a surface this repository does not own.
