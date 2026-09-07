@@ -1,6 +1,6 @@
 {
   "name": "libredb-website",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "type": "module",
   "description": "libredb.org — marketing website for LibreDB Studio (Astro static + Outstatic CMS)",
