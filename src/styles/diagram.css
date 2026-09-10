@@ -136,4 +136,15 @@
   .diag__wire {
     min-height: 44px;
   }
+  .diag__line {
+    left: 50%;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    margin: 0 0 0 -1px;
+    background-image: repeating-linear-gradient(180deg, var(--error-text) 0 5px, transparent 5px 10px);
+    animation-name: lbDashY;
+  }
 }

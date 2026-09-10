@@ -179,6 +179,12 @@ const modes = ['out', 'in'] as const;
   .flow__card[data-switch-active='in'] .flow__caption {
     color: var(--success-text);
   }
+
+  @media (max-width: 560px) {
+    .flow__card[data-switch-active='in'] .diag__line {
+      background-image: repeating-linear-gradient(180deg, var(--success-text) 0 5px, transparent 5px 10px);
+    }
+  }
   .flow__card[data-switch-active='in'] .flow__spec {
     color: var(--text-brand);
     border-color: var(--primary-600);

@@ -178,6 +178,12 @@ import { why } from '../../data/home';
     color: var(--success-text);
   }
 
+  @media (max-width: 560px) {
+    .why__card[data-switch-active='3'] .diag__line {
+      background-image: repeating-linear-gradient(180deg, var(--success-text) 0 5px, transparent 5px 10px);
+    }
+  }
+
   .why__status {
     font: var(--weight-regular) 11.5px / 1.5 var(--font-mono);
     color: var(--text-tertiary);
