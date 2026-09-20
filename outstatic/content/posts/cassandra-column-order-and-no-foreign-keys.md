@@ -40,7 +40,7 @@ no statement that could create the object the diagram is looking for.
 That is recorded in the capability set rather than left to the canvas to imply:
 `declaresForeignKeys` is `false`, so a reader knows `foreignKeys: []` means this
 engine has none rather than this schema declares none. The [ER diagram
-feature](/features) publishes the matching limit on the product side - edges come
+feature](/features/) publishes the matching limit on the product side - edges come
 from declared foreign keys, and a relationship your application enforces in code
 but never declares has nothing to discover.
 

@@ -17,7 +17,7 @@ publishedAt: 2026-09-08T09:00:00.000Z
 
 A desktop database client makes two demands that nobody writes down. Every developer laptop has to be able to reach the production network, and every developer laptop has to hold a copy of every credential. Both are load-bearing, and both are the reason a database client is usually the last tool a team gets around to putting behind SSO.
 
-Moving the client to a server next to the data removes both demands. The credential stops living on sixty laptops and starts living in one place. The network path stops being a VPN grant per person and starts being a deployment topology. [The tool goes to the data](/blog/the-tool-goes-to-the-data) is the argument for making that trade; this is the invoice.
+Moving the client to a server next to the data removes both demands. The credential stops living on sixty laptops and starts living in one place. The network path stops being a VPN grant per person and starts being a deployment topology. [The tool goes to the data](/blog/the-tool-goes-to-the-data/) is the argument for making that trade; this is the invoice.
 
 It is not free, because it creates four new problems that a desktop client never had. The client is now a multi-tenant network service holding every connection your team owns. We hit all four building LibreDB Studio. What follows is the specific shape each one took, including the two we got wrong first.
 
@@ -61,7 +61,7 @@ There is a keying subtlety too. For the "authenticated user hit an admin route" 
 
 The browser was the store. Connections, tabs and query history all lived in `localStorage`, which is the right default for one developer and useless the moment two people share a deployment. Server mode is one environment variable: reads still come from `localStorage` as a write-through cache, and mutations get pushed to a per-user scoped server store, with connection credentials encrypted at rest.
 
-What the encryption buys is a stolen database file or a dump. It is not a vault: anyone who can read the server's environment can read the key. And the browser copy of your credentials is still plaintext, because encrypting it would require a master password and a recovery flow, which changes what the product is. That single admission is why the cross-site scripting controls are the highest-leverage rows in [our security posture](/security) and not a checkbox.
+What the encryption buys is a stolen database file or a dump. It is not a vault: anyone who can read the server's environment can read the key. And the browser copy of your credentials is still plaintext, because encrypting it would require a master password and a recovery flow, which changes what the product is. That single admission is why the cross-site scripting controls are the highest-leverage rows in [our security posture](/security/) and not a checkbox.
 
 ## What this does not buy you
 
@@ -69,4 +69,4 @@ Relocating the client narrows the blast radius. It does not produce an authoriza
 
 The posture page listing all of this is checked against the repository on every build. A row that names a file that does not exist, or a test that does not run, fails CI. It cannot verify that a linked test is *true*, which is the residual we carry knowingly, and which is also written down.
 
-None of this is specific to us. If you are moving any credential-holding client onto a shared host, the four problems arrive with it: the boundary lands inside your process, ambient browser authority becomes a real vector, your own error paths become a resource to exhaust, and your state stops being one person's. LibreDB Studio is MIT licensed and [deploys as a package, an image or a chart](/deploy), so you can read exactly how we answered each one.
+None of this is specific to us. If you are moving any credential-holding client onto a shared host, the four problems arrive with it: the boundary lands inside your process, ambient browser authority becomes a real vector, your own error paths become a resource to exhaust, and your state stops being one person's. LibreDB Studio is MIT licensed and [deploys as a package, an image or a chart](/deploy/), so you can read exactly how we answered each one.

@@ -39,7 +39,7 @@ as an MQL object and dispatches on `operation`. Eleven operations are supported:
 
 A missing `collection` or `operation`, or a string that is not valid JSON, is a
 `QueryError` that quotes the format it wanted. The engine row on the
-[databases page](/databases) states the consequence flatly: no SQL translation
+[databases page](/databases/) states the consequence flatly: no SQL translation
 layer is faked, and queries here are MongoDB queries.
 
 The cost of that decision is not hidden either. Because there is no
@@ -54,8 +54,8 @@ drafted `db.orders.aggregate([...])` - correct MongoDB, unrunnable here. Naming
 what the language is did not survive contact with the model's prior; naming what
 it is not did. Plan mode opens on a MongoDB connection and drafts statements for
 a human to run. Agent AUTO mode does not run here at all: the read-only
-execution profile is database-native and exists only on PostgreSQL, SQLite and
-DuckDB, so an auto run on MongoDB ends `engine-unsupported`.
+execution profile is database-native and exists only on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and
+[DuckDB](/blog/engine/duckdb/), so an auto run on MongoDB ends `engine-unsupported`.
 
 ## find, aggregate, distinct and their real defaults
 

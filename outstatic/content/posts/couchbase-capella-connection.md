@@ -51,7 +51,7 @@ set from the scheme, a `couchbases://` paste posted plain HTTP to port 18091,
 which is a connection failure that looks like a network problem and is not one.
 
 `require` and not a verifying mode, for the same reason it is `require` on
-PostgreSQL and MySQL here: a self-hosted Couchbase node ships a self-signed
+[PostgreSQL](/blog/engine/postgresql/) and [MySQL](/blog/engine/mysql/) here: a self-hosted Couchbase node ships a self-signed
 certificate, and a default that refused it would be a default nobody could use on
 their own cluster. Capella is the case where you should change it. Its
 certificate is signed by a public root, so `verify-system` verifies against the
@@ -167,6 +167,6 @@ callers opt out per statement with `{ scanConsistency: 'not_bounded' }`.
 Capella is the cloud vendor this provider is documented against. Its management
 APIs - allowed-IP administration, cluster provisioning - are not covered here,
 and neither are Analytics, Full-Text Search or Eventing. The transport and the
-default port for this engine are on the [engine list](/databases), and the
+default port for this engine are on the [engine list](/databases/), and the
 container that has to sit close enough to the cluster to reach it at all is the
-subject of [getting started](/get-started).
+subject of [getting started](/get-started/).

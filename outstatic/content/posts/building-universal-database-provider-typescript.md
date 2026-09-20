@@ -48,7 +48,7 @@ In mature enterprise ecosystems like Java or .NET, developer tools that interact
 * **Java:** `java.sql.Driver`, `java.sql.Connection`, `java.sql.Statement`, and `java.sql.ResultSet` (JDBC).
 * **.NET:** `System.Data.Common.DbConnection`, `DbCommand`, and `DbDataReader` (ADO.NET).
 
-In these environments, database vendors—whether Oracle, PostgreSQL, MySQL, or Microsoft SQL Server—author driver JARs or DLLs that conform strictly to these runtime interfaces. The GUI or client application calls standard APIs without needing to know low-level wire protocol nuances, connection pool nuances, or engine-specific error classes.
+In these environments, database vendors—whether Oracle, [PostgreSQL](/blog/engine/postgresql/), MySQL, or Microsoft [SQL Server](/blog/engine/sqlserver/)—author driver JARs or DLLs that conform strictly to these runtime interfaces. The GUI or client application calls standard APIs without needing to know low-level wire protocol nuances, connection pool nuances, or engine-specific error classes.
 
 ### The JavaScript / TypeScript Gap
 
@@ -59,7 +59,7 @@ Instead, the npm ecosystem contains a fragmented collection of independent commu
 * MySQL uses `mysql2`.
 * SQLite relies on native bindings like `better-sqlite3`, `bun:sqlite`, or `node:sqlite`.
 * Oracle DB relies on `oracledb`.
-* NoSQL databases like Redis (`ioredis`), MongoDB (`mongodb`), and Cassandra (`cassandra-driver`) use entirely different paradigms (document descriptors, key-value commands, binary buffers).
+* NoSQL databases like Redis (`ioredis`), MongoDB (`mongodb`), and [Cassandra](/blog/engine/cassandra/) (`cassandra-driver`) use entirely different paradigms (document descriptors, key-value commands, binary buffers).
 
 Building a universal, self-hosted database IDE or management platform in TypeScript requires solving this fundamental problem: **How do you build a single, type-safe, performant, and secure application that can interact with 15+ relational, document, key-value, OLAP, and embedded database engines without a unifying runtime SPI?**
 

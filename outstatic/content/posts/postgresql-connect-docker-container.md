@@ -65,7 +65,7 @@ docker compose -f database-compose.yml up -d postgres
 
 If Studio is running on your machine rather than in a container - the npx package,
 the desktop build, a dev server - you are done. The [get started
-walkthrough](/get-started) picks up from the connection dialog. If Studio is a
+walkthrough](/get-started/) picks up from the connection dialog. If Studio is a
 container, read on, because the next thing you will see is a connection error.
 
 ## Why localhost fails from inside a container
@@ -147,7 +147,7 @@ certificate is not verified. Verified TLS to a managed host needs an explicit SS
 mode of `verify-system`, `verify-ca` or `verify-full`.
 
 The same reasoning scales past one machine. Among the [deployment
-channels](/deploy), a Helm release addresses the database by its Kubernetes service
+channels](/deploy/), a Helm release addresses the database by its Kubernetes service
 name for the same reason a compose stack addresses it by its compose service name.
 Only a client on your own machine ever addresses `localhost`.
 
@@ -189,4 +189,4 @@ Both are trades made in the same direction: an exact count on every table in a l
 schema means a sequential scan per table at every tree refresh. The estimate is free,
 because the planner was keeping it anyway. What the estimate cannot answer is how many
 rows are in the table right now; for that, type the `COUNT(*)` in the editor. The
-[engine grid](/databases) carries the same kind of line for every other engine.
+[engine grid](/databases/) carries the same kind of line for every other engine.

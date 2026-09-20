@@ -49,7 +49,7 @@ against a cluster holding nothing yet.
 ## Why the port does not change under TLS
 
 `9200` is the default for both schemes. A TLS deployment serves HTTPS on that
-same number. The [engine grid](/databases) names this engine's transport `http`
+same number. The [engine grid](/databases/) names this engine's transport `http`
 and its port `9200` for exactly that reason: there is one port, and the scheme in
 front of it is a separate question.
 
@@ -61,7 +61,7 @@ password to a port nothing is listening on.
 
 If you have seen `9201` attached to OpenSearch somewhere, it came from a
 container fixture. The studio repo's compose file publishes the node on host port
-`9201` because the Elasticsearch service in the same file already claims `9200`.
+`9201` because the [Elasticsearch](/blog/engine/elasticsearch/) service in the same file already claims `9200`.
 That is a collision on one machine, not a fact about the product. A real node is
 on `9200`, TLS or not.
 
@@ -92,7 +92,7 @@ does. `require` here does not mean "encrypt without checking" the way it does on
 the driver-based engines, because nothing in this code path can skip a check, and
 `verify-ca` and `verify-full` cannot pin against a pasted CA. Nothing in the code
 branches on which mode you picked. That is the kind of boundary the
-[security page](/security) exists to publish.
+[security page](/security/) exists to publish.
 
 ## Three deployment shapes that work
 

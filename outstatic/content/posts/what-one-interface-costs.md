@@ -17,7 +17,7 @@ publishedAt: 2026-08-29T09:00:00.000Z
 
 Every tool that claims to speak many databases makes the same promise on its front page and breaks it in the same place: the fourth engine.
 
-The first three are easy, because the first three are usually PostgreSQL, MySQL and SQL Server, and those three agree about almost everything. They have tables, foreign keys, an `information_schema`, a query planner, a session list. A single interface over them is barely an abstraction — it is a dialect switch.
+The first three are easy, because the first three are usually [PostgreSQL](/blog/engine/postgresql/), MySQL and [SQL Server](/blog/engine/sqlserver/), and those three agree about almost everything. They have tables, foreign keys, an `information_schema`, a query planner, a session list. A single interface over them is barely an abstraction — it is a dialect switch.
 
 Then someone connects Redis, and the promise has to decide what it meant.
 
@@ -25,7 +25,7 @@ Then someone connects Redis, and the promise has to decide what it meant.
 
 There are two ordinary ways to answer this, and both cost more than they look like they do.
 
-**Reduce to the intersection.** Ship only what every engine can do. The interface is consistent, honest, and useless: no EXPLAIN, because Cassandra has none; no ER diagram, because ClickHouse declares no foreign keys; no row editing, because Druid is append-oriented. You end up with a text box and a grid, which is the tool everyone already has.
+**Reduce to the intersection.** Ship only what every engine can do. The interface is consistent, honest, and useless: no EXPLAIN, because Cassandra has none; no ER diagram, because [ClickHouse](/blog/engine/clickhouse/) declares no foreign keys; no row editing, because Druid is append-oriented. You end up with a text box and a grid, which is the tool everyone already has.
 
 **Ship the union and let it fail.** Show every control on every engine and let the error come from the server. This is the common choice, because it demos well. The cost lands later, on the user: they click *Explain* on a Cassandra query, wait, and get a driver exception with a stack trace in it. They now know less than before they clicked, because the error does not distinguish "this engine cannot do this" from "your query is wrong" or "the cluster is down".
 
@@ -51,7 +51,7 @@ Here is what that looks like in practice, engine by engine:
 | Cassandra | No joins and no EXPLAIN; the grid respects partition-key query rules instead of hiding them |
 | Elasticsearch, OpenSearch | Query-and-browse: no row editing, no ER diagrams |
 
-Every line in that table is published on the [engine pages](/databases), next to the engine's transport and default port, rather than being discovered at runtime.
+Every line in that table is published on the [engine pages](/databases/), next to the engine's transport and default port, rather than being discovered at runtime.
 
 ## The claim is the span, not the number
 

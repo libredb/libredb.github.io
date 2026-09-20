@@ -129,7 +129,7 @@ Agent AUTO mode reads at most 200 rows per statement, and that is a separate bud
 enforced on a separate path - the agent's `queryReadOnly()` runs exactly one statement
 inside `BEGIN READ ONLY` and does no rewriting at all. The editor's row cap and the
 agent's row budget are not the same mechanism and do not share a number; the agent's is
-published with the rest of that run's budgets on the [features page](/features). AUTO
+published with the rest of that run's budgets on the [features page](/features/). AUTO
 mode also needs a least-privilege role on this engine: the execution profile probes the
 role when it opens and refuses a superuser connection with
 `PROFILE_PRIVILEGES_TOO_BROAD`.

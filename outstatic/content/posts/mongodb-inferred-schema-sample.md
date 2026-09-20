@@ -15,7 +15,7 @@ tags:
 publishedAt: 2026-05-20T09:00:00.000Z
 ---
 
-Open a PostgreSQL connection and the field list under a table is a read: the tree
+Open a [PostgreSQL](/blog/engine/postgresql/) connection and the field list under a table is a read: the tree
 asks `information_schema` what the columns are and the answer is the definition
 itself. Open a MongoDB connection and there is nothing equivalent to ask. A
 collection has no declared shape, so the field list has to come from the
@@ -122,8 +122,8 @@ considered.
 
 Agent AUTO mode - the tool-using, metered run - does not run on MongoDB. The
 read-only execution profile it depends on is database-native and exists only on
-PostgreSQL, SQLite and DuckDB, so an auto run here ends `engine-unsupported`. That
-rule is published in the [feature limits](/features).
+PostgreSQL, [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/), so an auto run here ends `engine-unsupported`. That
+rule is published in the [feature limits](/features/).
 
 PLAN mode does open on a MongoDB connection. It is toolless, executes nothing, and
 drafts a statement for a human to run. Its grounding is `getSchema()` - the same

@@ -139,13 +139,13 @@ in the maintenance list here.
 
 Two more boundaries travel with the family, not with any one relative. Agent
 AUTO mode does not run on any of these servers: the read-only profile is
-database-native and only PostgreSQL, SQLite and DuckDB implement it, so an auto
+database-native and only [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) implement it, so an auto
 run ends `engine-unsupported`. Agent PLAN mode does open, toolless, executing
 nothing, and it is told in one sentence that a `user:*` row is a grouping this
 server derived from a bounded scan rather than a key any command can be given.
 That same fact is why the schema explorer offers no per-row Profile Table,
 Generate Test Data or maintenance action here.
 
-The [engine list](/databases) publishes what each engine deliberately cannot do
-next to its transport and port, and the [capability pages](/features) publish
+The [engine list](/databases/) publishes what each engine deliberately cannot do
+next to its transport and port, and the [capability pages](/features/) publish
 the limit beside each feature.

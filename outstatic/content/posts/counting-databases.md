@@ -32,9 +32,9 @@ because we got it wrong first.
 
 ## Three numbers, three denominators
 
-**Sixteen — engines with a first-class provider.** PostgreSQL, MySQL, Oracle, SQL
-Server, SQLite, libSQL, DuckDB, ClickHouse, Druid, Trino, Cassandra,
-Elasticsearch, OpenSearch, MongoDB, Couchbase and Redis. Each one has a provider
+**Sixteen — engines with a first-class provider.** [PostgreSQL](/blog/engine/postgresql/), MySQL, Oracle, SQL
+Server, SQLite, libSQL, DuckDB, [ClickHouse](/blog/engine/clickhouse/), Druid, Trino, Cassandra,
+[Elasticsearch](/blog/engine/elasticsearch/), OpenSearch, MongoDB, Couchbase and Redis. Each one has a provider
 module, a page under `docs/providers/`, and integration tests that run against a
 real container. Adding one is weeks of work, and the honest capability line it
 carries — what it deliberately cannot do — is written at the same time as the
@@ -122,7 +122,7 @@ re-added from memory in six months by someone who remembers that it connected.
 opinion. That is the honest state, and it is different from a failure.
 
 One consequence you can see on this site: the engine grid on
-[the databases page](/databases) shows **seventeen**, not sixteen. The
+[the databases page](/databases/) shows **seventeen**, not sixteen. The
 seventeenth is LibreDB's own embedded store, which is a thing you can select in
 the connection dialog and therefore belongs in a list of things you can select.
 It is not an external engine, so it is outside the sixteen and outside the

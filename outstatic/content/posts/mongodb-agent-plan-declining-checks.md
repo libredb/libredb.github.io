@@ -24,7 +24,7 @@ LibreDB Studio's plan mode takes the second one.
 Agent AUTO mode — the tool-using, metered run that executes statements itself
 — does not run on MongoDB. The read-only execution profile it needs is
 database-native, and a provider-native `queryReadOnly` exists only on
-PostgreSQL, SQLite and DuckDB, so an auto run on a MongoDB connection ends
+[PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/), so an auto run on a MongoDB connection ends
 `engine-unsupported`. Plan mode opens on every connection, including this one.
 It is toolless, it executes nothing, and it drafts one statement for a person
 to run.
@@ -99,7 +99,7 @@ It checks no columns. With no inventory it records `no-inventory`, because an
 empty list would be a claim that every table exists.
 
 **Read-only classification**, through the same statement guard the rest of the
-[agent surface uses](/features). A statement that is not read-only is not
+[agent surface uses](/features/). A statement that is not read-only is not
 blocked — that was ruled on deliberately — but it is marked on the event and
 visibly in the rail, so a hand-off never quietly gives someone a delete.
 
@@ -158,7 +158,7 @@ The execution confirmation gate reads the same JSON shape and treats
 exactly as a `DELETE FROM` does on a SQL engine. A payload it cannot read as a
 document with a string `operation` asks as well, rather than staying silent.
 That gate is a runtime control on your own execution, not a verdict on the
-draft; the [published boundaries](/security) say what it does not cover.
+draft; the [published boundaries](/security/) say what it does not cover.
 
 Then check the result size, because the provider's defaults are asymmetric. A
 `find` with no explicit `options.limit` is capped at 100 documents. An

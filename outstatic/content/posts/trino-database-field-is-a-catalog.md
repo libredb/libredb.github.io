@@ -63,7 +63,7 @@ There is also no field for a session schema, which matters in a moment.
 ## Catalog, schema, table, and how the tree gets shaped
 
 Trino's hierarchy is catalog to schema to table, one level deeper than the tree's
-database to schema to table. The mapping chosen is the PostgreSQL one: the
+database to schema to table. The mapping chosen is the [PostgreSQL](/blog/engine/postgresql/) one: the
 connection's database field holds the catalog, exactly as a PostgreSQL connection
 pins one database, and the schemas inside it become the schema level. So the tree
 is two levels deep, and a table's display name is always `schema.table`.
@@ -88,7 +88,7 @@ eight views - `applicable_roles`, `columns`, `enabled_roles`, `roles`, `schemata
 row editing is not offered, because an `UPDATE ... WHERE` with no column that
 identifies one row would rewrite every row that matches. That is a fact about the
 engine, not a gap in the client, and it is [published on the engine
-pages](/databases) rather than discovered at runtime.
+pages](/databases/) rather than discovered at runtime.
 
 ## A connection that pins no catalog
 
@@ -107,7 +107,7 @@ For a local cluster to try this against, `trinodb/trino:476` ships `tpch`,
 `tpcds`, `memory`, `system` and `jmx` already configured, so there is no seed
 step. Point a connection at `localhost:8080` with no user, no password and `tpch`
 in the database field, and `tpch.tiny.nation` is there. The rest of the setup is
-in [getting started](/get-started).
+in [getting started](/get-started/).
 
 ## Cross-catalog statements, fully qualified
 

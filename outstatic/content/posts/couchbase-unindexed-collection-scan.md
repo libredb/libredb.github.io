@@ -174,7 +174,7 @@ Everything above is the un-indexed story only. The other Couchbase boundaries -
 one bucket per connection, no inline row editing, no transactions over stateless
 HTTP, no foreign keys and therefore no ER diagram edges, and Agent AUTO mode
 ending `engine-unsupported` because the read-only profile is database-native and
-exists only on PostgreSQL, SQLite and DuckDB - are published on
-[the engine pages](/databases), beside what each engine's transport and default
+exists only on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) - are published on
+[the engine pages](/databases/), beside what each engine's transport and default
 port actually are. The rule that produces those lines, and what it costs to keep,
-is on [the features page](/features).
+is on [the features page](/features/).

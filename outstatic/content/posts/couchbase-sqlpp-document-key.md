@@ -94,7 +94,7 @@ absent rather than offered and then quietly useless. Addressing a document needs
 `META(d).id` or `USE KEYS`, which is per-dialect statement building rather than
 a shared template. Until that exists, a document is edited with a hand-written
 SQL++ statement. The same rule governs every other absent control across
-[the capability surface](/features): a control that cannot work on the connected
+[the capability surface](/features/): a control that cannot work on the connected
 engine is absent rather than present and broken.
 
 Knowing the key also buys you something. `USE KEYS` reads a document with no
@@ -142,8 +142,8 @@ A document store keeps identity in metadata rather than in a column, and an inde
 has to catch up with a write before a scan can see it. The other boundaries those
 two facts produce here - no transactions over stateless HTTP, no foreign keys to
 draw an ER diagram from, EXPLAIN without an analyze mode - are listed on
-[the Couchbase entry in the engine grid](/databases). Agent AUTO mode is a
+[the Couchbase entry in the engine grid](/databases/). Agent AUTO mode is a
 separate absence: an auto run ends engine-unsupported on Couchbase, because the
-read-only profile it needs is database-native and exists only on PostgreSQL,
-SQLite and DuckDB. Plan mode opens here, drafts statements and runs none of
+read-only profile it needs is database-native and exists only on [PostgreSQL](/blog/engine/postgresql/),
+[SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/). Plan mode opens here, drafts statements and runs none of
 them.

@@ -110,7 +110,7 @@ What survives is worth naming too, because it is not nothing. Where the grants
 exist, blocked-session detection is real here (`blocking_session_id > 0` from
 `sys.dm_exec_sessions` joined to `sys.dm_exec_requests`) and index scan counts are
 real usage data from `sys.dm_db_index_usage_stats`, seeks plus scans plus lookups.
-Both readings sit under the limit the [feature list](/features) already states,
+Both readings sit under the limit the [feature list](/features/) already states,
 that what each panel can show is bounded by what the engine reports. On this engine
 that reads as the widest DMV surface of any engine in Studio, and a dashboard a
 single permission can still empty.

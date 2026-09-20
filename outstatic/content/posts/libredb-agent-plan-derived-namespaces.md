@@ -40,7 +40,7 @@ transaction, `PRAGMA query_only`, a `READ_ONLY` handle - and the LibreDB provide
 implements no such method. Grep for `queryReadOnly` under the LibreDB provider
 and there is no hit. **An agent AUTO run on a LibreDB connection ends
 `engine-unsupported`.** That is the whole story of AUTO mode on this engine, and
-it is the same sentence the [feature pages](/features) publish for every engine
+it is the same sentence the [feature pages](/features/) publish for every engine
 outside those three.
 
 PLAN mode is a different thing and opens on every connection, this one included.
@@ -55,8 +55,8 @@ grounded.
 
 Since 2026-08-15 the server reads the connection's schema through the provider
 before the model's first turn, so a plan run is not guessing at names. The read
-is bounded, and the bound is the provider's own: MongoDB stops at 200
-collections, Redis scans 1000 keys, LibreDB 10000.
+is bounded, and the bound is the provider's own: [MongoDB](/blog/engine/mongodb/) stops at 200
+collections, [Redis](/blog/engine/redis/) scans 1000 keys, LibreDB 10000.
 
 On this engine that number is `LIBREDB_MAX_KEY_SCAN`, and the scan is one
 half-open range over the entire keyspace:
@@ -136,7 +136,7 @@ LibreDB-specific agent audit path, and this site does not claim one.
 
 That is a narrower guarantee than the AUTO engines carry, and it is narrower in a
 specific direction: there is less to audit because there is less that runs. The
-[security page](/security) publishes the same boundary from the other side.
+[security page](/security/) publishes the same boundary from the other side.
 
 Two absences reinforce it. `getActiveSessions()` refuses with
 `LIBREDB_ACTIVE_SESSIONS_REFUSAL` - the file is opened inside this server's own

@@ -48,7 +48,7 @@ not the server refusing.
 The point of drawing the JSON as a tree is that the nesting already is the tree - the
 terminal just renders it as indentation you have to hold in your head. The plan panel
 lays out scan type, join strategy and cost per node, so the expensive node is the one
-you see first. The [feature page](/features) says which engines expose a plan this can
+you see first. The [feature page](/features/) says which engines expose a plan this can
 draw and which have nothing to render.
 
 Take an ordinary two-table statement:
@@ -147,7 +147,7 @@ To get from shape to duration, something has to actually run:
 One more boundary, because it is the one people assume their way past. Agent AUTO mode,
 the tool-using run that reads results and cites them, does not run on MySQL: the
 read-only execution profile it depends on is database-native and exists only for
-PostgreSQL, SQLite and DuckDB, so an auto run on a MySQL connection ends
+[PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/), so an auto run on a MySQL connection ends
 `engine-unsupported`. Agent PLAN mode does open here, grounded in the schema this
 provider introspects; it executes nothing and drafts a statement for a person to run.
-The [engine list](/databases) states this per engine, next to the transport.
+The [engine list](/databases/) states this per engine, next to the transport.

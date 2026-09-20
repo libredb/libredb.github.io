@@ -149,7 +149,7 @@ here and a bloat count over no rows once produced a `0` badged green, which is a
 clean bill of health for an operation that does not exist.
 
 This is the rule the rest of the product runs on: [what each panel can show
-is bounded by what the engine reports](/features), and every engine's deliberate
-absences are published on [its own page](/databases) rather than discovered at
+is bounded by what the engine reports](/features/), and every engine's deliberate
+absences are published on [its own page](/databases/) rather than discovered at
 runtime. The dashboard is just where that rule is hardest to follow, because
 blankness is cheap and a reason costs someone a paragraph.

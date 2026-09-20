@@ -105,7 +105,7 @@ exactly like a connection that is encrypted and verified, from the results grid.
 
 `require` is the same object, chosen deliberately rather than detected. Both of
 these are worth saying out loud on the same page as the rest of the
-[security posture](/security), because "SSL is on" is the claim that most often
+[security posture](/security/), because "SSL is on" is the claim that most often
 turns out to mean less than the person making it believed.
 
 ## Which verifying mode to choose, and what it needs
@@ -174,4 +174,4 @@ The through-line is the same in all three cases: a setting that exists on a form
 is not a setting that reached the driver, and the branch a connection takes
 decides which of the two it is. If the connection is a URI, the URI is the
 configuration. The engine's transport, port and published limits are on the
-[MySQL engine page](/databases) alongside every other engine's.
+[MySQL engine page](/databases/) alongside every other engine's.

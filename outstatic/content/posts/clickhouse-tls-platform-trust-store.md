@@ -97,7 +97,7 @@ of the scheme.
 So the failure is a boundary, not a misconfiguration. Nothing you type into the
 connection form will make a self-signed node verify, and the app does not offer a
 checkbox that pretends otherwise - the same rule that governs every control on
-[the engine pages](/databases), where what an engine deliberately cannot do is
+[the engine pages](/databases/), where what an engine deliberately cannot do is
 published beside what it can.
 
 ## What that leaves for a self-signed deployment
@@ -135,7 +135,7 @@ There is a third shape that is not a workaround but is worth naming, because it 
 the deployment this product is built around: the app runs beside the database, on
 the same private network, and the link between them never leaves it. TLS on that hop
 is a decision about your own network rather than an unavoidable requirement, and the
-[security page](/security) sets out what is protected where when it is made either
+[security page](/security/) sets out what is protected where when it is made either
 way.
 
 For a local instance the question does not arise at all. The pinned compose service

@@ -46,7 +46,7 @@ connection model, because the database has no server and no wire protocol to
 carry one; embedded in-process is the only supported mode. Run Studio as a
 container beside your data and the file has to be on a volume that container can
 see. That is the whole networking story, and it is why this engine appears on
-[the engine grid](/databases) as a file rather than a host and port.
+[the engine grid](/databases/) as a file rather than a host and port.
 
 ## Every open takes a lock, and the second one is refused
 
@@ -63,7 +63,7 @@ file admits exactly one handle and a second open is refused.** Not queued, not
 degraded to read-only, not resolved last-writer-wins. Refused.
 
 This is the only engine in the product that declares `singleWriterFile: true`.
-The other file-backed engine, SQLite, takes its locks per transaction rather than
+The other file-backed engine, [SQLite](/blog/engine/sqlite/), takes its locks per transaction rather than
 at open, so two connections to one file coexist and contend statement by
 statement. LibreDB moves that contention forward to `connect()`. You find out at
 connection time, once, instead of at an arbitrary write.
@@ -91,8 +91,8 @@ borrower and never cached under the profiled key. Two bounds keep the agent's
 isolation intact: only `agent-operations` borrows, and no borrow happens for a
 connection that configures an `agentUser`, because a reuse cannot substitute one
 principal for another. Agent AUTO mode is unavailable on this engine regardless —
-it requires a provider-level `queryReadOnly`, which exists only on PostgreSQL,
-SQLite and DuckDB, so an auto run here ends `engine-unsupported`. Plan mode opens
+it requires a provider-level `queryReadOnly`, which exists only on [PostgreSQL](/blog/engine/postgresql/),
+SQLite and [DuckDB](/blog/engine/duckdb/), so an auto run here ends `engine-unsupported`. Plan mode opens
 and drafts a command for a person to run.
 
 ## Working alongside command-line tooling
@@ -165,5 +165,5 @@ Studio instance seeds a connection named "Sample (LibreDB)" on first startup,
 covering all three lenses — a relational table, a document collection and raw
 key-value keys. `LIBREDB_EMBEDDED_SAMPLE=false` turns it off and
 `LIBREDB_EMBEDDED_SAMPLE_PATH` moves the file. The
-[getting started guide](/get-started) covers bringing the container up next to
+[getting started guide](/get-started/) covers bringing the container up next to
 the volume that holds it.

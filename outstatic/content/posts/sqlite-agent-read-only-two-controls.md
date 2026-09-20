@@ -31,7 +31,7 @@ is a different question, and `VACUUM INTO` is the answer.
 
 ## A second handle, physically separate
 
-PostgreSQL establishes read-only enforcement per transaction. SQLite has no such
+[PostgreSQL](/blog/engine/postgresql/) establishes read-only enforcement per transaction. SQLite has no such
 construct, so the boundary has to be established at open time instead. The agent's
 read-only profile does not borrow the shared, writable provider the editor uses. It
 acquires a dedicated provider keyed by connection id and execution profile, and that
@@ -143,14 +143,14 @@ segments simply resolve. On a shared self-hosted instance, any logged-in user ca
 any SQLite file the Studio process can read; the mitigations available today are
 OS-level - the process user, the container mount - and an optional base-directory
 allowlist is tracked as an open issue. That, and the rest of what this profile does
-not cover, is written down on the [security page](/security) rather than left for a
+not cover, is written down on the [security page](/security/) rather than left for a
 reader to infer.
 
-None of this transfers to libSQL. It speaks SQLite's dialect over a network protocol
+None of this transfers to [libSQL](/blog/engine/libsql/). It speaks SQLite's dialect over a network protocol
 and refuses `PRAGMA query_only`, so agent AUTO mode does not extend to it. AUTO runs
-on PostgreSQL, SQLite and DuckDB only, because those are the three providers that
+on PostgreSQL, SQLite and [DuckDB](/blog/engine/duckdb/) only, because those are the three providers that
 implement a database-native read-only path; anywhere else a run ends
 `engine-unsupported`. PLAN mode opens on every connection - it is toolless, executes
 nothing, and drafts a statement for a human to run. The difference between the two
 modes, and the rest of what agent mode does with the handle it gets, is on the
-[features page](/features).
+[features page](/features/).

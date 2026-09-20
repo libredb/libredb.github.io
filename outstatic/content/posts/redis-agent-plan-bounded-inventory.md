@@ -26,7 +26,7 @@ handed is not a list of keys; it is a summary this server computed.
 ## What grounding means on a key-value store
 
 Before a plan run's first turn, the server reads the connection's schema through the
-provider and writes it into the prompt. On PostgreSQL that is catalog reads plus a
+provider and writes it into the prompt. On [PostgreSQL](/blog/engine/postgresql/) that is catalog reads plus a
 statistics read. On Redis it is one call, because there are no statistics this run
 knows how to read here, and it comes out of the same per-run statement budget and is
 audited the same way as every other read.
@@ -52,7 +52,7 @@ driven by what the provider declares, not by a check on the connection's type.
 The first is the noun. This product records every schema in one shape, `TableSchema`,
 and the prompts had been using that shape's name as a word. `ProviderLabels.entityName`
 has carried the right word all along - "Table" on the SQL engines, "Collection" on
-MongoDB, "Datasource" on Druid, "Key Pattern" on Redis - and only the browser was
+[MongoDB](/blog/engine/mongodb/), "Datasource" on Druid, "Key Pattern" on Redis - and only the browser was
 being shown it. The fenced inventory header now takes it, so a Redis run reads
 "17 key pattern(s)".
 
@@ -119,12 +119,12 @@ and asks the one question that would unblock it.
 
 Nobody in this loop does. Agent AUTO mode - the tool-using run - does not open on
 Redis at all. The read-only profile that mode depends on is database-native,
-and `queryReadOnly` exists on the PostgreSQL, SQLite and DuckDB providers only. It
+and `queryReadOnly` exists on the PostgreSQL, [SQLite](/blog/engine/sqlite/) and DuckDB providers only. It
 appears nowhere in `redis.ts`, so a Redis agent run ends `engine-unsupported`. Plan
 mode opens on every connection instead, and it is toolless: it executes nothing, and
 its inventory is that bounded thousand-key scan whose rows are derived groupings rather
 than objects a command can be given. Those are two different modes, and the distinction
-is published on the [features page](/features).
+is published on the [features page](/features/).
 
 That leaves a person holding a drafted command. Two things meet them there. The
 provider has no read-only guard - the generic `call()` dispatch executes `SET`, `DEL`
@@ -137,5 +137,5 @@ its destructive vocabulary. A body it cannot parse asks rather than staying sile
 The drafted statement is also recorded, as a `plan-statement-drafted` event carrying
 the command, the dialect, whether it is read-only and what the identifier check found.
 The audit trail is admin-only, which is stated with the rest of the boundaries on the
-[security page](/security). A plan run leaves a record of what it proposed. What
+[security page](/security/). A plan run leaves a record of what it proposed. What
 happened next is on the person who pressed Run.

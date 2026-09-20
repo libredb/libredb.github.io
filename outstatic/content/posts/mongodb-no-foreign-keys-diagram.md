@@ -26,7 +26,7 @@ has no place to record them.
 The diagram in LibreDB Studio is not drawn by hand and is not inferred. It is
 discovered: `getSchema()` returns a `foreignKeys` list per table, and every edge
 on the canvas is one entry from that list, laid out hierarchically by ELK.js.
-That is the whole input. The [ER diagram feature](/features) publishes the
+That is the whole input. The [ER diagram feature](/features/) publishes the
 consequence next to the claim - a relationship your application enforces in code
 but never declares in the schema has nothing to discover, and will not appear.
 
@@ -58,7 +58,7 @@ on, because there is no constraint to add.
 
 The flag is not decoration. It is what lets the interface distinguish an empty
 panel from a broken one, which is the rule the whole [engine
-matrix](/databases) is built on. Where a control cannot work, it is absent with
+matrix](/databases/) is built on. Where a control cannot work, it is absent with
 the reason written where it would have been, rather than offered and then failed.
 
 ## Inferring edges from names would be a guess

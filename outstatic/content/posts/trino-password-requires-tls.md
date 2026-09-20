@@ -101,7 +101,7 @@ message that names both ways out:
 > remove the password to connect as an unauthenticated user.
 
 The reasoning is the same one that governs which controls appear per engine on
-[the engines page](/databases): a round trip that can only end one way is not
+[the engines page](/databases/): a round trip that can only end one way is not
 worth taking, and an error that arrives from the server carries less than a
 sentence written where the decision is made. A 401 in a connection dialog reads
 as a rejected credential. It sends people to look for the account, the realm,
@@ -131,7 +131,7 @@ short one. The coordinator's host is the only field that has to be filled in:
 | SSL | off |
 
 The Database field is a catalog, not a database. Trino's hierarchy is catalog to
-schema to table, so the pinned catalog occupies the slot a PostgreSQL database
+schema to table, so the pinned catalog occupies the slot a [PostgreSQL](/blog/engine/postgresql/) database
 would, and the tree below it is two levels deep with every table displayed
 `schema.table`. A connection that pins no catalog still connects and still runs
 fully qualified statements; what it cannot do is show a tree, and it says so
@@ -147,7 +147,7 @@ and `system.runtime.queries` will show against every statement it runs. If you
 are reading a query history to find out who ran something, an unauthenticated
 Trino connection has told you nothing. That is a property of the deployment, not
 of the client, and it is one of the reasons the [security
-model](/security) treats the network the container sits on as part of the
+model](/security/) treats the network the container sits on as part of the
 control set rather than an implementation detail.
 
 ## Turning on TLS, and what that changes about the port

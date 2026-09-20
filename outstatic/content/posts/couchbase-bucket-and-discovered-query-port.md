@@ -64,7 +64,7 @@ So a connection without one is refused rather than guessed at, with this message
 Couchbase requires a bucket (use the "database" field)
 ```
 
-Below the bucket, the flattening follows the rule PostgreSQL already established
+Below the bucket, the flattening follows the rule [PostgreSQL](/blog/engine/postgresql/) already established
 for schema and table. The default scope is implicit, everything else is qualified:
 
 ```text
@@ -144,7 +144,7 @@ docker exec cb couchbase-cli bucket-create -c 127.0.0.1 \
 ```
 
 Then point a connection at `127.0.0.1:8091` with bucket `travel`. The
-[get started guide](/get-started) covers the container side in general;
+[get started guide](/get-started/) covers the container side in general;
 `--storage-backend couchstore` and `--bucket-replica 0` are the Couchbase-specific
 part, and both are required.
 
@@ -178,7 +178,7 @@ projection alias `__id`, which the shared editor's primary-key heuristic would
 turn into `WHERE __id = '<key>'` - a predicate no document satisfies, so the edit
 would match zero documents and still report success. And Agent AUTO mode ends
 `engine-unsupported` here, because the read-only profile it runs under is
-database-native and only PostgreSQL, SQLite and DuckDB implement it. Agent PLAN
+database-native and only PostgreSQL, [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) implement it. Agent PLAN
 mode opens on this connection like any other: it runs no statement of yours,
 writes nothing, and hands every statement it drafts to you to run. On Couchbase
 its grounding infers field names from a sample of your own documents rather than

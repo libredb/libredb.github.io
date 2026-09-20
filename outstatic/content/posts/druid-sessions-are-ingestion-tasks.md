@@ -165,7 +165,7 @@ true count and an empty list states it correctly. A denied panel is a different
 claim, and the two are not allowed to look alike.
 
 None of this is unique to Druid in kind, only in which panels it hits. The
-[monitoring feature page](/features) states the same boundary in general terms -
+[monitoring feature page](/features/) states the same boundary in general terms -
 what a panel can show is bounded by what the engine reports - and the
-[engine pages](/databases) carry each engine's line next to its transport and
+[engine pages](/databases/) carry each engine's line next to its transport and
 default port.

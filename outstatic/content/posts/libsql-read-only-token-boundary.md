@@ -40,7 +40,7 @@ publishes:
 
 The shared requirement is that the refusal comes from the database. A parser that
 inspects a string before sending it is guessing about a dialect it does not execute;
-`VACUUM INTO '<path>'` is the example that made the point on SQLite, because it reads
+`VACUUM INTO '<path>'` is the example that made the point on [SQLite](/blog/engine/sqlite/), because it reads
 as a read and writes a file. The SQLite provider refuses it because the handle
 refuses it, not because a regular expression recognised it.
 
@@ -109,7 +109,7 @@ for the statements that follow, because there is no "following" — each stateme
 one stateless HTTP request.
 
 **A fake boundary is worse than an absent one.** The [capability model this site
-publishes](/features) exists so a control that cannot work is absent with its reason
+publishes](/features/) exists so a control that cannot work is absent with its reason
 written where it would have been, rather than offered and then failed. A read-only
 profile that was enforced by our parser instead of the database would pass a demo and
 misdescribe itself in the only sentence anyone would rely on: that the database
@@ -153,7 +153,7 @@ mint a read-only token, paste that URL into a separate connection, and let the s
 enforce it. The application does not need to know. That is a connection-level control
 and it applies to everything running through it — the editor, the browser, row
 editing — not only to an agent run. It also means the boundary does not depend on our
-code being correct, which is the distinction [the security page](/security) draws when
+code being correct, which is the distinction [the security page](/security/) draws when
 it says a display control is not a boundary.
 
 ## What plan mode still does here
@@ -175,7 +175,7 @@ So a plan on libSQL knows your tables, your columns, your declared foreign keys 
 your row counts. It drafts against them, then stops. You press Run, or you do not.
 
 That split is the same everywhere: AUTO mode needs a boundary the database enforces,
-and runs on PostgreSQL, SQLite and DuckDB only. Plan mode needs a schema, and every
+and runs on [PostgreSQL](/blog/engine/postgresql/), SQLite and [DuckDB](/blog/engine/duckdb/) only. Plan mode needs a schema, and every
 engine has one. libSQL sits on the plan side of that line because of one refused
 pragma, and the credential that replaces it is issued by the same server for the same
 purpose — just earlier, and by you.

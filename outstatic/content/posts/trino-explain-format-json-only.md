@@ -138,7 +138,7 @@ about the engine rather than a gap in the integration: `indexes` and `foreignKey
 as empty arrays by construction, and the ER diagram for a Trino connection draws the
 tables and never an edge, permanently.
 
-The trade is stated on the [plan rendering feature](/features) as well: plans are read
+The trade is stated on the [plan rendering feature](/features/) as well: plans are read
 from the engine's own output and nothing is simulated. On Trino, the engine's own output
 that can be had without executing anything is the estimate. If you need measured timings,
 type `EXPLAIN ANALYZE` in the editor yourself, having decided that a second execution is

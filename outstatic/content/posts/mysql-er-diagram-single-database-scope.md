@@ -44,7 +44,7 @@ The third row is the entire edge set. An edge on the diagram is a row in
 The layout is done by ELK.js and the boxes carry cardinality labels, but the
 graph itself is discovered rather than authored: if the server does not publish
 the constraint, there is no line to lay out. That is the published limit on
-[the features page](/features) too - a relationship your application enforces in
+[the features page](/features/) too - a relationship your application enforces in
 code but never declares in the schema has nothing to discover.
 
 For a MySQL foreign key diagram this has a consequence worth checking before you
@@ -67,7 +67,7 @@ prefix with. And there is no cross-schema foreign-key resolution: a constraint
 whose referenced table lives elsewhere on the server has no box to point at, so
 it is not drawn as an edge.
 
-This is where the shape differs sharply from the PostgreSQL provider in the same
+This is where the shape differs sharply from the [PostgreSQL](/blog/engine/postgresql/) provider in the same
 codebase, which walks all non-system schemas in one pass and resolves foreign
 keys across them. Both are reading the catalog honestly; they are reading
 differently shaped catalogs. If your MySQL server holds a logical application
@@ -142,7 +142,7 @@ the statement above.
 
 The same provider answers for MariaDB, Percona, TiDB and the other
 MySQL-protocol engines - there is no separate MariaDB type id - and their
-support levels differ, listed per engine on [the databases page](/databases).
+support levels differ, listed per engine on [the databases page](/databases/).
 The scoping rule is this provider's code rather than any one server's, so it
 holds wherever this provider is what answered.
 

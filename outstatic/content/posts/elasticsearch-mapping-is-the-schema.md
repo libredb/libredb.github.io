@@ -158,11 +158,11 @@ None of this is a browser waiting for write support. This grammar has no `INSERT
 parser listing everything it would have accepted - so inline row editing and the
 create-table toggle are not offered rather than offered and failed, which is the
 same rule that governs
-[every capability this interface shows or hides](/features).
+[every capability this interface shows or hides](/features/).
 
 A grammar that cannot write is still not the guarantee agent auto mode asks for.
 Auto mode runs only where the provider implements a database-native read-only
-profile, which is PostgreSQL, SQLite and DuckDB and no other entry in the
-[supported engine list](/databases); on this engine an auto run ends
+profile, which is [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) and no other entry in the
+[supported engine list](/databases/); on this engine an auto run ends
 engine-unsupported. Plan mode opens on the connection, is toolless, runs nothing,
 and drafts a statement for a human to run.

@@ -150,7 +150,7 @@ withhold, because their absence is already handled as an empty list.
 The reason to bother getting this right is that the ACL is the enforcement point,
 not the provider. The generic `call()` dispatch runs `SET`, `DEL` and `FLUSHALL`
 the same way it runs `GET`; there is no read-only guard in the Redis provider, so
-access control is whatever the ACL enforces. The [security page](/security) makes
+access control is whatever the ACL enforces. The [security page](/security/) makes
 the same point about the controls Studio does apply: masking is display-level,
 and a hard guarantee needs database-side grants on the account the connection
 uses. A read-only Redis session is an ACL you wrote, or it is nothing.

@@ -66,10 +66,10 @@ refusal covers every SELECT, including one that already carries its own `LIMIT n
 and is therefore never rewritten - because the failure mode being avoided is not
 the rewrite, it is the duplicate rows.
 
-This is the same rule the [capability declarations](/features) follow everywhere
+This is the same rule the [capability declarations](/features/) follow everywhere
 else in the product: a control that cannot work is absent with its reason
 attached, rather than offered and then quietly wrong. The engine row on the
-[databases page](/databases) states the same boundary before you connect.
+[databases page](/databases/) states the same boundary before you connect.
 
 ## Keeping the filtering clause last when a bound is added
 

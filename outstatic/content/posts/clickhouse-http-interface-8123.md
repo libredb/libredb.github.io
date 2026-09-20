@@ -53,7 +53,7 @@ the same endpoint, so a second HTTP surface next to `query()` would buy nothing.
 
 Foreign keys are the one thing the catalogs cannot answer, and the list is always
 empty. ClickHouse has no foreign-key concept anywhere - no engine, no table
-setting, no DDL declares one - so the [engine pages](/databases) state it
+setting, no DDL declares one - so the [engine pages](/databases/) state it
 directly: ER diagrams here show structure without discovered relations.
 
 ## What to publish from a container, and what not to
@@ -160,11 +160,11 @@ operation with its query id, which needs its own grant like any other
 `system.processes` operation.
 
 One boundary that is not about the transport, but belongs next to these: agent
-mode reads PostgreSQL, SQLite and DuckDB only, because the read-only profile is
+mode reads [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, because the read-only profile is
 database-native and exists only where a provider implements it. On any other
 engine a run ends `engine-unsupported`. Plan mode opens on every connection - it
 is toolless, runs nothing, and drafts a statement for you to run yourself.
 
 To check any of this against a real server, the compose service above is the
-shortest path; the [getting started guide](/get-started) covers pointing a Studio
+shortest path; the [getting started guide](/get-started/) covers pointing a Studio
 container at it.

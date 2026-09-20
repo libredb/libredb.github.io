@@ -154,5 +154,5 @@ open a transaction yourself, or run it on a copy.
 
 Every number in the plan-only tree is an estimate. That limitation is the price of
 the guarantee that reading it changed nothing, and it is published on the
-[feature pages](/features) and the [engine page](/databases) rather than left in a
+[feature pages](/features/) and the [engine page](/databases/) rather than left in a
 tooltip.

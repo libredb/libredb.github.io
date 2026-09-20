@@ -82,7 +82,7 @@ per-column relationship records. On a `PRIMARY KEY` row `referenced_table` is
 NULL and `referenced_column_names` is `[]`, which is how one read serves both
 key kinds without a second statement.
 
-This is the same rule the [ER diagram feature](/features) states everywhere: the
+This is the same rule the [ER diagram feature](/features/) states everywhere: the
 edges are discovered from declared constraints, not inferred. A relationship your
 loader enforces in application code and never declares in the schema has nothing
 in `duckdb_constraints()` to find, and no edge is drawn for it. That is worth
@@ -138,7 +138,7 @@ The workaround is the connection dialog. A DuckDB connection is a server-local
 file path - there is no host, no port and no credential, since `defaultPort` is
 `null` and the filesystem is the access control. Adding a second connection
 pointed at `/data/side.duckdb` gives that file its own tree and its own diagram.
-The [DuckDB engine page](/databases) carries the transport details for this.
+The [DuckDB engine page](/databases/) carries the transport details for this.
 
 One deployment note goes with that. A DuckDB file admits exactly one operating
 system process: a second read-write process is refused with `IO Error: Could not

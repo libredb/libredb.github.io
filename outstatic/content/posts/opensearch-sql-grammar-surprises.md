@@ -125,7 +125,7 @@ is no generated `SELECT` doing introspection for you to inherit a quoting bug
 from.
 
 Where the product does quote, it quotes with a backtick. The `opensearch` type-id
-shares MySQL's branch in the codebase's quoter (`src/lib/sql/identifier.ts`), and
+shares [MySQL](/blog/engine/mysql/)'s branch in the codebase's quoter (`src/lib/sql/identifier.ts`), and
 the sibling search type-id, served by the same directory, cannot share that
 branch: the quoting rule is a per-product fact, not a family one.
 Index names make this concrete. A stock cluster already carries
@@ -136,8 +136,8 @@ connection means a backtick.
 
 Which quote a provider uses is data the interface reads rather than a branch
 someone maintains, the same shape as every other
-[declared capability](/features); each engine's published boundary sits on its
-row on the [databases page](/databases).
+[declared capability](/features/); each engine's published boundary sits on its
+row on the [databases page](/databases/).
 
 ## Paging, and why it is expressed as data rather than a branch
 

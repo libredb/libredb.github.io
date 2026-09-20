@@ -55,7 +55,7 @@ is where a primary key would be named and `key_column_usage` is where its column
 would be. Trino publishes neither, in any catalog, on any connector.
 
 So this is not a read that came back empty. It is a read that has no place to
-happen. A PostgreSQL table reached through the PostgreSQL connector still has its
+happen. A [PostgreSQL](/blog/engine/postgresql/) table reached through the PostgreSQL connector still has its
 primary key and its indexes on the PostgreSQL server; Trino will not name one of
 them, because the interface it would name them through does not exist. Whether
 the system behind a connector has keys is that system's business and unreadable
@@ -76,7 +76,7 @@ the connection, so there is nothing to ask.
 ## Boxes with no edges, permanently
 
 The ER diagram on this site is described plainly on the
-[feature page](/features): edges come from declared foreign keys, and a
+[feature page](/features/): edges come from declared foreign keys, and a
 relationship your application enforces in code but never declares in the schema
 has nothing to discover. Trino is that rule at its limit. Every foreign key it
 could declare is a foreign key it declares nowhere.
@@ -132,7 +132,7 @@ default for names that are not. The join condition is the relationship, stated b
 you, for that statement.
 
 If a diagram with edges is the thing you need, connect to the system that
-declares them. The [engine list](/databases) publishes what each one answers next
+declares them. The [engine list](/databases/) publishes what each one answers next
 to its transport and default port, so a PostgreSQL catalog you reach through
 Trino for federation is the same server you can connect to directly for its keys.
 Two connections, two honest answers, neither one inventing the other's.
