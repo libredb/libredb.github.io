@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import site from './site.config.json' with { type: 'json' };
 import { redirectPaths } from './src/data/redirects.ts';
+import { postEngine } from './src/lib/posts.ts';
 import { readFileSync, readdirSync } from 'node:fs';
 
 // Read from the posts themselves rather than a generated list: a second copy of
@@ -64,8 +65,12 @@ export default defineConfig({
         // is published and at no other time.
         const engine = /^\/blog\/engine\/([^/]+)\/?$/.exec(path)?.[1];
         if (engine) {
+          // `postEngine` is the one place that reads an engine out of a slug;
+          // re-deriving it here is the drift this file already warns about, and
+          // it would miss the longest-match rule that keeps `sqlite` from
+          // claiming a `sqlserver-` post.
           const dates = Object.entries(postDates)
-            .filter(([slug]) => slug === engine || slug.startsWith(`${engine}-`))
+            .filter(([slug]) => postEngine(slug) === engine)
             .map(([, d]) => d)
             .sort();
           const newest = dates.at(-1);

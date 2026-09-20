@@ -30,15 +30,23 @@ const tag = (doc: string, re: RegExp) => re.exec(doc)?.[1];
 const titleOf = (doc: string) => tag(doc, /<title>([^<]*)<\/title>/);
 const descOf = (doc: string) => tag(doc, /<meta name="description" content="([^"]*)"/);
 
-/** Entities are one rendered character each; counting the source overcounts. */
-const rendered = (s: string) =>
-  s
-    .replace(/&mdash;/g, '—')
-    .replace(/&amp;/g, '&')
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>').length;
+/**
+ * Entities are one rendered character each; counting the source overcounts.
+ *
+ * Decoded in a single pass. Chained `.replace()` calls each run over what the
+ * previous one produced, so `&amp;lt;` would decode to `&lt;` and then to `<` —
+ * one entity spending two decodes. Matching once and consuming the match is the
+ * only ordering that cannot do that.
+ */
+const ENTITIES: Record<string, string> = {
+  '&mdash;': '—',
+  '&amp;': '&',
+  '&#39;': "'",
+  '&quot;': '"',
+  '&lt;': '<',
+  '&gt;': '>',
+};
+const rendered = (s: string) => s.replace(/&(?:mdash|amp|#39|quot|lt|gt);/g, (e) => ENTITIES[e]!).length;
 
 describe('the brand suffix is fitted, not fixed', () => {
   it('keeps the full name when the title leaves room', () => {
