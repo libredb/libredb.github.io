@@ -284,11 +284,15 @@ const schema = [
     right: var(--space-03);
     padding: var(--space-02) var(--space-03);
     border: var(--border-width-1) solid var(--console-border, var(--border));
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-s);
     background: var(--console-bg, var(--surface));
     color: var(--console-text-tertiary, var(--text-tertiary));
     font: var(--weight-medium) 11.5px / 1 var(--font-mono);
     cursor: pointer;
+    /* The button lives inside the <pre>, so its label is part of the block's
+       selectable text. Without this, selecting the block by hand — the very
+       thing this button exists to replace — copies "docker run …copy". */
+    user-select: none;
     opacity: 0;
     transition:
       opacity 120ms ease,

@@ -165,6 +165,21 @@ describe('code blocks can be copied', () => {
     }
   });
 
+  it('keeps its own label out of the block a reader selects by hand', () => {
+    // The button sits inside the <pre>, so without user-select: none its label
+    // joins the block's selectable text and a hand-selected `docker run …`
+    // comes out as `docker run …copy` — breaking the one workflow this was
+    // added to improve.
+    const doc = readFileSync('dist/blog/postgresql-connect-docker-container/index.html', 'utf8');
+    const sheets = [...doc.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]!);
+    const rule = sheets
+      .map((href) => readFileSync(`dist${href}`, 'utf8'))
+      .flatMap((css) => [...css.matchAll(/\.codecopy\{([^}]*)\}/g)].map((m) => m[1]!))
+      .find((body) => body.includes('cursor:pointer'));
+    expect(rule, 'the .codecopy rule is not in any stylesheet').toBeDefined();
+    expect(rule, 'the button label is selectable with the code').toContain('user-select:none');
+  });
+
   it('reads the code from the DOM instead of duplicating it into an attribute', () => {
     // A `data-copy` attribute per block would roughly double the weight of a
     // code-heavy page to save a few lines of script.
