@@ -27,6 +27,8 @@ const DESCRIPTIONS: Record<string, string> = {
   '/deploy': 'Every distribution channel that is live today — registries, package managers, Kubernetes and PaaS.',
   '/docker-compose': 'The canonical docker-compose.yml, byte for byte, with every environment variable explained.',
   '/get-started': 'From nothing to a running Studio, by container or by npx.',
+  '/helper':
+    'The installation guide: one self-contained page per release, 22 install routes, every setting, in 13 languages.',
   '/playground': 'Run the LibreDB database in the browser, with no install.',
   '/open-source': 'What the MIT licence permits, how to contribute, and how to report a vulnerability.',
   '/supporters':
