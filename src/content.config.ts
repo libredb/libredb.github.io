@@ -61,6 +61,10 @@ const posts = defineCollection({
       )
       .default({ name: '', picture: '' }),
     description: text(),
+    // Optional: a title written for a search listing when the headline the post
+    // wants on the page runs past what Google renders. The H1 is unaffected.
+    seoTitle: text(),
+    seoDescription: text(),
     coverImage: text(),
     tags: list(tag).default([]),
   }),

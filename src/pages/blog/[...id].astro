@@ -19,7 +19,7 @@ export const getStaticPaths = (async () => {
 type Props = { post: CollectionEntry<'posts'> };
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, publishedAt, author, tags, coverImage } = post.data;
+const { title, description, publishedAt, author, tags, coverImage, seoTitle, seoDescription } = post.data;
 
 const all = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
@@ -68,7 +68,9 @@ const schema = [
 <BaseLayout
   path={`/blog/${post.id}`}
   title={title}
+  seoTitle={seoTitle || undefined}
   description={description}
+  seoDescription={seoDescription || undefined}
   type="article"
   image={coverImage || undefined}
   publishedTime={publishedAt.toISOString()}

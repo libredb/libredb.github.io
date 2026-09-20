@@ -6,6 +6,9 @@ import { site } from '../lib/site';
 const schema = [
   {
     '@type': 'TechArticle',
+    // Same organisation authorship the posts declare; an Article without one
+    // is incomplete to Google and ambiguous to a reader.
+    author: { '@type': 'Organization', name: site.name },
     headline: 'How LibreDB Studio compares',
     description:
       'Three ways to reach a database — a desktop client, a hosted editor, or a tool deployed beside the data — and what each shape costs you.',

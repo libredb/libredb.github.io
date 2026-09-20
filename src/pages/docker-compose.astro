@@ -45,6 +45,9 @@ const highlighted = body.split('\n').map(highlight).join('\n');
 const schema = [
   {
     '@type': 'TechArticle',
+    // Same organisation authorship the posts declare; an Article without one
+    // is incomplete to Google and ambiguous to a reader.
+    author: { '@type': 'Organization', name: site.name },
     headline: 'LibreDB Studio docker-compose.yml',
     description:
       'The full docker-compose.example.yml for self-hosting LibreDB Studio, with every supported environment variable.',
