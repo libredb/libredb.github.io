@@ -127,7 +127,7 @@ submitting a native batch task with an inline input source to
 the concrete reason the Router's extra surface is worth having in a dev cluster.
 
 For a real deployment the rule follows from the architecture this whole product
-is built on: [the tool goes to the data](/get-started), so what you expose is one
+is built on: [the tool goes to the data](/get-started/), so what you expose is one
 HTTP port on one process inside the network the cluster already lives in.
 Fronting Brokers with the Router or a load balancer is what a Druid deployment
 does anyway, and that is exactly the host a connection should point at - which
@@ -163,4 +163,4 @@ datasource that vanished from the tree is an availability question before it is 
 SQL question.
 
 The rest of what this engine deliberately does not do is published on
-[the engine pages](/databases), next to its transport and default port.
+[the engine pages](/databases/), next to its transport and default port.

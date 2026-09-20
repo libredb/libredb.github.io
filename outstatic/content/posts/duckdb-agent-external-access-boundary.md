@@ -40,8 +40,8 @@ The flag was genuinely in force during every measurement below. `INSERT` was
 refused throughout. What it does not touch is the process: the DuckDB library is
 linked into Studio's own process, holds Studio's own privileges, and its
 file-reaching functions are ordinary reads as far as `access_mode` is concerned.
-This is the same class of escape as `VACUUM INTO` on SQLite and `COPY TO PROGRAM`
-on PostgreSQL, both already closed in their own providers.
+This is the same class of escape as `VACUUM INTO` on [SQLite](/blog/engine/sqlite/) and `COPY TO PROGRAM`
+on [PostgreSQL](/blog/engine/postgresql/), both already closed in their own providers.
 
 ## What still succeeded under it, measured
 
@@ -93,7 +93,7 @@ DuckDB *process* on an open file is refused with a lock error even when it asks
 for `READ_ONLY`. And the writable editor connection passes neither option, by
 design - there `COPY ... TO` and `read_csv_auto('...')` are features, and they
 were measured unaffected. The file-reading capability listed for DuckDB on
-[the engine list](/databases) is a property of the editor connection, not of an
+[the engine list](/databases/) is a property of the editor connection, not of an
 agent run.
 
 This is also the concrete meaning of a boundary published elsewhere on this
@@ -152,6 +152,6 @@ rather than the process, the boundary is external access disabled at open, and
 the SQL denylist is defence in depth with three measured bypasses on record.
 One more boundary sits outside DuckDB entirely and is worth carrying into your
 threat model with the rest of [what this product publishes about its own
-security](/security): anyone who can create a DuckDB connection chooses a path
+security](/security/): anyone who can create a DuckDB connection chooses a path
 on the server's filesystem, so on a shared deployment that right is closer to a
 shell on the Studio host than to a database login.

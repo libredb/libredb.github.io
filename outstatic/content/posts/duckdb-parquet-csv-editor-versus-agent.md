@@ -95,11 +95,11 @@ one operating-system process: a second read-write process is refused with
 `IO Error: Could not set lock on file ...`, and a second `READ_ONLY` process is
 refused with the same error. Two Studio replicas pointed at one file is a broken
 configuration, not a degraded one. That measurement is why the engine's row on
-[the engines page](/databases) says health shows storage rather than connections.
+[the engines page](/databases/) says health shows storage rather than connections.
 
 ## The same statements under the agent handle
 
-Agent AUTO mode runs on PostgreSQL, SQLite and DuckDB only, because the read-only
+Agent AUTO mode runs on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and DuckDB only, because the read-only
 profile is database-native and exists only where a provider implements it. On any
 other engine an auto run ends `engine-unsupported`. PLAN mode is a different
 thing entirely: it opens on every connection, holds no tools, executes nothing,
@@ -192,7 +192,7 @@ estimate - after a delete it answered 1,076,480 where `count(*)` answered
 **Use PLAN mode where AUTO cannot go.** Plan mode drafts the file-reaching
 statement and hands it back for you to run in the editor. Nothing executes, so
 nothing has to be sandboxed, and the statement lands on the connection that is
-allowed to run it. The [feature pages](/features) carry the same split for agent
+allowed to run it. The [feature pages](/features/) carry the same split for agent
 mode generally.
 
 Two smaller traps worth knowing while you set this up. A catalog is named after

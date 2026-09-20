@@ -108,7 +108,7 @@ pending a better query, and `getHealth()` says so in its own string field:
 `cacheHitRatio` is `N/A`.
 
 Slow queries are the same shape of absence. `getSlowQueries()` returns `[]`
-unconditionally, and the empty state is overridden away from PostgreSQL's
+unconditionally, and the empty state is overridden away from [PostgreSQL](/blog/engine/postgresql/)'s
 `pg_stat_statements` advice to the sentence that is actually true here: SQLite
 keeps no statistics about finished statements, so there is nothing to enable.
 Index `scans` is always `0` for the same reason - there is no usage counter to
@@ -168,9 +168,9 @@ the byte fields are absent rather than zero, and why every consumer gates on the
 absent `tableSizeBytes` instead of reading a placeholder.
 
 The rule that came out of it governs the rest of this dashboard, and it is the
-same rule every entry in the [feature list](/features) follows: a control that
+same rule every entry in the [feature list](/features/) follows: a control that
 cannot answer is absent, with the reason written where it would have been. An
 empty panel is indistinguishable from a broken one, so the absence carries a
-sentence. [The SQLite engine page](/databases) publishes that sentence before
+sentence. [The SQLite engine page](/databases/) publishes that sentence before
 anyone connects: there is no server to monitor, and health reads file size and
 pragma statistics only.

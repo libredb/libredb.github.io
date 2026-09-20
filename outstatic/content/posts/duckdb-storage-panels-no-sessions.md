@@ -79,7 +79,7 @@ That reads as *nothing is running right now*, which is a claim about the current
 moment. "This panel can never show a row" is a claim about the engine. They are
 different sentences and only one of them is true here.
 
-The SQLite provider makes the opposite call: it answers the sessions panel with a
+The [SQLite](/blog/engine/sqlite/) provider makes the opposite call: it answers the sessions panel with a
 single row describing its own handle. That row would be true on DuckDB too, and it
 was still not shipped, because it would be the only row the panel could ever
 produce, and *the engine reports one session* is a different claim from *the
@@ -143,8 +143,8 @@ surface — a zero on a size panel is a claim, and the provider will not make on
 cannot support.
 
 This is the same rule that decides what appears anywhere else in the product: the
-[capability declarations behind each feature](/features) are data, and the
-[per-engine pages](/databases) publish what each engine deliberately cannot answer
+[capability declarations behind each feature](/features/) are data, and the
+[per-engine pages](/databases/) publish what each engine deliberately cannot answer
 next to what it can. On DuckDB that comes to two panels that will never carry a
 row, each naming the table function the engine does not publish, and a per-table
 byte figure presented as the allocation it measures rather than as the size of the

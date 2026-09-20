@@ -141,7 +141,7 @@ the schema read says that is why rather than showing an empty one.
 So the working habit on Trino is the habit the warning asks for. Write
 `catalog.schema.table` in the editor and the missing session cannot change what a name
 resolves to. Write a `USE` and it can. The engine's published line on
-[the engine pages](/databases) names the neighbouring boundary: Trino queries catalogs, it
+[the engine pages](/databases/) names the neighbouring boundary: Trino queries catalogs, it
 does not manage a lakehouse, and writes depend on the underlying connector. Measured, a
 connector that accepts `CREATE TABLE` answers `UPDATE` with `This connector does not
 support modifying table rows`, and that refusal is shown verbatim.
@@ -149,4 +149,4 @@ support modifying table rows`, and that refusal is shown verbatim.
 Two of these three facts the tool absorbs and you never see. The third arrives as a
 warning on a statement that succeeded, because that is the only place a reader can still
 act on it. What the editor generates per engine, and what it does not, is written down on
-[the features page](/features).
+[the features page](/features/).

@@ -6,6 +6,9 @@ import { site } from '../lib/site';
 const schema = [
   {
     '@type': 'TechArticle',
+    // Same organisation authorship the posts declare; an Article without one
+    // is incomplete to Google and ambiguous to a reader.
+    author: { '@type': 'Organization', name: site.name },
     headline: 'How LibreDB Studio compares',
     description:
       'Three ways to reach a database — a desktop client, a hosted editor, or a tool deployed beside the data — and what each shape costs you.',
@@ -104,7 +107,7 @@ const schema = [
         <p class="doc__lead">{closing.body}</p>
         <p class="doc__fine">
           The editor itself is MIT and free, so the way to settle this is to run it rather than read about it.
-          <a href="/get-started">Get started in about ten seconds →</a> · <a href="/playground"
+          <a href="/get-started/">Get started in about ten seconds →</a> · <a href="/playground/"
             >Try it with no install →</a
           >
         </p>

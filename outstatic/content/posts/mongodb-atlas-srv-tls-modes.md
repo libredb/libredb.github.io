@@ -67,7 +67,7 @@ removes the trade, so the form can now say what the URI says.
 `tls`, `ca`, `cert`, `key` and `rejectUnauthorized` are all on the driver's
 allow-list - `LEGAL_TLS_SOCKET_OPTIONS` in `mongodb/lib/cmap/connect.js` - and
 reach `tls.connect` under Node's names, so the material maps the same way it does
-for PostgreSQL, MySQL and Couchbase.
+for [PostgreSQL](/blog/engine/postgresql/), [MySQL](/blog/engine/mysql/) and [Couchbase](/blog/engine/couchbase/).
 
 | `ssl.mode` | Options added |
 | --- | --- |
@@ -110,7 +110,7 @@ rather than a per-engine list. What they must not do is imply a control you have
 exercised: choosing `verify-full` over `verify-ca` on MongoDB changes nothing
 about the connection. If host-name verification is part
 of your threat model, this is the wrong layer to satisfy it, and the [security
-page](/security) lists this class of boundary next to the controls rather than
+page](/security/) lists this class of boundary next to the controls rather than
 underneath them.
 
 One consequence: `tlsAllowInvalidHostnames=true` in a pasted URI is deliberately

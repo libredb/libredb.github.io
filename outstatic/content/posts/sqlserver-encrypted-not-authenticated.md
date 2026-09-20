@@ -127,7 +127,7 @@ handed to tedious" - which replaces the driver with a mock rather than talking t
 server, so it fixes the options handed over and not what a server does with them. A
 mode added later cannot quietly fall through to the trusting branch. That is a
 compensating control rather than a fix; the names still overpromise. The
-[security page](/security) carries the same boundary.
+[security page](/security/) carries the same boundary.
 
 ## What a pasted string now maps to, and what can break
 
@@ -166,4 +166,4 @@ connection carrying only a raw URL and no fields would be built against `localho
 
 Authentication into the server is SQL authentication only - `user` and `password`.
 Windows Integrated and Azure AD are not wired. That, the TLS default, and the rest of
-this engine's boundaries sit on its entry in [the engine list](/databases).
+this engine's boundaries sit on its entry in [the engine list](/databases/).

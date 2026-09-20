@@ -23,7 +23,7 @@ asked for it can only send one statement.
 
 ## What a SQL Server execution plan viewer actually requires
 
-On PostgreSQL and MySQL, a plan is a statement. You write `EXPLAIN` in front of
+On [PostgreSQL](/blog/engine/postgresql/) and MySQL, a plan is a statement. You write `EXPLAIN` in front of
 the query, send the resulting text, and read the rows that come back. The whole
 transaction with the server is one request and one response, and a builder that
 prepends a keyword to a string is a complete implementation.
@@ -106,7 +106,7 @@ this feature. It is absent.
 `getCapabilities()` on this provider returns `supportsExplain: false`, and the
 interface renders from that declaration rather than from a layout guess. That is
 the same mechanism described in
-[the capability declarations behind the feature list](/features) - a control that cannot
+[the capability declarations behind the feature list](/features/) - a control that cannot
 work is absent, with the reason written where it would have been, rather than
 offered and then failed.
 
@@ -122,7 +122,7 @@ the showplan sequence above against your real tables, grounded on this provider'
 own inventory. Running it is your decision and your session, which is precisely
 the boundary the product cannot cross on your behalf here. AUTO mode does not run
 on SQL Server at all; it ends `engine-unsupported`, because the read-only
-execution profile it needs exists only on PostgreSQL, SQLite and DuckDB.
+execution profile it needs exists only on PostgreSQL, [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/).
 
 ## What re-enabling it would take
 
@@ -150,5 +150,5 @@ blocked-session detection from `blocking_session_id` and real index usage counts
 from `dm_db_index_usage_stats`, and it is graded partial for a separate reason:
 those DMVs need `VIEW SERVER STATE`, and a login without it gets `N/A` and empty
 lists across the dashboard rather than numbers. The per-engine boundaries,
-including this one, are published on the [engine pages](/databases) rather than
+including this one, are published on the [engine pages](/databases/) rather than
 discovered when you press something.

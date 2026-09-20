@@ -59,7 +59,7 @@ connection, so there is nothing to ask.
 
 ## Sessions and slow queries on a coordinator
 
-A sessions tab on a PostgreSQL connection lists connections. Trino has none: the
+A sessions tab on a [PostgreSQL](/blog/engine/postgresql/) connection lists connections. Trino has none: the
 client protocol is stateless HTTP, each statement is its own exchange, and there
 is no session object anywhere to count. The panel shows statements in flight
 instead, the nearest true thing.
@@ -158,6 +158,6 @@ maintenance toolkit is admin-only in any case, and on this engine no maintenance
 control is rendered at all.
 
 A panel can be absent with a sentence rather than empty because of the
-[capability declarations](/features) each engine publishes, and Trino's line on
-the [engine list](/databases) says the rest: it queries catalogs, and the storage
+[capability declarations](/features/) each engine publishes, and Trino's line on
+the [engine list](/databases/) says the rest: it queries catalogs, and the storage
 behind them is somebody else's.

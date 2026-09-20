@@ -87,7 +87,7 @@ through the maintenance `kill` operation, which is
 `DELETE FROM system:active_requests WHERE requestId = $1` and takes the request
 id shown in the sessions panel. No sessions panel, no request id, no kill. The
 maintenance toolkit and the audit trail are admin-only in any case, which is
-described alongside the other [access boundaries](/security) the deployment
+described alongside the other [access boundaries](/security/) the deployment
 publishes.
 
 ## Omitted rather than zero, and the bug behind that rule
@@ -170,4 +170,4 @@ those zeroes into a total that was quietly wrong.
 "not measured" unless you know the account holds the catalog role. That is the
 one seam where the omission rule could not be applied, and it is stated here
 rather than smoothed over - the same way the rest of the
-[capability model](/features) names what each engine cannot answer.
+[capability model](/features/) names what each engine cannot answer.

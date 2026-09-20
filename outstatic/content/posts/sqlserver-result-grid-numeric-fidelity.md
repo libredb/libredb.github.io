@@ -155,6 +155,6 @@ Wide integers, decimals and money values are surfaced as JavaScript numbers and 
 lose precision; only one result set of a multi-statement batch is surfaced; and a
 parameterised paged statement is not recognised as already bounded, so the statement
 fails. Those three sentences are the SQL Server entry's cost of admission. They are
-on [the engine pages](/databases) and in the published
-[feature boundaries](/features), and we would rather you read them now than reconcile
+on [the engine pages](/databases/) and in the published
+[feature boundaries](/features/), and we would rather you read them now than reconcile
 a ledger against them later.

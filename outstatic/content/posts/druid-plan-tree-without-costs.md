@@ -109,7 +109,7 @@ alternative was available and was rejected: the field is optional, an empty
 metrics slot is legal, and filling it with a plausible number would have been the
 worst option on the list. A fabricated cost renders identically to a measured one.
 
-The general description of the [plan tree feature](/features) stops describing
+The general description of the [plan tree feature](/features/) stops describing
 Druid at this point. That copy mentions costs laid out so the expensive node is
 the one you see first, and it is accurate on the engines that publish a cost.
 Druid publishes none, so on this engine the tree answers "what will run" and

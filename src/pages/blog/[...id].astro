@@ -4,7 +4,8 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/blog/TableOfContents.astro';
 import { formatDate, isoDate, readingTime } from '../../lib/format';
-import { site } from '../../lib/site';
+import { canonicalUrl, pagePath, site } from '../../lib/site';
+import { engineName, postEngine, postNeighbours, relatedPosts } from '../../lib/posts';
 
 // PITFALLS B5: getStaticPaths is extracted into its own module at build time, so
 // nothing defined in the rest of this frontmatter is visible inside it. Every
@@ -18,25 +19,48 @@ export const getStaticPaths = (async () => {
 type Props = { post: CollectionEntry<'posts'> };
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, publishedAt, author, tags, coverImage } = post.data;
+const { title, description, publishedAt, author, tags, coverImage, seoTitle, seoDescription } = post.data;
 
 const all = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
 );
-const others = all.filter((p) => p.id !== post.id).slice(0, 2);
+// Same engine first — see src/lib/posts.ts for why the slug is the grouping.
+const others = relatedPosts(post, all);
+const { prev, next } = postNeighbours(post, all);
+const family = postEngine(post.id);
+const familyName = family ? engineName(family) : undefined;
+const updatedAt = (post.data as { updatedAt?: Date }).updatedAt;
 
 const minutes = readingTime(post.body ?? '');
+
+const url = canonicalUrl(`/blog/${post.id}`);
 
 const schema = [
   {
     '@type': 'BlogPosting',
     headline: title,
     description,
+    // Article rich results want an image, and every page already computes one
+    // for og:image — emitting only there left 104 posts ineligible for the
+    // richer listing while the asset sat one line away.
+    image: canonicalUrl(coverImage || '/og/default.png'),
     datePublished: publishedAt.toISOString(),
+    // Only when the post actually says so. A dateModified defaulted to the
+    // build date tells Google every post changed on every deploy.
+    ...(updatedAt ? { dateModified: updatedAt.toISOString() } : {}),
     inLanguage: 'en',
     author: { '@type': 'Organization', name: author.name || site.name },
     publisher: { '@id': `${site.url}/#organization` },
-    mainEntityOfPage: `${site.url}/blog/${post.id}`,
+    // The served URL, not the redirect that reaches it.
+    mainEntityOfPage: url,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: canonicalUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: canonicalUrl('/blog') },
+      { '@type': 'ListItem', position: 3, name: title, item: url },
+    ],
   },
 ];
 ---
@@ -44,21 +68,35 @@ const schema = [
 <BaseLayout
   path={`/blog/${post.id}`}
   title={title}
+  seoTitle={seoTitle || undefined}
   description={description}
+  seoDescription={seoDescription || undefined}
   type="article"
   image={coverImage || undefined}
   publishedTime={publishedAt.toISOString()}
+  modifiedTime={updatedAt?.toISOString()}
   authors={[author.name || site.name]}
   schema={schema}
 >
   <article class="post">
     <div class="post__inner u-container">
-      <p class="post__back"><a href="/blog">← All posts</a></p>
+      <nav class="post__crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href={pagePath('/')}>Home</a></li>
+          <li><a href={pagePath('/blog')}>Blog</a></li>
+          <li aria-current="page">{familyName ?? 'Post'}</li>
+        </ol>
+      </nav>
 
       <header class="post__head">
         {
-          tags.length > 0 && (
+          (tags.length > 0 || family) && (
             <p class="post__tags">
+              {family && familyName && (
+                <a class="post__tag post__tag--engine" href={pagePath(`/blog/engine/${family}`)}>
+                  {familyName}
+                </a>
+              )}
               {tags.map((t) => (
                 <span class="post__tag">{t.label}</span>
               ))}
@@ -94,11 +132,11 @@ const schema = [
       {
         others.length > 0 && (
           <aside class="post__more" aria-label="Keep reading">
-            <p class="post__morelabel">Keep reading</p>
+            <p class="post__morelabel">{familyName ? `More on ${familyName}` : 'Keep reading'}</p>
             <ul class="post__morelist">
               {others.map((p) => (
                 <li>
-                  <a href={`/blog/${p.id}`}>
+                  <a href={pagePath(`/blog/${p.id}`)}>
                     <span class="post__moretitle">{p.data.title}</span>
                     <span class="post__moredate">{formatDate(p.data.publishedAt)}</span>
                   </a>
@@ -106,6 +144,27 @@ const schema = [
               ))}
             </ul>
           </aside>
+        )
+      }
+
+      {
+        (prev || next) && (
+          <nav class="post__seq" aria-label={familyName ? `${familyName} posts in order` : 'Post navigation'}>
+            {prev ? (
+              <a class="post__seqlink post__seqlink--prev" href={pagePath(`/blog/${prev.id}`)} rel="prev">
+                <span class="post__seqdir">← Earlier</span>
+                <span class="post__seqtitle">{prev.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a class="post__seqlink post__seqlink--next" href={pagePath(`/blog/${next.id}`)} rel="next">
+                <span class="post__seqdir">Later →</span>
+                <span class="post__seqtitle">{next.data.title}</span>
+              </a>
+            )}
+          </nav>
         )
       }
     </div>
@@ -116,17 +175,39 @@ const schema = [
   .post__inner {
     padding-block: clamp(var(--space-09), 6vh, 72px) clamp(var(--section-y-desktop), 10vh, 112px);
   }
-  .post__back {
+  /* Replaces the old "← All posts" line: same role, but it shows the path the
+     page sits on, and the BreadcrumbList schema says the same thing. */
+  .post__crumbs {
     font: var(--weight-medium) 12.5px / 1 var(--font-mono);
   }
-  .post__back a {
+  .post__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-02);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--text-tertiary);
+  }
+  .post__crumbs li {
     display: inline-flex;
     align-items: center;
     min-height: 24px;
+  }
+  .post__crumbs li + li::before {
+    content: '/';
+    margin-inline-end: var(--space-02);
+    color: var(--border-strong);
+  }
+  .post__crumbs a {
     color: var(--text-tertiary);
   }
-  .post__back a:hover {
+  .post__crumbs a:hover {
     color: var(--text-primary);
+  }
+  .post__crumbs [aria-current='page'] {
+    color: var(--text-secondary);
   }
 
   .post__head {
@@ -143,6 +224,15 @@ const schema = [
     letter-spacing: var(--overline-tracking);
     text-transform: uppercase;
     color: var(--text-brand);
+  }
+  .post__tag--engine {
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+  }
+  .post__tag--engine:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
   }
   .post__title {
     margin-top: var(--space-04);
@@ -184,6 +274,39 @@ const schema = [
     grid-template-columns: minmax(0, var(--measure-long)) minmax(0, 240px);
     gap: clamp(var(--space-08), 5vw, 72px);
     align-items: start;
+  }
+
+  /* Walks one engine's posts in the order they were written; see src/lib/posts.ts. */
+  .post__seq {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--space-04);
+    margin-top: var(--space-08);
+  }
+  .post__seqlink {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-02);
+    padding: var(--space-05);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .post__seqlink:hover {
+    border-color: var(--border-strong);
+  }
+  .post__seqlink--next {
+    text-align: right;
+  }
+  .post__seqdir {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .post__seqtitle {
+    color: var(--text-primary);
+    line-height: var(--leading-snug);
   }
 
   .post__more {

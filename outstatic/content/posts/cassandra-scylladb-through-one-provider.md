@@ -71,7 +71,7 @@ Two things are absent for the integration rather than for the server, and they a
 on both. There is no EXPLAIN — the keyword is not in CQL's grammar, so the button and the
 tab are not rendered rather than rendered dead. And Agent AUTO mode ends
 `engine-unsupported`, because a tool-using run needs a database-native read-only
-statement path, and that exists on PostgreSQL, SQLite and DuckDB only. Agent PLAN mode opens
+statement path, and that exists on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only. Agent PLAN mode opens
 on the connection as it does everywhere: toolless, executing nothing, drafting a
 statement for a person to run.
 
@@ -151,6 +151,6 @@ lives in `system.versions`, which this provider does not read.
 
 That is a confusing figure for a human reading a version string, so it is published as
 what it is rather than swapped for a friendlier one, and the caveat travels with it on
-the [engine pages](/databases). The [capability declarations behind those
-panels](/features) are data rather than layout, which is why a panel here can report
+the [engine pages](/databases/). The [capability declarations behind those
+panels](/features/) are data rather than layout, which is why a panel here can report
 absence with a sentence rather than fail the screen it sits on.

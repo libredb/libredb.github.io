@@ -48,7 +48,7 @@ vocabulary is smaller, and this word is not in it.
 An interface has two ways to handle that. It can show the button and let the
 server produce the sentence above with a driver stack trace wrapped around it, or
 it can not show the button. LibreDB Studio does the second, for the reason set
-out in [the capability model behind the feature set](/features): a control that
+out in [the capability model behind the feature set](/features/): a control that
 cannot work is absent with its reason recorded. A parser error arriving from a
 button the interface itself offered reads as a broken statement, or a broken
 interface, long before it reads as an engine that has no such feature.
@@ -152,8 +152,8 @@ each with its own recorded reason. What the query surface does carry:
   refused with that reason instead of returning page one again.
 - **Agent Plan mode.** It is toolless, executes nothing, and drafts a statement
   for a human to run. Agent AUTO mode ends `engine-unsupported` here: its
-  read-only profile is database-native and exists on PostgreSQL, SQLite and
-  DuckDB only.
+  read-only profile is database-native and exists on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and
+  [DuckDB](/blog/engine/duckdb/) only.
 
 What is not present, and says so where the number would be: no row count and no
 table size anywhere, because `system.size_estimates` counts partitions per token
@@ -161,6 +161,6 @@ range from flushed SSTables only, and `system_views.disk_usage` reports whole
 mebibytes. No slow-query list either - the threshold writes to the node's log
 file rather than to a table, so there is nothing a session can read.
 
-Each of those absences is published on the [engine reference](/databases)
+Each of those absences is published on the [engine reference](/databases/)
 alongside the transport and port, which is where a limit belongs: before the
 evaluation, not twenty minutes into it.

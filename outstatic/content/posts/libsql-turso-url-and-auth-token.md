@@ -95,7 +95,7 @@ typing it produce the same connection.
 
 `libsql://` is not a hint. It implies TLS, and it implies 443, which is how Turso
 Cloud serves every database. There is no plaintext form of the scheme, and that is
-a deliberate refusal rather than a gap: `http://` already resolves to ClickHouse in
+a deliberate refusal rather than a gap: `http://` already resolves to [ClickHouse](/blog/engine/clickhouse/) in
 this codebase's connection-string parser, and two engines cannot own one scheme. A
 self-hosted server on plain HTTP is reached through the host and port fields with
 TLS off, on `sqld`'s own default port `8080`.
@@ -114,7 +114,7 @@ uptime reads `N/A`. Nothing publishes them.
 
 One type-id, `libsql`, reaches both a self-hosted libSQL server and Turso Cloud.
 They are not two integrations. They speak the same protocol and embed the same
-SQLite - 3.47.0 measured on both, on 2026-08-27 - and every statement, every
+[SQLite](/blog/engine/sqlite/) - 3.47.0 measured on both, on 2026-08-27 - and every statement, every
 catalog read and every refusal measured the same on each.
 
 Where they differ, they differ in what they publish about themselves rather than in
@@ -152,6 +152,6 @@ connection like any other: it is toolless, executes nothing, and drafts a statem
 for a human to run.
 
 The rest is a normal SQLite session over the network. The published capability line
-for this engine sits with the others on the [engine pages](/databases), and the
+for this engine sits with the others on the [engine pages](/databases/), and the
 container that holds the connection is set up in
-[getting started](/get-started).
+[getting started](/get-started/).

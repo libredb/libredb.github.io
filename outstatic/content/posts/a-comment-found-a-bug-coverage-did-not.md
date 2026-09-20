@@ -19,7 +19,7 @@ A Russian technology site ran a piece about LibreDB Studio, and a reader in the 
 One UI for sixteen engines, they asked, so is there really a written interface for each kind of database, for editing tables and columns?
 
 The answer is that there is one UI and no per-engine interface: an abstract provider class with thirteen required methods, one file per type id, and a UI that branches on what a provider publishes about itself rather than on the engine's name.
-That is why MongoDB's tree says Collection and document, Redis says Key Pattern and key, and the Cassandra editor is labelled CQL with no JOIN, no subquery and no OFFSET.
+That is why MongoDB's tree says Collection and document, Redis says Key Pattern and key, and the [Cassandra](/blog/engine/cassandra/) editor is labelled CQL with no JOIN, no subquery and no OFFSET.
 The create-table form appears where a provider declares `supportsCreateTable`, and where a provider does not declare it the button is simply absent rather than present and broken.
 
 Then they pushed on exactly the right spot.
@@ -30,11 +30,11 @@ Then they pushed on exactly the right spot.
 
 We had not solved it.
 The form declared a `dbType` prop, the workspace passed the active connection's type into it, and the component never destructured it.
-The prop was dead, so one form emitted one dialect for all eight engines, and that dialect was PostgreSQL's: the default column was `id SERIAL PRIMARY KEY` and the type list offered `JSONB`.
+The prop was dead, so one form emitted one dialect for all eight engines, and that dialect was [PostgreSQL](/blog/engine/postgresql/)'s: the default column was `id SERIAL PRIMARY KEY` and the type list offered `JSONB`.
 
 ## The part that made it a bug rather than an inconvenience
 
-On SQL Server, Oracle and Trino, `SERIAL` does not parse.
+On [SQL Server](/blog/engine/sqlserver/), Oracle and Trino, `SERIAL` does not parse.
 The form previews its SQL above the button, so a user saw a statement fail and knew why.
 That is bad, and it is honest.
 

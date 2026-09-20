@@ -38,7 +38,7 @@ changed column, and a `WHERE` clause identifying the row.
 UPDATE events SET status = 'closed' WHERE id = 41;
 ```
 
-On PostgreSQL that runs. On ClickHouse it does not, and it does not fail quietly at
+On [PostgreSQL](/blog/engine/postgresql/) that runs. On ClickHouse it does not, and it does not fail quietly at
 the edge of the driver either, because there is no driver. The ClickHouse provider
 carries no dependency at all: every statement is the body of a `POST /` on the
 documented HTTP interface, default port `8123`, answered through the runtime's own
@@ -81,7 +81,7 @@ cluster.
 
 So the provider declares `supportsInlineRowEdit: false`, and the interface renders
 from that declaration. Neither the EDIT toggle nor an editable cell appears on a
-ClickHouse connection. The [capability declarations behind each feature](/features)
+ClickHouse connection. The [capability declarations behind each feature](/features/)
 are data rather than layout, which is why a missing control here is a stated
 absence rather than a gap.
 
@@ -142,7 +142,7 @@ count from the predicate, and it does not suppress the zero to avoid the questio
 A fabricated two is worse than an honest zero, because the zero is falsifiable and
 the two is not.
 
-The [ClickHouse engine page](/databases) carries the transport and default port for
+The [ClickHouse engine page](/databases/) carries the transport and default port for
 this connection. The boundary behind both halves of this post is stated here:
 **inline row editing is not offered on ClickHouse, because a bare update answers
 code `48` `NOT_IMPLEMENTED`, and the documented alternative reports zero rows

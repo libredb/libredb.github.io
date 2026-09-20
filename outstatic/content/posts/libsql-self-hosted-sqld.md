@@ -18,7 +18,7 @@ publishedAt: 2026-03-20T09:00:00.000Z
 Most of a self-hosted libSQL sqld connection is a question of what to leave out.
 There is one integration for this engine, one type id, and it reaches both a
 container you started yourself and a managed Turso Cloud database, because the
-two speak the same protocol and embed the same SQLite - 3.47.0 measured on both.
+two speak the same protocol and embed the same [SQLite](/blog/engine/sqlite/) - 3.47.0 measured on both.
 What separates them in the connection dialog is a host, a TLS switch and a
 credential. Locally, two of those three are the absence of something.
 
@@ -62,7 +62,7 @@ libsql://<database>-<org>.turso.io?authToken=<jwt>
 
 That is what `turso db show --url` prints, and `libsql://` implies TLS on 443.
 There is no plaintext spelling of the scheme. `http://` is already claimed by
-ClickHouse in the connection string parser, and two engines cannot own one
+[ClickHouse](/blog/engine/clickhouse/) in the connection string parser, and two engines cannot own one
 scheme, so a self-hosted server on plain HTTP is reached through the fields
 instead.
 
@@ -116,7 +116,7 @@ The read-only form is the engine-side answer to a gap. `PRAGMA query_only = true
 is refused by the server on both deployments, so this provider implements no
 read-only query path of its own. Agent AUTO mode - the run that uses tools -
 therefore ends `engine-unsupported` on libSQL, because that profile needs the
-read-only path and exists on PostgreSQL, SQLite and DuckDB only. Agent PLAN mode
+read-only path and exists on [PostgreSQL](/blog/engine/postgresql/), SQLite and DuckDB only. Agent PLAN mode
 opens on every connection here as it does everywhere: toolless, executing
 nothing, drafting a statement for a person to run. The read-only token is a
 credential you create, not a statement the provider can issue.
@@ -190,5 +190,5 @@ only what the deployment publishes: no uptime, no cache hit ratio, no slow query
 list, because libSQL keeps no statistics about finished statements.
 
 The published capability line for this engine and the sixteen others is on the
-[databases page](/databases), and LibreDB Studio itself is one `docker run` away
-in [get started](/get-started).
+[databases page](/databases/), and LibreDB Studio itself is one `docker run` away
+in [get started](/get-started/).

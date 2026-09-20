@@ -155,4 +155,4 @@ is the trade, stated in one place rather than discovered per user.
 For a single-operator install none of this is necessary and the plain path field is the
 feature working as designed. For anything shared, the mount is the access control, and
 it should be written down next to the deployment rather than held in someone's head. The
-[deployment guide](/deploy) lists the channels this image ships through.
+[deployment guide](/deploy/) lists the channels this image ships through.

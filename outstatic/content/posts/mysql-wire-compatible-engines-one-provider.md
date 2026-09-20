@@ -148,7 +148,7 @@ successfully, because the constraint is a planner hint there. SingleStore refuse
 outright, and with `ignore_foreign_keys` on it accepts an inline one and strips it.
 
 **Do not expect agent AUTO mode anywhere on this type id.** The read-only execution
-profile is database-native, and only PostgreSQL, SQLite and DuckDB implement it. An auto
+profile is database-native, and only [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) implement it. An auto
 run against any of these nine ends `engine-unsupported`. PLAN mode does open on every
 one of them: it is toolless, executes nothing, and drafts a statement for a human to
 run. On Databend that difference is legible: the schema read fails, so a plan run

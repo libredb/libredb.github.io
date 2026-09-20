@@ -65,7 +65,7 @@ total crosses with its digits intact. A `NUMBER(38,0)` identifier does not, and
 the two sit in the same grid looking equally trustworthy.
 
 There is a known fix and it is not applied. Fetching `NUMBER` as a string keeps
-every digit - the same move that keeps a Cassandra `bigint` intact one provider
+every digit - the same move that keeps a [Cassandra](/blog/engine/cassandra/) `bigint` intact one provider
 over. It is not in the product because it changes **every numeric cell Oracle
 produces**: the ones the grid right-aligns, the ones the CSV writes, the ones the
 SQL export puts inside an `INSERT`. A change of that blast radius is tracked on
@@ -145,7 +145,7 @@ standard the `NUMBER` path does not yet meet.
 ## Reading around both, on the server side
 
 Oracle still has everything the client dropped. Ask for it in the same result
-set, in the [editor](/features) you were already in:
+set, in the [editor](/features/) you were already in:
 
 ```sql
 SELECT
@@ -175,4 +175,4 @@ change waiting to be made across every numeric cell at once, and measured the wa
 the LOB and interval changes were. The stored offset is not recoverable at this
 layer at all: the driver reduces the value before provider code sees it, so
 `TO_CHAR` is the answer rather than a stopgap. Both are listed on the
-[engine pages](/databases) as what Oracle cannot answer here.
+[engine pages](/databases/) as what Oracle cannot answer here.

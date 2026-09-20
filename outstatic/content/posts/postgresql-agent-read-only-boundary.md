@@ -152,10 +152,10 @@ policy layer's catalog and schema allowlist screens the target the agent
 *declared*; only the grants bound what a hostile statement could touch instead.
 
 This is the AUTO path - the metered, tool-using run, which exists on PostgreSQL,
-SQLite and DuckDB only, because the read-only profile is database-native and
+[SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, because the read-only profile is database-native and
 exists only where a provider implements it. PLAN mode opens on every connection: it
 is toolless, executes nothing, and drafts a statement for a human to run. The
-[agent mode entry in the feature list](/features) states that boundary, and
-[the security page](/security) publishes the known limitations next to the
+[agent mode entry in the feature list](/features/) states that boundary, and
+[the security page](/security/) publishes the known limitations next to the
 controls, which is where the `SET TRANSACTION READ WRITE` result belongs as much
 as it belongs here.

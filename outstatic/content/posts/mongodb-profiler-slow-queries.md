@@ -28,7 +28,7 @@ is broken. It prints the sentence that names the missing step:
 > start recording into system.profile.
 
 That string is `slowQueriesEmptyState`, a per-engine label on the MongoDB
-provider. It used to be PostgreSQL's `pg_stat_statements` advice, hardcoded into
+provider. It used to be [PostgreSQL](/blog/engine/postgresql/)'s `pg_stat_statements` advice, hardcoded into
 the panel for every engine including this one, and `pg_stat_statements` is a
 PostgreSQL extension that a MongoDB server has no equivalent of.
 
@@ -61,7 +61,7 @@ permissions answer, not a bug. The Overview read is the exception, because its
 
 Every one of those methods is wrapped in try/catch, so one refusal costs one panel
 rather than the dashboard. The same principle runs through the rest of the
-[monitoring surface](/features): what a panel shows is bounded by what the engine
+[monitoring surface](/features/): what a panel shows is bounded by what the engine
 reports.
 
 ## Why the MongoDB slow query log, system.profile, is empty by default
@@ -82,7 +82,7 @@ editor here parses a JSON command object and only that:
 
 A statement beginning `db.` cannot be executed through this provider at all. That
 is the same boundary the engine grid states on
-[the databases page](/databases) - queries here are MongoDB queries, with no SQL
+[the databases page](/databases/) - queries here are MongoDB queries, with no SQL
 translation layer faked over them - and it cuts the other way too: mongosh syntax
 is not the language the editor accepts either.
 

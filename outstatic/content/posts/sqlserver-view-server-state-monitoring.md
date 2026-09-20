@@ -59,7 +59,7 @@ other engines here are filled differently.
 
 **Blocking is measured, not defaulted.** The active-sessions panel derives its
 `blocked` flag from `blocking_session_id > 0` in `sys.dm_exec_requests`. This is
-the only provider in the product that does. The PostgreSQL, MySQL and Oracle
+the only provider in the product that does. The [PostgreSQL](/blog/engine/postgresql/), [MySQL](/blog/engine/mysql/) and [Oracle](/blog/engine/oracle/)
 providers report `blocked: false` for every session. A `false` there is a
 placeholder; here it is an answer, and the session id it points at is the one
 you would pass to a kill.
@@ -75,7 +75,7 @@ lookups are all zero is an index nothing has touched since that reset.
 
 Who is blocking whom, and which indexes are earning their maintenance cost, are
 both readings rather than defaults here, which is why this is the widest read
-surface of any provider in the [capability set](/features).
+surface of any provider in the [capability set](/features/).
 
 ## The one grant everything is behind
 
@@ -114,7 +114,7 @@ DMVs are restricted by the platform, and `sys.dm_exec_sessions` there wants
 misconfigured in that case; the panels are simply empty for the same reason.
 Granting server-state to a reporting login is a real privilege decision, and it
 belongs in the same conversation as the rest of the
-[deployment boundaries](/security) rather than being handed out to make a chart
+[deployment boundaries](/security/) rather than being handed out to make a chart
 render.
 
 ## Why performance metrics stop at a single figure

@@ -141,7 +141,7 @@ an interval someone marked unused.
 Two things this cannot become. There is no query log to consult afterwards - Druid
 keeps none, in no system table, at no endpoint, in no file - so the failed statement
 leaves no trace to read later. And an agent cannot go and look for you: agent AUTO mode
-runs only on PostgreSQL, SQLite and DuckDB, because the read-only profile it needs is
+runs only on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/), because the read-only profile it needs is
 database-native, and on a Druid connection an auto run ends `engine-unsupported`. PLAN
 mode opens on the connection and will draft the `sys.servers` statement, toolless, for
 a human to run.

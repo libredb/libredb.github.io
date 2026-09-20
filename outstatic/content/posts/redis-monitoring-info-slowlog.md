@@ -55,7 +55,7 @@ sessions show. It is the parser's fallback, not a login.
 
 The queries panel's empty state says what is empty: Redis lists what `SLOWLOG`
 holds, and nothing has yet run slower than `slowlog-log-slower-than`. That
-sentence used to be PostgreSQL's advice about `pg_stat_statements` on every
+sentence used to be [PostgreSQL](/blog/engine/postgresql/)'s advice about `pg_stat_statements` on every
 engine, which is worse than no sentence, because it sends the reader to look for
 an extension that does not exist here.
 
@@ -100,11 +100,11 @@ and `user:456` collapse into a row called `user:*`. That row is this server's ow
 summary of a bounded scan. It is not a key any command can be given, and it has
 no statistics of its own to report, because Redis does not keep any.
 
-The stated limit on [the monitoring feature](/features) is that what each panel
+The stated limit on [the monitoring feature](/features/) is that what each panel
 can show is bounded by what the engine reports, and Redis is that sentence at its
 plainest: the tab renders the list the provider returned, and the list is empty,
 so nothing fills it with plausible zeros. The engine's line on [the databases
-page](/databases) makes the same point one level up: no SQL, and none is
+page](/databases/) makes the same point one level up: no SQL, and none is
 pretended.
 
 ## Degrading under a restricted ACL instead of breaking

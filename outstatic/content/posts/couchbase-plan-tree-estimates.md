@@ -75,7 +75,7 @@ comparing two plans would be comparing two truncations.
 either shape - an array of operators or a single operator - before walking into
 it. The rendered result is the same `{ kind: "tree" }` model every other engine's
 plan renders into, which is why the Explain panel looks the same here as it does
-elsewhere in [the interface](/features) while the parsing underneath is
+elsewhere in [the interface](/features/) while the parsing underneath is
 engine-specific.
 
 ## Why there is no analyze form to compare with
@@ -146,5 +146,5 @@ empty rather than zeroed.
 Couchbase states the missing case explicitly, with `-1`, rather than leaving the
 field out. The work on this side was to keep that statement intact instead of
 rendering it as a number. What each engine does and does not do here is published
-per engine on [the databases page](/databases), beside its transport and its
+per engine on [the databases page](/databases/), beside its transport and its
 default port.

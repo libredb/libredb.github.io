@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { site } from '../../lib/site';
+import { pagePath, site } from '../../lib/site';
 
 /**
  * The guide is a single self-contained file per release, not a versioned doc
@@ -28,6 +28,7 @@ const schema = [
       'A single-file installation guide for LibreDB Studio: 22 install routes, a walkthrough of the application, every setting, in 13 languages.',
     url: `${site.url}/helper/`,
     about: { '@type': 'SoftwareApplication', name: site.name, applicationCategory: 'DeveloperApplication' },
+    author: { '@type': 'Organization', name: site.shortName },
     publisher: { '@id': `${site.url}/#organization` },
   },
 ];
@@ -99,8 +100,8 @@ const schema = [
       </section>
 
       <p class="guide__more">
-        Installing rather than reading? <a href="/get-started">Get started</a> has the short path, and the provider documentation
-        lives in the repository.
+        Installing rather than reading? <a href={pagePath('/get-started')}>Get started</a> has the short path, and the provider
+        documentation lives in the repository.
         <a href={site.links.docs} target="_blank" rel="noreferrer">Read the docs ↗</a>
       </p>
     </div>

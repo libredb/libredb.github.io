@@ -155,8 +155,8 @@ and secondary-index statistics are absent from the engine's model, not from this
 integration, and no amount of work here produces them.
 
 That distinction is why the empty states are published rather than left for a
-reader to infer. Each page in the [engine reference](/databases) carries what is
+reader to infer. Each page in the [engine reference](/databases/) carries what is
 deliberately absent next to the transport and the port, and the
-[monitoring surface](/features) declares which tabs an engine can fill before
+[monitoring surface](/features/) declares which tabs an engine can fill before
 rendering any of them. A blank panel and a broken panel look identical on
 screen; the text beside them is the only thing that separates the two.

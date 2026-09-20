@@ -449,45 +449,45 @@ export const footer = {
     {
       title: 'Product',
       links: [
-        { label: 'Features', href: '/features' },
-        { label: 'Databases', href: '/databases' },
-        { label: 'How it compares', href: '/compare' },
-        { label: 'Playground', href: '/playground' },
+        { label: 'Features', href: '/features/' },
+        { label: 'Databases', href: '/databases/' },
+        { label: 'How it compares', href: '/compare/' },
+        { label: 'Playground', href: '/playground/' },
         { label: 'Live demo', href: 'https://app.libredb.org' },
       ],
     },
     {
       title: 'Deploy',
       links: [
-        { label: 'Docker Compose', href: '/docker-compose' },
-        { label: 'Every channel', href: '/deploy' },
-        { label: 'Get started', href: '/get-started' },
+        { label: 'Docker Compose', href: '/docker-compose/' },
+        { label: 'Every channel', href: '/deploy/' },
+        { label: 'Get started', href: '/get-started/' },
         { label: 'Documentation', href: `${gh}/tree/main/docs` },
       ],
     },
     {
       title: 'Company',
       links: [
-        { label: 'Open source', href: '/open-source' },
-        { label: 'Supporters', href: '/supporters' },
-        { label: 'Security model', href: '/security' },
+        { label: 'Open source', href: '/open-source/' },
+        { label: 'Supporters', href: '/supporters/' },
+        { label: 'Security model', href: '/security/' },
         // The label is fixed, not chosen: the SignPath Foundation terms require
         // the term "Code signing policy" to appear on the project's home page,
         // as a section header or a link. This is that link, and the footer is on
         // every page, so the download page carries it too.
-        { label: 'Code signing policy', href: '/code-signing-policy' },
-        { label: 'Vendor support', href: '/support' },
-        { label: 'LibreDB Platform', href: '/platform' },
-        { label: 'Privacy', href: '/privacy-policy' },
+        { label: 'Code signing policy', href: '/code-signing-policy/' },
+        { label: 'Vendor support', href: '/support/' },
+        { label: 'LibreDB Platform', href: '/platform/' },
+        { label: 'Privacy', href: '/privacy-policy/' },
       ],
     },
     {
       title: 'Projects',
       links: [
         { label: 'LibreDB Studio', href: gh },
-        { label: 'LibreDB database', href: '/libredb-database' },
-        { label: 'Blog', href: '/blog' },
-        { label: 'FAQ', href: '/faq' },
+        { label: 'LibreDB database', href: '/libredb-database/' },
+        { label: 'Blog', href: '/blog/' },
+        { label: 'FAQ', href: '/faq/' },
       ],
     },
   ],

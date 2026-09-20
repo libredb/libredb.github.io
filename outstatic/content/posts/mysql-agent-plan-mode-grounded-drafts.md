@@ -30,9 +30,9 @@ So an AI SQL assistant for MySQL, in this product, is a plan-mode run.
 Agent mode's guarantee is not "the model was told to be careful". It is that every
 statement the run issues goes through an audited pipeline - a policy decision, an
 audit event and budget accounting before the driver is touched - under a read-only
-profile the *database* enforces: a read-only transaction on PostgreSQL,
-`PRAGMA query_only` re-asserted per statement on SQLite, a `READ_ONLY` engine
-handle plus an SQL-level guard on DuckDB.
+profile the *database* enforces: a read-only transaction on [PostgreSQL](/blog/engine/postgresql/),
+`PRAGMA query_only` re-asserted per statement on [SQLite](/blog/engine/sqlite/), a `READ_ONLY` engine
+handle plus an SQL-level guard on [DuckDB](/blog/engine/duckdb/).
 
 MySQL's provider has no equivalent handle to acquire, so the profile cannot be
 established, so the run is refused. A run whose workflow sends statements is
@@ -44,7 +44,7 @@ The alternative would have been to open the run anyway and rely on prompt text a
 statement classification to keep it read-only. That is a guarantee made by the
 layer being guarded, which is the shape of guarantee this project does not ship.
 The controls this project does ship, and the limits they do not cover, are
-[published on the security page](/security) for the same reason.
+[published on the security page](/security/) for the same reason.
 
 One consequence worth stating plainly: MariaDB, Percona Server, TiDB, Vitess and
 the other wire-compatible engines all connect through this same `mysql` provider.
@@ -138,4 +138,4 @@ prompt, a confused model and a mis-scoped objective because it is structural
 rather than behavioural. A plan-mode draft is also worth less than a completed
 investigation: it is a statement, not a finding. Which side of that trade you want
 is not a choice this engine offers, and the refusal is printed on MySQL's own row
-in the [engine list](/databases) rather than discovered when a run fails.
+in the [engine list](/databases/) rather than discovered when a run fails.

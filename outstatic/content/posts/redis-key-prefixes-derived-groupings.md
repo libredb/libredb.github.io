@@ -19,7 +19,7 @@ Open a Redis connection and the schema tree fills with rows that look like table
 `user:*`, `session:*`, `queue:*`, each with a key count beside it. They are not tables.
 A Redis key prefix browser has to scan keys rather than list them, and what comes back
 is a summary computed from the slice the scan reached. Right-click one of those rows
-and the menu is shorter than it is on PostgreSQL. That is the same fact, showing up
+and the menu is shorter than it is on [PostgreSQL](/blog/engine/postgresql/). That is the same fact, showing up
 where you can see it.
 
 ## How the Redis key prefix browser builds a row
@@ -89,7 +89,7 @@ keyspace; the command line is not bounded by that cap.
 
 The provider declares `tablesAreDerivedGroupings: true`. The interface reads that flag
 and removes controls rather than letting them fail, which is the [capability rule the
-interface follows](/features): a control that cannot work is absent, with its reason,
+interface follows](/features/): a control that cannot work is absent, with its reason,
 instead of present and broken.
 
 Four schema-explorer actions are missing on Redis, all for one reason.
@@ -119,7 +119,7 @@ The same sentence travels into the agent layer. Plan mode opens on a Redis conne
 it is toolless and executes nothing - and its grounding rules carry one line saying the
 inventory rows are groupings derived from a bounded scan, so a plan does not draft a
 command against `user:*`. Agent AUTO mode does not run here at all: the read-only
-profile is database-native and only PostgreSQL, SQLite and DuckDB implement it, so an
+profile is database-native and only PostgreSQL, [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) implement it, so an
 auto run on Redis ends `engine-unsupported`.
 
 ## Scan Keys is one iteration, not a listing
@@ -145,6 +145,6 @@ mixed, it emits `TYPE <key>` instead of guessing, because a wrong reader -
 are escaped in the `MATCH` half of a `SCAN` and nowhere else, since a key argument
 containing a literal `*` is a real key name.
 
-The [engine page for Redis](/databases) states the top half of this before you connect:
+The [engine page for Redis](/databases/) states the top half of this before you connect:
 no SQL, and none is pretended. The prefix rows are the bottom half - no tables either,
 and the rows that stand in for them are labelled as the groupings they are.

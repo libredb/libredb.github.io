@@ -31,7 +31,7 @@ in the Docker image.
 The SQL endpoint is first-party and available on the basic tier with no plugin to
 install, which is why it is the query surface here rather than the DSL. ES|QL
 exists on this product and works on basic - measured - and is deliberately unused:
-one implementation serves both `elasticsearch` and `opensearch`, and OpenSearch
+one implementation serves both `elasticsearch` and `opensearch`, and [OpenSearch](/blog/engine/opensearch/)
 has no ES|QL at all.
 
 The schema does not come from that endpoint at all. Indices are read from `GET
@@ -73,7 +73,7 @@ and `declaresForeignKeys` is `false` - the empty list means "impossible here", n
 "none declared". And no column is ever marked primary: nothing a mapping
 declares is unique, and `_id` is not even selectable (`SELECT _id FROM
 probe_orders` answers "Unknown column [_id], did you mean [id]?"). The absent ER
-diagram is published on [the engine grid](/databases).
+diagram is published on [the engine grid](/databases/).
 
 ## Why a second page is refused rather than approximated
 
@@ -142,11 +142,11 @@ not a restraint the integration applies, and it invites the conclusion that the
 tool-using agent is safe to run here. It is not.
 
 Agent AUTO mode requires a read-only mode the database itself enforces per
-statement: a read-only transaction on PostgreSQL, `PRAGMA query_only` re-asserted
-per statement on SQLite, a `READ_ONLY` handle plus an SQL guard on DuckDB.
+statement: a read-only transaction on [PostgreSQL](/blog/engine/postgresql/), `PRAGMA query_only` re-asserted
+per statement on [SQLite](/blog/engine/sqlite/), a `READ_ONLY` handle plus an SQL guard on DuckDB.
 `queryReadOnly` exists on exactly those three providers. The search providers
 implement none of it, so an AUTO run on this connection ends `engine-unsupported`
-- the same answer given on [the agent's own feature entry](/features).
+- the same answer given on [the agent's own feature entry](/features/).
 
 "This grammar has no INSERT" and "the database refused to let this statement
 write" are different guarantees. The first is a claim about a parser at the time

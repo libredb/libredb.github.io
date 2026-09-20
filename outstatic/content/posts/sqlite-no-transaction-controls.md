@@ -16,7 +16,7 @@ publishedAt: 2026-03-17T09:00:00.000Z
 ---
 
 Open a SQLite connection in Studio and the editor toolbar is missing a group of
-buttons you will find on the PostgreSQL connection next to it. There is no BEGIN,
+buttons you will find on the [PostgreSQL](/blog/engine/postgresql/) connection next to it. There is no BEGIN,
 no COMMIT, no ROLLBACK, and no SANDBOX toggle. The reason is not that SQLite
 lacks transactions. SQLite has `BEGIN`. The provider does not have a session to
 run it in.
@@ -84,7 +84,7 @@ broken. The flag describes the provider's surface, not the engine's grammar -
 that distinction is written into the capability table in the provider doc,
 because the two are genuinely different claims and conflating them would make the
 flag a lie about SQLite. This is the same rule the rest of the interface follows:
-a control that cannot work is [absent with its reason published](/features),
+a control that cannot work is [absent with its reason published](/features/),
 not disabled and not silently missing.
 
 ## The cancel path that does not exist either
@@ -133,7 +133,7 @@ what the engine said and stops there. Inline row editing works, because
 full-table read in a scratch tab comes back bounded.
 
 Agent AUTO mode runs here. SQLite is one of the three engines where it does -
-PostgreSQL and DuckDB are the others, because those three are the providers that
+PostgreSQL and [DuckDB](/blog/engine/duckdb/) are the others, because those three are the providers that
 implement `queryReadOnly`; on any other engine an auto run ends
 `engine-unsupported`, and PLAN mode, which is toolless and executes nothing,
 opens everywhere. AUTO mode reaches the missing session from a different
@@ -151,4 +151,4 @@ the ones the file model already offers: point the connection at a copy of the
 file, or at `:memory:` for a scratch database that is discarded on disconnect.
 Neither is a rollback. Saying so is cheaper than a button that answers 400. The
 per-engine capability lines, including this one, are published on the
-[engine pages](/databases) rather than discovered at runtime.
+[engine pages](/databases/) rather than discovered at runtime.

@@ -137,7 +137,7 @@ connect time with a file error that reads like a permissions problem.
 
 The SSL / TLS panel holds PEM **text**, not a path. Paste the certificate
 contents - `caCert`, `clientCert` and `clientKey` map onto `pg`'s `ca`, `cert`
-and `key`. [The security page](/security) states the same boundary alongside the
+and `key`. [The security page](/security/) states the same boundary alongside the
 others this build publishes.
 
 ## Setting a verified TLS mode by hand
@@ -174,5 +174,5 @@ every managed provider on a custom domain.
 The shortest correct habit: after pasting a URL, open the SSL / TLS panel and
 read the mode. A mode you chose is the mode you get. A mode you did not choose -
 including the Disable the form opens on - hands the decision to a host-name match
-that encrypts without checking who answered. The [engine reference](/databases)
+that encrypts without checking who answered. The [engine reference](/databases/)
 carries the rest of the PostgreSQL provider's transport detail.

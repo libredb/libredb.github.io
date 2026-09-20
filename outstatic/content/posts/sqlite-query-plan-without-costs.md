@@ -131,12 +131,12 @@ rather than its arithmetic.
 Timing is a separate absence with the same shape. SQLite keeps no statistics about
 finished statements: `getSlowQueries()` returns an empty list unconditionally, and
 the monitoring panel's empty state says so in those words rather than repeating
-PostgreSQL's advice about enabling an extension that does not exist here. Per-index
+[PostgreSQL](/blog/engine/postgresql/)'s advice about enabling an extension that does not exist here. Per-index
 usage counts are the same story - index `scans` is always `0`, because there is no
 usage counter to read.
 
 This is what the engine grid means when the SQLite row on
-[the databases page](/databases) says there is no server to monitor. The absences
+[the databases page](/databases/) says there is no server to monitor. The absences
 all come from one fact: an embedded engine with a single file and no server process
 keeps no runtime accounting for anyone to query.
 
@@ -152,14 +152,14 @@ The plan answers structure. For the rest, go to a surface that measures somethin
   are not available here, so the decision is made from plans and definitions, not
   from a hit counter.
 - **"What should I change?"** Agent mode's auto run works on SQLite, one of the
-  three engines it runs on at all, with PostgreSQL and DuckDB. It reads through a
+  three engines it runs on at all, with PostgreSQL and [DuckDB](/blog/engine/duckdb/). It reads through a
   read-only profile: a
   second, physically separate handle to the same file, with `PRAGMA query_only` set
   and verified again before every statement. It takes the catalog out of
   `sqlite_master` rather than the pragma table-valued functions the statement guard
   refuses, and composes a report whose every claim cites the result it came from.
   The statements it drafts for you, it does not run - the handle it holds refuses
-  writes. The rest is on [the features page](/features).
+  writes. The rest is on [the features page](/features/).
 - **"Have the statistics gone stale?"** Run `ANALYZE`. It is in the maintenance
   toolkit, which is admin-only, and on SQLite it is offered per table as well as for
   the whole database. It will not add numbers to the plan tree. It will change which

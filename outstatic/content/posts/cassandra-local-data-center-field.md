@@ -30,7 +30,7 @@ sits, and why there is no box to paste a URL into.
 ## The four fields, and the fifth one
 
 Host, port, user and password are the four fields most connection forms open on. Cassandra
-needs a fifth, and no other engine in [the supported list](/databases) requires it.
+needs a fifth, and no other engine in [the supported list](/databases/) requires it.
 
 | Field | Required | What it is |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ supplying them to an open server connects fine. So on a first local node, the tw
 user expects to be mandatory are not, and the one they have never seen before is.
 
 The form puts `localDataCenter` in the open rather than behind the Advanced accordion that
-holds Oracle's service name. That placement is not a style call. Advanced is where optional
+holds [Oracle](/blog/engine/oracle/)'s service name. That placement is not a style call. Advanced is where optional
 things go, and a hidden mandatory field is a connection nobody can open: the reader would fill
 in everything visible, press Connect, and be told about a field they were never shown. It is
 also classified `public` in `connection-secrets.ts` rather than as a secret, because a data
@@ -111,7 +111,7 @@ Everything here was measured against Apache Cassandra 5.0.9, the official image,
 ## The keyspace is pinned at connect time
 
 The fourth field deserves the same attention, because it fails at the same moment. The
-connection's `database` field pins exactly one keyspace for the session, the way a PostgreSQL
+connection's `database` field pins exactly one keyspace for the session, the way a [PostgreSQL](/blog/engine/postgresql/)
 connection pins a database.
 
 A keyspace that does not exist fails the **connect**, not the first statement:

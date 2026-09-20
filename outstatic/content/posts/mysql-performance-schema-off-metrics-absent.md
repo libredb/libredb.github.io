@@ -149,8 +149,8 @@ sentence for every empty list, whatever produced it, because the one cause a rea
 would guess - instrumentation off - is the cause that never reaches the error path.
 Guessing there would be the same defect one level up.
 
-The [monitoring surface](/features) is bounded by what each engine's own reporting
+The [monitoring surface](/features/) is bounded by what each engine's own reporting
 interface publishes, and that boundary differs from engine to engine. What each one
-does and does not answer is published on the [engine pages](/databases) next to its
+does and does not answer is published on the [engine pages](/databases/) next to its
 transport and default port, so you can check before you build a runbook on a figure
 that turns out to be a cardinality estimate.

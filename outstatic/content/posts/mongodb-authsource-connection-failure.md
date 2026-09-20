@@ -165,7 +165,7 @@ be run here - because a plan run on 2026-08-22 drafted
 Plan mode is the only agent mode this connection has. It is toolless, it runs
 nothing, and it drafts a statement for a person to run; the metered auto run ends
 `engine-unsupported` here, because the read-only execution profile it needs is
-database-native and exists only on PostgreSQL, SQLite and DuckDB.
+database-native and exists only on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/).
 
 A `find` with no explicit limit returns at most 100 documents, so a first query
 that looks suspiciously round is not a truncation bug. The collection list is
@@ -175,5 +175,5 @@ catalog, which is worth remembering the first time a field you know exists is
 missing from the tree.
 
 The engine's published limits, transport and default port are listed on the
-[databases page](/databases), and the connection dialog itself is the first
-thing covered in [getting started](/get-started).
+[databases page](/databases/), and the connection dialog itself is the first
+thing covered in [getting started](/get-started/).

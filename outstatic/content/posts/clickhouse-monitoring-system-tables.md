@@ -62,7 +62,7 @@ The Queries panel does not list executions. It lists statement shapes.
 `system.query_log` is filtered to `type = 'QueryFinish'` and grouped by
 `normalized_query_hash`, so one row is one statement shape with its call count and
 its minimum, maximum and average duration. That is the same grouping
-`pg_stat_statements` performs on PostgreSQL, and it is the grouping that makes the
+`pg_stat_statements` performs on [PostgreSQL](/blog/engine/postgresql/), and it is the grouping that makes the
 panel readable: a dashboard query fired ten thousand times with the same literals
 substituted is one row worth reading, not ten thousand rows worth scrolling.
 
@@ -126,7 +126,7 @@ finding of this provider, not general folklore.
 The practical shape of a restricted user, then: the schema tree and the overview
 survive, and only the panels and maintenance operations that need their own grant
 go quiet. Which panel went quiet tells you which grant is missing. It is the same
-rule the [engine list](/databases) states — a control that cannot work is hidden,
+rule the [engine list](/databases/) states — a control that cannot work is hidden,
 not offered and then failed — applied to a surface that degrades panel by panel
 rather than all at once.
 
@@ -155,5 +155,5 @@ them correctly:
 Storage numbers here are as good as `system.parts` and `system.disks` are, and no
 better. The panel reports the engine's own catalog, and where the catalog is silent
 it says zero or unknown rather than filling the gap. Each engine's published
-boundary sits on the [engine list](/databases) next to its transport and default
+boundary sits on the [engine list](/databases/) next to its transport and default
 port, so it is readable before you connect rather than after.

@@ -91,7 +91,7 @@ an open question on the backlog rather than a settled one.
 
 `buildTLSOptions()` turns `connection.ssl` into the single `tls` object ioredis
 hands to Node's `tls.connect`, so the material travels under Node's own names -
-the same mapping the PostgreSQL, MySQL and Couchbase adapters use.
+the same mapping the [PostgreSQL](/blog/engine/postgresql/), [MySQL](/blog/engine/mysql/) and [Couchbase](/blog/engine/couchbase/) adapters use.
 
 | `ssl.mode` | `tls` option |
 |---|---|
@@ -174,7 +174,7 @@ only a single standalone node is supported. What is published is the mapping fro
 scheme to mode to driver option, measured against a local TLS-only node, and the
 rule that a `rediss://` paste selects `require` rather than a verifying mode. The
 boundaries this product publishes about itself are collected on
-[the security page](/security).
+[the security page](/security/).
 
 If you need the chain checked, pick the mode. The URL will not pick it for you,
 and it should not.

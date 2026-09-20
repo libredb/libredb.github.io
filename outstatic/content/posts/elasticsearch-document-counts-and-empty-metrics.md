@@ -146,13 +146,13 @@ The inverse encoding appears on the same screen and is also correct: `maxConnect
 reads a zero maximum as "no limit published" rather than dividing by it.
 
 None of this is specific to search engines. It is the rule the whole [capability
-model](/features) runs on: a figure that cannot be answered on the connected engine is
+model](/features/) runs on: a figure that cannot be answered on the connected engine is
 absent with the reason written where it would have been, not rendered as a confident
-zero. The [engine pages](/databases) publish those boundaries before you connect.
+zero. The [engine pages](/databases/) publish those boundaries before you connect.
 
 Two more, in the same spirit. The SQL surface here has no writes of any kind, so row
 editing is not offered and then failed. And Agent AUTO mode does not run on this
 connection: the tool-using run needs a database-native read-only profile, which
-exists on PostgreSQL, SQLite and DuckDB only, so an auto run here ends
+exists on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, so an auto run here ends
 `engine-unsupported`. Agent PLAN mode does open, toolless, and drafts a statement for
 you to run yourself.

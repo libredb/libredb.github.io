@@ -98,7 +98,7 @@ means that path on the machine running Studio, always.
 So SQLite as a target fits self-hosted installs, Docker, local development, edge
 deployments and zero-configuration trials, where the file already sits beside
 the app. It is not a multi-tenant SaaS target, and the
-[engine list](/databases) is where to look if the database you need to reach is
+[engine list](/databases/) is where to look if the database you need to reach is
 somewhere else.
 
 There is a second consequence for shared instances, and it is not a corner case.
@@ -135,14 +135,14 @@ that actually holds.
 The connection form is not where you ask for read-only. `connect()` opens the
 file `readwrite` and sets `journal_mode = WAL`, which is itself a write. The
 read-only handle belongs to agent mode instead. SQLite is one of the three
-engines - with PostgreSQL and DuckDB - where an agent run executes statements at
+engines - with [PostgreSQL](/blog/engine/postgresql/) and [DuckDB](/blog/engine/duckdb/) - where an agent run executes statements at
 all, and its execution profile opens a second, physically separate handle to the
 same file with the driver's read-only flag, then sets and verifies
 `PRAGMA query_only` at open and before every statement, because a read-only open
 alone reads `query_only` back as 0. Plan mode opens on every connection, is
 toolless, and drafts statements for you to run yourself. Each packaged channel
 puts its data directory in a different place, so check the
-[deployment channels](/deploy) for the one you use.
+[deployment channels](/deploy/) for the one you use.
 
 ## In-memory databases, and what they are for
 

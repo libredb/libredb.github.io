@@ -6,6 +6,9 @@ import { site } from '../lib/site';
 const schema = [
   {
     '@type': 'TechArticle',
+    // Same organisation authorship the posts declare; an Article without one
+    // is incomplete to Google and ambiguous to a reader.
+    author: { '@type': 'Organization', name: site.name },
     headline: `${site.name} security model`,
     description: 'What LibreDB Studio enforces, where it enforces it, and where those guarantees end.',
     url: `${site.url}/security`,
@@ -92,7 +95,7 @@ const schema = [
           <a href={disclosure.href} target="_blank" rel="noreferrer">Read the security policy ↗</a>
         </p>
         <p class="doc__fine">
-          Who supports this software, on which versions, and for how long: <a href="/support">vendor support →</a>
+          Who supports this software, on which versions, and for how long: <a href="/support/">vendor support →</a>
         </p>
       </section>
     </div>

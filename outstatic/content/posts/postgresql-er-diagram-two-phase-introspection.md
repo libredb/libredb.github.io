@@ -125,7 +125,7 @@ shown schema-qualified, and referenced tables follow the same rule so a
 cross-schema key points somewhere legible.
 
 The consequence is the one stated on the [ER diagram feature
-page](/features): a relationship your application enforces in code and never
+page](/features/): a relationship your application enforces in code and never
 declares in the schema has nothing to discover. If `orders.customer_id` is an
 `integer` with no constraint on it, the schema has not said that it references
 anything, and the graph is built from what the schema says.

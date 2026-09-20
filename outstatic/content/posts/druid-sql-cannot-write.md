@@ -68,10 +68,10 @@ parser will reject. `supportsTransactions` is `false`, so the transaction contro
 withheld rather than answering HTTP 400, since a language with no DML gives a transaction
 nothing to hold.
 
-This is the rule the whole [capability model](/features) runs on, applied to the engine
+This is the rule the whole [capability model](/features/) runs on, applied to the engine
 where it bites hardest: a control that cannot work is absent, with the reason written
 where it would have been, rather than present and failing on the server's time. The
-[engine page for Druid](/databases) publishes the same line next to its transport and
+[engine page for Druid](/databases/) publishes the same line next to its transport and
 default port, so it is readable before a connection is made rather than after.
 
 ## The refusals, quoted as the cluster wrote them

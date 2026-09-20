@@ -23,7 +23,7 @@ outcome and the error detail, and it is readable by admins only.
 
 That is a smaller claim than a server-side audit extension makes, and it is
 deliberately a different one. The trail is application-level and
-engine-independent: the same record shape on PostgreSQL as on Redis, because it is
+engine-independent: the same record shape on PostgreSQL as on [Redis](/blog/engine/redis/), because it is
 written by the application, not by the engine.
 
 ## What the trail records, statement by statement
@@ -95,7 +95,7 @@ reach the stdout channel: its body is client-supplied, and giving it the
 authoritative channel would let an admin session forge an indistinguishable log
 line. Authoritative events are emitted as one structured JSON line on stdout, into
 whatever already collects your container logs. The rest of the control set is on
-[the security page](/security), stated with its gaps.
+[the security page](/security/), stated with its gaps.
 
 ## Application history is not a database audit extension
 
@@ -149,7 +149,7 @@ with `PROFILE_PRIVILEGES_TOO_BROAD` unless superuser and membership of
 `pg_read_server_files`, `pg_write_server_files` and `pg_execute_server_program`
 all read back false. PLAN mode opens on every connection, is handed no tools, and
 executes nothing, so it produces no execution events to audit. The rest of that
-boundary is on [the features page](/features).
+boundary is on [the features page](/features/).
 
 ## Using it as change evidence, and where that stops
 

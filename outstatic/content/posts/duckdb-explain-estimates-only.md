@@ -86,7 +86,7 @@ So the Explain action turns the analyze form off for DuckDB rather than
 sending it and post-processing whatever comes back. There is no timing data to
 show, and none is fabricated. A control that cannot work is absent with its
 reason written where it would have been, which is the same rule the rest of
-[the capability model](/features) runs on.
+[the capability model](/features/) runs on.
 
 ## Why a later release makes this worse, not better
 
@@ -167,4 +167,4 @@ which matters more than usual on an engine with no session to `KILL` from a seco
 connection.
 
 The full set of what DuckDB answers and what it declines is on
-[its engine page](/databases).
+[its engine page](/databases/).

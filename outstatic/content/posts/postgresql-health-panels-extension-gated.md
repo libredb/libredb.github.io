@@ -130,8 +130,8 @@ statement about the code, not about your locks.
 
 That last one is the sharpest example of why the distinction matters. A `false` you
 believe is worse than a panel you know is missing, and it is the reason the [monitoring
-surface](/features) reports absences as absences. PostgreSQL is the engine where
-[nothing is held back](/databases) in feature coverage, and it is still an engine whose
+surface](/features/) reports absences as absences. PostgreSQL is the engine where
+[nothing is held back](/databases/) in feature coverage, and it is still an engine whose
 health surface depends in places on an extension, a grant or a major version. Those are
 two compatible facts, and publishing both is cheaper than explaining one of them during
 an incident.

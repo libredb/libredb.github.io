@@ -95,7 +95,7 @@ Two counts in the schema read the same way. Foreign keys are always `[]` and
 `declaresForeignKeys` is `false`, so the empty list means impossible here rather
 than none declared. `indexCount` is 0 and stays 0, because every mapped field is
 inverted-indexed as a property of being mapped, so there is no index object to
-name. The [engine list](/databases) states the short version: no row editing, no
+name. The [engine list](/databases/) states the short version: no row editing, no
 ER diagrams.
 
 ## There is no connection string either
@@ -108,7 +108,7 @@ and port; the official client takes a `node` URL, which is not a
 credential-carrying DSN a shared parser could round-trip.
 
 And `http://` and `https://` are already claimed in the shared connection-string
-parser, where an HTTP URL is the canonical connection target for ClickHouse.
+parser, where an HTTP URL is the canonical connection target for [ClickHouse](/blog/engine/clickhouse/).
 Pasting `http://localhost:9200` therefore selects ClickHouse. That consequence is
 recorded rather than hidden: `connection-string-parser.ts` is not touched by this
 provider, and the connection form's unparseable-string message lists the schemes
@@ -162,7 +162,7 @@ are listed as deliberately absent rather than assumed to work, so treat those
 three as untested rather than supported.
 
 Agent AUTO mode - the tool-using run - does not open on this connection at all.
-`queryReadOnly` exists on exactly three providers, PostgreSQL, SQLite and DuckDB,
+`queryReadOnly` exists on exactly three providers, [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and DuckDB,
 because there the read-only profile is enforced by the database itself; the
 search providers implement none, so an AUTO run ends `engine-unsupported`. The
 fact that this grammar cannot write - `INSERT`, `UPDATE`, `DELETE`, `CREATE

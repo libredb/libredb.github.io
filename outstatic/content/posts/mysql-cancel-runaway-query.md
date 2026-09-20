@@ -25,7 +25,7 @@ here you press Cancel, and that press sends one statement to one connection.
 The MySQL provider builds a `mysql2` pool and sets only options that pool has:
 `connectionLimit` from the pool `max` (default 10), `waitForConnections`,
 `queueLimit`, `enableKeepAlive`, `keepAliveInitialDelay` and `timezone`. The
-provider's own `queryTimeout` option is not among them. PostgreSQL's provider can
+provider's own `queryTimeout` option is not among them. [PostgreSQL](/blog/engine/postgresql/)'s provider can
 translate that option into `statement_timeout` because `pg` has a place to put it;
 the mysql2 pool has no equivalent, so the value is not translated and no
 server-side bound is applied.
@@ -158,5 +158,5 @@ None of that bounds execution time. A `LIMIT 500` over an unindexed join still
 scans everything before it returns five hundred rows. It bounds the transfer and
 the browser, not the server's work, which is exactly why the cancel path exists
 and why its caveat is published rather than buried. The per-engine capability
-lines on [the engine pages](/databases) and the boundaries listed with each
-[feature](/features) are written the same way, for the same reason.
+lines on [the engine pages](/databases/) and the boundaries listed with each
+[feature](/features/) are written the same way, for the same reason.

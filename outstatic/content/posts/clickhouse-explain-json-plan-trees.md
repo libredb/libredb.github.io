@@ -95,7 +95,7 @@ for it - would not narrow the feature, it would switch the feature off: the
 direct Explain action always builds with mode `analyze` and refuses to run when
 the strategy declines, so the button would simply go dead while only the
 background pre-warm still worked. The same call is made for the same reason in
-the SQLite and Couchbase strategies.
+the [SQLite](/blog/engine/sqlite/) and [Couchbase](/blog/engine/couchbase/) strategies.
 
 That flag is a wiring detail, not a capability. There is still no analyze mode
 here: both requests ask for the same estimated plan, and neither of them runs
@@ -114,7 +114,7 @@ SELECT. A pre-warm on a query that would scan a year of events costs the server 
 planning pass and nothing else. Nothing was executed in the background, so nothing
 in the tree is a timing, in either path.
 
-The [plan viewer's published limit](/features) says the same thing from the other
+The [plan viewer's published limit](/features/) says the same thing from the other
 side: plan rendering follows the engine, and nothing in the tree is simulated. What
 the engine did not report is not drawn.
 
@@ -146,11 +146,11 @@ ClickHouse publishes no per-index counter the HTTP interface can reach, and a
 guessed number would be worse than an obvious zero.
 
 One more boundary, since a plan tree is where someone often reaches for the
-model-backed helper. Agent mode reads PostgreSQL, SQLite and DuckDB only,
+model-backed helper. Agent mode reads [PostgreSQL](/blog/engine/postgresql/), SQLite and DuckDB only,
 because the read-only profile is database-native and exists only where a provider
 implements it; on any other engine a run ends engine-unsupported. Plan mode opens
 on every connection - it is toolless, runs nothing, and drafts a statement for you
-to run yourself. On a [ClickHouse connection](/databases) that plan run is grounded
+to run yourself. On a [ClickHouse connection](/databases/) that plan run is grounded
 through the provider's own schema description.
 
 Read the ratios, not the timings. There are no timings.

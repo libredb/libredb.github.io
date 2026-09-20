@@ -28,7 +28,7 @@ and the code path that produces an explain request can only send one.
 ## What a plan flow on Oracle needs
 
 Every engine whose plan LibreDB Studio renders answers the same way: one statement
-in, one result set back. `EXPLAIN (FORMAT JSON) SELECT ...` on PostgreSQL is a
+in, one result set back. `EXPLAIN (FORMAT JSON) SELECT ...` on [PostgreSQL](/blog/engine/postgresql/) is a
 statement whose rows are the plan. The renderer takes those rows and draws nodes.
 
 Oracle does not work like that. The plan is produced by one statement and read by
@@ -55,7 +55,7 @@ the `oracledb` pool, runs `conn.execute(...)`, and returns
 `{ rows, fields, rowCount, executionTime }`. There is no place in that shape for
 "run this, then run that, and give me the rows from the second one".
 
-The builder that composes the explain string handles the PostgreSQL and MySQL
+The builder that composes the explain string handles the PostgreSQL and [MySQL](/blog/engine/mysql/)
 dialects. Oracle is not in it, and adding a case is not a one-line change, because
 the string is the wrong unit. A pair of statements needs a sequencing decision the
 single-statement path never had to make: whether the display call may be sent on a
@@ -93,7 +93,7 @@ So the flag was flipped. **The explain capability is declared false on Oracle an
 the action is hidden, because a real plan flow needs a plan statement followed by a
 display call, which the single-statement explain path cannot express.** That is not
 a note in a changelog. It is the published capability of this engine, and it lines
-up with what [the plan-rendering feature page](/features) states in general form:
+up with what [the plan-rendering feature page](/features/) states in general form:
 where an engine has no plan interface, there is nothing to render. On Oracle the
 interface that is missing is the single-statement one, not the plan facility.
 
@@ -110,7 +110,7 @@ reads `V$SQL` ordered by elapsed time - which is not a plan, but it is the engin
 own account of what has been expensive. Agent plan mode opens here too: it is
 toolless, executes nothing, and drafts a statement for a human to run. Agent auto
 mode does not run on Oracle at all; that is a separate boundary, published on the
-[Oracle engine page](/databases), and it is not what this post is about.
+[Oracle engine page](/databases/), and it is not what this post is about.
 
 And the plan itself is not out of reach. The editor sends what you type, so the two
 statements above run there today, in order, and `DBMS_XPLAN.DISPLAY()` returns the

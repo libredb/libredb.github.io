@@ -1,0 +1,263 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/blog/PostCard.astro';
+import { pagePath, site } from '../../../lib/site';
+import { engineName, postEngine } from '../../../lib/posts';
+import { engines } from '../../../data/engines';
+
+/**
+ * One archive per database engine.
+ *
+ * The blog already groups by engine — nine PostgreSQL posts, eight MySQL — but
+ * the grouping lived in the filename, so a reader who wanted "everything about
+ * Postgres" had to scan a flat list of 104. These pages give that group an
+ * address, and give the engine chip on each post somewhere to point.
+ *
+ * Only engines that actually have posts get a page: an archive listing nothing
+ * is a thin page, and shipping eighteen of them to cover four would be padding.
+ * The threshold is two — one post is the post, not an archive of it.
+ *
+ * PITFALLS B5: getStaticPaths is extracted at build time and sees nothing from
+ * the rest of this frontmatter, so it imports what it needs itself.
+ */
+export const getStaticPaths = (async () => {
+  const { getCollection } = await import('astro:content');
+  const { postEngine } = await import('../../../lib/posts');
+
+  const posts = await getCollection('posts', ({ data }) => data.status === 'published');
+  const byEngine = new Map<string, typeof posts>();
+  for (const post of posts) {
+    const id = postEngine(post.id);
+    if (!id) continue;
+    byEngine.set(id, [...(byEngine.get(id) ?? []), post]);
+  }
+
+  return [...byEngine.entries()]
+    .filter(([, list]) => list.length >= 2)
+    .map(([engine, list]) => ({
+      params: { engine },
+      props: {
+        posts: list.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()),
+      },
+    }));
+}) satisfies GetStaticPaths;
+
+type Props = { posts: Awaited<ReturnType<typeof import('astro:content').getCollection<'posts'>>> };
+const { engine } = Astro.params;
+const { posts } = Astro.props;
+
+const name = engineName(engine!) ?? engine!;
+const engineData = engines.find((e) => e.id === engine);
+
+// Sibling archives, so a reader comparing two engines can cross over without
+// going back to the flat list. Built from what actually shipped, not from the
+// full engine list — an archive that does not exist must not be linked.
+const siblings = (await import('astro:content'))
+  .getCollection('posts', ({ data }) => data.status === 'published')
+  .then((all) => {
+    const counts = new Map<string, number>();
+    for (const p of all) {
+      const id = postEngine(p.id);
+      if (id) counts.set(id, (counts.get(id) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .filter(([id, n]) => n >= 2 && id !== engine)
+      .map(([id]) => ({ id, name: engineName(id) ?? id }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  });
+const others = await siblings;
+
+const description = `Every LibreDB Studio write-up about ${name}: what the provider does, where it stops, and why. ${posts.length} posts.`;
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: `${name} — LibreDB Studio blog`,
+    description,
+    isPartOf: { '@id': `${site.url}/#website` },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: posts.length,
+      itemListElement: posts.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${site.url}${pagePath(`/blog/${p.id}`)}`,
+        name: p.data.title,
+      })),
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${site.url}${pagePath('/')}` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site.url}${pagePath('/blog')}` },
+      { '@type': 'ListItem', position: 3, name, item: `${site.url}${pagePath(`/blog/engine/${engine}`)}` },
+    ],
+  },
+];
+---
+
+<BaseLayout path={`/blog/engine/${engine}`} title={`${name} posts`} description={description} schema={schema}>
+  <section class="earc" aria-labelledby="earc-title">
+    <div class="u-wash earc__wash" aria-hidden="true"></div>
+    <div class="earc__inner u-container">
+      <nav class="earc__crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href={pagePath('/')}>Home</a></li>
+          <li><a href={pagePath('/blog')}>Blog</a></li>
+          <li aria-current="page">{name}</li>
+        </ol>
+      </nav>
+
+      <header class="earc__head">
+        <p class="u-eyebrow">{posts.length} posts</p>
+        <h1 class="earc__title" id="earc-title">
+          Writing on <span class="u-grad-brand">{name}</span>
+        </h1>
+        {
+          engineData && (
+            <p class="earc__intro">
+              {engineData.desc}
+              {engineData.not && <span class="earc__limit"> Where it stops: {engineData.not}</span>}
+            </p>
+          )
+        }
+        <p class="earc__links">
+          <a href={pagePath('/databases')}>{name} support in Studio →</a>
+          <span aria-hidden="true">·</span>
+          <a href={pagePath('/blog')}>All posts</a>
+        </p>
+      </header>
+
+      <div class="earc__grid">
+        {posts.map((post) => <PostCard post={post} hideEngine />)}
+      </div>
+
+      {
+        others.length > 0 && (
+          <nav class="earc__others" aria-label="Other engines">
+            <p class="earc__otherslabel">Other engines</p>
+            <ul>
+              {others.map((o) => (
+                <li>
+                  <a href={pagePath(`/blog/engine/${o.id}`)}>{o.name}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .earc {
+    position: relative;
+    isolation: isolate;
+  }
+  .earc__inner {
+    padding-block: clamp(var(--space-09), 6vh, 72px) clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .earc__crumbs {
+    font: var(--weight-medium) 12.5px / 1 var(--font-mono);
+  }
+  .earc__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-02);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--text-tertiary);
+  }
+  .earc__crumbs li {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+  }
+  .earc__crumbs li + li::before {
+    content: '/';
+    margin-inline-end: var(--space-02);
+    color: var(--border-strong);
+  }
+  .earc__crumbs a {
+    color: var(--text-tertiary);
+  }
+  .earc__crumbs a:hover {
+    color: var(--text-primary);
+  }
+  .earc__crumbs [aria-current='page'] {
+    color: var(--text-secondary);
+  }
+
+  .earc__head {
+    margin-top: var(--space-08);
+    max-width: var(--measure-long);
+  }
+  .earc__title {
+    margin-top: var(--space-03);
+    font: var(--weight-semibold) var(--h1-size) / var(--leading-tight) var(--font-display);
+    letter-spacing: var(--tracking-tight);
+  }
+  .earc__intro {
+    margin-top: var(--space-05);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+  .earc__limit {
+    color: var(--text-tertiary);
+  }
+  .earc__links {
+    margin-top: var(--space-05);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-03);
+    font: var(--weight-medium) 13px / 1 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  .earc__grid {
+    margin-top: clamp(var(--space-09), 6vh, var(--space-11));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+    gap: var(--space-06);
+  }
+
+  .earc__others {
+    margin-top: clamp(var(--space-11), 8vh, var(--space-13));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+  .earc__otherslabel {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .earc__others ul {
+    margin: var(--space-05) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03);
+  }
+  .earc__others a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding-inline: var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    font: var(--weight-medium) 13px / 1 var(--font-mono);
+    color: var(--text-secondary);
+  }
+  .earc__others a:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+</style>

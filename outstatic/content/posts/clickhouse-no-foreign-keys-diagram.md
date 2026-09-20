@@ -27,7 +27,7 @@ different query would have found.
 The diagram in LibreDB Studio is discovered rather than drawn. `getSchema()`
 returns a `foreignKeys` list per table, and each entry becomes one edge, laid out
 hierarchically by ELK.js. That list is the entire input. The [ER diagram
-feature](/features) publishes the consequence beside the claim: a relationship
+feature](/features/) publishes the consequence beside the claim: a relationship
 your application enforces in code but never declares in the schema has nothing to
 discover, and will not appear.
 
@@ -83,7 +83,7 @@ relation list is always empty, because this engine has no foreign-key concept
 anywhere, so the diagram shows structure without discovered relations.** No
 permission fixes it, no DDL adds it, and no reorganisation of your tables turns
 the edges on. It is the published boundary for this engine on the [engine
-matrix](/databases), written next to its transport and default port rather than
+matrix](/databases/), written next to its transport and default port rather than
 discovered at runtime.
 
 ## What the structure map is still worth

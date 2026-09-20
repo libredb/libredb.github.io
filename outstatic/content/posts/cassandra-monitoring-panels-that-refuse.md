@@ -131,7 +131,7 @@ Refusing this much is only defensible if the rest are real reads:
   two microsecond readings. No user, no keyspace, no client address, so user and
   database are reported as `unknown` rather than borrowed from the connected role.
 
-That is the [capability declaration](/features) at work: a control renders from
+That is the [capability declaration](/features/) at work: a control renders from
 what the provider says it can answer.
 
 ## A structural probe instead of matching an error message

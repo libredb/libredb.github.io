@@ -108,7 +108,7 @@ describe('the published page', () => {
     // "Please add the term 'Code signing policy' on your project's home page" —
     // as a section header or a link to a dedicated page. This is the link arm.
     const home = page(HOME);
-    const link = [...home.querySelectorAll('a')].find((a) => a.getAttribute('href') === '/code-signing-policy');
+    const link = [...home.querySelectorAll('a')].find((a) => a.getAttribute('href') === '/code-signing-policy/');
     expect(link, 'no link to /code-signing-policy on the home page').toBeTruthy();
     expect(link?.textContent?.trim().toLowerCase()).toBe('code signing policy');
   });
@@ -130,7 +130,7 @@ describe('the published page', () => {
 
   it('links the privacy policy too, which the terms offer as the alternative', () => {
     const hrefs = [...page(POLICY).querySelectorAll('a')].map((a) => a.getAttribute('href'));
-    expect(hrefs).toContain('/privacy-policy');
+    expect(hrefs).toContain('/privacy-policy/');
   });
 });
 

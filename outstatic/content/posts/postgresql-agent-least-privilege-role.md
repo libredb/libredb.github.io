@@ -123,7 +123,7 @@ something that never covered `COPY ... TO PROGRAM` in the first place. A
 boundary you can talk your way out of inside one statement is not one worth
 shipping under the word read-only.
 
-Agent AUTO mode runs on PostgreSQL, SQLite and DuckDB only, because the
+Agent AUTO mode runs on PostgreSQL, [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, because the
 read-only profile is database-native and exists only where a provider implements
 it. Even on PostgreSQL, a superuser connection is refused with
 `PROFILE_PRIVILEGES_TOO_BROAD`. On every other engine an auto run ends
@@ -176,7 +176,7 @@ Four falses and the role clears the privilege probe. Anything else and the open
 is refused with `PROFILE_PRIVILEGES_TOO_BROAD`, which names the check that
 failed but not which of the four answers tripped it - the query above is how you
 find that out. The rest of what agent mode does - the metering,
-the citation rule, the verdict - is on the [features page](/features); what the
+the citation rule, the verdict - is on the [features page](/features/); what the
 run is allowed to touch and what it records is on the
-[security page](/security); and which engines carry the profile at all is on the
-[engine grid](/databases).
+[security page](/security/); and which engines carry the profile at all is on the
+[engine grid](/databases/).

@@ -42,7 +42,7 @@ The word "server-local" is the load-bearing part. The path is resolved on the
 machine Studio runs on, not on the machine holding the browser. A remote user of a
 hosted deployment cannot point Studio at a file on their own laptop, because there
 is nothing to connect to over a network. That constraint is inherited from the
-engine being embedded, and it is the same one the SQLite provider carries.
+engine being embedded, and it is the same one the [SQLite](/blog/engine/sqlite/) provider carries.
 
 ## What a second process actually gets
 
@@ -110,7 +110,7 @@ balancer will send some requests to the replica that holds the lock and some to 
 one that cannot get it.
 
 Mixed deployments are the case to watch. An instance holding only the networked
-engines on [the engine list](/databases) puts no limit of its own on the replica
+engines on [the engine list](/databases/) puts no limit of its own on the replica
 count. Add one DuckDB connection to it and the whole deployment inherits the
 constraint, because the DuckDB connection lives wherever the replica lives.
 
@@ -125,7 +125,7 @@ a database login. Grant it accordingly.
 Given all of the above, the agent's read-only access looks like it should be
 impossible. It is not, and the reason is exactly the distinction the table draws.
 
-Agent AUTO mode runs on DuckDB, alongside PostgreSQL and SQLite, because the
+Agent AUTO mode runs on DuckDB, alongside [PostgreSQL](/blog/engine/postgresql/) and SQLite, because the
 provider implements a read-only query path. What it opens is a second handle in the
 **same process** as the writer, with two engine options fixed at open time:
 

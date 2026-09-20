@@ -103,14 +103,14 @@ drafted nothing while the user is looking at a statement.
 The label is not a UI string. No screen renders it; it exists only in what the model is
 told, and a provider declares one only where the engine's own name misleads a model about
 what a statement is here. It is one instance of the rule the [capability
-model](/features) is built on: what a provider can and cannot do is declared, not
+model](/features/) is built on: what a provider can and cannot do is declared, not
 discovered at runtime.
 
 ## Why the tool-using run cannot open here at all
 
 **Agent AUTO mode - the tool-using, metered run - cannot run on OpenSearch. A run ends
-`engine-unsupported`.** The read-only execution profile is database-native: only PostgreSQL,
-SQLite and DuckDB implement `queryReadOnly`, and a run whose workflow sends a statement is
+`engine-unsupported`.** The read-only execution profile is database-native: only [PostgreSQL](/blog/engine/postgresql/),
+[SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) implement `queryReadOnly`, and a run whose workflow sends a statement is
 refused when it is started rather than after a model turn has been spent. A run that reaches
 the driver some other way fails profiled acquisition with `PROFILE_UNSUPPORTED_BY_PROVIDER`
 and ends `engine-unsupported`.
@@ -119,7 +119,7 @@ This provider could not implement that profile if it wanted to. The read-only gu
 to be enforced by the engine, and this grammar has no transaction to open read-only and no
 session-scoped setting to make read-only - the surface is one stateless HTTP request per
 statement. An integration-level imitation of read-only would be a promise made by the wrong
-party, which is the argument the [security page](/security) makes about every control it
+party, which is the argument the [security page](/security/) makes about every control it
 publishes.
 
 ## What the person on the other end has to do

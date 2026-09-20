@@ -24,7 +24,7 @@ never reads.
 ## The fixture, the port and the credentials
 
 MySQL reaches LibreDB Studio through `MySQLProvider`, built on `mysql2/promise`,
-extending the same `SQLBaseProvider` the PostgreSQL provider extends. Default port
+extending the same `SQLBaseProvider` the [PostgreSQL](/blog/engine/postgresql/) provider extends. Default port
 3306. Connection strings are supported and passed to the pool as its `uri` option.
 
 The studio repository ships a fixture so there is nothing to guess. The `mysql`
@@ -93,7 +93,7 @@ by service name whether or not anything is published at all.
 
 Every provider funnels its driver's errors through the same shared
 `mapDatabaseError()`, so this mistake reads the same whichever engine you point
-at, which is why it is worth naming once. The [engine pages](/databases) print
+at, which is why it is worth naming once. The [engine pages](/databases/) print
 each engine's transport and default port next to its name for exactly this
 moment.
 
@@ -178,5 +178,5 @@ an estimate of distinct values rather than a usage counter, because MySQL
 publishes no equivalent of `pg_stat_user_indexes.idx_scan`. Both are useful for
 ordering things by size. Neither is a number to quote in a report.
 
-Once the badge is green, [the setup guide](/get-started) covers the rest of the
+Once the badge is green, [the setup guide](/get-started/) covers the rest of the
 first run.

@@ -66,7 +66,7 @@ standing. The default a guard degrades to is `N/A` or `[]` where the shape has
 somewhere to say "not measured" - and, where it does not, nothing at all.
 
 This is the same rule the rest of the product follows for engine capabilities:
-[a control that cannot work](/features) is absent with the reason written where
+[a control that cannot work](/features/) is absent with the reason written where
 it would have been, rather than offered and then failed. Here the reason is a
 grant rather than an engine limit, which makes it more actionable, not less.
 
@@ -147,11 +147,11 @@ Nothing there is required to use the product. A user with only `CREATE SESSION`
 and object privileges gets the editor, the schema tree, the ER diagram, row
 editing, the Tables and Storage panels, and Agent plan mode, which is toolless
 and executes nothing. Agent auto mode is a different question, and no grant
-reaches it: auto runs on PostgreSQL, SQLite and DuckDB only, and an auto run
+reaches it: auto runs on [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, and an auto run
 started against Oracle ends engine-unsupported. The `V$` grants buy
 observability and nothing else.
 
-They are also not free, and the [security page](/security) is the argument for
+They are also not free, and the [security page](/security/) is the argument for
 treating them that way: `V$SESSION` exposes what every other session in the
 instance is running, across schemas the grantee cannot otherwise read. Killing a
 session is a further step again - the operation issues `ALTER SYSTEM KILL

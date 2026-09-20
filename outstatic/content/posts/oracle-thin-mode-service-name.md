@@ -170,7 +170,7 @@ low-privilege user gets a dashboard with gaps rather than a failure. There is no
 Explain action: `supportsExplain` is false until an Oracle dialect wrapper
 exists, and the UI hides the action rather than running the query unchanged.
 Agent AUTO mode does not run here either - it needs a database-native read-only
-profile, which exists for PostgreSQL, SQLite and DuckDB only, so an auto run on
+profile, which exists for [PostgreSQL](/blog/engine/postgresql/), [SQLite](/blog/engine/sqlite/) and [DuckDB](/blog/engine/duckdb/) only, so an auto run on
 Oracle ends engine-unsupported. Plan mode does open on the connection, toolless,
 and drafts a statement for a human to run. The per-engine boundaries are listed
-on the [databases page](/databases).
+on the [databases page](/databases/).

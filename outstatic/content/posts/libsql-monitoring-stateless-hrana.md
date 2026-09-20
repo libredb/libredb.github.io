@@ -21,7 +21,7 @@ engine - uptime, active connections, a cache hit ratio, a slow query log - misse
 almost every line here, and every miss traces back to one protocol decision made above
 the storage layer.
 
-libSQL is SQLite's dialect with a server in front of it. The server is `sqld`, and what
+libSQL is [SQLite](/blog/engine/sqlite/)'s dialect with a server in front of it. The server is `sqld`, and what
 `sqld` speaks is Hrana: a list of requests posted as JSON to `POST /v2/pipeline`, one
 result per request. One type-id, `libsql`, reaches both a self-hosted `sqld` and Turso
 Cloud, because they speak that same protocol and embed the same SQLite - 3.47.0 measured
@@ -69,7 +69,7 @@ because `0 B` next to a table name reads as an empty table.
 lock and refuses a second with `SQLITE_BUSY`, so `0` there is the engine's behaviour
 written down, not a counter that failed to load. That distinction is why what each panel
 can show is bounded by what the engine reports rather than by a shared layout, which is
-the trade [the interface makes on every engine](/features).
+the trade [the interface makes on every engine](/features/).
 
 State the boundary plainly, because it is the shape of this engine and not a defect:
 **uptime is N/A, active connections are absent because each statement is its own

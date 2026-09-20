@@ -45,7 +45,7 @@ the process rather than in a query per table.
 
 The two other shapes in this codebase put the cost somewhere else. A per-table
 loop is N+1: the round-trip count follows the table count. A single stitched
-query is one round trip, which is what the PostgreSQL provider does, but it
+query is one round trip, which is what the [PostgreSQL](/blog/engine/postgresql/) provider does, but it
 needs a materialized CTE that only holds together in one dialect. Five bulk
 statements sit between the two: a fixed count, no generated SQL, and five flat
 result sets grouped in memory by table name.
@@ -72,11 +72,11 @@ WHERE ac.OWNER = :1 AND ac.CONSTRAINT_TYPE = 'R'
 
 Two consequences follow from that being the only source of an edge.
 
-The first is the rule the [feature page](/features) publishes for every engine:
+The first is the rule the [feature page](/features/) publishes for every engine:
 edges are discovered from declared foreign keys. A relationship your application
 enforces in code, or that lives only in a naming convention, declares nothing for
 this query to find and draws no line. Oracle is not special there; it is the same
-sentence as ClickHouse, arrived at from the opposite direction, since ClickHouse
+sentence as [ClickHouse](/blog/engine/clickhouse/), arrived at from the opposite direction, since ClickHouse
 declares no foreign keys at all.
 
 The second is specific to this dictionary read. The join above matches
@@ -150,4 +150,4 @@ count is `SELECT COUNT(*)`, and it costs what it costs.
 The rest of what the Oracle provider does and declines to do - Thin-mode
 transport, the maintenance vocabulary, and an agent auto run that ends
 engine-unsupported on Oracle while plan mode still opens and executes nothing -
-is on the [engine page](/databases).
+is on the [engine page](/databases/).
