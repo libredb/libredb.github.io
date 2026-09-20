@@ -4,7 +4,14 @@
    arrangement, so the base rules live here; each section keeps only its own
    state overrides in its scoped <style>.
    -------------------------------------------------------------------------- */
+/* The wire's axis is one decision, not two: the gradient angle and the keyframes
+   that scroll it have to agree, and when they disagreed the wire sat still while
+   looking alive. It is decided here, on the container, and inherited. A state
+   that only recolours the wire sets --diag-dash-color and touches nothing else. */
 .diag {
+  --diag-dash-angle: 90deg;
+  --diag-dash-anim: lbDashX;
+  --diag-dash-color: var(--error-text);
   display: flex;
   align-items: stretch;
 }
@@ -64,8 +71,12 @@
   top: 50%;
   height: 2px;
   margin-top: -1px;
-  background-image: repeating-linear-gradient(90deg, var(--error-text) 0 5px, transparent 5px 10px);
-  animation: lbDashX 1s linear infinite;
+  background-image: repeating-linear-gradient(
+    var(--diag-dash-angle),
+    var(--diag-dash-color) 0 5px,
+    transparent 5px 10px
+  );
+  animation: var(--diag-dash-anim) 1s linear infinite;
 }
 .diag__chip {
   position: absolute;
@@ -126,6 +137,8 @@
 
 @media (max-width: 560px) {
   .diag {
+    --diag-dash-angle: 180deg;
+    --diag-dash-anim: lbDashY;
     flex-direction: column;
     gap: var(--space-04);
   }
@@ -144,7 +157,5 @@
     width: 2px;
     height: auto;
     margin: 0 0 0 -1px;
-    background-image: repeating-linear-gradient(180deg, var(--error-text) 0 5px, transparent 5px 10px);
-    animation-name: lbDashY;
   }
 }

@@ -112,3 +112,45 @@ describe('the test and production deploys stay separate', () => {
     expect(netlify).toMatch(/NETLIFY_AUTH_TOKEN:\s*\$\{\{\s*secrets\.NETLIFY_AUTH_TOKEN\s*\}\}/);
   });
 });
+
+/**
+ * The Lighthouse gate audits a list of routes, and that list used to be typed
+ * out by hand. That is the same second-copy-of-a-list this file exists to
+ * forbid, and it failed the same way: /code-signing-policy had to be added in a
+ * follow-up commit, and /helper plus seventeen engine archives shipped in
+ * v1.3.0 with no audit at all, because adding a page to site.config.json does
+ * not add it to a list that lives somewhere else.
+ *
+ * The list is now derived, so these assert the derivation against dist rather
+ * than against another literal.
+ */
+describe('the accessibility gate audits what the site actually builds', () => {
+  const built: string[] = [];
+  const walk = (dir: string, prefix = '') => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) walk(`${dir}/${entry.name}`, `${prefix}/${entry.name}`);
+      else if (entry.name === 'index.html') built.push(prefix || '/');
+      else if (entry.name === '404.html') built.push('/404');
+    }
+  };
+  walk('dist');
+
+  it('covers every standalone page, so a new one cannot ship unaudited', async () => {
+    const { a11yRoutes } = await import('../scripts/a11y-routes.mjs');
+    // Blog posts and engine archives are templates over many routes; they are
+    // covered by a representative below, not one entry per post.
+    const standalone = built.filter((r) => !r.startsWith('/blog/') && !redirectPaths.includes(r));
+    const missing = standalone.filter((r) => !a11yRoutes.includes(r));
+    expect(missing, 'these pages build but are never audited').toEqual([]);
+  });
+
+  it('audits one representative of each templated family', async () => {
+    const { a11yRoutes } = await import('../scripts/a11y-routes.mjs');
+    for (const family of ['/blog/', '/blog/engine/']) {
+      const audited = a11yRoutes.filter((r: string) => r.startsWith(family) && r !== family.replace(/\/$/, ''));
+      expect(audited.length, `no ${family} page is audited`).toBeGreaterThan(0);
+      // A representative that no longer builds audits nothing.
+      for (const route of audited) expect(built, `${route} is audited but not built`).toContain(route);
+    }
+  });
+});

@@ -23,6 +23,7 @@ import { existsSync, statSync } from 'node:fs';
 import { extname, join, resolve as resolvePath, sep } from 'node:path';
 import { launch } from 'chrome-launcher';
 import lighthouse from 'lighthouse';
+import { a11yRoutes } from './a11y-routes.mjs';
 
 const args = process.argv.slice(2);
 const flag = (name, fallback) => {
@@ -32,37 +33,7 @@ const flag = (name, fallback) => {
 
 const MIN = Number(flag('min', 95));
 const DIST = 'dist';
-const ROUTES = args.includes('--route')
-  ? args.filter((a, i) => args[i - 1] === '--route')
-  : [
-      '/',
-      '/blog',
-      '/blog/the-tool-goes-to-the-data',
-      // The engine archives are one template over seventeen routes, so one
-      // stands for all of them the way the post above stands for 104.
-      '/blog/engine/postgresql',
-      '/faq',
-      '/get-started',
-      // Every standalone content page is audited. /playground earns its slot
-      // twice over: it is the only route with an interactive surface built by
-      // script at runtime, so it is the one axe-core findings can appear on
-      // without anyone touching a template.
-      '/playground',
-      '/databases',
-      '/features',
-      '/open-source',
-      '/supporters',
-      '/deploy',
-      '/docker-compose',
-      '/libredb-database',
-      '/security',
-      '/code-signing-policy',
-      '/helper',
-      '/support',
-      '/platform',
-      '/compare',
-      '/privacy-policy',
-    ];
+const ROUTES = args.includes('--route') ? args.filter((a, i) => args[i - 1] === '--route') : a11yRoutes;
 
 if (!existsSync(join(DIST, 'index.html'))) {
   console.error(`No ${DIST}/index.html — run \`bun run build\` first.`);

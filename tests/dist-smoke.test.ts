@@ -265,3 +265,25 @@ describe('hero product tour', () => {
     expect(button?.getAttribute('aria-label')).toBeTruthy();
   });
 });
+
+/**
+ * The diagram wire is drawn by a dashed gradient and scrolled by keyframes, and
+ * the two have to agree on an axis. They were stated together in six places —
+ * base, mobile, and a green override per section per breakpoint — and one of the
+ * six was missed: the working state animated along X while drawn along Y, so the
+ * wire looked alive and sat still. The axis is now set once on .diag and
+ * inherited; a state that recolours the wire must not restate the gradient.
+ */
+describe('the diagram wire states its axis once', () => {
+  it('defines the dashed gradient in exactly one rule', () => {
+    const gradients = styles().match(/repeating-linear-gradient\(var\(--diag-dash-angle\)/g) ?? [];
+    expect(gradients.length, 'the wire gradient is defined more than once').toBe(1);
+  });
+
+  it('leaves no state override spelling the gradient out again', () => {
+    // A literal angle next to a dash colour is the old shape coming back.
+    const literals =
+      styles().match(/repeating-linear-gradient\((?:90|180)deg,\s*var\(--(?:error|success)-text\)/g) ?? [];
+    expect(literals, 'a state restates the gradient instead of setting --diag-dash-color').toEqual([]);
+  });
+});

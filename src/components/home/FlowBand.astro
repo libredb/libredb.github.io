@@ -164,9 +164,15 @@ const modes = ['out', 'in'] as const;
   }
 
   /* "Tool → data" is the working direction: green wire, Studio lands, specs light */
-  .flow__card[data-switch-active='in'] .diag__line {
-    background-image: repeating-linear-gradient(90deg, var(--success-text) 0 5px, transparent 5px 10px);
-    animation-name: lbDashXR;
+  .flow__card[data-switch-active='in'] .diag {
+    --diag-dash-color: var(--success-text);
+  }
+  /* Running the dashes backwards is a horizontal idea. Below 560px the wire is
+     drawn top-to-bottom, so it keeps the shared vertical animation instead. */
+  @media (min-width: 561px) {
+    .flow__card[data-switch-active='in'] .diag {
+      --diag-dash-anim: lbDashXR;
+    }
   }
   .flow__card[data-switch-active='in'] .diag__chip {
     color: var(--success-text);
@@ -180,15 +186,6 @@ const modes = ['out', 'in'] as const;
     color: var(--success-text);
   }
 
-  /* The stacked layout turns the wire vertical, but the rule above is what sets
-     this state's animation and it outranks the one in diagram.css, so the axis
-     has to be restated here or the green wire stops moving. */
-  @media (max-width: 560px) {
-    .flow__card[data-switch-active='in'] .diag__line {
-      background-image: repeating-linear-gradient(180deg, var(--success-text) 0 5px, transparent 5px 10px);
-      animation-name: lbDashY;
-    }
-  }
   .flow__card[data-switch-active='in'] .flow__spec {
     color: var(--text-brand);
     border-color: var(--primary-600);
