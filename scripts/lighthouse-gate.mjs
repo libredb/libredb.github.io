@@ -38,6 +38,9 @@ const ROUTES = args.includes('--route')
       '/',
       '/blog',
       '/blog/the-tool-goes-to-the-data',
+      // The engine archives are one template over seventeen routes, so one
+      // stands for all of them the way the post above stands for 104.
+      '/blog/engine/postgresql',
       '/faq',
       '/get-started',
       // Every standalone content page is audited. /playground earns its slot
@@ -54,6 +57,7 @@ const ROUTES = args.includes('--route')
       '/libredb-database',
       '/security',
       '/code-signing-policy',
+      '/helper',
       '/support',
       '/platform',
       '/compare',
