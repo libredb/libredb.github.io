@@ -1,15 +1,27 @@
 ---
 import { formatDate, isoDate } from '../../lib/format';
 import type { CollectionEntry } from 'astro:content';
+import { pagePath } from '../../lib/site';
+import { engineName, postEngine } from '../../lib/posts';
 
 interface Props {
   post: CollectionEntry<'posts'>;
   /** the first card on the index gets the wider treatment */
   featured?: boolean;
+  /** an engine archive already says which engine these are; the chip would
+   * link every card back to the page the reader is standing on */
+  hideEngine?: boolean;
 }
-const { post, featured = false } = Astro.props;
+const { post, featured = false, hideEngine = false } = Astro.props;
 const { title, description, publishedAt, tags, coverImage } = post.data;
-const href = `/blog/${post.id}`;
+const href = pagePath(`/blog/${post.id}`);
+
+// The engine is the axis the blog is actually organised on, so it is the one
+// chip that navigates. The declared tags stay plain text: "Engineering" is on
+// every post and "Databases" on all but four, so a link on either would lead to
+// a page that duplicates /blog rather than narrowing anything.
+const engine = hideEngine ? undefined : postEngine(post.id);
+const engineLabel = engine ? engineName(engine) : undefined;
 ---
 
 <article class:list={['pcard', featured && 'pcard--featured']}>
@@ -28,6 +40,13 @@ const href = `/blog/${post.id}`;
           <span class="pcard__sep" aria-hidden="true">
             ·
           </span>
+        )
+      }
+      {
+        engine && engineLabel && (
+          <a class="pcard__tag pcard__tag--engine" href={pagePath(`/blog/engine/${engine}`)}>
+            {engineLabel}
+          </a>
         )
       }
       {tags.map((t) => <span class="pcard__tag">{t.label}</span>)}
@@ -80,6 +99,18 @@ const href = `/blog/${post.id}`;
   }
   .pcard__tag {
     color: var(--text-brand);
+  }
+  /* The engine chip navigates; the declared tags do not. Bordering only the
+     link keeps that difference visible without a second colour. */
+  .pcard__tag--engine {
+    padding-inline: var(--space-03);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+  }
+  .pcard__tag--engine:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
   }
   .pcard__title {
     font-family: var(--font-heading);

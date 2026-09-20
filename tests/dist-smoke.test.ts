@@ -135,8 +135,11 @@ describe('SEO surface', () => {
       ['blog', blog, '/blog'],
       ['post', post, '/blog/the-tool-goes-to-the-data'],
     ] as const) {
+      // The canonical must be the URL the host actually serves. The build emits
+      // directories, so that URL ends in a slash — a canonical without one names
+      // a 301 rather than the page it sits on.
       const canonical = doc.querySelector('link[rel=canonical]')?.getAttribute('href');
-      expect(canonical, `${name}: canonical`).toBe(path === '/' ? `${site.url}/` : `${site.url}${path}`);
+      expect(canonical, `${name}: canonical`).toBe(`${site.url}${path === '/' ? '/' : `${path}/`}`);
       expect(meta(doc, 'meta[name=description]')?.length ?? 0, `${name}: description`).toBeGreaterThan(50);
       expect(meta(doc, 'meta[property="og:image"]'), `${name}: og:image`).toMatch(/^https:\/\//);
       expect(meta(doc, 'meta[name="twitter:card"]'), `${name}: twitter card`).toBe('summary_large_image');
@@ -159,8 +162,12 @@ describe('SEO surface', () => {
   it('publishes a sitemap and an RSS feed carrying every published post', () => {
     const rss = readFileSync('dist/rss.xml', 'utf8');
     const items = (rss.match(/<item>/g) ?? []).length;
-    expect(items).toBe(readdirSync('dist/blog', { withFileTypes: true }).filter((e) => e.isDirectory()).length);
-    expect(rss).toContain(`${site.url}/blog/the-tool-goes-to-the-data`);
+    // `engine` holds the per-engine archives; those are pages, not feed items.
+    const postDirs = readdirSync('dist/blog', { withFileTypes: true }).filter(
+      (e) => e.isDirectory() && e.name !== 'engine',
+    );
+    expect(items).toBe(postDirs.length);
+    expect(rss).toContain(`${site.url}/blog/the-tool-goes-to-the-data/`);
     expect(rss).toContain('<language>en</language>');
 
     const sitemap = readFileSync('dist/sitemap-0.xml', 'utf8');

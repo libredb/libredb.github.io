@@ -24,6 +24,18 @@ const text = (fallback = '') => z.preprocess((v) => (v === null || v === undefin
 const list = <T extends z.ZodType>(item: T) =>
   z.preprocess((v) => (v === null || v === undefined || v === '' ? [] : v), z.array(item));
 
+/**
+ * An optional date, in the same shape as `text()` and `list()`: Outstatic writes
+ * three kinds of empty and `.optional()` accepts only one of them, so the empties
+ * are folded to `undefined` before the union sees them. A bare `.optional()` here
+ * is what tests/content.test.ts forbids, and why.
+ */
+const maybeDate = () =>
+  z.preprocess(
+    (v) => (v === null || v === undefined || v === '' ? undefined : v),
+    z.union([z.coerce.date(), z.undefined()]),
+  );
+
 const tag = z.object({ value: z.string(), label: z.string() });
 
 const posts = defineCollection({
@@ -39,6 +51,9 @@ const posts = defineCollection({
     // Outstatic writes publishedAt as an UNQUOTED ISO-8601 timestamp, so the
     // YAML parser hands us a Date, not a string.
     publishedAt: z.coerce.date(),
+    // Optional: a post that has been revised says so, and only then does the
+    // page emit dateModified and the sitemap a lastmod for it.
+    updatedAt: maybeDate(),
     author: z
       .preprocess(
         (v) => (v === null || v === undefined || v === '' ? {} : v),

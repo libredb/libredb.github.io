@@ -43,7 +43,7 @@ export interface Redirect {
 export const redirects: Redirect[] = [
   {
     from: '/providers',
-    to: '/databases',
+    to: '/databases/',
     canonical: '/databases',
     label: 'Databases',
     because: 'Same page, renamed: "providers" is the code word for it, "databases" is what people search for.',
@@ -57,7 +57,7 @@ export const redirects: Redirect[] = [
   },
   {
     from: '/docker-compose-example',
-    to: '/docker-compose',
+    to: '/docker-compose/',
     canonical: '/docker-compose',
     label: 'Docker Compose',
     because:
@@ -65,7 +65,7 @@ export const redirects: Redirect[] = [
   },
   {
     from: '/database',
-    to: '/libredb-database',
+    to: '/libredb-database/',
     canonical: '/libredb-database',
     label: 'LibreDB, the embeddable database',
     because:
@@ -73,21 +73,21 @@ export const redirects: Redirect[] = [
   },
   {
     from: '/database-architecture',
-    to: '/libredb-database#architecture',
+    to: '/libredb-database/#architecture',
     canonical: '/libredb-database',
     label: 'LibreDB architecture',
     because: 'Three pages on one product became three sections of one page; this is its second section.',
   },
   {
     from: '/database-reliability',
-    to: '/libredb-database#reliability',
+    to: '/libredb-database/#reliability',
     canonical: '/libredb-database',
     label: 'LibreDB reliability',
     because: 'Three pages on one product became three sections of one page; this is its third section.',
   },
   {
     from: '/tech-stack',
-    to: '/open-source',
+    to: '/open-source/',
     canonical: '/open-source',
     label: 'Open source',
     because:

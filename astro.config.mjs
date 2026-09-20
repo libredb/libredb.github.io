@@ -3,6 +3,23 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import site from './site.config.json' with { type: 'json' };
 import { redirectPaths } from './src/data/redirects.ts';
+import { readFileSync, readdirSync } from 'node:fs';
+
+// Read from the posts themselves rather than a generated list: a second copy of
+// this mapping is exactly the drift CLAUDE.md warns about. `updatedAt` wins when
+// a post declares one, otherwise the publication date is the last time it
+// changed.
+const POSTS = './outstatic/content/posts';
+const postDates = Object.fromEntries(
+  readdirSync(POSTS)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => {
+      const front = readFileSync(`${POSTS}/${f}`, 'utf8').split('---')[1] ?? '';
+      const pick = (key) => new RegExp(`^${key}:\\s*['"]?([0-9T:.Z+-]+)`, 'm').exec(front)?.[1];
+      return [f.replace(/\.md$/, ''), pick('updatedAt') ?? pick('publishedAt')];
+    })
+    .filter(([, date]) => Boolean(date)),
+);
 
 // Custom domain (libredb.org) => the site is served from the root, so `base`
 // stays at its default. Setting it would double-prefix every asset and route;
@@ -10,7 +27,13 @@ import { redirectPaths } from './src/data/redirects.ts';
 export default defineConfig({
   site: site.url,
   output: 'static',
-  trailingSlash: 'ignore',
+
+  // 'ignore' let links, canonicals and the sitemap disagree: the build emits
+  // directories, so the host serves `/features/` and 301s `/features` to it.
+  // Every internal link spent a redirect and every canonical pointed at one.
+  // 'always' makes the dev server agree with the deployed host, and
+  // `pagePath()` in src/lib/site.ts is what writes the slash into links.
+  trailingSlash: 'always',
 
   // Astro 7 defaults compressHTML to 'jsx', which strips newline-containing
   // whitespace between inline elements. That silently welded the hero headline
@@ -29,6 +52,30 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         !page.includes('/404') && !redirectPaths.some((p) => new URL(page).pathname.replace(/\/$/, '') === p),
+
+      // lastmod only where a date is actually known — the posts' own front
+      // matter. Stamping every URL with the build date would tell Google the
+      // whole site changed on every deploy, which is the fastest way to have
+      // the signal ignored. Marketing pages carry no date and get none.
+      serialize: (item) => {
+        const path = new URL(item.url).pathname;
+
+        // An engine archive is as fresh as its newest post: it changes when one
+        // is published and at no other time.
+        const engine = /^\/blog\/engine\/([^/]+)\/?$/.exec(path)?.[1];
+        if (engine) {
+          const dates = Object.entries(postDates)
+            .filter(([slug]) => slug === engine || slug.startsWith(`${engine}-`))
+            .map(([, d]) => d)
+            .sort();
+          const newest = dates.at(-1);
+          return newest ? { ...item, lastmod: newest } : item;
+        }
+
+        const slug = /^\/blog\/([^/]+)\/?$/.exec(path)?.[1];
+        const date = slug ? postDates[slug] : undefined;
+        return date ? { ...item, lastmod: date } : item;
+      },
     }),
   ],
 

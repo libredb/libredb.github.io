@@ -89,7 +89,7 @@ export const tiers = [
     line: 'MIT · free · self-hosted · community support',
     detail:
       'The full editor. Every engine, every capability, no seat count and no enterprise tier. This is what most people need.',
-    href: '/open-source',
+    href: '/open-source/',
     cta: 'What MIT lets you do →',
   },
   {
