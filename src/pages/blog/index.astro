@@ -2,11 +2,25 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
-import { site } from '../../lib/site';
+import { pagePath, site } from '../../lib/site';
+import { engineName, postEngine } from '../../lib/posts';
 
 const posts = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
 );
+
+// A way into 104 posts that is not "scroll". These are plain links to the
+// archives rather than a client-side filter: the grouping is then crawlable,
+// linkable and survives with JavaScript off, and the work is already done.
+const byEngine = new Map<string, number>();
+for (const post of posts) {
+  const id = postEngine(post.id);
+  if (id) byEngine.set(id, (byEngine.get(id) ?? 0) + 1);
+}
+const archives = [...byEngine.entries()]
+  .filter(([, n]) => n >= 2)
+  .map(([id, n]) => ({ id, n, name: engineName(id) ?? id }))
+  .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
 ---
 
 <BaseLayout
@@ -31,6 +45,23 @@ const posts = (await getCollection('posts', ({ data }) => data.status === 'publi
           <span aria-hidden="true">·</span>
           <a href={site.links.github} target="_blank" rel="noreferrer">GitHub ↗</a>
         </p>
+        {
+          archives.length > 0 && (
+            <nav class="blog__engines" aria-label="Posts by engine">
+              <p class="blog__engineslabel">By engine</p>
+              <ul>
+                {archives.map((e) => (
+                  <li>
+                    <a href={pagePath(`/blog/engine/${e.id}`)}>
+                      {e.name}
+                      <span class="blog__enginecount">{e.n}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
       </header>
 
       {
@@ -58,6 +89,43 @@ const posts = (await getCollection('posts', ({ data }) => data.status === 'publi
 </BaseLayout>
 
 <style>
+  .blog__engines {
+    margin-top: var(--space-07);
+  }
+  .blog__engineslabel {
+    font: var(--weight-semibold) var(--overline-size) / 1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .blog__engines ul {
+    margin: var(--space-04) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-03);
+  }
+  .blog__engines a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-02);
+    min-height: 32px;
+    padding-inline: var(--space-04);
+    border: var(--border-width-1) solid var(--border);
+    border-radius: var(--radius-pill);
+    font: var(--weight-medium) 13px / 1 var(--font-mono);
+    color: var(--text-secondary);
+  }
+  .blog__engines a:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .blog__enginecount {
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
   .blog {
     position: relative;
     overflow: hidden;

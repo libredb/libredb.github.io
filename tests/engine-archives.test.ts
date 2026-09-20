@@ -85,6 +85,26 @@ describe('an archive exists for each engine that has posts', () => {
   });
 });
 
+describe('the listing offers a way in other than scrolling', () => {
+  it('indexes every archive from /blog, as links rather than a script', () => {
+    const doc = html('dist/blog/index.html');
+    const index = /<nav class="blog__engines"[\s\S]*?<\/nav>/.exec(doc)?.[0] ?? '';
+    expect(index, '/blog has no engine index').not.toBe('');
+    const linked = [...index.matchAll(/href="\/blog\/engine\/([a-z0-9-]+)\/"/g)].map((m) => m[1]!);
+    expect(linked.sort()).toEqual([...archives].sort());
+  });
+
+  it('says how many posts each archive holds', () => {
+    const doc = html('dist/blog/index.html');
+    const index = /<nav class="blog__engines"[\s\S]*?<\/nav>/.exec(doc)?.[0] ?? '';
+    for (const id of archives) {
+      const count = counts.get(id)!;
+      const entry = new RegExp(`href="/blog/engine/${id}/"[^>]*>[\\s\\S]{0,120}?>${count}<`);
+      expect(entry.test(index), `${id} is listed without its count`).toBe(true);
+    }
+  });
+});
+
 describe('the engine chip is the one tag that navigates', () => {
   it('points every engine post at its archive', () => {
     for (const slug of postSlugs) {
