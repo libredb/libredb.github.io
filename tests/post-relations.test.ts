@@ -151,3 +151,41 @@ describe('the sitemap dates what it knows', () => {
     for (const path of undated) expect(path, 'a post went undated').not.toMatch(/^\/blog\/[^/]+\/$/);
   });
 });
+
+describe('code blocks can be copied', () => {
+  it('loads the copier on every post', () => {
+    // The button is injected at runtime, so the markup cannot be asserted — what
+    // can be is that the module reaches the page and that it shares the
+    // clipboard fallback rather than carrying a second copy of it.
+    for (const slug of dirs) {
+      const doc = readFileSync(`dist/blog/${slug}/index.html`, 'utf8');
+      const modules = [...doc.matchAll(/<script type="module" src="([^"]+)"/g)].map((m) => m[1]!);
+      const loaded = modules.some((src) => readFileSync(`dist${src}`, 'utf8').includes('codecopy'));
+      expect(loaded, `${slug}: the code copier is not loaded`).toBe(true);
+    }
+  });
+
+  it('keeps its own label out of the block a reader selects by hand', () => {
+    // The button sits inside the <pre>, so without user-select: none its label
+    // joins the block's selectable text and a hand-selected `docker run …`
+    // comes out as `docker run …copy` — breaking the one workflow this was
+    // added to improve.
+    const doc = readFileSync('dist/blog/postgresql-connect-docker-container/index.html', 'utf8');
+    const sheets = [...doc.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]!);
+    const rule = sheets
+      .map((href) => readFileSync(`dist${href}`, 'utf8'))
+      .flatMap((css) => [...css.matchAll(/\.codecopy\{([^}]*)\}/g)].map((m) => m[1]!))
+      .find((body) => body.includes('cursor:pointer'));
+    expect(rule, 'the .codecopy rule is not in any stylesheet').toBeDefined();
+    expect(rule, 'the button label is selectable with the code').toContain('user-select:none');
+  });
+
+  it('reads the code from the DOM instead of duplicating it into an attribute', () => {
+    // A `data-copy` attribute per block would roughly double the weight of a
+    // code-heavy page to save a few lines of script.
+    const doc = readFileSync('dist/blog/postgresql-connect-docker-container/index.html', 'utf8');
+    const body = doc.slice(doc.indexOf('post__body prose'), doc.indexOf('<nav class="toc"'));
+    expect(body).toContain('<pre');
+    expect(body, 'code was duplicated into an attribute').not.toContain('data-copy=');
+  });
+});
