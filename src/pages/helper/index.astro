@@ -1,0 +1,254 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../lib/site';
+
+/**
+ * The guide is a single self-contained file per release, not a versioned doc
+ * tree, so this page is the address that does not move. Add the new release at
+ * the top of the list on the day it ships; the previous one stays reachable
+ * because someone who installed it is still reading about it.
+ */
+const guides = [
+  {
+    version: '0.16.1',
+    href: '/helper/0.16.1.html',
+    published: '2026-09-20',
+    size: '6.0 MB',
+    current: true,
+  },
+];
+
+const current = guides.find((g) => g.current) ?? guides[0];
+
+const schema = [
+  {
+    '@type': 'TechArticle',
+    headline: `${site.name} installation guide`,
+    description:
+      'A single-file installation guide for LibreDB Studio: 22 install routes, a walkthrough of the application, every setting, in 13 languages.',
+    url: `${site.url}/helper/`,
+    about: { '@type': 'SoftwareApplication', name: site.name, applicationCategory: 'DeveloperApplication' },
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<BaseLayout
+  path="/helper/"
+  title="Installation guide"
+  description="The LibreDB Studio installation guide: one self-contained page per release, 22 install routes, every setting, in 13 languages. Open it in a browser or save it and read it offline."
+  schema={schema}
+>
+  <section class="guide" aria-labelledby="guide-title">
+    <div class="u-wash guide__wash" aria-hidden="true"></div>
+    <div class="guide__inner u-container">
+      <p class="u-eyebrow">Installation guide</p>
+      <h1 class="guide__title" id="guide-title">
+        One page, <span class="u-grad-brand">every way in</span>
+      </h1>
+      <p class="guide__intro">
+        Someone installed LibreDB Studio on each of these platforms, wrote down what actually happened, and
+        screenshotted it. That is the whole guide: 22 install routes, a walkthrough of the application, every setting it
+        exposes, and the notes on what was tested and what was not. It is one file with the images and fonts inside it,
+        so it opens with no network and nothing to install.
+      </p>
+
+      <div class="guide__now">
+        <div class="guide__nowhead">
+          <p class="guide__kicker">Current</p>
+          <h2 class="guide__h">Version {current.version}</h2>
+          <p class="guide__meta">
+            Published {current.published} · {current.size} · 13 languages
+          </p>
+        </div>
+        <div class="guide__actions">
+          <a class="guide__cta" href={current.href}>Open the guide</a>
+          <a class="guide__alt" href={current.href} download>Download it</a>
+        </div>
+      </div>
+
+      <p class="guide__note">
+        The language picker sits at the top of the guide itself: English, Spanish, Japanese, Russian, Urdu, Chinese in
+        both scripts, Polish, French, Italian, German, Indonesian and Portuguese. Printing it prints every section,
+        collapsed ones included.
+      </p>
+
+      <section class="guide__block" aria-labelledby="ver-h">
+        <div class="guide__head">
+          <p class="guide__kicker">By release</p>
+          <h2 class="guide__h" id="ver-h">Older versions stay where they were</h2>
+        </div>
+        <p class="guide__blurb">
+          Each release keeps its own address. A link you saved for the version you installed still opens the guide that
+          matches it, rather than a newer page describing something you do not have.
+        </p>
+        <ul class="guide__list">
+          {
+            guides.map((g) => (
+              <li class="guide__item">
+                <a class="guide__link" href={g.href}>
+                  {g.version}
+                </a>
+                <span class="guide__when">{g.published}</span>
+                <span class="guide__size">{g.size}</span>
+                {g.current && <span class="guide__badge">current</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <p class="guide__more">
+        Installing rather than reading? <a href="/get-started">Get started</a> has the short path, and the provider documentation
+        lives in the repository.
+        <a href={site.links.docs} target="_blank" rel="noreferrer">Read the docs ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .guide {
+    position: relative;
+    overflow: hidden;
+  }
+  .guide__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .guide__inner {
+    position: relative;
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  .guide__title {
+    margin: 0.35rem 0 0;
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .guide__intro {
+    max-width: 62ch;
+    margin: 1.1rem 0 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .guide__now {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-top: 2.25rem;
+    padding: clamp(1.1rem, 3vw, 1.6rem);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+  }
+  .guide__kicker {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .guide__h {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+    letter-spacing: -0.01em;
+  }
+  .guide__meta {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .guide__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .guide__cta,
+  .guide__alt {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.15rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .guide__cta {
+    background: var(--primary-600);
+    color: #fff;
+  }
+  .guide__alt {
+    border: 1px solid var(--border);
+    color: var(--fg);
+  }
+  .guide__cta:hover,
+  .guide__alt:hover {
+    filter: brightness(1.08);
+  }
+  .guide__note {
+    max-width: 62ch;
+    margin: 1.4rem 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .guide__block {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+  .guide__head {
+    margin-bottom: 0.9rem;
+  }
+  .guide__blurb {
+    max-width: 62ch;
+    margin: 0 0 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .guide__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .guide__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .guide__item:last-child {
+    border-bottom: 0;
+  }
+  .guide__link {
+    font-weight: 600;
+    font-family: var(--font-mono, monospace);
+  }
+  .guide__when,
+  .guide__size {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .guide__badge {
+    margin-left: auto;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .guide__more {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    color: var(--muted);
+  }
+</style>
