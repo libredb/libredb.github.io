@@ -163,8 +163,8 @@ import { why } from '../../data/home';
   }
 
   /* step 04 is the one that works: the wire turns green and Studio lands */
-  .why__card[data-switch-active='3'] .diag__line {
-    background-image: repeating-linear-gradient(90deg, var(--success-text) 0 5px, transparent 5px 10px);
+  .why__card[data-switch-active='3'] .diag {
+    --diag-dash-color: var(--success-text);
   }
   .why__card[data-switch-active='3'] .diag__chip {
     color: var(--success-text);
@@ -176,12 +176,6 @@ import { why } from '../../data/home';
   }
   .why__card[data-switch-active='3'] .why__status {
     color: var(--success-text);
-  }
-
-  @media (max-width: 560px) {
-    .why__card[data-switch-active='3'] .diag__line {
-      background-image: repeating-linear-gradient(180deg, var(--success-text) 0 5px, transparent 5px 10px);
-    }
   }
 
   .why__status {
