@@ -17,30 +17,6 @@ tags:
 publishedAt: 2026-09-13T09:00:00.000Z
 ---
 
-> **Author:** Cevheri & The LibreDB Studio Engineering Team  
-> **Topic:** Software Architecture / Database Engineering / TypeScript & Node.js / AI Safety  
-> **Target Audience:** Senior Software Engineers, Systems Architects, and Technical Leads  
-
----
-
-## Table of Contents
-
-1. [Introduction: The Missing SPI in Modern Runtimes](#introduction-the-missing-spi-in-modern-runtimes)
-2. [The Problem Statement](#the-problem-statement)
-3. [Architecture Overview: The `DatabaseProvider` SPI & Adapter Pattern](#architecture-overview-the-databaseprovider-spi--adapter-pattern)
-4. [Deep Dive: Resolving Core Engineering Challenges](#deep-dive-resolving-core-engineering-challenges)
-   - [Challenge 1: Zero-Overhead Dynamic Module Loading](#challenge-1-zero-overhead-dynamic-module-loading)
-   - [Challenge 2: Unifying Heterogeneous Engine Schemas ("Object Surface API")](#challenge-2-unifying-heterogeneous-engine-schemas-object-surface-api)
-   - [Challenge 3: AI Agent Isolation & Read-Only Execution Profiles](#challenge-3-ai-agent-isolation--read-only-execution-profiles)
-   - [Challenge 4: Single-Writer File Locks & SSH Tunnel Forwarding](#challenge-4-single-writer-file-locks--ssh-tunnel-forwarding)
-5. [Code Walkthrough & Implementation Details](#code-walkthrough--implementation-details)
-   - [The Provider Contract (`BaseDatabaseProvider`)](#the-provider-contract-basedatabaseprovider)
-   - [The Factory & Cache Registry](#the-factory--cache-registry)
-   - [Engine Adapter Case Studies (PostgreSQL, SQLite, Embedded LibreDB)](#engine-adapter-case-studies)
-6. [Key Takeaways & Lessons Learned](#key-takeaways--lessons-learned)
-
----
-
 ## Introduction: The Missing SPI in Modern Runtimes
 
 In mature enterprise ecosystems like Java or .NET, developer tools that interact with databases rely on standardized, runtime-level Service Provider Interfaces (SPIs):
