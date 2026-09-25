@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostCard from '../../../components/blog/PostCard.astro';
 import { pagePath, site } from '../../../lib/site';
-import { engineName, postEngine } from '../../../lib/posts';
+import { engineArchives, engineName, type PublishedPosts } from '../../../lib/posts';
 import { engines } from '../../../data/engines';
 
 /**
@@ -23,27 +23,16 @@ import { engines } from '../../../data/engines';
  */
 export const getStaticPaths = (async () => {
   const { getCollection } = await import('astro:content');
-  const { postEngine } = await import('../../../lib/posts');
 
   const posts = await getCollection('posts', ({ data }) => data.status === 'published');
-  const byEngine = new Map<string, typeof posts>();
-  for (const post of posts) {
-    const id = postEngine(post.id);
-    if (!id) continue;
-    byEngine.set(id, [...(byEngine.get(id) ?? []), post]);
-  }
 
-  return [...byEngine.entries()]
-    .filter(([, list]) => list.length >= 2)
-    .map(([engine, list]) => ({
-      params: { engine },
-      props: {
-        posts: list.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()),
-      },
-    }));
+  return [...engineArchives(posts).entries()].map(([engine, list]) => ({
+    params: { engine },
+    props: { posts: list },
+  }));
 }) satisfies GetStaticPaths;
 
-type Props = { posts: Awaited<ReturnType<typeof import('astro:content').getCollection<'posts'>>> };
+type Props = { posts: PublishedPosts };
 const { engine } = Astro.params;
 const { posts } = Astro.props;
 
@@ -53,20 +42,11 @@ const engineData = engines.find((e) => e.id === engine);
 // Sibling archives, so a reader comparing two engines can cross over without
 // going back to the flat list. Built from what actually shipped, not from the
 // full engine list — an archive that does not exist must not be linked.
-const siblings = (await import('astro:content'))
-  .getCollection('posts', ({ data }) => data.status === 'published')
-  .then((all) => {
-    const counts = new Map<string, number>();
-    for (const p of all) {
-      const id = postEngine(p.id);
-      if (id) counts.set(id, (counts.get(id) ?? 0) + 1);
-    }
-    return [...counts.entries()]
-      .filter(([id, n]) => n >= 2 && id !== engine)
-      .map(([id]) => ({ id, name: engineName(id) ?? id }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  });
-const others = await siblings;
+const all = await (await import('astro:content')).getCollection('posts', ({ data }) => data.status === 'published');
+const others = [...engineArchives(all).keys()]
+  .filter((id) => id !== engine)
+  .map((id) => ({ id, name: engineName(id) ?? id }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 const description = `Every LibreDB Studio write-up about ${name}: what the provider does, where it stops, and why. ${posts.length} posts.`;
 
@@ -98,7 +78,13 @@ const schema = [
 ];
 ---
 
-<BaseLayout path={`/blog/engine/${engine}`} title={`${name} posts`} description={description} schema={schema}>
+<BaseLayout
+  path={`/blog/engine/${engine}`}
+  title={`${name} posts`}
+  description={description}
+  schema={schema}
+  feed={{ href: `/blog/engine/${engine}/rss.xml`, title: `${site.name} — ${name} posts` }}
+>
   <section class="earc" aria-labelledby="earc-title">
     <div class="u-wash earc__wash" aria-hidden="true"></div>
     <div class="earc__inner u-container">
@@ -125,6 +111,8 @@ const schema = [
         }
         <p class="earc__links">
           <a href={pagePath('/databases')}>{name} support in Studio →</a>
+          <span aria-hidden="true">·</span>
+          <a href={pagePath(`/blog/engine/${engine}/rss.xml`)}>{name} RSS feed →</a>
           <span aria-hidden="true">·</span>
           <a href={pagePath('/blog')}>All posts</a>
         </p>

@@ -29,6 +29,40 @@ export function engineName(engineId: string): string | undefined {
 type Datable = { id: string; data: { publishedAt: Date } };
 
 /**
+ * The engine archives the blog actually offers: engine id to its posts, newest
+ * first, for engines with at least two posts.
+ *
+ * The threshold and the grouping live here because two routes need the same
+ * answer — the archive page and its feed. When they each carried their own copy
+ * of the loop, the only thing keeping a feed from existing without its page was
+ * that both happened to say `>= 2`. One edit to either and they part silently,
+ * which is the drift this repo keeps writing rules against.
+ *
+ * Two is the floor because one post is the post, not an archive of it.
+ */
+/** The shape both engine routes hand each other: a list of published posts. */
+export type PublishedPosts = Awaited<ReturnType<typeof import('astro:content').getCollection<'posts'>>>;
+
+/** One post is the post, not an archive of it. */
+const ARCHIVE_MIN = 2;
+
+export function engineArchives<T extends Datable>(posts: T[]): Map<string, T[]> {
+  const byEngine = new Map<string, T[]>();
+  for (const post of posts) {
+    const id = postEngine(post.id);
+    if (!id) continue;
+    byEngine.set(id, [...(byEngine.get(id) ?? []), post]);
+  }
+
+  const byDate = (a: T, b: T) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+  return new Map(
+    [...byEngine.entries()]
+      .filter(([, list]) => list.length >= ARCHIVE_MIN)
+      .map(([id, list]) => [id, [...list].sort(byDate)]),
+  );
+}
+
+/**
  * Posts to offer at the end of `post`: same engine first, newest first, topped
  * up with recent posts when that engine has too few to fill the block.
  *

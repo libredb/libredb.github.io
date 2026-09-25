@@ -14,8 +14,14 @@ import { site } from '../src/lib/site';
  */
 
 const POSTS = 'outstatic/content/posts';
+/**
+ * Published posts only. Both routes filter on `status`, and the schema allows
+ * `draft`, so a fixture that counted every file on disk would turn the gate red
+ * the moment an editor saved a draft, with nothing wrong in the built site.
+ */
 const postSlugs = readdirSync(POSTS)
   .filter((f) => f.endsWith('.md'))
+  .filter((f) => /^status:\s*published\s*$/m.test(readFileSync(`${POSTS}/${f}`, 'utf8')))
   .map((f) => f.replace(/\.md$/, ''));
 
 const archives = existsSync('dist/blog/engine')
@@ -183,6 +189,85 @@ describe('prose names other engines as links, not as plain text', () => {
         expect(ids, `${slug} links unknown engine ${id}`).toContain(id!);
         expect(archives, `${slug} links archive-less engine ${id}`).toContain(id!);
       }
+    }
+  });
+});
+
+/**
+ * Each archive's feed.
+ *
+ * The site feed carries all 104 posts, so an aggregator that wants one engine
+ * has to filter downstream, and ours does: Planet for the MySQL Community runs
+ * our entry through siftrss on a title regex, which drops the posts whose title
+ * does not name the engine. These feeds are the fix, and nothing else in the
+ * suite touches them: domain.test.ts collects rss.xml files but then drops
+ * everything under /blog/, so all seventeen could stop building and the gate
+ * would stay green.
+ */
+describe('each engine archive ships a feed of its own', () => {
+  const feedPath = (id: string) => `dist/blog/engine/${id}/rss.xml`;
+  // Read both sides off disk rather than filtering one out of the other, or a
+  // feed with no archive page behind it is invisible to the comparison.
+  const pages = archives.filter((id) => existsSync(`dist/blog/engine/${id}/index.html`));
+  const feeds = archives.filter((id) => existsSync(feedPath(id)));
+
+  it('pairs one feed with one archive, in both directions', () => {
+    expect(feeds.length, 'no feeds were built').toBeGreaterThan(0);
+    expect(feeds.sort()).toEqual([...pages].sort());
+  });
+
+  it('keeps serving the feed an aggregator already subscribed to', () => {
+    // planet.oursqlcommunity.org holds /blog/engine/mysql/rss.xml as a URL in
+    // its own configuration. The archive threshold would withdraw that address
+    // without a redirect if MySQL ever fell to a single published post.
+    expect(feeds, 'the MySQL feed is a published address now').toContain('mysql');
+  });
+
+  it('carries every post of that engine and no other', () => {
+    for (const id of archives) {
+      const xml = readFileSync(feedPath(id), 'utf8');
+      const links = [...xml.matchAll(/<link>([^<]+)<\/link>/g)]
+        .map((m) => m[1])
+        .filter((href) => href.includes('/blog/') && !href.endsWith(`/blog/engine/${id}/`));
+
+      expect(links.length, `${id}: item count`).toBe(counts.get(id)!);
+      for (const href of links) {
+        const slug = href.replace(/^.*\/blog\//, '').replace(/\/$/, '');
+        expect(postEngine(slug), `${id}: ${slug} belongs to another engine`).toBe(id);
+      }
+    }
+  });
+
+  it('names the engine as the first category, which is what an aggregator filters on', () => {
+    for (const id of archives) {
+      const xml = readFileSync(feedPath(id), 'utf8');
+      const name = engines.find((e) => e.id === id)!.name;
+      const items = xml.split('<item>').slice(1);
+      expect(items.length, `${id}: no items`).toBeGreaterThan(0);
+      for (const item of items) {
+        const first = item.match(/<category>(?:<!\[CDATA\[)?([^<\]]+)/);
+        expect(first?.[1], `${id}: first category`).toBe(name);
+      }
+    }
+  });
+
+  it('points back at the archive it was cut from, not the home page', () => {
+    for (const id of archives) {
+      const xml = readFileSync(feedPath(id), 'utf8');
+      const channelLink = xml.match(/<channel>[\s\S]*?<link>([^<]+)<\/link>/)?.[1];
+      expect(channelLink, `${id}: channel link`).toBe(`${site.url}/blog/engine/${id}/`);
+    }
+  });
+
+  it('is the feed the archive page advertises, so a reader subscribes to what they clicked', () => {
+    for (const id of archives) {
+      const doc = html(`dist/blog/engine/${id}/index.html`);
+      const alternate = doc.match(/<link rel="alternate" type="application\/rss\+xml"[^>]*>/)?.[0] ?? '';
+      expect(alternate, `${id}: alternate href`).toContain(`/blog/engine/${id}/rss.xml`);
+      expect(doc, `${id}: visible feed link`).toContain(`href="/blog/engine/${id}/rss.xml"`);
+      // The engine feed is listed first, but the site feed stays discoverable:
+      // replacing it would hide the whole blog from a reader on this page.
+      expect(doc, `${id}: site feed still advertised`).toContain(`href="${site.url}/rss.xml"`);
     }
   });
 });
