@@ -3,8 +3,16 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { parseHTML } from 'linkedom';
 import site from '../site.config.json' with { type: 'json' };
 import { engines } from '../src/data/engines';
+import { feedCreator } from '../src/lib/feed';
 
 const page = (path: string) => parseHTML(readFileSync(path, 'utf8')).document;
+/** Every per-engine feed that was actually built. */
+const engineFeeds = () =>
+  existsSync('dist/blog/engine')
+    ? readdirSync('dist/blog/engine', { withFileTypes: true })
+        .filter((e) => e.isDirectory() && existsSync(`dist/blog/engine/${e.name}/rss.xml`))
+        .map((e) => `dist/blog/engine/${e.name}/rss.xml`)
+    : [];
 
 /** Every stylesheet the homepage links, concatenated. Astro splits them per
  *  component, so which chunk the hero lands in is not something to assert on. */
@@ -169,6 +177,39 @@ describe('SEO surface', () => {
     expect(items).toBe(postDirs.length);
     expect(rss).toContain(`${site.url}/blog/the-tool-goes-to-the-data/`);
     expect(rss).toContain('<language>en</language>');
+  });
+
+  it('serves feeds that parse as XML at all, with the author in dc:creator', () => {
+    // Every feed puts the author's name in <dc:creator> and declares where it
+    // lives, because RSS 2.0 defines <author> as an email address and the W3C
+    // validator rejects a name there. Both depend on the namespaces declared on
+    // <rss>: drop that one line and every feed on the site stops being
+    // well-formed XML, which nothing here used to notice.
+    const feeds = ['dist/rss.xml', ...engineFeeds()];
+    expect(feeds.length, 'no feeds were built').toBeGreaterThanOrEqual(1);
+
+    for (const path of feeds) {
+      const xml = readFileSync(path, 'utf8');
+      expect(xml, `${path}: dc namespace`).toContain('xmlns:dc="http://purl.org/dc/elements/1.1/"');
+      expect(xml, `${path}: atom namespace`).toContain('xmlns:atom="http://www.w3.org/2005/Atom"');
+      expect(xml, `${path}: author must not be a bare name`).not.toContain('<author>');
+      expect(xml, `${path}: creator`).toContain('<dc:creator>');
+      expect(xml, `${path}: self link`).toMatch(/<atom:link href="[^"]+" rel="self" type="application\/rss\+xml"\/>/);
+      // Every prefix used in the body must be one of the declared namespaces.
+      for (const prefix of new Set([...xml.matchAll(/<([a-z]+):[a-z]+/g)].map((m) => m[1]))) {
+        expect(xml, `${path}: ${prefix} prefix used but not declared`).toContain(`xmlns:${prefix}=`);
+      }
+    }
+  });
+
+  it('escapes a creator name that carries XML syntax', () => {
+    // The site feed's author name contains an ampersand, the case that breaks a
+    // feed silently: a reader stops at the parse error and shows nothing.
+    expect(feedCreator('a & b')).toBe('<dc:creator>a &amp; b</dc:creator>');
+    expect(feedCreator('<i>x</i>')).toBe('<dc:creator>&lt;i&gt;x&lt;/i&gt;</dc:creator>');
+    expect(readFileSync('dist/rss.xml', 'utf8')).toContain(
+      '<dc:creator>Cevheri &amp; LibreDB Engineering</dc:creator>',
+    );
 
     const sitemap = readFileSync('dist/sitemap-0.xml', 'utf8');
     expect(sitemap).toContain(`${site.url}/`);
