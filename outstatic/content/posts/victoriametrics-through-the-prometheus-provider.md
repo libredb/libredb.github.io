@@ -33,7 +33,7 @@ rather than a full one. Here is what the other sixteen are, and why.
 Instant vectors, range selectors, subqueries and scalars all answer, the three
 refusals end the way they do on Prometheus, and Cancel stops a running query.
 The provider sends the expression to `/api/v1/query` exactly as typed, so
-nothing stands between MetricsQL and the server. We ran seven MetricsQL
+nothing stands between MetricsQL and the server. We ran six MetricsQL
 expressions through the provider and every one answered:
 
 ```
@@ -54,7 +54,7 @@ answers three series.
 Two limits apply. The highlighter knows Prometheus's own grammar, so a
 MetricsQL-only function such as `rollup_rate` or `median_over_time` is shown as
 a plain identifier rather than as a function. And our compatibility claim is for
-PromQL: the seven expressions above are a check that MetricsQL reaches the
+PromQL: the six expressions above are a check that MetricsQL reaches the
 server, not a measurement of MetricsQL itself.
 
 ## Three paths VictoriaMetrics does not serve
