@@ -1820,7 +1820,7 @@ $ curl -s localhost:3000/api/db/health
 <p data-t="p-koyeb.09" lang="id" hidden>Dua syarat menentukan apakah agent database bisa berjalan, dan keduanya terpisah. Yang pertama adalah di mana koneksinya tinggal: sebuah run me-resolve ulang koneksinya di server, jadi koneksi yang hanya diketahui browser Anda bukan koneksi yang bisa ia pakai. Yang kedua hanya berlaku untuk PostgreSQL, dan inilah yang sering menjebak orang: agent menolak role yang superuser atau anggota <code>pg_read_server_files</code>, <code>pg_write_server_files</code> atau <code>pg_execute_server_program</code>. Ia mengatakannya di dalam run, karena transaksi read-only tidak menghentikan akses file sisi server maupun eksekusi program. Arahkan ke role dengan hak paling kecil, bukan ke pemiliknya.</p>
 <p data-t="p-koyeb.09" lang="pt" hidden>Duas condições decidem se o agente de banco de dados pode rodar, e elas são separadas. A primeira é onde a conexão mora: uma execução resolve a conexão de novo no servidor, então uma que só o seu navegador conhece não serve. A segunda vale só para PostgreSQL, e pega muita gente de surpresa: o agente recusa uma role que seja superuser ou membro de <code>pg_read_server_files</code>, <code>pg_write_server_files</code> ou <code>pg_execute_server_program</code>. Ele diz isso na execução, porque uma transação somente leitura não impede acesso a arquivos do servidor nem execução de programas. Aponte para uma role de menor privilégio, não para a dona do banco.</p>
       </div>
-      <div class="panel" id="p-do" role="tabpanel" aria-labelledby="tab-do">
+      <div hidden class="panel" id="p-do" role="tabpanel" aria-labelledby="tab-do">
         <h3 class="panel-head" data-t="p-do.01" lang="en">DigitalOcean</h3>
 <h3 class="panel-head" data-t="p-do.01" lang="es" hidden>DigitalOcean</h3>
 <h3 class="panel-head" data-t="p-do.01" lang="ja" hidden>DigitalOcean</h3>
@@ -1986,7 +1986,7 @@ $ curl -s localhost:3000/api/db/health
 <p data-t="p-do.12" lang="id" hidden>Bentuk image ini mirip dengan image AWS dan Azure: Ubuntu 24.04, container yang dipublikasikan, dijalankan oleh systemd, kredensial dibuat di instance Anda sendiri pada boot pertama. Satu perbedaan perlu Anda ketahui: droplet ini memaku container lewat tag, sedangkan image AWS dan template Azure sama-sama memakunya lewat digest. Satu tempat di mana apa yang bisa Anda boot hari ini tertinggal dari image AWS adalah soal penulisan file di atas. Tidak ada yang menelepon pulang dan penerbitnya tidak punya akses ke droplet Anda.</p>
 <p data-t="p-do.12" lang="pt" hidden>A imagem é parecida com as da AWS e da Azure no formato: Ubuntu 24.04, o container publicado, rodando por systemd, credenciais geradas na sua própria instância no primeiro boot. Vale conhecer uma diferença: este droplet fixa o container por tag, enquanto tanto a imagem da AWS quanto o template da Azure fixam por digest. O único ponto em que o que você consegue subir hoje fica atrás da imagem da AWS é a escrita descrita acima. Nada manda informação para casa e quem publica não tem acesso ao seu droplet.</p>
       </div>
-      <div class="panel" id="p-aws" role="tabpanel" aria-labelledby="tab-aws">
+      <div hidden class="panel" id="p-aws" role="tabpanel" aria-labelledby="tab-aws">
         <h3 class="panel-head" data-t="p-aws.01" lang="en">AWS</h3>
 <h3 class="panel-head" data-t="p-aws.01" lang="es" hidden>AWS</h3>
 <h3 class="panel-head" data-t="p-aws.01" lang="ja" hidden>AWS</h3>
@@ -2314,7 +2314,7 @@ $ curl -s localhost:3000/api/db/health
 <p data-t="p-aws.24" lang="id" hidden>Jangan merotasi <code>JWT_SECRET</code> pada instance yang sedang berjalan. Kunci yang menyegel secret koneksi tersimpan Anda diturunkan darinya, jadi mengubahnya membuat semuanya tidak bisa dibaca.</p>
 <p data-t="p-aws.24" lang="pt" hidden>Não rotacione o <code>JWT_SECRET</code> numa instância que está funcionando. A chave que sela os segredos das suas conexões salvas é derivada dele, então trocá-lo torna todos eles ilegíveis.</p>
       </div>
-      <div class="panel" id="p-azure" role="tabpanel" aria-labelledby="tab-azure">
+      <div hidden class="panel" id="p-azure" role="tabpanel" aria-labelledby="tab-azure">
         <h3 class="panel-head" data-t="p-azure.01" lang="en">Azure</h3>
 <h3 class="panel-head" data-t="p-azure.01" lang="es" hidden>Azure</h3>
 <h3 class="panel-head" data-t="p-azure.01" lang="ja" hidden>Azure</h3>
@@ -2453,7 +2453,7 @@ $ curl -s localhost:3000/api/db/health
 <p data-t="p-azure.10" lang="pt" hidden>O anúncio não cobra nada pelo software em si. O Azure continua cobrando a VM, o disco gerenciado e a banda de saída, mais o IP público e qualquer outra coisa que o template criar no resource group, e é por isso que a página do anúncio mostra um preço que varia em vez de um zero fixo. Uma coisa para checar antes de depender disso: o template fixa o container por digest e não por tag, e o digest do pacote que está no ar hoje leva à <b>0.16.0</b>, a mesma release que o DigitalOcean entrega e duas atrás da 0.17.0 que estas páginas descrevem. Um digest não escorrega, então o que for implantado no mês que vem é o que é implantado agora; o painel de versão na instância rodando é onde você confirma isso.</p>
         </div>
       </div>
-      <div class="panel" id="p-gcp" role="tabpanel" aria-labelledby="tab-gcp">
+      <div hidden class="panel" id="p-gcp" role="tabpanel" aria-labelledby="tab-gcp">
         <h3 class="panel-head" data-t="p-gcp.01" lang="en">Google Cloud</h3>
 <h3 class="panel-head" data-t="p-gcp.01" lang="es" hidden>Google Cloud</h3>
 <h3 class="panel-head" data-t="p-gcp.01" lang="ja" hidden>Google Cloud</h3>
@@ -2962,7 +2962,7 @@ kubectl port-forward deployment/libredb-libredb-studio 3000:3000</code></pre>
 <p data-t="p-rancher.06" lang="id" hidden>Instalasi di cluster biasanya berada di belakang ingress yang menerminasi TLS, dan itulah kasus di mana <code>AUTH_COOKIE_SECURE</code> sebaiknya tetap tidak diset: lewat HTTPS browser menyimpan cookie Secure, jadi saran di panel home server adalah situasi sebaliknya, bukan yang ini. Kalau belum ada yang diekspos, <code>kubectl port-forward</code> sudah cukup untuk melihat-lihat.</p>
 <p data-t="p-rancher.06" lang="pt" hidden>Uma instalação em cluster geralmente fica atrás de um ingress que termina o TLS, que é o caso em que <code>AUTH_COOKIE_SECURE</code> deve ficar sem valor: em HTTPS o navegador guarda um cookie Secure, então o conselho dos painéis de home server é a situação oposta, não esta. Onde nada está exposto ainda, <code>kubectl port-forward</code> basta para dar uma olhada.</p>
       </div>
-      <div class="panel" id="p-unraid" role="tabpanel" aria-labelledby="tab-unraid">
+      <div hidden class="panel" id="p-unraid" role="tabpanel" aria-labelledby="tab-unraid">
         <h3 class="panel-head" data-t="p-unraid.01" lang="en">Unraid</h3>
 <h3 class="panel-head" data-t="p-unraid.01" lang="es" hidden>Unraid</h3>
 <h3 class="panel-head" data-t="p-unraid.01" lang="ja" hidden>Unraid</h3>
@@ -3185,7 +3185,7 @@ kubectl port-forward deployment/libredb-libredb-studio 3000:3000</code></pre>
 <p data-t="p-unraid.16" lang="pt" hidden>O template já vem com <code>AUTH_COOKIE_SECURE=false</code>, porque uma instalação na LAN é servida em HTTP puro. Se depois você puser o app atrás de um proxy reverso com HTTPS, mude para <code>true</code>. Deixar em <code>false</code> num host virado para a internet manda o seu cookie de sessão em texto puro.</p>
         </div>
       </div>
-      <div class="panel" id="p-truenas" role="tabpanel" aria-labelledby="tab-truenas">
+      <div hidden class="panel" id="p-truenas" role="tabpanel" aria-labelledby="tab-truenas">
         <h3 class="panel-head" data-t="p-truenas.01" lang="en">TrueNAS SCALE</h3>
 <h3 class="panel-head" data-t="p-truenas.01" lang="es" hidden>TrueNAS SCALE</h3>
 <h3 class="panel-head" data-t="p-truenas.01" lang="ja" hidden>TrueNAS SCALE</h3>
@@ -3806,7 +3806,7 @@ kubectl port-forward deployment/libredb-libredb-studio 3000:3000</code></pre>
 <p data-t="p-cosmos.06" lang="id" hidden>Ketiga template ini sudah men-set <code>STORAGE_PROVIDER</code> ke <code>sqlite</code> dan me-mount volume di <code>/app/data</code>, jadi koneksi tersimpan ada di server dan selamat dari restart. Anda tidak perlu mengubah keduanya. Itu juga menaruhnya di tempat yang bisa di-resolve ulang oleh agent database, meski pada PostgreSQL agent punya syarat kedua: ia menolak role yang superuser atau yang bisa membaca dan menulis file server atau menjalankan program, jadi beri ia role dengan hak paling kecil, bukan pemiliknya.</p>
 <p data-t="p-cosmos.06" lang="pt" hidden>Os três templates aqui já põem <code>STORAGE_PROVIDER</code> em <code>sqlite</code> e montam um volume em <code>/app/data</code>, então as conexões salvas ficam no servidor e sobrevivem a um restart. Você não precisa mudar nenhum dos dois. Isso também as deixa onde o agente de banco de dados consegue resolvê-las de novo, embora no PostgreSQL o agente tenha uma segunda condição: ele recusa uma role que seja superuser ou que possa ler ou escrever arquivos do servidor ou rodar programas, então dê a ele uma role de menor privilégio em vez da dona do banco.</p>
       </div>
-      <div class="panel" id="p-proxmox" role="tabpanel" aria-labelledby="tab-proxmox">
+      <div hidden class="panel" id="p-proxmox" role="tabpanel" aria-labelledby="tab-proxmox">
         <h3 class="panel-head" data-t="p-proxmox.01" lang="en">Proxmox VE</h3>
 <h3 class="panel-head" data-t="p-proxmox.01" lang="es" hidden>Proxmox VE</h3>
 <h3 class="panel-head" data-t="p-proxmox.01" lang="ja" hidden>Proxmox VE</h3>
@@ -3992,7 +3992,7 @@ curl -fsSL https://get.docker.com | sh</code></pre>
 <p data-t="p-proxmox.13" lang="id" hidden>Kalau Anda menambahkan aplikasi ini ke pemeriksaan monitoring Proxmox, pakai path itu. Sebagian besar sisa <code>/api/</code> akan menyesatkan Anda: sebagian path mengalihkan ke layar login dan terbaca 200 dari sana, jadi pemeriksaannya jadi hijau tanpa pernah sampai ke aplikasi.</p>
 <p data-t="p-proxmox.13" lang="pt" hidden>Se você for incluir o app num check de monitoramento do Proxmox, use esse caminho. A maior parte do resto de <code>/api/</code> vai te enganar: alguns caminhos redirecionam para a tela de login e respondem 200 de lá, então o check fica verde sem nunca chegar no app.</p>
       </div>
-      <div class="panel" id="p-local" role="tabpanel" aria-labelledby="tab-local">
+      <div hidden class="panel" id="p-local" role="tabpanel" aria-labelledby="tab-local">
         <h3 class="panel-head" data-t="p-local.01" lang="en">Your own machine, or no machine at all</h3>
 <h3 class="panel-head" data-t="p-local.01" lang="es" hidden>Tu propia máquina, o ninguna</h3>
 <h3 class="panel-head" data-t="p-local.01" lang="ja" hidden>自分のマシン、あるいはマシンなしで</h3>
@@ -4174,7 +4174,7 @@ sudo snap install libredb-studio</code></pre>
     </div>
   </div>
 </section>
-<section id="tour" class="tabsec" role="tabpanel">
+<section hidden id="tour" class="tabsec" role="tabpanel">
   <div class="wrap">
     <div class="col">
       <p class="sec-label" data-t="tour.01" lang="en">Tour</p>
@@ -4788,7 +4788,7 @@ sudo snap install libredb-studio</code></pre>
             </section>
 
       <!-- ===================== II ===================== -->
-      <section class="part tabpart" id="part-2" role="tabpanel">
+      <section hidden class="part tabpart" id="part-2" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-2.01" lang="en">Connecting a database</h2>
 <h2 data-t="part-2.01" lang="es" hidden>Conectar una base de datos</h2>
 <h2 data-t="part-2.01" lang="ja" hidden>データベースをつなぐ</h2>
@@ -5623,7 +5623,7 @@ sudo snap install libredb-studio</code></pre>
 </section>
 
       <!-- ===================== III ===================== -->
-      <section class="part tabpart" id="part-3" role="tabpanel">
+      <section hidden class="part tabpart" id="part-3" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-3.01" lang="en">Reading what is there</h2>
 <h2 data-t="part-3.01" lang="es" hidden>Leer lo que hay</h2>
 <h2 data-t="part-3.01" lang="ja" hidden>そこにあるものを読む</h2>
@@ -6781,7 +6781,7 @@ sudo snap install libredb-studio</code></pre>
 </section>
 
       <!-- ===================== IV ===================== -->
-      <section class="part tabpart" id="part-4" role="tabpanel">
+      <section hidden class="part tabpart" id="part-4" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-4.01" lang="en">Asking questions</h2>
 <h2 data-t="part-4.01" lang="es" hidden>Hacer preguntas</h2>
 <h2 data-t="part-4.01" lang="ja" hidden>問い合わせる</h2>
@@ -7263,7 +7263,7 @@ sudo snap install libredb-studio</code></pre>
             </section>
 
       <!-- ===================== V ===================== -->
-      <section class="part tabpart" id="part-5" role="tabpanel">
+      <section hidden class="part tabpart" id="part-5" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-5.01" lang="en">Changing data</h2>
 <h2 data-t="part-5.01" lang="es" hidden>Cambiar datos</h2>
 <h2 data-t="part-5.01" lang="ja" hidden>データを変える</h2>
@@ -7588,7 +7588,7 @@ sudo snap install libredb-studio</code></pre>
             </section>
 
       <!-- ===================== VI ===================== -->
-      <section class="part tabpart" id="part-6" role="tabpanel">
+      <section hidden class="part tabpart" id="part-6" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-6.01" lang="en">Understanding a schema you did not write</h2>
 <h2 data-t="part-6.01" lang="es" hidden>Entender un esquema que no escribiste</h2>
 <h2 data-t="part-6.01" lang="ja" hidden>自分が書いていないスキーマを理解する</h2>
@@ -7998,7 +7998,7 @@ sudo snap install libredb-studio</code></pre>
             </section>
 
       <!-- ===================== VII ===================== -->
-      <section class="part tabpart" id="part-7" role="tabpanel">
+      <section hidden class="part tabpart" id="part-7" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-7.01" lang="en">Getting around faster</h2>
 <h2 data-t="part-7.01" lang="es" hidden>Moverte más rápido</h2>
 <h2 data-t="part-7.01" lang="ja" hidden>もっと速く動き回る</h2>
@@ -8157,7 +8157,7 @@ sudo snap install libredb-studio</code></pre>
             </section>
 
       <!-- ===================== VIII ===================== -->
-      <section class="part tabpart" id="part-8" role="tabpanel">
+      <section hidden class="part tabpart" id="part-8" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-8.01" lang="en">Running it for other people</h2>
 <h2 data-t="part-8.01" lang="es" hidden>Ejecutarlo para otras personas</h2>
 <h2 data-t="part-8.01" lang="ja" hidden>ほかの人のために運用する</h2>
@@ -9440,7 +9440,7 @@ connections:
             </section>
 
       <!-- ===================== IX ===================== -->
-      <section class="part tabpart" id="part-9" role="tabpanel">
+      <section hidden class="part tabpart" id="part-9" role="tabpanel">
         <div class="part-rule"><h2 data-t="part-9.01" lang="en">The database agent</h2>
 <h2 data-t="part-9.01" lang="es" hidden>El agente de base de datos</h2>
 <h2 data-t="part-9.01" lang="ja" hidden>データベースエージェント</h2>
@@ -10215,7 +10215,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
     </div>
   </div>
 </section>
-<section id="reference" class="tabsec" role="tabpanel">
+<section hidden id="reference" class="tabsec" role="tabpanel">
   <div class="wrap">
     <div class="col">
       <p class="sec-label" data-t="reference.01" lang="en">Settings</p>
@@ -11531,7 +11531,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
   </div>
 </section>
 
-<footer class="foot tabsec" id="notes" role="tabpanel">
+<footer hidden class="foot tabsec" id="notes" role="tabpanel">
   <div class="wrap">
     <div class="col">
       <h2 data-t="notes.01" lang="en">What I could not check</h2>
