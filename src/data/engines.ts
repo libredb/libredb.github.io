@@ -1,12 +1,13 @@
 /**
- * The seventeen engines shown in the hexagon grid (design/Home.dc.html → engineData).
+ * The nineteen engines shown in the hexagon grid (design/Home.dc.html → engineData).
  * Copy, transport strings and the "what this engine does not do" lines are final —
  * they are the honest-capability claim the design is built around.
  *
  * `logo` points at a self-hosted copy under public/engines/; the prototype
  * hot-linked devicon / simpleicons CDNs (see scripts/fetch-engine-logos.sh).
  */
-export type EngineCategory = 'SQL' | 'Analytics' | 'Federated' | 'Document' | 'Key-value' | 'Wide-column' | 'Search';
+export type EngineCategory =
+  'SQL' | 'Analytics' | 'Federated' | 'Document' | 'Key-value' | 'Wide-column' | 'Search' | 'Time-series' | 'Streaming';
 
 export interface Engine {
   id: string;
@@ -104,7 +105,7 @@ export const engines: Engine[] = [
   },
   {
     id: 'trino',
-    name: 'Apache Trino',
+    name: 'Trino',
     cat: 'Federated',
     logo: '/engines/trino.svg',
     desc: 'Federated SQL — one query across the catalogs you already have, from object storage to RDBMS.',
@@ -173,6 +174,24 @@ export const engines: Engine[] = [
     desc: 'The same query-and-browse surface as Elasticsearch, against OpenSearch clusters.',
     tr: 'http · 9200',
     not: 'Search engines are query-and-browse: no row editing, no ER diagrams.',
+  },
+  {
+    id: 'prometheus',
+    name: 'Prometheus',
+    cat: 'Time-series',
+    logo: '/engines/prometheus.svg',
+    desc: 'PromQL over the HTTP API, with the metric, rule and target browser beside it.',
+    tr: 'http \u00b7 9090',
+    not: 'Read-only: Studio calls the read APIs only, so there is nothing to write back.',
+  },
+  {
+    id: 'kafka',
+    name: 'Apache Kafka',
+    cat: 'Streaming',
+    logo: '/engines/kafka.svg',
+    desc: 'Topic, group and broker browser that reads by offset or by time.',
+    tr: 'kafka \u00b7 9092',
+    not: 'Read-only: it reads records, it does not produce them.',
   },
 ];
 

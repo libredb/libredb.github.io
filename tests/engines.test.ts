@@ -71,10 +71,10 @@ describe('the engine count is stated consistently', () => {
   // The count appears as prose in five places. It has already drifted once — the
   // site said sixteen while docs/providers/README.md listed seventeen providers,
   // because LibreDB (the embedded store /playground runs) was never added.
-  const WORD = 'seventeen';
+  const WORD = 'nineteen';
 
   it('matches the number of engines actually defined', () => {
-    expect(engines.length).toBe(17);
+    expect(engines.length).toBe(19);
   });
 
   it('is spelled the same way everywhere it is written out', () => {
@@ -86,7 +86,7 @@ describe('the engine count is stated consistently', () => {
     ] as const;
     for (const f of sources) {
       const text = readFileSync(f, 'utf8').toLowerCase();
-      expect(text.includes('sixteen'), `${f} still says "sixteen"`).toBe(false);
+      expect(text.includes('seventeen'), `${f} still says "seventeen"`).toBe(false);
       expect(text.includes(WORD), `${f} should name the count`).toBe(true);
     }
   });
