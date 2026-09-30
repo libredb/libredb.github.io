@@ -10,7 +10,7 @@ export const faq = [
   },
   {
     q: 'Which databases are supported?',
-    a: 'Seventeen engines: PostgreSQL, MySQL, Oracle, SQL Server, SQLite, libSQL, DuckDB, ClickHouse, Apache Druid, Apache Trino, MongoDB, Couchbase, Redis, LibreDB, Cassandra, Elasticsearch and OpenSearch — relational, document, key-value, wide-column, analytical, search and federated query.',
+    a: 'Nineteen engines: PostgreSQL, MySQL, Oracle, SQL Server, SQLite, libSQL, DuckDB, ClickHouse, Apache Druid, Trino, MongoDB, Couchbase, Redis, LibreDB, Cassandra, Elasticsearch, OpenSearch, Prometheus and Apache Kafka — relational, document, key-value, wide-column, analytical, search, time-series, streaming and federated query. One of the nineteen is LibreDB itself, the embedded store the playground runs on, so the count you will see on the product listings is eighteen: those count the engines you point Studio at, not the one it carries.',
   },
   {
     q: 'Is anything held back from the open-source build?',

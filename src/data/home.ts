@@ -22,7 +22,7 @@ export const hero = {
     lineOne: ['You', 'created', 'the', 'database.'],
     lineTwo: ['The', 'editor', 'is', 'already', 'beside', 'it.'],
   },
-  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and thirteen more engines, with SSO and audit built in.',
+  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and fifteen more engines, with SSO and audit built in.',
   primaryCta: { label: 'Open live demo', href: 'https://app.libredb.org' },
   secondaryCta: { label: 'Deploy in one click', href: '#deploy' },
   command: 'docker run -p 3000:3000 libredb/libredb-studio',
@@ -151,7 +151,7 @@ export const how = {
 
 /* --- databases ------------------------------------------------------------ */
 export const databases = {
-  eyebrow: 'Seventeen engines',
+  eyebrow: 'Nineteen engines',
   headline: { lineOne: 'One interface.', gradient: 'Different engines.' },
   intro:
     "Relational, document, key-value, analytical, search and federated query — the same tree, editor and grid over each of them, and each engine's real limits declared rather than papered over.",
@@ -159,7 +159,7 @@ export const databases = {
   notDoNote:
     'Stated because the alternative is a feature list that quietly breaks on the fourth engine. Capability flags come from the provider itself — a control that cannot work is hidden, not offered and then failed.',
   footnote:
-    'The claim is the span, not a count — seventeen engines, one interface. Per-engine detail lives in the provider docs.',
+    'The claim is the span, not a count — nineteen engines, one interface. Per-engine detail lives in the provider docs.',
 } as const;
 
 /* --- product demo --------------------------------------------------------- */
