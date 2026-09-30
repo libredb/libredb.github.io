@@ -1,4 +1,4 @@
-# Handoff: LibreDB Studio — Marketing Website (Astro + Outstatic)
+# LibreDB Studio Marketing Website
 
 ## Overview
 
