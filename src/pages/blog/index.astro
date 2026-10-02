@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import { pagePath, site } from '../../lib/site';
-import { engineName, postEngine } from '../../lib/posts';
+import { engineArchives, engineName } from '../../lib/posts';
 
 const posts = (await getCollection('posts', ({ data }) => data.status === 'published')).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
@@ -12,14 +12,8 @@ const posts = (await getCollection('posts', ({ data }) => data.status === 'publi
 // A way into 104 posts that is not "scroll". These are plain links to the
 // archives rather than a client-side filter: the grouping is then crawlable,
 // linkable and survives with JavaScript off, and the work is already done.
-const byEngine = new Map<string, number>();
-for (const post of posts) {
-  const id = postEngine(post.id);
-  if (id) byEngine.set(id, (byEngine.get(id) ?? 0) + 1);
-}
-const archives = [...byEngine.entries()]
-  .filter(([, n]) => n >= 2)
-  .map(([id, n]) => ({ id, n, name: engineName(id) ?? id }))
+const archives = [...engineArchives(posts).entries()]
+  .map(([id, list]) => ({ id, n: list.length, name: engineName(id) ?? id }))
   .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
 ---
 
