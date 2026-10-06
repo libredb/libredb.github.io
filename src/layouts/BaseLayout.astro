@@ -15,15 +15,21 @@ import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import CookieConsent from '../components/layout/CookieConsent.astro';
 import { buildSeo, type SeoInput } from '../lib/seo';
-import { site } from '../lib/site';
+import { canonicalUrl, site } from '../lib/site';
 
 interface Props extends SeoInput {
   /** JSON-LD graph nodes appended to the page */
   schema?: unknown[];
   bodyClass?: string;
+  /**
+   * The feed this page is a view of, when it is not the site-wide one. An
+   * engine archive that advertises /rss.xml subscribes the reader to all 104
+   * posts, which is the opposite of what they clicked.
+   */
+  feed?: { href: string; title: string };
 }
 
-const { schema = [], bodyClass, ...seoInput } = Astro.props;
+const { schema = [], bodyClass, feed, ...seoInput } = Astro.props;
 const seo = buildSeo(seoInput);
 
 const jsonLd = {
@@ -87,7 +93,8 @@ const jsonLd = {
     <link rel="apple-touch-icon" href="/brand/lb-icon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0b0d18" />
-    <link rel="alternate" type="application/rss+xml" title={`${site.name} — blog`} href={`${site.url}/rss.xml`} />
+    {feed && <link rel="alternate" type="application/rss+xml" title={feed.title} href={canonicalUrl(feed.href)} />}
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — blog`} href={canonicalUrl('/rss.xml')} />
 
     <script is:inline>
       // Runs before first paint: no theme flash, and `html.js` is the switch the
