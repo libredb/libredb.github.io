@@ -162,7 +162,7 @@ export const engines: Engine[] = [
     name: 'Elasticsearch',
     cat: 'Search',
     logo: '/engines/elasticsearch.svg',
-    desc: 'Query DSL and browsing over indices, with mapping introspection and cluster health.',
+    desc: 'Elasticsearch SQL over indices, with mapping introspection and cluster health.',
     tr: 'http · 9200',
     not: 'Search engines are query-and-browse: no row editing, no ER diagrams.',
   },
