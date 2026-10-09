@@ -31,24 +31,24 @@
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
-    "@astrojs/sitemap": "3.7.3",
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/jetbrains-mono": "5.3.0",
     "@fontsource-variable/plus-jakarta-sans": "5.3.0",
     "@libredb/libredb": "0.2.2",
-    "astro": "7.2.9"
+    "astro": "7.3.6"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
-    "@secretlint/secretlint-rule-preset-recommend": "13.0.5",
-    "@types/bun": "1.4.0",
-    "chrome-launcher": "1.2.1",
-    "knip": "6.33.0",
-    "lighthouse": "13.4.1",
+    "@secretlint/secretlint-rule-preset-recommend": "13.0.7",
+    "@types/bun": "1.4.2",
+    "chrome-launcher": "1.2.2",
+    "knip": "6.40.0",
+    "lighthouse": "13.5.0",
     "linkedom": "0.18.13",
-    "oxlint": "1.80.0",
-    "prettier": "3.9.6",
+    "oxlint": "1.87.0",
+    "prettier": "3.9.9",
     "prettier-plugin-astro": "0.14.1",
-    "secretlint": "13.0.5",
+    "secretlint": "13.0.7",
     "sirv-cli": "3.0.1",
     "typescript": "6.0.3"
   }
