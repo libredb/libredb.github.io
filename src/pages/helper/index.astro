@@ -14,7 +14,7 @@ const guides = [
     href: '/helper/0.17.0.html',
     published: '2026-09-28',
     size: '15.7 MB',
-    current: true,
+    latest: true,
   },
   {
     version: '0.16.2',
@@ -30,14 +30,18 @@ const guides = [
   },
 ];
 
-const current = guides.find((g) => g.current) ?? guides[0];
+// `latest` marks the newest guide, which is not the same as the current
+// release: when the site describes a newer Studio than any guide covers, the
+// page says so rather than presenting the guide as matching it.
+const current = guides.find((g) => g.latest) ?? guides[0];
+const behind = current.version !== site.version;
 
 const schema = [
   {
     '@type': 'TechArticle',
     headline: `${site.name} installation guide`,
     description:
-      'A single-file installation guide for LibreDB Studio: 22 install routes, a walkthrough of the application, every setting, in 13 languages.',
+      'A single-file installation guide for LibreDB Studio, one per release: the install routes, a walkthrough of the application, every setting, in 13 languages.',
     url: `${site.url}/helper/`,
     about: { '@type': 'SoftwareApplication', name: site.name, applicationCategory: 'DeveloperApplication' },
     author: { '@type': 'Organization', name: site.shortName },
@@ -49,7 +53,7 @@ const schema = [
 <BaseLayout
   path="/helper/"
   title="Installation guide"
-  description="The LibreDB Studio installation guide: one self-contained page per release, 22 install routes, every setting, in 13 languages. Open it in a browser or save it and read it offline."
+  description="The LibreDB Studio installation guide: one self-contained page per release, the install routes, every setting, in 13 languages. Open it in a browser or save it and read it offline."
   schema={schema}
 >
   <section class="guide" aria-labelledby="guide-title">
@@ -61,18 +65,26 @@ const schema = [
       </h1>
       <p class="guide__intro">
         Someone installed LibreDB Studio on each of these platforms, wrote down what actually happened, and
-        screenshotted it. That is the whole guide: 22 install routes, a walkthrough of the application, every setting it
-        exposes, and the notes on what was tested and what was not. It is one file with the images and fonts inside it,
-        so it opens with no network and nothing to install.
+        screenshotted it. That is the whole guide: the install routes, a walkthrough of the application, every setting
+        it exposes, and the notes on what was tested and what was not. It is one file with the images and fonts inside
+        it, so it opens with no network and nothing to install.
       </p>
 
       <div class="guide__now">
         <div class="guide__nowhead">
-          <p class="guide__kicker">Current</p>
+          <p class="guide__kicker">Latest guide</p>
           <h2 class="guide__h">Version {current.version}</h2>
           <p class="guide__meta">
             Published {current.published} · {current.size} · 13 languages
           </p>
+          {
+            behind && (
+              <p class="guide__meta">
+                It describes {current.version}. The current release is {site.version}, and no guide covers it yet, so
+                some steps and screens may differ.
+              </p>
+            )
+          }
         </div>
         <div class="guide__actions">
           <a class="guide__cta" href={current.href}>Open the guide</a>
@@ -104,7 +116,7 @@ const schema = [
                 </a>
                 <span class="guide__when">{g.published}</span>
                 <span class="guide__size">{g.size}</span>
-                {g.current && <span class="guide__badge">current</span>}
+                {g.latest && <span class="guide__badge">latest</span>}
               </li>
             ))
           }

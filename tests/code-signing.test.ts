@@ -36,13 +36,13 @@ const HOME = 'dist/index.html';
 const POLICY = 'dist/code-signing-policy/index.html';
 const DOWNLOAD = 'dist/deploy/index.html';
 
-/** Repository permission, read from the GitHub API on 2026-09-01. The published
+/** Repository permission, read from the GitHub API on 2026-10-11. The published
  *  roles are a claim about who may do what; if they drift from the repository,
  *  the claim is false, so the mapping is pinned rather than trusted. */
 const REPO_PERMISSION: Record<string, 'admin' | 'maintain' | 'read'> = {
   cevheri: 'admin',
   'kaya-abdullah': 'admin',
-  'yusuf-gundogdu': 'maintain',
+  'yusuf-gundogdu': 'admin',
   mfatihdayan: 'read',
 };
 

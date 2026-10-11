@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { engines } from '../src/data/engines';
+import { engines, externalEngines } from '../src/data/engines';
 import { channels } from '../src/data/deploy-channels';
 import { pageRoutes } from '../src/pages/llms.txt';
 import site from '../site.config.json' with { type: 'json' };
@@ -40,6 +40,16 @@ const WORDS = [
   'eighteen',
   'nineteen',
   'twenty',
+  'twenty-one',
+  'twenty-two',
+  'twenty-three',
+  'twenty-four',
+  'twenty-five',
+  'twenty-six',
+  'twenty-seven',
+  'twenty-eight',
+  'twenty-nine',
+  'thirty',
 ];
 
 describe('llms.txt', () => {
@@ -63,7 +73,7 @@ describe('llms.txt', () => {
   });
 
   it('counts the engines the engine list actually holds', () => {
-    expect(full()).toContain(`## Supported engines (${engines.length})`);
+    expect(full()).toContain(`## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)`);
     for (const e of engines) {
       expect(full(), `${e.name} is missing from llms-full.txt`).toContain(e.name);
     }
@@ -79,9 +89,9 @@ describe('llms.txt', () => {
     // is the meta description of every page and the first paragraph of
     // llms.txt, so it was the most-read wrong sentence on the site.
     const named = (site.description.match(/\b(PostgreSQL|MySQL|MongoDB|Redis)\b/g) ?? []).length;
-    const more = WORDS.indexOf(site.description.match(/and (\w+) more engines/)?.[1] ?? '');
+    const more = WORDS.indexOf(site.description.match(/and ([\w-]+) more engines/)?.[1] ?? '');
     expect(more, 'the description no longer says "and <n> more engines"').toBeGreaterThan(-1);
-    expect(named + more, 'site.description undercounts or overcounts the engines').toBe(engines.length);
+    expect(named + more, 'site.description undercounts or overcounts the engines').toBe(externalEngines.length);
   });
 
   it('carries the vendor identity, which is what a model is asked to verify', () => {

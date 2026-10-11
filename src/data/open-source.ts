@@ -63,5 +63,5 @@ export const security = {
   headline: 'Found a vulnerability? Do not open an issue.',
   body: 'Security reports go to the vendor by email, not through the public tracker, so a fix can ship before the details are public. The policy covers what to include, what to expect and the disclosure timeline.',
   email: 'info@sekoya.tech',
-  note: 'Security updates are provided for the current minor line; older lines are not patched. The policy also documents the known security considerations and publishes a software bill of materials.',
+  note: 'Security fixes are released against the latest published release only; there is no long-term support branch and no backport. The policy also documents the known security considerations and publishes a software bill of materials.',
 } as const;

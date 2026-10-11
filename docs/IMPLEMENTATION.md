@@ -177,7 +177,7 @@ drifts out of step.
 ## Regenerating assets
 
 ```sh
-./scripts/fetch-engine-logos.sh          # the sixteen engine marks
+./scripts/fetch-engine-logos.sh          # the nineteen fetched engine marks
 node scripts/logo-contrast-report.mjs    # how each reads on the white plate
 bun run build && bun run scripts/og/build-og.mjs   # public/og/default.png
 node scripts/contrast.mjs "#7f87a7" "#141829"   # one contrast pair

@@ -1,8 +1,11 @@
 /**
  * The environment-variable reference behind /docker-compose.
  *
- * SOURCE OF TRUTH is `src/data/docker-compose.example.yml`, which is a verbatim
- * copy of libredb-studio's `docker-compose.example.yml`. This file only describes
+ * SOURCE OF TRUTH is `src/data/docker-compose.example.yml`, which is
+ * libredb-studio's `docker-compose.example.yml` at the tag in `upstreamCompose`
+ * with the comment lines listed there corrected, and nothing else changed (the
+ * studio repo is not edited from here, so a false comment is fixed in this copy
+ * and listed). This file only describes
  * what is in there — it must never introduce a variable the compose file does not
  * mention, and must never omit one it does. `tests/compose.test.ts` checks both
  * directions, so a drifting copy fails the gate rather than shipping a table that
@@ -34,7 +37,7 @@ export const composeGroups: ComposeGroup[] = [
   {
     id: 'auth',
     title: 'Authentication',
-    note: 'The local email/password provider. Studio will not start a usable login without ADMIN_PASSWORD and JWT_SECRET.',
+    note: 'The local email/password provider. This compose file refuses to start until ADMIN_PASSWORD and JWT_SECRET are set in .env. Studio on its own generates both on first start and prints the admin password to the log once; the file asks for them so the values are yours.',
     vars: [
       {
         name: 'ADMIN_EMAIL',
@@ -45,7 +48,7 @@ export const composeGroups: ComposeGroup[] = [
       {
         name: 'ADMIN_PASSWORD',
         def: 'required',
-        desc: 'Admin password. Without it the login screen shows a configuration error instead of a form.',
+        desc: 'Admin password. Unset, docker compose up stops with an error before the container starts.',
         state: 'active',
       },
       {
@@ -77,7 +80,7 @@ export const composeGroups: ComposeGroup[] = [
   {
     id: 'oidc',
     title: 'OIDC single sign-on',
-    note: 'Only read when NEXT_PUBLIC_AUTH_PROVIDER=oidc. Tested against Auth0, Keycloak, Okta, Microsoft Entra ID and Zitadel.',
+    note: "Only read when NEXT_PUBLIC_AUTH_PROVIDER=oidc. Studio's OIDC guide has setup examples for Auth0, Keycloak, Okta, Microsoft Entra ID and Zitadel. The Keycloak steps are verified on Keycloak 26.4 and ship as a local demo stack; the others are configuration examples, and Okta's logout has not been tried against a live tenant.",
     vars: [
       {
         name: 'OIDC_ISSUER',
@@ -115,7 +118,7 @@ export const composeGroups: ComposeGroup[] = [
   {
     id: 'storage',
     title: 'Storage',
-    note: 'Where saved connections and configuration live. The default keeps them in the browser, so a fresh container starts empty on purpose.',
+    note: 'Where saved connections and configuration live. The default keeps them in the browser. A first start also adds two editable sample connections, on by default; .env.example has the switches that turn them off.',
     vars: [
       {
         name: 'STORAGE_PROVIDER',
@@ -131,7 +134,7 @@ export const composeGroups: ComposeGroup[] = [
       },
       {
         name: 'STORAGE_POSTGRES_URL',
-        def: '—',
+        def: 'postgresql://postgres:postgres@libredb-postgres:5432/libredb_storage?sslmode=disable',
         desc: 'Connection string for the postgres provider. The file ships a matching optional postgres:18 service.',
         state: 'commented',
       },
@@ -153,7 +156,7 @@ export const composeGroups: ComposeGroup[] = [
       {
         name: 'LLM_API_URL',
         def: '—',
-        desc: 'Base URL for ollama and custom, e.g. http://host:11434/v1.',
+        desc: 'Required for custom, and read by every provider: an Ollama that is not on localhost:11434, e.g. http://host:11434/v1, or a proxy or regional endpoint for gemini.',
         state: 'commented',
       },
     ],
@@ -184,6 +187,50 @@ export const composeGroups: ComposeGroup[] = [
     ],
   },
   {
+    id: 'mcp',
+    title: 'MCP server',
+    note: 'Off unless switched on. An AI client of your own reads schemas and runs read-only SQL at /api/mcp, with a token minted on the settings screen.',
+    vars: [
+      {
+        name: 'LIBREDB_MCP_ENABLED',
+        def: 'unset',
+        desc: 'true, on or 1 turns the MCP endpoint on; unset leaves it off.',
+        state: 'commented',
+      },
+      {
+        name: 'LIBREDB_MCP_URL',
+        def: 'http://localhost:3000/api/mcp',
+        desc: 'The address clients use, with your BASE_PATH. Every token is bound to it, so changing it invalidates them all.',
+        state: 'commented',
+      },
+      {
+        name: 'LIBREDB_MCP_TOKEN_LABEL',
+        def: '—',
+        desc: 'Any non-empty value. Changing it revokes every MCP token at once.',
+        state: 'commented',
+      },
+      {
+        name: 'LIBREDB_MCP_TOKEN_TTL_DAYS',
+        def: '30',
+        desc: 'How many days a minted token stays valid, from 1 to 365.',
+        state: 'commented',
+      },
+    ],
+  },
+  {
+    id: 'passkeys',
+    title: 'Passkeys',
+    note: 'Off unless PASSKEY_ORIGIN is set. Needs local sign-in and STORAGE_PROVIDER sqlite or postgres, since the server store keeps the passkey records.',
+    vars: [
+      {
+        name: 'PASSKEY_ORIGIN',
+        def: 'http://localhost:3000',
+        desc: 'The exact address people open Studio at: scheme, host and port, no path. https is required except on localhost.',
+        state: 'commented',
+      },
+    ],
+  },
+  {
     id: 'seed',
     title: 'Seed connections',
     note: 'Optional. Ship the team a Studio that already knows the databases, instead of asking everyone to add them by hand.',
@@ -204,3 +251,54 @@ export const composeQuickStart = `curl -O https://libredb.org/docker-compose.exa
 mv docker-compose.example.yml docker-compose.yml
 printf 'ADMIN_PASSWORD=change-me\\nJWT_SECRET=%s\\n' "$(openssl rand -base64 32)" > .env
 docker compose up -d`;
+
+/**
+ * The site copy against upstream. Every line that differs from libredb-studio's
+ * file at `tag` is listed here, and each one is a comment that was false at that
+ * tag. tests/compose.test.ts puts the upstream text back, hashes the result and
+ * compares it with `sha256` (the upstream file's own hash), so any other edit,
+ * functional or not, fails the gate. When the upstream file changes: copy it,
+ * re-apply only the corrections still needed, and update `tag` and `sha256`.
+ */
+export const upstreamCompose = {
+  tag: '0.18.2',
+  sha256: '305c389ed153de7c9c1244fc62b1a3cf5d906bbab165f627a5ad006561963d85',
+  corrections: [
+    {
+      line: 14,
+      upstream: '# Every supported environment variable is listed below. Commonly-used ones are',
+      site: '# The variables most deployments use are listed below; .env.example has the rest.',
+      why: 'The file lists a subset of what Studio reads; .env.example is the full set.',
+    },
+    {
+      line: 15,
+      upstream: '# active; less-frequently-used ones are shown commented out — uncomment as needed.',
+      site: '# Commonly-used ones are active; others are commented out — uncomment as needed.',
+      why: 'Rewrapped with line 14.',
+    },
+    {
+      line: 33,
+      upstream: '      # AUTHENTICATION — local provider. ADMIN_PASSWORD is required (without it',
+      site: '      # AUTHENTICATION — local provider. ADMIN_PASSWORD is required here (without',
+      why: 'Rewrapped with line 34.',
+    },
+    {
+      line: 34,
+      upstream: '      # the login screen shows a clear config error); USER_* is optional.',
+      site: '      # it docker compose refuses to start); USER_* is optional.',
+      why: 'The file uses ${ADMIN_PASSWORD:?}, so compose stops before the container starts; Studio itself would generate a password (.env.example, ZERO-CONFIG BOOTSTRAP).',
+    },
+    {
+      line: 75,
+      upstream: '      # LLM_API_URL: ${LLM_API_URL}                # ollama/custom only, e.g. http://host:11434/v1',
+      site: '      # LLM_API_URL: ${LLM_API_URL}                # required for custom, read by every provider, e.g. http://host:11434/v1',
+      why: '.env.example: "required for the custom provider, and read by every kind" (Gemini reads it for a proxy or regional endpoint).',
+    },
+    {
+      line: 129,
+      upstream: "    # Image runs as node:24.16.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
+      site: "    # Image runs as node:26.10.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
+      why: 'The Dockerfile at 0.18.2 builds the runner FROM node:26.10.0-trixie-slim.',
+    },
+  ],
+} as const;

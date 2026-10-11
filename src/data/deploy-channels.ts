@@ -8,8 +8,8 @@
  * RULE: only `status: live` channels appear here. A channel that is `pending`
  * (submitted, not yet listed) or `deprecated` must never be shown — the page
  * would be promising an install that does not exist yet. As of the transcription
- * below, channels.yaml holds 33 channels: 26 live, 6 pending, 1 deprecated. The
- * 26 live ones are all present.
+ * below (studio 0.18.2), channels.yaml holds 46 channels: 39 live, 6 pending,
+ * 1 deprecated. The 39 live ones are all present.
  *
  * When channels.yaml changes, re-transcribe rather than adding by hand — the
  * scorecard in docs/CHANNELS.md is the number to reconcile against.
@@ -61,7 +61,7 @@ export const channelCategories: CategoryMeta[] = [
   {
     id: 'kubernetes-operators',
     title: 'Kubernetes',
-    tagline: 'The published Helm chart, on any cluster — including a certified partner listing.',
+    tagline: 'The published Helm chart and operator, on any cluster — including a certified partner listing.',
   },
   {
     id: 'package-managers',
@@ -134,7 +134,7 @@ export const channels: Channel[] = [
     automated: true,
   },
 
-  // --- kubernetes (2 live) ---
+  // --- kubernetes (4 live) ---
   {
     id: 'helm',
     name: 'Helm chart',
@@ -154,8 +154,26 @@ export const channels: Channel[] = [
     note: 'A certified chart in Rancher Partner Charts, with a SUSE Partner Certification listing.',
     automated: false,
   },
+  {
+    id: 'operatorhub-community',
+    name: 'OperatorHub / OpenShift community operators',
+    category: 'kubernetes-operators',
+    platforms: ['Kubernetes'],
+    url: 'https://operatorhub.io/operator/libredb-studio-operator',
+    note: 'The operator in the community catalogs of operatorhub.io and the OpenShift console. Community, not Red Hat certified, so the console lists it under Community.',
+    automated: false,
+  },
+  {
+    id: 'zopdev-helm-charts',
+    name: 'ZopDev Helm Charts',
+    category: 'kubernetes-operators',
+    platforms: ['Kubernetes'],
+    url: 'https://helm.zop.dev',
+    note: 'A chart of its own in the ZopDev repository, served from helm.zop.dev. Not a copy of the libredb.org chart.',
+    automated: false,
+  },
 
-  // --- package managers (5 live) ---
+  // --- package managers (6 live) ---
   {
     id: 'homebrew',
     name: 'Homebrew tap',
@@ -197,6 +215,16 @@ export const channels: Channel[] = [
     automated: true,
   },
   {
+    id: 'scoop',
+    name: 'Scoop',
+    category: 'package-managers',
+    platforms: ['Windows'],
+    url: 'https://github.com/ScoopInstaller/Extras/blob/master/bucket/libredb-studio.json',
+    command: 'scoop install extras/libredb-studio',
+    note: 'The same standalone zip, from the Scoop Extras bucket (scoop bucket add extras first). The bucket updates itself from each release.',
+    automated: false,
+  },
+  {
     id: 'flatpark',
     name: 'FlatPark (Flatpak)',
     category: 'package-managers',
@@ -235,7 +263,7 @@ export const channels: Channel[] = [
     automated: false,
   },
 
-  // --- PaaS catalogs (8 live) ---
+  // --- PaaS catalogs (15 live) ---
   {
     id: 'railway-template',
     name: 'Railway',
@@ -252,6 +280,24 @@ export const channels: Channel[] = [
     platforms: ['Cloud'],
     url: 'https://github.com/caprover/one-click-apps',
     note: 'Listed in CapRover’s official one-click apps.',
+    automated: false,
+  },
+  {
+    id: 'caprover-autoconnect',
+    name: 'CapRover auto-connect',
+    category: 'paas-catalogs',
+    platforms: ['Cloud'],
+    url: 'https://github.com/caprover/one-click-apps',
+    note: 'An opt-in second CapRover entry: a discovery companion reads the Docker socket and connects Studio to the databases CapRover runs. The plain entry stays socket-free.',
+    automated: false,
+  },
+  {
+    id: 'dokku-plugin',
+    name: 'Dokku plugin',
+    category: 'paas-catalogs',
+    platforms: ['Cloud'],
+    url: 'https://dokku.com/docs/community/plugins/',
+    note: 'A community plugin, listed on Dokku’s community plugins page.',
     automated: false,
   },
   {
@@ -285,9 +331,18 @@ export const channels: Channel[] = [
     id: 'cosmos',
     name: 'Cosmos',
     category: 'paas-catalogs',
-    platforms: ['Container'],
+    platforms: ['Cloud'],
     url: 'https://github.com/azukaar/cosmos-servapps-official',
     note: 'A servapp in the Cosmos marketplace.',
+    automated: false,
+  },
+  {
+    id: 'railyard',
+    name: 'Railyard',
+    category: 'paas-catalogs',
+    platforms: ['Cloud'],
+    url: 'https://railyard.run/templates/libredb-studio',
+    note: 'A template in the Railyard catalog. Railyard builds the Dockerfile from main at deploy time, so a deploy can carry commits no release has shipped yet.',
     automated: false,
   },
   {
@@ -306,6 +361,42 @@ export const channels: Channel[] = [
     platforms: ['Container'],
     url: 'https://apps.truenas.com/catalog/libredb-studio_community/',
     note: 'In the TrueNAS SCALE community apps catalog.',
+    automated: false,
+  },
+  {
+    id: 'casaos',
+    name: 'CasaOS App Store',
+    category: 'paas-catalogs',
+    platforms: ['Container'],
+    url: 'https://github.com/IceWhaleTech/CasaOS-AppStore',
+    note: 'In the CasaOS App Store; installs a container on your own device.',
+    automated: false,
+  },
+  {
+    id: 'okxlin-appstore',
+    name: '1Panel community app store',
+    category: 'paas-catalogs',
+    platforms: ['Container'],
+    url: 'https://github.com/okxlin/appstore/tree/localApps/apps/libredb-studio',
+    note: 'The community-maintained app store for 1Panel, bumped by the store’s own Renovate.',
+    automated: false,
+  },
+  {
+    id: 'portainer-templates-as93',
+    name: 'Portainer templates (lissy93)',
+    category: 'paas-catalogs',
+    platforms: ['Container'],
+    url: 'https://portainer-templates.as93.net',
+    note: 'In the lissy93 Portainer templates aggregator, a third-party list rather than the official portainer/templates repository. It names the :latest image tag.',
+    automated: false,
+  },
+  {
+    id: 'yunohost',
+    name: 'YunoHost',
+    category: 'paas-catalogs',
+    platforms: ['Linux'],
+    url: 'https://apps.yunohost.org/app/libredb_studio',
+    note: 'In the YunoHost app catalog. No container: it unpacks the standalone Linux tarball under systemd with its own Node 24.',
     automated: false,
   },
 
@@ -334,11 +425,11 @@ export const channels: Channel[] = [
     category: 'deploy-recipes',
     platforms: ['Cloud'],
     url: 'https://github.com/libredb/libredb-studio/tree/main/deploy/koyeb',
-    note: 'A deploy button in the repository README. It deliberately ships no default credentials — you supply your own.',
+    note: 'A deploy button in the repository README. It prefills no password and no working secret: you set JWT_SECRET (32+ characters) in the deploy form, or the instance stops at boot; the admin password is generated on first run and printed to the Koyeb runtime log.',
     automated: false,
   },
 
-  // --- cloud marketplaces (1 live) ---
+  // --- cloud marketplaces (4 live) ---
   {
     id: 'digitalocean',
     name: 'DigitalOcean Marketplace',
@@ -346,6 +437,33 @@ export const channels: Channel[] = [
     platforms: ['Cloud'],
     url: 'https://marketplace.digitalocean.com/apps/libredb-studio',
     note: 'Provisioned straight from DigitalOcean’s marketplace.',
+    automated: false,
+  },
+  {
+    id: 'aws-marketplace',
+    name: 'AWS Marketplace',
+    category: 'cloud-marketplaces',
+    platforms: ['Cloud'],
+    url: 'https://aws.amazon.com/marketplace/pp/prodview-tsahkrgdqpnws',
+    note: 'A free AMI product.',
+    automated: false,
+  },
+  {
+    id: 'azure-marketplace',
+    name: 'Azure Marketplace',
+    category: 'cloud-marketplaces',
+    platforms: ['Cloud'],
+    url: 'https://marketplace.microsoft.com/en-us/product/libredb.libredb-studio',
+    note: 'A free (“Get It Now”) Azure Application solution template.',
+    automated: false,
+  },
+  {
+    id: 'gcp-marketplace',
+    name: 'Google Cloud Marketplace',
+    category: 'cloud-marketplaces',
+    platforms: ['Kubernetes', 'Cloud'],
+    url: 'https://console.cloud.google.com/marketplace/product/libredb-public/libredb-studio',
+    note: 'A free Terraform Kubernetes app, deployed from the Google Cloud console into your own GKE cluster.',
     automated: false,
   },
 ];

@@ -94,7 +94,7 @@ export const scope: SupportArea[] = [
   {
     area: 'Configuration',
     detail:
-      'OIDC single sign-on, role mapping, storage backends, seed connections, ingress and TLS, and the hardened chart defaults — non-root, read-only root filesystem, NetworkPolicy, PodDisruptionBudget and HPA.',
+      'OIDC single sign-on, role mapping, storage backends, seed connections, ingress and TLS, the chart’s hardened defaults — non-root, read-only root filesystem, all capabilities dropped — and its opt-in NetworkPolicy, PodDisruptionBudget and HPA, which ship disabled.',
   },
   {
     area: 'Defects',
@@ -122,5 +122,15 @@ export const listings = [
     name: 'Red Hat OpenShift community catalog',
     href: 'https://github.com/redhat-openshift-ecosystem/community-operators-prod',
   },
+  { name: 'OperatorHub.io', href: 'https://operatorhub.io/operator/libredb-studio-operator' },
   { name: 'Artifact Hub', href: 'https://artifacthub.io/packages/helm/libredb-studio/libredb-studio' },
+  { name: 'AWS Marketplace', href: 'https://aws.amazon.com/marketplace/pp/prodview-tsahkrgdqpnws' },
+  {
+    name: 'Microsoft Azure Marketplace',
+    href: 'https://marketplace.microsoft.com/en-us/product/libredb.libredb-studio',
+  },
+  {
+    name: 'Google Cloud Marketplace',
+    href: 'https://console.cloud.google.com/marketplace/product/libredb-public/libredb-studio',
+  },
 ];

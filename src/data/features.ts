@@ -5,9 +5,10 @@
  * handoff) and are the spine of this page too — this file only adds the depth a
  * dedicated page owes a reader, keyed by the same `n`.
  *
- * Source: libredb-studio README.md § "Key Features" and docs/AGENT.md. Every
+ * Source: libredb-studio README.md § "Key Features", docs/AGENT.md, docs/MCP.md
+ * and the 0.18.x release notes, re-verified at 0.18.2. Every
  * `limit` is stated there too; none of them is softened here. Where the product
- * documents a boundary (agent mode's three engines, masking being client-side
+ * documents a boundary (agent mode's four engines, masking being client-side
  * only, the toolkit being admin-only), the boundary is part of the feature.
  */
 export interface FeatureDetail {
@@ -33,7 +34,7 @@ export const featureDetails: FeatureDetail[] = [
       'A snapshot timeline — pick any two points and compare',
     ],
     limit:
-      'Migration SQL is generated for PostgreSQL, MySQL, SQLite, Oracle and SQL Server, plus ClickHouse column modifications. Other engines diff but do not emit migrations.',
+      'Migration SQL is generated for the relational engines, Db2 LUW and Databend included, but where the generator cannot write a change safely it writes a comment instead: a Db2 or Databend column modification, a foreign key on Trino, ClickHouse or Databend, a primary key on Trino or Databend, and index changes on Trino, ClickHouse and Databend. Document, key-value, search, time-series, graph, vector and streaming engines, and Druid, diff but get an explanatory comment rather than DDL, and no migration is an idempotent script.',
   },
   {
     n: '02',
@@ -42,6 +43,7 @@ export const featureDetails: FeatureDetail[] = [
       'Graphical execution plans, node by node',
       'Scan type, join strategy and cost surfaced per node',
       'Reads each engine’s own plan output — nothing is simulated',
+      'MySQL, MariaDB and Percona Server plans drawn as a tree too',
     ],
     limit:
       'Plan rendering follows the engine: PostgreSQL, MySQL, DuckDB, ClickHouse and Trino among others expose a plan this can draw. Where an engine has no plan interface, there is nothing to render.',
@@ -87,16 +89,17 @@ export const featureDetails: FeatureDetail[] = [
   },
   {
     n: '06',
-    body: 'You state an objective and press Start. The run drafts SQL, reads what comes back, and composes a report in which every claim cites the result it came from. It never starts itself, never writes to the editor, and never executes what it recommends.',
+    body: 'You state an objective and press Start. The run drafts SQL, reads what comes back, and composes a report in which every claim cites the result it came from. It never starts itself and never executes what it recommends. It stays out of your editor unless you opt in: an Analyze run opened with auto-execute, after a consent step, places its answer’s statement in your editor and runs it there, under the same database-enforced read-only boundary.',
     points: [
-      'Three workflows — Investigate, Optimize, Assess',
-      'Read-only enforced by the database, not by a parser: a read-only transaction on PostgreSQL, PRAGMA query_only re-asserted per statement on SQLite, a READ_ONLY handle plus an SQL guard on DuckDB',
+      'Five workflows: Investigate, Optimize, Assess, Analyze, which answers a question about the data rather than about the database, and Operate, which sends no SQL at all and reads the engine’s own reporting interface',
+      'Read-only enforced by the database, not by a parser: a read-only transaction on PostgreSQL, PRAGMA query_only re-asserted per statement on SQLite, a READ_ONLY handle plus an SQL guard on DuckDB, and on SQL Server a principal verified unable to write and a transaction always rolled back',
       'Every statement passes a policy decision, an audit event and budget accounting before the driver is touched',
-      'Bounded and metered on screen: 20 statements, 60s of database time, 200 rows per read, a 5-minute deadline',
+      'Bounded and metered on screen: 18 to 45 statements and a 6 to 15 minute deadline depending on workflow, 200 rows per read',
       'Evidence or nothing — a claim with no citation cannot be composed',
       'The run states its own verdict: “Run answered” or “Run did not answer”',
+      'An MCP endpoint, off by default, lets an AI client of your own read schemas and run bounded read-only SQL through Studio while the credentials stay on the server',
     ],
     limit:
-      'Agent mode reads PostgreSQL, SQLite and DuckDB only, because the read-only profile is database-native and exists only where a provider implements it. On any other engine a run ends engine-unsupported. Plan mode opens on every connection — it is toolless, runs nothing, and drafts a statement for you to run yourself. The embedded @libredb/studio package carries no agent surface at all.',
+      'Agent mode reads PostgreSQL, SQLite, DuckDB and SQL Server only, because the read-only profile is database-native and exists only where a provider implements it. On any other engine an agent run that sends statements is refused when it is started; the same four engines are the only ones where the MCP endpoint runs a query. Plan mode opens on every connection — it is toolless, runs nothing, and drafts a statement for you to run yourself. The embedded @libredb/studio package carries no agent surface at all.',
   },
 ];

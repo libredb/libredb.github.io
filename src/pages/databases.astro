@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { engines, engineReference, type EngineCategory } from '../data/engines';
+import { engines, externalEngines, engineReference, type EngineCategory } from '../data/engines';
 import { databases } from '../data/home';
 import { site } from '../lib/site';
 
 // The homepage shows one engine at a time behind a hexagon tablist — good for a
 // first impression, useless for the question this page exists to answer: "is my
-// engine in here, and what exactly does it not do?" So this renders all nineteen
+// engine in here, and what exactly does it not do?" So this renders every engine
 // at once, grouped, with every limit visible without a click.
 const ORDER: EngineCategory[] = [
   'SQL',
@@ -15,6 +15,8 @@ const ORDER: EngineCategory[] = [
   'Document',
   'Key-value',
   'Wide-column',
+  'Graph',
+  'Vector',
   'Search',
   'Time-series',
   'Streaming',
@@ -27,23 +29,32 @@ const BLURBS: Record<EngineCategory, string> = {
   Document: 'Collections and nested documents, with the grid flattening what it can.',
   'Key-value': 'Ordered keyspaces. Tables and collections are conventions over the keys.',
   'Wide-column': 'Partition-and-clustering-key stores, where a scan is a decision, not a default.',
-  Search: 'Index-first engines queried through their own DSL as well as SQL where offered.',
+  Graph: 'Nodes and relationships read in their own query language, and drawn as a graph beside the grid.',
+  Vector: "Collections of vectors and payloads, searched by similarity in the engine's own request format.",
+  Search:
+    'Index-first engines queried through their own SQL endpoint, Elasticsearch SQL or OpenSearch SQL, not the JSON query DSL.',
   'Time-series': 'Metric stores read through their own query language; the series is the table.',
   Streaming: 'Logs of records, browsed by offset or by time rather than queried.',
 };
 
+// Every card is shown, but the counters count external engines only, so they
+// sum to the same externalEngines.length the heading and description state. An
+// embedded store in a group (LibreDB, in Key-value) is named beside the counter
+// instead of being added to it.
 const groups = ORDER.map((cat) => ({
   cat,
   blurb: BLURBS[cat],
   items: engines.filter((e) => e.cat === cat),
+  counted: externalEngines.filter((e) => e.cat === cat).length,
+  embedded: engines.filter((e) => e.cat === cat && e.embedded).map((e) => e.name),
 })).filter((g) => g.items.length > 0);
 
 const schema = [
   {
     '@type': 'ItemList',
     name: 'Database engines supported by LibreDB Studio',
-    numberOfItems: engines.length,
-    itemListElement: engines.map((e, i) => ({
+    numberOfItems: externalEngines.length,
+    itemListElement: externalEngines.map((e, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: e.name,
@@ -56,7 +67,7 @@ const schema = [
 <BaseLayout
   path="/databases"
   title="Databases"
-  description="The nineteen engines LibreDB Studio speaks — PostgreSQL, MySQL, Oracle, MongoDB, Redis, ClickHouse and more — each with its transport and the capability it deliberately does not have."
+  description={`The ${externalEngines.length} engines LibreDB Studio speaks — PostgreSQL, MySQL, Oracle, MongoDB, Redis, ClickHouse and more — each with its transport and the capability it deliberately does not have.`}
   schema={schema}
 >
   <section class="dbp" aria-labelledby="dbp-title">
@@ -73,8 +84,9 @@ const schema = [
           groups.map((g) => (
             <li>
               <a href={`#cat-${g.cat.toLowerCase().replace(/[^a-z]/g, '-')}`}>
-                <span class="dbp__count">{String(g.items.length).padStart(2, '0')}</span>
+                <span class="dbp__count">{String(g.counted).padStart(2, '0')}</span>
                 {g.cat}
+                {g.embedded.length > 0 && ` + ${g.embedded.join(', ')}`}
               </a>
             </li>
           ))
@@ -176,7 +188,7 @@ const schema = [
     text-wrap: pretty;
   }
 
-  /* Category jump strip — nineteen engines is enough to need one. */
+  /* Category jump strip — this many engines is enough to need one. */
   .dbp__counts {
     display: flex;
     flex-wrap: wrap;

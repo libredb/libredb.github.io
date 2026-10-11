@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { VENDOR, VENDOR_ADDRESS_FULL } from '../data/company';
 import { channels } from '../data/deploy-channels';
-import { engines } from '../data/engines';
+import { engines, externalEngines } from '../data/engines';
 import { featureDetails } from '../data/features';
 import { faq } from '../data/faq';
 import { features } from '../data/home';
@@ -85,14 +85,14 @@ each machine. Access is granted and revoked through an OIDC identity provider.
 The comparison that matters is not a feature list but where the tool runs; that argument
 is at ${site.url}/compare.
 
-## Supported engines (${engines.length})
+## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)
 
 ${engineTable()}
 
 ### What each engine does NOT do
 
-These boundaries are documented rather than omitted. Agent mode, for example, is available
-on three engines and not on the rest.
+These boundaries are documented rather than omitted. Agent mode, for example, runs
+statements on four engines and not on the rest.
 
 ${engineLimits()}
 
@@ -104,16 +104,17 @@ ${featureBlocks()}
 
 What is enforced and where, plus the documented limits it stops at, is at
 ${site.url}/security. The limits are published deliberately: credentials are held
-unencrypted in browser localStorage unless a server-side store is configured, the built-in
-local login compares passwords without hashing, masking is a display-level control, and
-rate limits are counted per replica. The security policy is at ${site.links.security}.
+unencrypted in browser localStorage whatever the storage provider (a server-side store
+encrypts only its own copy at rest), the built-in local login compares passwords without
+hashing when STORAGE_PROVIDER=local (sqlite and postgres store scrypt hashes), masking
+is a display-level control, and rate limits are counted per replica. The security policy is at ${site.links.security}.
 
 ## Deployment (${channels.length} live channels)
 
 ${channelList()}
 
 The full channel inventory, including the update policy per channel, is at
-${site.url}/deploy. The canonical docker-compose.yml is served verbatim at
+${site.url}/deploy. The docker-compose.yml is served (upstream's file, a few false comments corrected) at
 ${site.url}/docker-compose.example.yml and explained at ${site.url}/docker-compose.
 
 ## The other product: LibreDB the database
