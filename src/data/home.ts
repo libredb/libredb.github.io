@@ -3,6 +3,7 @@
  * Copy is final — see README.md § Fidelity. Nothing here is paraphrased.
  */
 import { site } from '../lib/site';
+import { externalEngines } from './engines';
 
 /* --- header / nav --------------------------------------------------------- */
 export const navLinks = [
@@ -22,7 +23,7 @@ export const hero = {
     lineOne: ['You', 'created', 'the', 'database.'],
     lineTwo: ['The', 'editor', 'is', 'already', 'beside', 'it.'],
   },
-  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and fifteen more engines, with SSO and audit built in.',
+  sub: 'LibreDB Studio is the database IDE that deploys next to your data instead of onto your laptop — one browser tab for PostgreSQL, MySQL, MongoDB, Redis and twenty-three more engines, with SSO and audit built in.',
   primaryCta: { label: 'Open live demo', href: 'https://app.libredb.org' },
   secondaryCta: { label: 'Deploy in one click', href: '#deploy' },
   command: 'docker run -p 3000:3000 libredb/libredb-studio',
@@ -98,7 +99,7 @@ export const flowBand = {
   toggles: { out: 'Data → tool', in: 'Tool → data' },
   /** "out" = the old way (data travels), "in" = Studio's way (the tool travels) */
   out: {
-    chip: '✕ 4,2 TB · copies out',
+    chip: '✕ 4.2 TB · copies out',
     destKicker: 'YOU',
     destTitle: 'Desktop client',
     destSub: 'one licensed laptop',
@@ -112,7 +113,7 @@ export const flowBand = {
     caption: '→ the data never leaves the network — a URL travels instead',
   },
   specs: ['runs in a browser', 'reaches a phone', 'deploys like infrastructure', 'MIT licensed'],
-  dbMeta: '4,2 TB · in place',
+  dbMeta: '4.2 TB · in place',
 } as const;
 
 /* --- how it works --------------------------------------------------------- */
@@ -151,15 +152,15 @@ export const how = {
 
 /* --- databases ------------------------------------------------------------ */
 export const databases = {
-  eyebrow: 'Nineteen engines',
+  eyebrow: 'Twenty-seven engines',
   headline: { lineOne: 'One interface.', gradient: 'Different engines.' },
   intro:
-    "Relational, document, key-value, analytical, search and federated query — the same tree, editor and grid over each of them, and each engine's real limits declared rather than papered over.",
+    "Relational, document, key-value, graph, vector, time-series, streaming, analytical, search and federated query — the same tree, editor and grid over each of them, and each engine's real limits declared rather than papered over.",
   notDoTitle: 'What this engine does not do',
   notDoNote:
     'Stated because the alternative is a feature list that quietly breaks on the fourth engine. Capability flags come from the provider itself — a control that cannot work is hidden, not offered and then failed.',
   footnote:
-    'The claim is the span, not a count — nineteen engines, one interface. Per-engine detail lives in the provider docs.',
+    'The claim is the span, not a count — twenty-seven engines, one interface, plus LibreDB, the embedded store the playground runs on. Twenty-seven more speak one of these wire protocols and connect through the same drivers, each measured against a live instance: fifty-four named engines in all. Per-engine detail lives in the provider docs.',
 } as const;
 
 /* --- product demo --------------------------------------------------------- */
@@ -353,20 +354,33 @@ export const openSource = {
   eyebrow: 'Open source',
   headline: { before: 'Nothing sits behind an ', gradient: 'enterprise wall', after: '' },
   intro:
-    'LibreDB Studio is MIT because it has to go everywhere. What costs money is someone else running it for you — no capability moves across that line to create a reason to upgrade.',
+    'LibreDB Studio is MIT because it has to go everywhere. Nothing is sold: no paid edition, no hosted offering, and no capability held back from the MIT build to create a reason to pay.',
   tableHead: ['Capability', 'LibreDB Studio', 'Typical community editions'],
+  /*
+   * The right-hand column names no product, per the rule in compare.ts, and
+   * each cell is kept only where a vendor's own page says so (read 2026-10-11):
+   * - SSO: github.com/dbeaver/cloudbeaver/wiki/Single-Sign-On — "This feature
+   *   is available in Enterprise, AWS, and GCP editions only."
+   * - MongoDB and Redis: dbeaver.io/about — neither is in the Community list,
+   *   and "We support more SQL, NoSQL, and cloud data sources in DBeaver PRO."
+   * - AI assistant: dbeaver.com/docs/dbeaver/AI-Smart-Assistance/ — chat and
+   *   the editor AI command are unbadged, with OpenAI and GitHub Copilot only;
+   *   query suggestions, error troubleshooting, object exploration and the
+   *   other six providers carry "Available only in PRO".
+   * Removed the same day: "ER diagrams — PRO editions" (DBeaver Community ships
+   * ER diagrams). "AI assistant — Enterprise" was rewritten as above: the
+   * assistant exists in Community, limited.
+   */
   rows: [
-    { cap: 'OIDC single sign-on', us: 'in the MIT build', them: 'Enterprise, AWS only' },
-    { cap: 'ER diagrams', us: 'in the MIT build', them: 'PRO editions' },
-    { cap: 'AI assistant', us: 'in the MIT build', them: 'Enterprise' },
+    { cap: 'OIDC single sign-on', us: 'in the MIT build', them: 'paid editions only' },
+    { cap: 'AI assistant', us: 'in the MIT build', them: 'most providers and features in PRO editions' },
     { cap: 'MongoDB and Redis', us: 'in the MIT build', them: 'absent from community driver sets' },
   ],
-  tableNote:
-    'License and feature scope only, each line with a primary source — the full table lives on the comparison page.',
+  tableNote: 'License and feature scope only.',
   stats: [
     { v: '100%', l: 'line coverage, enforced as a CI gate' },
-    { v: '17', l: 'engines — SQL, NoSQL, analytics and search' },
-    { v: '33', l: 'distribution channels, 26 of them live' },
+    { v: String(externalEngines.length), l: 'engines — SQL, NoSQL, analytics, graph and vector' },
+    { v: '46', l: 'distribution channels, 39 of them live' },
     { v: 'MIT', l: 'license. All of it, nothing held back' },
   ],
 } as const;
@@ -382,7 +396,7 @@ export const deploy = {
       id: 'docker',
       label: 'Docker',
       command: 'docker run -p 3000:3000 libredb/libredb-studio',
-      note: '# zero-config first run — secrets generated at boot, printed once',
+      note: '# zero-config first run — secrets generated at boot, admin password printed once',
     },
     {
       id: 'npx',
@@ -393,7 +407,7 @@ export const deploy = {
     {
       id: 'helm',
       label: 'Helm',
-      command: 'helm install studio ./charts/libredb-studio',
+      command: 'helm install libredb oci://ghcr.io/libredb/charts/libredb-studio',
       note: '# also a certified chart in Rancher Partner Charts',
     },
     {
@@ -409,8 +423,8 @@ export const deploy = {
       note: '# one click on the platform that already runs your database',
     },
   ],
-  channelsCount: '33',
-  channelsLabel: 'distribution channels — 26 live',
+  channelsCount: '46',
+  channelsLabel: 'distribution channels — 39 live',
   channels: [
     'Docker Hub',
     'Helm chart',
@@ -427,7 +441,7 @@ export const deploy = {
     'Fly.io',
   ],
   channelsNote:
-    'Every published artifact carries a build provenance attestation, and native channels bind to localhost by default.',
+    'Release archives, Linux packages, container images and the npm package carry a build provenance attestation (the Helm chart does not), and native channels bind to localhost by default.',
   channelsLink: 'Every channel →',
 } as const;
 

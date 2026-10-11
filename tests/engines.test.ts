@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { engines, engineReference, defaultEngineId } from '../src/data/engines';
+import { engines, externalEngines, engineReference, defaultEngineId } from '../src/data/engines';
 import { readFileSync, existsSync } from 'node:fs';
 
 /**
@@ -36,20 +36,24 @@ describe('engine reference paths', () => {
   });
 });
 
-describe('agent mode names the same three engines everywhere', () => {
-  // Exactly three providers implement `queryReadOnly`, which is what agent mode
-  // runs on: postgres.ts, sqlite.ts and duckdb/index.ts. Cards that enumerate
-  // the set must name all three — a stale pair reads as "DuckDB cannot".
-  const AGENT_ENGINES = ['postgresql', 'sqlite', 'duckdb'];
+describe('agent mode names the same four engines everywhere', () => {
+  // Exactly four providers implement `queryReadOnly`, which is what agent mode
+  // runs on: postgres.ts, sqlite.ts, duckdb/index.ts and mssql.ts
+  // (libredb-studio/src/lib/agent/engine-support.ts). Cards that enumerate the
+  // set must name all four — a stale list reads as "SQL Server cannot".
+  const AGENT_ENGINES = ['postgresql', 'sqlite', 'duckdb', 'sqlserver'];
 
-  it('advertises agent mode on exactly those three, and on no other', () => {
+  it('advertises agent mode on exactly those four, and on no other', () => {
     const advertised = engines.filter((e) => /agent mode/i.test(e.desc)).map((e) => e.id);
     expect(advertised.sort()).toEqual([...AGENT_ENGINES].sort());
   });
 
-  it('never enumerates the set without DuckDB', () => {
-    const stale = engines.filter((e) => /every engine but PostgreSQL and SQLite/i.test(e.not)).map((e) => e.id);
-    expect(stale, 'agent mode also runs on DuckDB').toEqual([]);
+  it('never enumerates the set without DuckDB or SQL Server', () => {
+    const enumerations = engines.filter((e) => /every engine but /i.test(e.not));
+    for (const e of enumerations) {
+      expect(e.not, `${e.id}: agent mode also runs on DuckDB`).toContain('DuckDB');
+      expect(e.not, `${e.id}: agent mode also runs on SQL Server`).toContain('SQL Server');
+    }
   });
 });
 
@@ -68,27 +72,37 @@ describe('engine card data is complete', () => {
 });
 
 describe('the engine count is stated consistently', () => {
-  // The count appears as prose in five places. It has already drifted once — the
+  // The count appears as prose in several places. It has drifted twice — the
   // site said sixteen while docs/providers/README.md listed seventeen providers,
-  // because LibreDB (the embedded store /playground runs) was never added.
-  const WORD = 'nineteen';
+  // and later nineteen (LibreDB included) while the product counted eighteen.
+  //
+  // The rule is libredb-studio's (src/lib/db/compatibility.ts,
+  // `connectableProductCount`, #424): a published count is the external engines,
+  // `EXTERNAL_DATABASE_TYPES`, so the embedded store is shown but never counted.
+  const WORD = 'twenty-seven';
+  const STALE = ['seventeen engines', 'eighteen engines', 'nineteen engines'];
 
-  it('matches the number of engines actually defined', () => {
-    expect(engines.length).toBe(19);
+  it('matches the number of external engines actually defined', () => {
+    expect(externalEngines.length).toBe(27);
+  });
+
+  it('flags exactly one entry as the embedded store, and it is LibreDB', () => {
+    expect(engines.filter((e) => e.embedded).map((e) => e.id)).toEqual(['libredb']);
   });
 
   it('is spelled the same way everywhere it is written out', () => {
-    const sources = [
-      'src/data/home.ts',
-      'src/data/faq.ts',
-      'src/data/engines.ts',
-      'src/pages/databases.astro',
-    ] as const;
+    const sources = ['src/data/home.ts', 'src/data/faq.ts', 'src/data/engines.ts', 'src/data/compare.ts'] as const;
     for (const f of sources) {
       const text = readFileSync(f, 'utf8').toLowerCase();
-      expect(text.includes('seventeen'), `${f} still says "seventeen"`).toBe(false);
+      for (const stale of STALE) expect(text.includes(stale), `${f} still says "${stale}"`).toBe(false);
       expect(text.includes(WORD), `${f} should name the count`).toBe(true);
     }
+  });
+
+  it('derives the count on /databases instead of writing it out', () => {
+    const text = readFileSync('src/pages/databases.astro', 'utf8').toLowerCase();
+    for (const stale of STALE) expect(text.includes(stale), `databases.astro still says "${stale}"`).toBe(false);
+    expect(text).toContain('externalengines.length');
   });
 
   it('keeps every engine logo pointing at a file that exists', () => {

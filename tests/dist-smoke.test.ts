@@ -121,7 +121,7 @@ describe('assets are self-hosted', () => {
     // and the literal here still said sixteen.
     expect(marks.sort()).toEqual(engines.map((e) => e.logo.replace('/engines/', '')).sort());
     for (const img of home.querySelectorAll('.hex img')) {
-      expect(img.getAttribute('src')).toMatch(/^\/engines\/[a-z]+\.svg$/);
+      expect(img.getAttribute('src')).toMatch(/^\/engines\/[a-z0-9]+\.svg$/);
     }
   });
 

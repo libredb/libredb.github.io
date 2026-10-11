@@ -317,29 +317,42 @@ the prototype's raw `rgba()`, which is the same composite through the token.
 
 ## Engine marks
 
-All sixteen logos are **self-hosted** in `public/engines/` (the prototype
-hot-linked jsDelivr and `cdn.simpleicons.org`). `scripts/fetch-engine-logos.sh`
-re-downloads them with devicon pinned to `v2.17.0`; `@latest` is a moving target
-that can restructure a path and break a production build.
+Every mark is **self-hosted** in `public/engines/` (the prototype hot-linked
+jsDelivr and `cdn.simpleicons.org`). `scripts/fetch-engine-logos.sh` re-downloads
+the nineteen that come from a CDN, with devicon pinned to `v2.17.0`; `@latest` is
+a moving target that can restructure a path and break a production build.
 
-Two ids deliberately differ from their upstream slug — `libsql` is served as
-`turso`, `druid` as `apachedruid`. Renaming them to match breaks the fetch.
+Three ids deliberately differ from their upstream slug — `libsql` is served as
+`turso`, `druid` as `apachedruid`, `kafka` as `apachekafka`. Renaming them to
+match breaks the fetch.
 
-**Open question for design.** Four marks are near-invisible on the white hexagon
-plate the design specifies:
+Nine marks are not fetched. `libredb.svg` is our own. Seven — Db2, Neo4j,
+Milvus, Qdrant, both InfluxDB types and Oxia — are the
+generic marks the product draws for itself
+(`libredb-studio/src/components/icons/db-icons.tsx`), stroked in `#334155`.
+The product chose not to use those vendors' logos (Neo4j's provider doc lists it
+as a known limitation), and the site does not show a vendor mark the product
+itself refuses; Db2 has no CDN mark in any case. Databend's is
+its official icon, used at the Databend team's request
+(databendlabs/databend-docs#3512), paths and colours unchanged. The fetch
+script's header names each.
+
+**Open question for design.** Five marks are faint on the white hexagon plate the
+design specifies, the first four near-invisible:
 
 ```
 1.19:1  duckdb      #FFF000
 1.34:1  libsql      #4FF8D2
 1.39:1  druid       #29F1FB
 1.51:1  clickhouse  #FFCC01
+2.95:1  etcd        #419EDA
 ```
 
 They are shipped **in brand colour anyway**. These are third-party trademarks and
 vendor brand guidelines forbid recolouring; the engine name is rendered as text
 directly beneath each mark, so the logo is decorative (`alt=""`) and carries no
 WCAG requirement. Recolouring them was tried and reverted. If this matters
-visually the fix belongs in the design — a darker plate for those four, or
+visually the fix belongs in the design — a darker plate for those five, or
 licensed alternate marks. `node scripts/logo-contrast-report.mjs` prints the
 current numbers.
 
@@ -400,6 +413,17 @@ Each of these was a live failure here, not a hypothetical. Each has a test.
 7. **Outstatic writes three kinds of empty** — absent key, `''`, and `null` — and
    `.optional()` accepts only `undefined` (`PITFALLS A2`). The schema uses
    tolerant combinators; `tests/content.test.ts` feeds it all three.
+
+## The compose file is upstream's, with listed comment fixes
+
+`src/data/docker-compose.example.yml` was a verbatim copy of libredb-studio's
+file. At 0.18.2 four of its comments were false (the image's Node version, what
+happens without ADMIN_PASSWORD, which providers read LLM_API_URL, and the claim
+that every supported variable is listed). The studio repository is not edited
+from this site, so the site copy corrects those comments and lists each one in
+`upstreamCompose` (`src/data/compose.ts`). `tests/compose.test.ts` reverts the
+listed lines and checks the result against the upstream file's SHA-256, so any
+other difference still fails the gate. Functional lines stay byte-identical.
 
 ## Known limits
 

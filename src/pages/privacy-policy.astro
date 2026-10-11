@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { VENDOR, VENDOR_ADDRESS_FULL, vendorOrganizationSchema } from '../data/company';
 import { site } from '../lib/site';
 
-const UPDATED = '2026-03-01';
+const UPDATED = '2026-10-11';
 const updatedLabel = new Date(UPDATED).toLocaleDateString('en-GB', {
   day: 'numeric',
   month: 'long',
@@ -173,8 +173,13 @@ const schema = [
         <h2 id="choices">Your choices</h2>
         <p>When you first visit our site, a cookie consent banner will appear. You can choose to:</p>
         <ul>
-          <li><strong>Accept</strong> — analytics cookies will be set and Google Analytics will load.</li>
-          <li><strong>Decline</strong> — no analytics cookies will be set and Google Analytics will not load.</li>
+          <li>
+            <strong>Accept</strong> — analytics cookies will be set, and Google Analytics and Meta Pixel will load.
+          </li>
+          <li>
+            <strong>Decline</strong> — no analytics cookies will be set, and neither Google Analytics nor Meta Pixel will
+            load.
+          </li>
         </ul>
         <p>
           You can change your preference at any time by clearing your browser's local storage for this site and
@@ -185,6 +190,10 @@ const schema = [
         <p>
           If you accept analytics cookies, anonymized usage data is processed by Google Analytics under Google's <a
             href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noreferrer">Privacy Policy ↗</a
+          >, and page-view data is sent to Meta by Meta Pixel under Meta's <a
+            href="https://www.facebook.com/privacy/policy/"
             target="_blank"
             rel="noreferrer">Privacy Policy ↗</a
           >. We do not sell, rent, or share your personal data with any other third parties.

@@ -66,8 +66,8 @@ export function engineArchives<T extends Datable>(posts: T[]): Map<string, T[]> 
  * Posts to offer at the end of `post`: same engine first, newest first, topped
  * up with recent posts when that engine has too few to fill the block.
  *
- * Falling back matters — seven of the eighteen engines have four posts or fewer,
- * and a post with no engine at all (`counting-databases`) must still get a
+ * Falling back matters — most engines have four posts or fewer, several have
+ * none yet, and a post with no engine at all (`counting-databases`) must still get a
  * block rather than an empty aside.
  */
 export function relatedPosts<T extends Datable>(post: T, all: T[], limit = 4): T[] {

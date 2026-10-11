@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { VENDOR, VENDOR_ADDRESS_FULL } from '../data/company';
-import { engines } from '../data/engines';
+import { engines, externalEngines } from '../data/engines';
 import { site } from '../lib/site';
 
 /**
@@ -20,15 +20,17 @@ import { site } from '../lib/site';
 /** What a model should be told each page is for. Keyed by the route. */
 const DESCRIPTIONS: Record<string, string> = {
   '/': 'What LibreDB Studio is and why it deploys next to the data instead of onto a laptop.',
-  '/features': 'The editor, the AI copilot, EXPLAIN plans, ER diagrams, masking and the monitoring dashboard.',
+  '/features':
+    'The schema-aware editor, visual EXPLAIN plans, ER diagrams, the AI helpers, the monitoring dashboard and the database agent, each with its documented limit.',
   '/databases': 'Every engine Studio connects to, what each provider supports and what it does not.',
   '/libredb-database':
     'LibreDB the embeddable database: one ordered key-value core, three lenses, zero dependencies, early beta.',
   '/deploy': 'Every distribution channel that is live today — registries, package managers, Kubernetes and PaaS.',
-  '/docker-compose': 'The canonical docker-compose.yml, byte for byte, with every environment variable explained.',
+  '/docker-compose':
+    'The docker-compose.yml from the repository, with a few false comments corrected, and every variable it sets or lists explained; the full list is in .env.example.',
   '/get-started': 'From nothing to a running Studio, by container or by npx.',
   '/helper':
-    'The installation guide: one self-contained page per release, 22 install routes, every setting, in 13 languages.',
+    'The installation guide: one self-contained page per release, the install routes, every setting, in 13 languages. The newest guide covers 0.17.0.',
   '/playground': 'Run the LibreDB database in the browser, with no install.',
   '/open-source': 'What the MIT licence permits, how to contribute, and how to report a vulnerability.',
   '/supporters':
@@ -93,7 +95,7 @@ ${links}
 - [Security policy](${site.links.security}): how to report a vulnerability.
 - [RSS](${site.url}/rss.xml): the blog feed.
 
-## Supported engines (${engines.length})
+## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)
 
 ${engineList}
 

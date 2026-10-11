@@ -18,10 +18,15 @@ import { faq } from '../src/data/faq';
  * data file together; docs/CHANNELS.md § "Coverage snapshot" is the number to
  * copy from.
  */
-const SCORECARD = { total: 33, live: 26, pending: 6, deprecated: 1 };
+const SCORECARD = { total: 46, live: 39, pending: 6, deprecated: 1 };
 
-/** Channels that exist in the inventory but are NOT live, so must never appear. */
-const NOT_LIVE = ['OperatorHub', 'OpenShift', 'CasaOS', 'Easypanel', 'Portainer', 'Umbrel', 'Flathub'];
+/**
+ * Channels that exist in the inventory but are NOT live, so must never appear.
+ * OperatorHub/OpenShift and CasaOS went live after this list was first written;
+ * the official portainer/templates entry is still pending, but a third-party
+ * Portainer aggregator is live, so 'Portainer' alone can no longer be banned.
+ */
+const NOT_LIVE = ['AUR', 'Arch User Repository', 'Easypanel', 'Umbrel', 'Civo', 'Koyeb One-Click', 'Flathub'];
 
 describe('the deploy data holds every live channel and only live channels', () => {
   it('has exactly as many entries as the scorecard has live channels', () => {
@@ -32,12 +37,12 @@ describe('the deploy data holds every live channel and only live channels', () =
     const perCategory: Record<string, number> = {
       'registries-releases': 2,
       containers: 2,
-      'kubernetes-operators': 2,
-      'package-managers': 5,
+      'kubernetes-operators': 4,
+      'package-managers': 6,
       'os-desktop': 3,
-      'paas-catalogs': 8,
+      'paas-catalogs': 15,
       'deploy-recipes': 3,
-      'cloud-marketplaces': 1,
+      'cloud-marketplaces': 4,
     };
     for (const [cat, n] of Object.entries(perCategory)) {
       expect(channels.filter((c) => c.category === cat).length, cat).toBe(n);

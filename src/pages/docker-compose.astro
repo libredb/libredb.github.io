@@ -6,6 +6,7 @@ import { site } from '../lib/site';
 
 const rawUrl = `${site.url}/docker-compose.example.yml`;
 const ghUrl = `${site.links.github}/blob/main/docker-compose.example.yml`;
+const envExampleUrl = `${site.links.github}/blob/main/.env.example`;
 
 /**
  * A three-token YAML pass, run at build time.
@@ -50,7 +51,7 @@ const schema = [
     author: { '@type': 'Organization', name: site.name },
     headline: 'LibreDB Studio docker-compose.yml',
     description:
-      'The full docker-compose.example.yml for self-hosting LibreDB Studio, with every supported environment variable.',
+      'The full docker-compose.example.yml for self-hosting LibreDB Studio, with every variable the compose file sets or lists.',
     proficiencyLevel: 'Beginner',
     about: { '@type': 'SoftwareApplication', name: 'LibreDB Studio', applicationCategory: 'DeveloperApplication' },
   },
@@ -60,7 +61,7 @@ const schema = [
 <BaseLayout
   path="/docker-compose"
   title="Docker Compose"
-  description="The complete LibreDB Studio docker-compose.yml, ready to copy. Pulls the published ghcr.io image, documents every environment variable, and downloads with one curl."
+  description="The complete LibreDB Studio docker-compose.yml, ready to copy. Pulls the published ghcr.io image, documents every variable the file sets or lists, and downloads with one curl."
   schema={schema}
 >
   <section class="dc" aria-labelledby="dc-title">
@@ -71,9 +72,11 @@ const schema = [
         The whole compose file, <span class="u-grad-brand">nothing to assemble</span>
       </h1>
       <p class="dc__intro">
-        One service, the published <code>ghcr.io</code> image, and every environment variable Studio reads — active ones set,
-        rarely-used ones sitting commented where you can find them. It is the same file that lives in the repository; this
-        page just saves you the clone.
+        One service, the published <code>ghcr.io</code> image, and the variables most deployments touch — active ones set,
+        rarely-used ones sitting commented where you can find them. It is the file that lives in the repository, with a few
+        comments corrected where they were wrong for this release; this page just saves you the clone. Studio reads more than
+        the file lists; the full set is in
+        <a href={envExampleUrl}><code>.env.example</code></a>.
       </p>
 
       <!-- Quick start ------------------------------------------------------ -->
@@ -119,9 +122,11 @@ const schema = [
       </div>
 
       <!-- Environment reference -------------------------------------------- -->
-      <h2 class="dc__h2" id="dc-env">Every environment variable</h2>
+      <h2 class="dc__h2" id="dc-env">Every variable the file sets or lists</h2>
       <p class="dc__lede">
-        Grouped as the file groups them. <strong>Set</strong> means the line ships uncommented and is already in force;
+        Grouped as the file groups them. This is a subset of what Studio reads; <a href={envExampleUrl}
+          ><code>.env.example</code></a
+        > documents the rest. <strong>Set</strong> means the line ships uncommented and is already in force;
         <strong>commented</strong> means it is there for you to uncomment. Secrets come from <code>.env</code> through
         <code>{'${VAR}'}</code> interpolation and are never written into the compose file.
       </p>
@@ -169,7 +174,7 @@ const schema = [
       <div class="dc__links">
         <a class="dc__link" href={ghUrl} target="_blank" rel="noreferrer">View on GitHub ↗</a>
         <a class="dc__link" href={rawUrl}>Raw file</a>
-        <a class="dc__link" href="/deploy/">All twenty-six install channels</a>
+        <a class="dc__link" href="/deploy/">All thirty-nine install channels</a>
         <a class="dc__link" href="/get-started/">Get started</a>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { composeGroups, composeQuickStart } from '../src/data/compose';
+import { createHash } from 'node:crypto';
+import { composeGroups, composeQuickStart, upstreamCompose } from '../src/data/compose';
 import site from '../site.config.json' with { type: 'json' };
 
 const yaml = readFileSync('src/data/docker-compose.example.yml', 'utf8');
@@ -11,9 +12,11 @@ const yaml = readFileSync('src/data/docker-compose.example.yml', 'utf8');
  * are: the file we show is not the file that runs, and the variable table
  * describes something the image never reads.
  *
- * The compose file is a verbatim copy of libredb-studio's. These tests cannot
- * reach that repository, so they pin the shape instead — enough that a partial
- * or mangled copy fails here rather than in someone's terminal.
+ * The compose file is libredb-studio's, with a listed set of false comments
+ * corrected (`upstreamCompose` in src/data/compose.ts). These tests cannot reach
+ * that repository, so they pin the upstream file's hash and the shape instead —
+ * enough that a partial, mangled or silently edited copy fails here rather than
+ * in someone's terminal.
  */
 
 /**
@@ -32,7 +35,12 @@ const envBlock = (() => {
   return yaml.slice(start, end);
 })();
 
-const declared = new Set([...envBlock.matchAll(/^\s*#?\s*([A-Z][A-Z0-9_]{2,}):/gm)].map((m) => m[1]));
+/**
+ * The negative lookahead skips section headings written in the same shape as a
+ * variable — `# PASSKEYS: off unless PASSKEY_ORIGIN is set` — whose "value" is
+ * prose. A real variable's value is a `${…}`, a quoted literal or a single path.
+ */
+const declared = new Set([...envBlock.matchAll(/^\s*#?\s*([A-Z][A-Z0-9_]{2,}):(?! [a-z]+ [a-z])/gm)].map((m) => m[1]));
 
 const documented = composeGroups.flatMap((g) => g.vars);
 
@@ -59,6 +67,36 @@ describe('the compose file is intact', () => {
   it('keeps the healthcheck, since the PaaS templates wait on it', () => {
     expect(yaml).toContain('healthcheck:');
     expect(yaml).toContain('/api/db/health');
+  });
+});
+
+describe('the site copy is upstream plus the listed comment corrections, nothing else', () => {
+  const lines = yaml.split('\n');
+
+  it('carries each correction on the line it names', () => {
+    for (const c of upstreamCompose.corrections) {
+      expect(lines[c.line - 1], `line ${c.line}`).toBe(c.site);
+    }
+  });
+
+  it('corrects comments only', () => {
+    for (const c of upstreamCompose.corrections) {
+      expect(c.site.trim().startsWith('#'), `line ${c.line} is not a comment`).toBe(true);
+      expect(c.upstream.trim().startsWith('#'), `line ${c.line} was not a comment upstream`).toBe(true);
+      // A commented-out variable may change only after its value: the part a
+      // reader uncomments must stay byte-identical.
+      if (/^\s*#\s*[A-Z][A-Z0-9_]+: /.test(c.upstream)) {
+        const head = (t: string) => t.split('  #')[0];
+        expect(head(c.site), `line ${c.line} changed more than its trailing comment`).toBe(head(c.upstream));
+      }
+    }
+  });
+
+  it(`hashes to upstream ${upstreamCompose.tag} once the corrections are reverted`, () => {
+    const restored = [...lines];
+    for (const c of upstreamCompose.corrections) restored[c.line - 1] = c.upstream;
+    const hash = createHash('sha256').update(restored.join('\n')).digest('hex');
+    expect(hash, 'the copy differs from upstream in a line the corrections do not list').toBe(upstreamCompose.sha256);
   });
 });
 

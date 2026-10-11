@@ -24,6 +24,14 @@
  *
  * SOURCE OF TRUTH for the roles: repository collaborator permissions on
  * github.com/libredb/libredb-studio. If those change, this file is wrong.
+ *
+ * The Reviewers text was re-read from the live API on 2026-10-11: rulesets
+ * `main` and `pr-required` (pull request, 0 approving reviews; Lint, Typecheck
+ * and Build plus Unit & Integration Tests), classic protection on main (adds
+ * Secret Scan, enforce_admins false), every ruleset with OrganizationAdmin
+ * bypass_mode "always". Commits 4ebc7876 (0.18.2), 62cfce50 (0.17.0), d4000e9c
+ * and bb31671e reached main with no pull request. Org 2FA requirement: on.
+ * Immutable releases: enabled. Org admins: cevheri, kaya-abdullah.
  */
 
 const REPO = 'https://github.com/libredb/libredb-studio';
@@ -73,21 +81,21 @@ export const roles: Role[] = [
     definition: 'People trusted to modify the source code in the version control system without an additional review.',
     members: ['cevheri', 'kaya-abdullah', 'yusuf-gundogdu'],
     enforcement:
-      'Write access on the repository — two administrators and one maintainer. Everyone else, including the fourth organisation member, has read access and lands changes only through a pull request.',
+      'Admin access on the repository, held by all three. Everyone else, including the fourth organisation member, has read access and lands changes only through a pull request.',
   },
   {
     role: 'Reviewers',
     definition: 'Each change proposed by someone who is not a committer is reviewed by a team member.',
     members: ['cevheri', 'kaya-abdullah', 'yusuf-gundogdu'],
     enforcement:
-      'main is protected: no direct pushes, and lint, typecheck, build, the full test suite and a secret scan must pass before a merge. An outside pull request is additionally read by one of the people above before it lands.',
+      'Rules on main require a pull request and three passing checks before a merge: lint, typecheck and build; the unit and integration tests; and a secret scan. They require no approving review, and they are not enforced on administrators: organisation admins (cevheri and kaya-abdullah) can bypass them, and release commits and some small changes are pushed to main directly. By policy, not by a rule, an outside pull request is read by one of the people above before it lands.',
   },
   {
     role: 'Approvers',
     definition: 'Each signing request is approved by a team member trusted by the entire team.',
     members: ['cevheri', 'kaya-abdullah', 'yusuf-gundogdu'],
     enforcement:
-      'Three approvers, so a release is never gated on one person being available. Signing is never automatic: a release is a tag pushed by hand, and each signing request is approved individually.',
+      'Three approvers, so a release is never gated on one person being available. A release is a tag pushed by hand. No signing happens yet; once it does, the policy is that each signing request is approved individually and none is automatic.',
   },
 ];
 
@@ -102,8 +110,8 @@ export const codeSigningPage = {
     kicker: SIGNING_ACTIVE ? 'Current state' : 'Current state — unsigned',
     headline: SIGNING_ACTIVE ? 'Windows builds are signed' : 'Windows builds are not signed yet',
     body: SIGNING_ACTIVE
-      ? 'The Windows portable zip and the winget and Chocolatey payloads are Authenticode-signed. The private key never leaves the signing service’s HSM, and the signature is applied from the public release workflow.'
-      : 'The Windows portable zip and the winget and Chocolatey payloads ship unsigned, so SmartScreen will warn on first run. That warning is correct and you should treat it as correct: verify the checksum published with the release before running the binary. An application for free open-source code signing is open; this page is written so that when it is granted, nothing about who approves a release has to change.',
+      ? 'The Windows portable zip, and the winget, Chocolatey and Scoop packages that install it, are Authenticode-signed. The private key never leaves the signing service’s HSM, and the signature is applied from the public release workflow.'
+      : 'The Windows portable zip, and the winget, Chocolatey and Scoop packages that install it, ship unsigned, so SmartScreen will warn on first run. That warning is correct and you should treat it as correct: verify the checksum published with the release before running the binary. An application for free open-source code signing is open; this page is written so that when it is granted, nothing about who approves a release has to change.',
     href: `${REPO}/releases`,
     linkLabel: 'Releases and checksums',
   },
@@ -122,7 +130,7 @@ export const codeSigningPage = {
   process: [
     {
       t: 'Built from a tag, in public',
-      d: 'Every artifact is produced by GitHub Actions from a pushed tag, using workflows anyone can read in the repository. Nothing is built on a maintainer’s machine and uploaded.',
+      d: 'Every release artifact is built by GitHub Actions, triggered by a pushed release tag or the release published from it, using workflows anyone can read in the repository. Nothing is built on a maintainer’s machine and uploaded.',
     },
     {
       t: 'Multi-factor authentication, enforced',
@@ -130,11 +138,11 @@ export const codeSigningPage = {
     },
     {
       t: 'Each signing request approved by hand',
-      d: 'A release is never signed as a side effect of a merge. An Approver authorises each request individually, after the release assets are built and verified.',
+      d: 'This is the policy for when signing starts, since nothing is signed today: a release is never signed as a side effect of a merge, and an Approver authorises each request individually, after the release assets are built and verified.',
     },
     {
       t: 'A release is never rewritten',
-      d: 'Published releases and package versions are immutable here by policy: a bad release is replaced by the next patch version, never re-uploaded under the same one. A signature therefore always describes the bytes it was made for.',
+      d: 'Published releases and package versions are immutable here by policy, and GitHub’s immutable releases setting is on for the repository: a bad release is replaced by the next patch version, never re-uploaded under the same one. A signature therefore always describes the bytes it was made for.',
     },
   ],
 
