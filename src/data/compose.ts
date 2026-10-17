@@ -261,7 +261,7 @@ docker compose up -d`;
  * re-apply only the corrections still needed, and update `tag` and `sha256`.
  */
 export const upstreamCompose = {
-  tag: '0.18.2',
+  tag: '0.18.3',
   sha256: '305c389ed153de7c9c1244fc62b1a3cf5d906bbab165f627a5ad006561963d85',
   corrections: [
     {
@@ -298,7 +298,7 @@ export const upstreamCompose = {
       line: 129,
       upstream: "    # Image runs as node:24.16.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
       site: "    # Image runs as node:26.10.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
-      why: 'The Dockerfile at 0.18.2 builds the runner FROM node:26.10.0-trixie-slim.',
+      why: 'The Dockerfile at 0.18.3 builds the runner FROM node:26.10.0-trixie-slim.',
     },
   ],
 } as const;
