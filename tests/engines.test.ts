@@ -79,11 +79,11 @@ describe('the engine count is stated consistently', () => {
   // The rule is libredb-studio's (src/lib/db/compatibility.ts,
   // `connectableProductCount`, #424): a published count is the external engines,
   // `EXTERNAL_DATABASE_TYPES`, so the embedded store is shown but never counted.
-  const WORD = 'twenty-seven';
+  const WORD = 'forty-one';
   const STALE = ['seventeen engines', 'eighteen engines', 'nineteen engines'];
 
   it('matches the number of external engines actually defined', () => {
-    expect(externalEngines.length).toBe(27);
+    expect(externalEngines.length).toBe(41);
   });
 
   it('flags exactly one entry as the embedded store, and it is LibreDB', () => {
