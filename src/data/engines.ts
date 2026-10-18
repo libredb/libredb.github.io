@@ -1,5 +1,5 @@
 /**
- * Every engine shown in the hexagon grid and on /databases: the twenty-seven
+ * Every engine shown in the hexagon grid and on /databases: the forty-one
  * external engines of libredb-studio's `EXTERNAL_DATABASE_TYPES`
  * (src/lib/db/compatibility.ts), plus LibreDB, the embedded store the product
  * carries, which is flagged `embedded` and is not counted.
@@ -17,6 +17,10 @@
  */
 export type EngineCategory =
   | 'SQL'
+  | 'Industrial'
+  | 'Network'
+  | 'Platform'
+  | 'Object store'
   | 'Analytics'
   | 'Federated'
   | 'Document'
@@ -295,6 +299,132 @@ export const engines: Engine[] = [
     desc: 'Topic, group and broker browser that reads by offset or by time.',
     tr: 'kafka \u00b7 9092',
     not: 'Read-only: it reads records, it does not produce them.',
+  },
+  {
+    id: 'bigquery',
+    name: 'BigQuery',
+    cat: 'Analytics',
+    logo: '/engines/bigquery.svg',
+    desc: 'GoogleSQL over the REST API v2 with no Google SDK: datasets with their tables and views, a free dry-run Explain, and the bytes a statement will process shown before it runs.',
+    tr: 'REST API v2 \u00b7 https',
+    not: 'No Google SDK is used, so anything the REST API does not expose is not there.',
+  },
+  {
+    id: 'snowflake',
+    name: 'Snowflake',
+    cat: 'Analytics',
+    logo: '/engines/snowflake.svg',
+    desc: 'The SQL API v2 with Studio\u2019s own client and no Snowflake driver: every statement is one asynchronous request, signed with a key-pair JWT or a programmatic access token.',
+    tr: 'SQL API v2 \u00b7 https',
+    not: 'No driver, so driver-only features such as PUT and GET file transfer are absent.',
+  },
+  {
+    id: 'spark',
+    name: 'Apache Spark',
+    cat: 'Federated',
+    logo: '/engines/spark.svg',
+    desc: 'Spark Connect over gRPC: catalogs, databases and tables in the browser, and Spark SQL in the editor.',
+    tr: 'Spark Connect gRPC \u00b7 15002',
+    not: 'A session a server cannot release is remembered by its id rather than silently reused.',
+  },
+  {
+    id: 'firestore',
+    name: 'Firestore',
+    cat: 'Document',
+    logo: '/engines/firestore.svg',
+    desc: 'Read-only access to a database in Native mode over the Firestore REST API v1, with no Google SDK: collections, documents and their fields.',
+    tr: 'REST API v1 \u00b7 https',
+    not: 'Read-only: it reads documents, it never writes one.',
+  },
+  {
+    id: 'rabbitmq',
+    name: 'RabbitMQ',
+    cat: 'Streaming',
+    logo: '/engines/rabbitmq.svg',
+    desc: 'Read-only: the management HTTP API for the tree, the details and the health panel, and an AMQP 0-9-1 client of Studio\u2019s own for stream messages.',
+    tr: 'management HTTP API \u00b7 15672',
+    not: 'The AMQP client can encode no publish, take or delete, so a write cannot be expressed.',
+  },
+  {
+    id: 'mqtt',
+    name: 'MQTT',
+    cat: 'Streaming',
+    logo: '/engines/mqtt.svg',
+    desc: 'Read-only access to a broker\u2019s topic tree over MQTT 5.0: one discovery subscription collects what the broker delivers until a budget ends the read.',
+    tr: 'MQTT 5.0 \u00b7 1883',
+    not: 'The encoder has no PUBLISH, and shared subscriptions are refused because they would take a device\u2019s messages.',
+  },
+  {
+    id: 'sparkplug',
+    name: 'Sparkplug B',
+    cat: 'Industrial',
+    logo: '/engines/sparkplug.svg',
+    desc: 'One MQTT broker read through the Eclipse Sparkplug B 3.0.0 topic namespace: groups, edge nodes and devices with their metrics.',
+    tr: 'MQTT \u00b7 Sparkplug B 3.0.0 namespace',
+    not: 'Read-only is an absence of code here, not a setting that could be turned off.',
+  },
+  {
+    id: 'opcua',
+    name: 'OPC UA',
+    cat: 'Industrial',
+    logo: '/engines/opcua.svg',
+    desc: 'The address space of one OPC UA server as a browsable tree, with node attributes and current values.',
+    tr: 'OPC UA TCP \u00b7 4840',
+    not: 'Read-only by construction rather than by configuration: no write service is wired up.',
+  },
+  {
+    id: 'modbus',
+    name: 'Modbus',
+    cat: 'Industrial',
+    logo: '/engines/modbus.svg',
+    desc: 'Modbus TCP, read-only: a device, or a gateway in front of serial devices, read over a raw socket by a client this project owns.',
+    tr: 'Modbus TCP \u00b7 502',
+    not: 'No write function code is implemented, so a coil or a register cannot be set.',
+  },
+  {
+    id: 'mtconnect',
+    name: 'MTConnect',
+    cat: 'Industrial',
+    logo: '/engines/mtconnect.svg',
+    desc: 'One MTConnect agent read over HTTP: devices, their components and the data items they publish.',
+    tr: 'HTTP \u00b7 5000',
+    not: 'Read only: the agent\u2019s own documents are the whole surface, and nothing is posted back.',
+  },
+  {
+    id: 'netconf',
+    name: 'NETCONF',
+    cat: 'Network',
+    logo: '/engines/netconf.svg',
+    desc: 'One network device read over NETCONF on SSH: the running configuration and state data as a browsable tree.',
+    tr: 'NETCONF over SSH \u00b7 830',
+    not: 'Phase one is read only: no edit-config is sent, so a device cannot be changed.',
+  },
+  {
+    id: 'snmp',
+    name: 'SNMP',
+    cat: 'Network',
+    logo: '/engines/snmp.svg',
+    desc: 'A read-only view of SNMP agents, speaking SNMPv2c over UDP, with the MIB walk presented as a tree.',
+    tr: 'SNMPv2c over UDP',
+    not: 'It writes nothing, ever: no SET is implemented.',
+  },
+  {
+    id: 'kubernetes',
+    name: 'Kubernetes',
+    cat: 'Platform',
+    logo: '/engines/kubernetes.svg',
+    desc: 'A read-only browser and a kubectl-subset console for one cluster, over the API server\u2019s REST API and with no driver.',
+    tr: 'API server REST \u00b7 6443',
+    not: 'Read-only whatever the connection says: no request it can send changes the cluster.',
+  },
+  {
+    id: 's3',
+    name: 'S3-compatible object storage',
+    cat: 'Object store',
+    logo: '/engines/s3.svg',
+    desc: 'Buckets, folders and objects with their metadata and a capped preview of text, JSON, CSV or Parquet. Verified on MinIO, Silo, Garage and RustFS, and not on AWS S3 or any hosted service.',
+    tr: 'S3 REST API \u00b7 9000',
+    not: 'Read-only by construction: Studio sends only GET and HEAD requests.',
   },
 ];
 

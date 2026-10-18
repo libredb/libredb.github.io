@@ -84,7 +84,7 @@ export const supportersPage = {
   eyebrow: 'Supporters',
   headline: { before: 'Who pays for the parts ', gradient: 'we do not build' },
   intro:
-    'LibreDB Studio is MIT and self-hosted, but the work around it is not free: a build fleet, fifty-four database engines to probe against, a public trial anyone can open, and the code-signing certificate the Windows binaries still lack. Where a company or an open-source programme covers one of those, it is named here.',
+    'LibreDB Studio is MIT and self-hosted, but the work around it is not free: a build fleet, sixty-eight database engines to probe against, a public trial anyone can open, and the code-signing certificate the Windows binaries still lack. Where a company or an open-source programme covers one of those, it is named here.',
 
   empty: {
     kicker: 'Current supporters',

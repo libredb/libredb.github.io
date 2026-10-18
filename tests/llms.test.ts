@@ -50,6 +50,18 @@ const WORDS = [
   'twenty-eight',
   'twenty-nine',
   'thirty',
+  'thirty-one',
+  'thirty-two',
+  'thirty-three',
+  'thirty-four',
+  'thirty-five',
+  'thirty-six',
+  'thirty-seven',
+  'thirty-eight',
+  'thirty-nine',
+  'forty',
+  'forty-one',
+  'forty-two',
 ];
 
 describe('llms.txt', () => {

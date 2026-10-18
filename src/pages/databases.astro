@@ -20,6 +20,10 @@ const ORDER: EngineCategory[] = [
   'Search',
   'Time-series',
   'Streaming',
+  'Industrial',
+  'Network',
+  'Platform',
+  'Object store',
 ];
 
 const BLURBS: Record<EngineCategory, string> = {
@@ -35,6 +39,11 @@ const BLURBS: Record<EngineCategory, string> = {
     'Index-first engines queried through their own SQL endpoint, Elasticsearch SQL or OpenSearch SQL, not the JSON query DSL.',
   'Time-series': 'Metric stores read through their own query language; the series is the table.',
   Streaming: 'Logs of records, browsed by offset or by time rather than queried.',
+  Industrial:
+    'Plant-floor protocols read as they are published: an address space, a topic namespace or a register map.',
+  Network: 'Network devices read over their own management protocols, configuration and state as a tree.',
+  Platform: 'A cluster read through its API server, workloads and their objects rather than rows.',
+  'Object store': 'Buckets and objects with their metadata, and a capped preview of what an object holds.',
 };
 
 // Every card is shown, but the counters count external engines only, so they
