@@ -261,7 +261,7 @@ docker compose up -d`;
  * re-apply only the corrections still needed, and update `tag` and `sha256`.
  */
 export const upstreamCompose = {
-  tag: '0.18.3',
+  tag: '1.0.0',
   sha256: '305c389ed153de7c9c1244fc62b1a3cf5d906bbab165f627a5ad006561963d85',
   corrections: [
     {
