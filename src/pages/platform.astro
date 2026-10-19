@@ -186,13 +186,38 @@ const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(contact.sub
               <input name="Email" type="email" autocomplete="email" required />
             </label>
             <label class="wl__field">
-              <span>Company <em aria-hidden="true">*</em></span>
-              <input name="Company" type="text" autocomplete="organization" required />
+              <span>Organization, as on the license <em aria-hidden="true">*</em></span>
+              <input name="Organization" type="text" autocomplete="organization" required />
             </label>
             <label class="wl__field">
               <span>Your role</span>
               <input name="Role" type="text" autocomplete="organization-title" placeholder="e.g. Head of Data" />
             </label>
+            <!-- A license is issued for one domain: the host of Platform's own
+                 URL, which Platform compares with AUTH_URL as it starts. A domain
+                 name only — no scheme, no port, no IP address. -->
+            <div class="wl__field wl__field--wide">
+              <label for="wl-domain">Platform domain <em aria-hidden="true">*</em></label>
+              <input
+                id="wl-domain"
+                name="Platform domain"
+                type="text"
+                inputmode="url"
+                autocapitalize="none"
+                spellcheck="false"
+                placeholder="libredb-platform.example.com"
+                pattern="([A-Za-z0-9]([A-Za-z0-9\-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}"
+                maxlength="253"
+                title="A domain name such as libredb-platform.example.com, without https:// or a port"
+                aria-describedby="wl-domain-hint"
+                required
+              />
+              <p class="wl__hint" id="wl-domain-hint">
+                The address people will open Platform at. The license runs on this one domain, so give the name you will
+                set as <code>endpoints.hosts.platform</code> in the installer's <code>libredb.yaml</code>. A domain name
+                only: no https://, no port, no IP address.
+              </p>
+            </div>
             <label class="wl__field wl__field--wide">
               <span>Databases you would connect</span>
               <input name="Databases" type="text" placeholder="e.g. PostgreSQL, Oracle, MongoDB" />
@@ -481,6 +506,15 @@ const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(contact.sub
   .wl__field em {
     font-style: normal;
     color: var(--text-tertiary);
+  }
+  .wl__hint {
+    font: var(--weight-regular) var(--body-xs-size) / 1.6 var(--font-ui);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .wl__hint code {
+    font: var(--weight-regular) 0.95em / 1 var(--font-mono);
+    color: var(--text-primary);
   }
   .wl__field input,
   .wl__field textarea {

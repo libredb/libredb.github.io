@@ -16,10 +16,15 @@ for (const form of document.querySelectorAll<HTMLFormElement>('[data-waitlist]')
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const lines = ['Hello LibreDB team,', '', 'I would like to join the LibreDB Platform waiting list.', ''];
-    for (const [name, value] of new FormData(form)) {
-      const text = String(value).trim();
-      if (text) lines.push(`${name}: ${text}`);
-    }
+    // What the license is issued from goes first, so whoever issues it reads
+    // the licence choice, the organization and the domain without scrolling.
+    const fields = [...new FormData(form)]
+      .map(([name, value]) => [name, String(value).trim()] as const)
+      .filter(([, text]) => text)
+      .map(([name, text]) => [name, name === 'Platform domain' ? text.toLowerCase() : text] as const);
+    const first = ['Licence', 'Organization', 'Platform domain'];
+    fields.sort(([a], [b]) => (first.indexOf(a) + 1 || 99) - (first.indexOf(b) + 1 || 99));
+    for (const [name, text] of fields) lines.push(`${name}: ${text}`);
     message = lines.join('\n');
     window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     if (status) status.hidden = false;

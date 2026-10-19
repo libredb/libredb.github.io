@@ -133,7 +133,7 @@ export const limits: { term: string; detail: string }[] = [
   {
     term: 'Licence key',
     detail:
-      'Every self-hosted install needs a licence key, and Platform does not start without one. The key sets the admin and user seats and the expiry.',
+      'Every self-hosted install needs a licence key, and Platform does not start without one. The key names your organization and the one domain Platform runs on, and sets the admin and user seats and the expiry.',
   },
   {
     term: 'Audit',
@@ -153,7 +153,7 @@ export const offer = {
   seats: '1 admin and 3 users',
   term: '12 months',
   headline: 'Join the waiting list',
-  lead: 'The licence for 1 admin and 3 users is free for 12 months — no card, nothing to buy. Need more seats? Those are paid, and we will send a price for the number you need. Tell us a little about your team and we will come back with a licence key and the installer.',
+  lead: 'The licence for 1 admin and 3 users is free for 12 months — no card, nothing to buy. Need more seats? Those are paid, and we will send a price for the number you need. Tell us your organization and the domain Platform will run on, and we will come back with a licence key and the installer.',
   choices: [
     { value: 'Free licence — 1 admin + 3 users', label: '1 admin + 3 users', note: 'Free for 12 months' },
     { value: 'Paid licence — more seats', label: 'More than that', note: 'Paid — we send a price' },
