@@ -67,6 +67,12 @@ const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
         <CopyBox command={hero.command} label="Copy the docker run command" />
         <p class="hero__note">{hero.commandNote}</p>
       </div>
+
+      <a class="hero__platform" href={hero.platformCta.href}>
+        <span class="hero__platform-tag">{hero.platformCta.tag}</span>
+        <span>{hero.platformCta.label}</span>
+        <span class="hero__arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 
@@ -272,6 +278,42 @@ const DEMO_MOBILE = '/demo/libredb-studio-demo-mobile.html';
   .hero__note {
     font: var(--weight-regular) var(--body-xs-size) / 1.5 var(--font-mono);
     color: var(--text-tertiary);
+  }
+
+  .hero__platform {
+    margin-top: var(--space-06);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-04);
+    /* the same 48px and 15px as the hero's two buttons, so it reads as a third
+       button rather than a caption under the install line */
+    min-height: 48px;
+    padding: 0 22px 0 8px;
+    border: var(--border-width-1) solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font: var(--weight-medium) 15px / 1 var(--font-ui);
+    color: var(--text-primary);
+    text-align: left;
+    animation: lbWord 0.7s var(--ease-out) 1.18s both;
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+  .hero__platform:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+  }
+  .hero__platform:hover .hero__arrow {
+    transform: translateX(4px);
+  }
+  .hero__platform-tag {
+    flex: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--action-primary);
+    font: var(--weight-semibold) 12px / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
   }
 
   .hero__demo {

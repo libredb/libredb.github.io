@@ -13,6 +13,7 @@ export const navLinks = [
   { href: '#product', label: 'Product' },
   { href: '#open-source', label: 'Open source' },
   { href: '#deploy', label: 'Deploy' },
+  { href: '/platform/', label: 'Platform' },
 ] as const;
 
 /* --- hero ----------------------------------------------------------------- */
@@ -28,6 +29,8 @@ export const hero = {
   secondaryCta: { label: 'Deploy in one click', href: '#deploy' },
   command: 'docker run -p 3000:3000 libredb/libredb-studio',
   commandNote: 'or npx @libredb/studio — no Docker needed. Running in about ten seconds.',
+  /** The one door from the homepage to the governed product, under the install line. */
+  platformCta: { tag: 'Platform', label: 'Governed access for teams', href: '/platform/' },
   frameAddress: 'studio.internal — live product tour',
 } as const;
 

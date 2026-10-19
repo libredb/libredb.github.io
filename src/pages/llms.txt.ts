@@ -40,7 +40,7 @@ const DESCRIPTIONS: Record<string, string> = {
     'Who may change the source, who approves a release for signing, and what the software sends over the network.',
   '/support': 'The vendor of record, the supported Kubernetes and runtime versions, and how to reach support.',
   '/platform':
-    'LibreDB Platform: multi-tenant database access governance for teams. Beta, self-hosted, not currently sold.',
+    'LibreDB Platform: database access governance for teams, a 60-second tour, and the waiting list. Self-hosted; free for 1 admin and 3 users for 12 months, paid beyond that.',
   '/compare': 'Desktop client, hosted editor, or deployed beside the data — what each approach costs you.',
   '/faq': 'The questions asked before adopting it.',
   '/blog': 'Release notes and engineering writing.',
@@ -102,8 +102,9 @@ ${engineList}
 ## Licence
 
 ${site.license}. Every capability, every engine, no paid tier of the editor.
-LibreDB Platform is governance on top of it, issued at no charge during the beta
-and not sold today, described at ${site.url}/platform.
+LibreDB Platform is governance on top of it, source-available under the Elastic
+License 2.0. Its licence is free for 1 admin and 3 users for 12 months and paid
+for more seats, requested through the waiting list at ${site.url}/platform.
 `;
 };
 
