@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { VENDOR } from '../data/company';
-import { capabilities, status, tiers } from '../data/platform';
+import { capabilities, contact, limits, offer, status, tiers, tour } from '../data/platform';
 import { site } from '../lib/site';
 
 /**
@@ -15,19 +14,34 @@ const schema = [
     '@type': 'SoftwareApplication',
     name: 'LibreDB Platform',
     applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Self-hosted (Linux, Kubernetes)',
+    operatingSystem: 'Self-hosted (Linux, Docker)',
     description:
-      'Database access governance for teams — authorised, audited database access built on the open-source LibreDB Studio engine.',
-    softwareVersion: 'beta',
+      'Database access governance for teams — single sign-on, sealed credentials, per-person grants and a query audit log, built on the open-source LibreDB Studio editor.',
+    softwareVersion: '1.0.1',
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+  {
+    '@type': 'VideoObject',
+    name: tour.title,
+    description:
+      'An admin registers a database, grants it to one analyst, and takes it away again, with the audit log recording every query.',
+    thumbnailUrl: `${site.url}${tour.poster}`,
+    uploadDate: tour.uploadDate,
+    duration: tour.duration,
+    embedUrl: tour.youtubeEmbed,
     publisher: { '@id': `${site.url}/#organization` },
   },
 ];
+
+/** The no-JS fallback: a mailto form post is a text/plain body of name=value
+ *  lines, which the script replaces with a readable message when it runs. */
+const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(contact.subject)}`;
 ---
 
 <BaseLayout
   path="/platform"
   title="LibreDB Platform"
-  description="Database access governance for teams: multi-tenant organisations, five-role RBAC, per-connection permissions and a full query audit log — self-hosted, built on the open-source Studio engine."
+  description="Database access governance for teams: single sign-on, sealed credentials, per-person grants and a full query audit log — self-hosted. Free for 1 admin and 3 users for 12 months; more seats are paid."
   schema={schema}
 >
   <section class="doc" aria-labelledby="plat-title">
@@ -38,6 +52,41 @@ const schema = [
         {status.headline.before}<span class="u-grad-data">{status.headline.gradient}</span>
       </h1>
       <p class="doc__intro">{status.intro}</p>
+      <p class="plat__cta">
+        <a class="plat__ctaprimary" href="#waitlist">Join the waiting list</a>
+        <a class="plat__ctaghost" href="#tour">Watch the 60-second tour</a>
+      </p>
+
+      <!-- Tour ---------------------------------------------------------------- -->
+      <section class="doc__block" id="tour" aria-labelledby="tour-h">
+        <div class="doc__head">
+          <p class="doc__kicker">See it work</p>
+          <h2 class="doc__h" id="tour-h">{tour.title}</h2>
+          <p class="doc__lead">
+            An admin registers a database, grants it to one analyst, and takes it away again — with the audit log
+            watching the whole time.
+          </p>
+        </div>
+        <!-- Nothing here talks to YouTube until the visitor presses play; see
+             `tour` in src/data/platform.ts. Without JavaScript the poster is a
+             plain link to the video on YouTube. -->
+        <div class="plat__video" data-yt-facade data-yt-player={tour.player} data-yt-title={tour.title}>
+          <a class="plat__play" href={tour.youtube} target="_blank" rel="noreferrer" data-yt-play>
+            <img src={tour.poster} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+            <span class="plat__playbtn" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="30" height="30"
+                ><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg
+              >
+            </span>
+            <span class="u-visually-hidden">Play {tour.title} (loads the YouTube player)</span>
+          </a>
+        </div>
+        <p class="plat__yt">
+          The player loads from YouTube when you press play. <a href={tour.youtube} target="_blank" rel="noreferrer"
+            >Watch on YouTube ↗</a
+          >
+        </p>
+      </section>
 
       <!-- Capabilities -------------------------------------------------------- -->
       <section class="doc__block" aria-labelledby="cap-h">
@@ -45,7 +94,7 @@ const schema = [
           <p class="doc__kicker">What teams get</p>
           <h2 class="doc__h" id="cap-h">Governance on top of the editor</h2>
           <p class="doc__lead">
-            Everything here is about the question "who reached which data, and when" — nothing here is an editor feature
+            Everything here answers one question — who reached which data, and when. Nothing here is an editor feature
             held back from Studio.
           </p>
         </div>
@@ -61,6 +110,24 @@ const schema = [
         </ul>
       </section>
 
+      <!-- Limits -------------------------------------------------------------- -->
+      <section class="doc__block" aria-labelledby="lim-h">
+        <div class="doc__head">
+          <p class="doc__kicker">Before you start</p>
+          <h2 class="doc__h" id="lim-h">What to know up front</h2>
+        </div>
+        <dl class="doc__defs">
+          {
+            limits.map((l) => (
+              <div class="doc__def">
+                <dt>{l.term}</dt>
+                <dd>{l.detail}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
       <!-- Open core ----------------------------------------------------------- -->
       <section class="doc__block" aria-labelledby="oc-h">
         <div class="doc__head">
@@ -68,7 +135,8 @@ const schema = [
           <h2 class="doc__h" id="oc-h">Where the line is</h2>
           <p class="doc__lead">
             Studio is not a trial of Platform. No capability was moved across this line to create a reason to upgrade —
-            what costs money is an organisation needing someone accountable for access, not the editor working properly.
+            what Platform adds is an organisation's need for someone accountable for access, not the editor working
+            properly.
           </p>
         </div>
         <div class="plat__tiers">
@@ -78,37 +146,89 @@ const schema = [
                 <h3>{t.tier}</h3>
                 <p class="plat__tierline">{t.line}</p>
                 <p class="plat__tierdetail">{t.detail}</p>
-                {t.href && <a href={t.href}>{t.cta}</a>}
+                <a href={t.href}>{t.cta}</a>
               </article>
             ))
           }
         </div>
       </section>
 
-      <!-- Getting it ---------------------------------------------------------- -->
-      <section class="doc__block" aria-labelledby="get-h">
+      <!-- Waiting list -------------------------------------------------------- -->
+      <section class="doc__block" id="waitlist" aria-labelledby="wl-h">
         <div class="doc__head">
-          <p class="doc__kicker">Getting it</p>
-          <h2 class="doc__h" id="get-h">Beta access is arranged directly</h2>
-          <p class="doc__lead">
-            There is no sign-up form and nothing to pay. During the beta a licence is issued per organisation at no
-            charge, so the conversation starts with what you need to govern and how many people need to reach it.
-          </p>
+          <p class="doc__kicker">Free licence · {offer.seats} · {offer.term}</p>
+          <h2 class="doc__h" id="wl-h">{offer.headline}</h2>
+          <p class="doc__lead">{offer.lead}</p>
         </div>
-        <p class="plat__cta">
-          <a class="plat__ctaprimary" href={`mailto:${VENDOR.email}?subject=LibreDB%20Platform%20beta`}
-            >Ask about the beta</a
-          >
-          <a class="plat__ctaghost" href="/get-started/">Or self-host Studio today</a>
-        </p>
-        <p class="doc__fine">
-          Studio covers everything on this site that is free, and it stays that way whether or not you ever talk to us
-          about Platform. <a href="/open-source/">Read the licence commitment →</a>
-        </p>
+
+        <form class="wl" action={mailto} method="post" enctype="text/plain" data-waitlist>
+          <fieldset class="wl__licence">
+            <legend>Which licence do you need?</legend>
+            <div class="wl__choices">
+              {
+                offer.choices.map((c, i) => (
+                  <label class="wl__choice">
+                    <input type="radio" name="Licence" value={c.value} checked={i === 0} required />
+                    <span class="wl__choice-label">{c.label}</span>
+                    <span class="wl__choice-note">{c.note}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div class="wl__grid">
+            <label class="wl__field">
+              <span>Full name <em aria-hidden="true">*</em></span>
+              <input name="Name" type="text" autocomplete="name" required />
+            </label>
+            <label class="wl__field">
+              <span>Work email <em aria-hidden="true">*</em></span>
+              <input name="Email" type="email" autocomplete="email" required />
+            </label>
+            <label class="wl__field">
+              <span>Company <em aria-hidden="true">*</em></span>
+              <input name="Company" type="text" autocomplete="organization" required />
+            </label>
+            <label class="wl__field">
+              <span>Your role</span>
+              <input name="Role" type="text" autocomplete="organization-title" placeholder="e.g. Head of Data" />
+            </label>
+            <label class="wl__field wl__field--wide">
+              <span>Databases you would connect</span>
+              <input name="Databases" type="text" placeholder="e.g. PostgreSQL, Oracle, MongoDB" />
+            </label>
+            <label class="wl__field wl__field--wide">
+              <span>What would you like to govern?</span>
+              <textarea
+                name="Use case"
+                rows="4"
+                placeholder="Who needs access to what, and what you have to prove to whom."></textarea>
+            </label>
+          </div>
+          <div class="wl__foot">
+            <button class="plat__ctaprimary" type="submit">Join the waiting list</button>
+            <p class="wl__note">
+              Sending opens your email app with the message written for you, addressed to
+              <a href={mailto}>{contact.email}</a>. Nothing is sent from this site.
+            </p>
+          </div>
+          <p class="wl__status" role="status" data-waitlist-status hidden>
+            Your email app should now be open with the message ready — just press send. If nothing opened, write to <a
+              href={mailto}>{contact.email}</a
+            > with the details above, or <button type="button" class="wl__copy" data-waitlist-copy
+              >copy the message</button
+            > and paste it into any email.
+          </p>
+        </form>
       </section>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import '../scripts/waitlist';
+  import '../scripts/youtube-facade';
+</script>
 
 <style>
   .plat__badge {
@@ -120,6 +240,78 @@ const schema = [
     border-radius: var(--radius-pill, 999px);
     font: var(--weight-medium) var(--label-size) / 1.4 var(--font-mono);
     color: var(--text-secondary);
+  }
+
+  .plat__video {
+    margin-top: var(--space-08);
+    max-width: 1080px;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    background: var(--frame-void);
+  }
+  .plat__video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+  .plat__play,
+  .plat__video :global(iframe) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .plat__play img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Under the poster's headline, in the empty half of its text column — the
+     centre of the frame is where the headline ends. */
+  .plat__playbtn {
+    position: absolute;
+    left: calc(5.1% + 42px);
+    top: 66%;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: var(--radius-circle);
+    background: var(--action-primary);
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out);
+  }
+  .plat__play:hover .plat__playbtn,
+  .plat__play:focus-visible .plat__playbtn {
+    background: var(--action-primary-hover);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .plat__playbtn svg {
+    margin-left: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plat__playbtn {
+      transition: none;
+    }
+  }
+
+  .plat__yt {
+    margin-top: var(--space-04);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+  }
+  .plat__yt a {
+    color: var(--link);
+    text-decoration: underline;
+  }
+  .plat__yt a:hover {
+    color: var(--link-hover);
   }
 
   .plat__tiers {
@@ -186,8 +378,10 @@ const schema = [
   }
   .plat__ctaprimary {
     padding: 0 var(--space-07);
+    border: 0;
     background: var(--action-primary);
     color: #fff;
+    cursor: pointer;
   }
   .plat__ctaprimary:hover {
     background: var(--action-primary-hover);
@@ -201,5 +395,148 @@ const schema = [
   .plat__ctaghost:hover {
     background: var(--surface-hover);
     color: var(--text-primary);
+  }
+
+  /* --- waiting list ------------------------------------------------------- */
+  .wl {
+    margin-top: var(--space-08);
+    max-width: var(--measure-long);
+    padding: var(--card-padding);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-left: 2px solid var(--primary-600);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+  }
+  .wl__licence {
+    margin: 0 0 var(--space-07);
+    padding: 0;
+    border: 0;
+  }
+  .wl__licence legend {
+    padding: 0;
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+    color: var(--text-primary);
+  }
+  .wl__choices {
+    margin-top: var(--space-03);
+    display: grid;
+    gap: var(--space-04);
+  }
+  @media (min-width: 40rem) {
+    .wl__choices {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .wl__choice {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-04);
+    align-items: center;
+    padding: var(--space-04) var(--space-05);
+    border: var(--border-width-1) solid var(--border-strong);
+    border-radius: var(--radius-m);
+    background: var(--background);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+  .wl__choice:has(input:checked) {
+    border-color: var(--primary-600);
+    box-shadow: inset 0 0 0 1px var(--primary-600);
+  }
+  .wl__choice input {
+    grid-row: span 2;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-600);
+  }
+  .wl__choice-label {
+    font: var(--weight-semibold) var(--body-s-size) / 1.4 var(--font-ui);
+    color: var(--text-primary);
+  }
+  .wl__choice-note {
+    font-size: var(--body-xs-size);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .wl__grid {
+    display: grid;
+    gap: var(--space-06);
+  }
+  @media (min-width: 40rem) {
+    .wl__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .wl__field--wide {
+      grid-column: 1 / -1;
+    }
+  }
+  .wl__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-03);
+    font: var(--weight-medium) var(--label-size) / 1.4 var(--font-ui);
+    color: var(--text-primary);
+  }
+  .wl__field em {
+    font-style: normal;
+    color: var(--text-tertiary);
+  }
+  .wl__field input,
+  .wl__field textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: var(--space-03) var(--space-04);
+    border: var(--border-width-1) solid var(--border-strong);
+    border-radius: var(--radius-m);
+    background: var(--background);
+    font: var(--weight-regular) var(--body-s-size) / 1.5 var(--font-ui);
+    color: var(--text-primary);
+  }
+  .wl__field textarea {
+    resize: vertical;
+  }
+  .wl__field ::placeholder {
+    color: var(--text-tertiary);
+  }
+  .wl__field input:focus-visible,
+  .wl__field textarea:focus-visible {
+    border-color: var(--primary-600);
+  }
+  .wl__foot {
+    margin-top: var(--space-07);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-05);
+  }
+  .wl__note,
+  .wl__status {
+    flex: 1 1 18rem;
+    font-size: var(--body-xs-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .wl__status {
+    margin-top: var(--space-05);
+    padding-top: var(--space-05);
+    border-top: var(--border-width-1) solid var(--border);
+    color: var(--text-primary);
+  }
+  /* links inside running text need more than colour to be found (WCAG 1.4.1) */
+  .wl__note a,
+  .wl__status a,
+  .wl__copy {
+    color: var(--link);
+    text-decoration: underline;
+  }
+  .wl__copy {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

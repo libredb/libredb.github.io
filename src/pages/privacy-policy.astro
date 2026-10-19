@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { VENDOR, VENDOR_ADDRESS_FULL, vendorOrganizationSchema } from '../data/company';
+import { contact as platformContact } from '../data/platform';
 import { site } from '../lib/site';
 
-const UPDATED = '2026-10-11';
+const UPDATED = '2026-10-19';
 const updatedLabel = new Date(UPDATED).toLocaleDateString('en-GB', {
   day: 'numeric',
   month: 'long',
@@ -103,8 +104,9 @@ const schema = [
 
         <h2 id="collect">Information we collect</h2>
         <p>
-          We do not require you to create an account or provide personal information to use this website. The only data
-          we collect is through analytics cookies, and only if you give your consent.
+          We do not require you to create an account or provide personal information to use this website. Apart from
+          emails you choose to send us, the only data collected through this site is through analytics cookies, which
+          load only if you give your consent, and the YouTube player, which loads only if you press play.
         </p>
         <p>When you consent to analytics, the following services may collect data:</p>
 
@@ -132,6 +134,26 @@ const schema = [
             target="_blank"
             rel="noreferrer">Privacy Policy ↗</a
           >. Meta Pixel is only loaded after you explicitly accept cookies.
+        </p>
+
+        <h3>YouTube videos</h3>
+        <p>
+          Some pages show a video hosted on YouTube. The YouTube player is not loaded when the page opens. Only our own
+          preview image is shown, and nothing is sent to YouTube. If you press play, the player loads from
+          youtube-nocookie.com, and from then on Google may collect information such as your IP address, browser and
+          device details, and how you interact with the video. This is processed by Google under its <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noreferrer">Privacy Policy ↗</a
+          >. If you do not press play, no data is shared with YouTube.
+        </p>
+
+        <h3>Emails you send us</h3>
+        <p>
+          The LibreDB Platform waiting list form does not send anything from this website. It opens your own email app
+          with a message addressed to {platformContact.email}. If you choose to send it, we receive the details you
+          entered (such as your name, work email and company) and use them only to reply to your request and to issue a
+          license. We do not add you to a mailing list.
         </p>
 
         <h2 id="cookies">Cookies</h2>

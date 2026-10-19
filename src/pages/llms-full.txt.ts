@@ -124,11 +124,14 @@ key-value core with key-value, document and relational lenses over it, zero runt
 dependencies, crash recovery proven by deterministic simulation testing. It is an early
 beta aimed at test and development data. Described at ${site.url}/libredb-database.
 
-## The product that is intended to cost money one day: LibreDB Platform
+## The product that costs money: LibreDB Platform
 
-Multi-tenant database access governance for teams — organisations, five-role RBAC,
-per-connection permissions and a query audit log, self-hosted. In beta, not sold today,
-and with no plan to sell it within the next year; the editor itself stays MIT and free. Described at ${site.url}/platform.
+Database access governance for teams — Keycloak single sign-on, credentials sealed so
+users never see them, per-person grants that can be revoked live, six system roles and
+a query audit log, self-hosted with Docker on one Linux host (Kubernetes in the next
+release). Source-available under the Elastic License 2.0; every install needs a licence
+key. The licence is free for 1 admin and 3 users for 12 months and paid for more
+seats, requested through the waiting list; the editor itself stays MIT and free. Described at ${site.url}/platform.
 
 ## FAQ
 
