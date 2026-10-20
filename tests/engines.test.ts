@@ -16,9 +16,10 @@ describe('engine reference paths', () => {
   const CANONICAL_DOC: Record<string, string> = {
     postgresql: 'docs/providers/postgres.md',
     sqlserver: 'docs/providers/mssql.md',
+    mariadb: 'docs/providers/mysql.md',
   };
 
-  it('maps the two product-name ids to their canonical type-id doc', () => {
+  it('maps the product-name ids to their canonical type-id doc', () => {
     for (const [id, expected] of Object.entries(CANONICAL_DOC)) {
       expect(engineReference(id), `${id} must not point at docs/providers/${id}.md`).toBe(expected);
     }
@@ -36,23 +37,25 @@ describe('engine reference paths', () => {
   });
 });
 
-describe('agent mode names the same four engines everywhere', () => {
-  // Exactly four providers implement `queryReadOnly`, which is what agent mode
-  // runs on: postgres.ts, sqlite.ts, duckdb/index.ts and mssql.ts
-  // (libredb-studio/src/lib/agent/engine-support.ts). Cards that enumerate the
-  // set must name all four — a stale list reads as "SQL Server cannot".
-  const AGENT_ENGINES = ['postgresql', 'sqlite', 'duckdb', 'sqlserver'];
+describe('agent mode names the same seven engines everywhere', () => {
+  // Seven type-ids carry a non-null agent statement language, which is what an
+  // agent run that sends statements needs: libredb-studio/src/lib/agent/
+  // agent-manifest.ts, AGENT_STATEMENT_LANGUAGE. MariaDB rides the MySQL one.
+  // Cards that enumerate the set must name all seven: a stale list reads as
+  // "MySQL cannot", which is how the four-engine list outlived MySQL's arm.
+  const AGENT_ENGINES = ['postgresql', 'mysql', 'mariadb', 'sqlite', 'duckdb', 'sqlserver', 'mongodb', 'kubernetes'];
+  const NAMES = ['PostgreSQL', 'MySQL', 'SQLite', 'DuckDB', 'SQL Server', 'MongoDB', 'Kubernetes'];
 
-  it('advertises agent mode on exactly those four, and on no other', () => {
+  it('advertises agent mode on exactly those engines, and on no other', () => {
     const advertised = engines.filter((e) => /agent mode/i.test(e.desc)).map((e) => e.id);
     expect(advertised.sort()).toEqual([...AGENT_ENGINES].sort());
   });
 
-  it('never enumerates the set without DuckDB or SQL Server', () => {
-    const enumerations = engines.filter((e) => /every engine but /i.test(e.not));
+  it('never enumerates the set without all seven', () => {
+    const enumerations = engines.filter((e) => /agent mode sends statements only on /i.test(e.not));
+    expect(enumerations.length).toBeGreaterThan(0);
     for (const e of enumerations) {
-      expect(e.not, `${e.id}: agent mode also runs on DuckDB`).toContain('DuckDB');
-      expect(e.not, `${e.id}: agent mode also runs on SQL Server`).toContain('SQL Server');
+      for (const n of NAMES) expect(e.not, `${e.id}: agent mode also runs on ${n}`).toContain(n);
     }
   });
 });
@@ -88,6 +91,18 @@ describe('the engine count is stated consistently', () => {
 
   it('flags exactly one entry as the embedded store, and it is LibreDB', () => {
     expect(engines.filter((e) => e.embedded).map((e) => e.id)).toEqual(['libredb']);
+  });
+
+  it('shows MariaDB through the MySQL driver without counting it', () => {
+    const viaEngines = engines.filter((e) => e.via);
+    expect(viaEngines.map((e) => [e.id, e.via])).toEqual([['mariadb', 'mysql']]);
+    for (const e of viaEngines) {
+      expect(externalEngines).not.toContain(e);
+      expect(
+        engines.some((d) => d.id === e.via && !d.via),
+        `${e.id}: via names a driver engine`,
+      ).toBe(true);
+    }
   });
 
   it('is spelled the same way everywhere it is written out', () => {

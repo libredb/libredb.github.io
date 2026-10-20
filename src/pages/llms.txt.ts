@@ -95,7 +95,7 @@ ${links}
 - [Security policy](${site.links.security}): how to report a vulnerability.
 - [RSS](${site.url}/rss.xml): the blog feed.
 
-## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)
+## Supported engines (${externalEngines.length}, plus the embedded LibreDB store and MariaDB through the MySQL driver)
 
 ${engineList}
 

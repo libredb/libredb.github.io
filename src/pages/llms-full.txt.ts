@@ -85,14 +85,14 @@ each machine. Access is granted and revoked through an OIDC identity provider.
 The comparison that matters is not a feature list but where the tool runs; that argument
 is at ${site.url}/compare.
 
-## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)
+## Supported engines (${externalEngines.length}, plus the embedded LibreDB store and MariaDB through the MySQL driver)
 
 ${engineTable()}
 
 ### What each engine does NOT do
 
 These boundaries are documented rather than omitted. Agent mode, for example, runs
-statements on four engines and not on the rest.
+statements on seven engines and not on the rest.
 
 ${engineLimits()}
 

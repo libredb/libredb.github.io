@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Re-download the nineteen fetched engine marks into public/engines/.
+# Re-download the twenty fetched engine marks into public/engines/.
 #
 # Ten more marks in public/engines/ are NOT fetched and this script never touches
 # them: libredb.svg is our own, and eight come from the product's own icon set,
@@ -60,6 +60,7 @@ fetch opensearch    "$SI/opensearch"
 fetch prometheus    "$SI/prometheus"
 fetch kafka         "$SI/apachekafka"
 fetch etcd          "$SI/etcd"
+fetch mariadb       "$SI/mariadb"
 
 echo
-echo "19 marks in $OUT"
+echo "20 marks in $OUT"

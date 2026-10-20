@@ -10,7 +10,7 @@ export const faq = [
   },
   {
     q: 'Which databases are supported?',
-    a: 'Forty-one engines: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, Firestore, ClickHouse, Apache Druid, Elasticsearch, OpenSearch, Trino, BigQuery, Databend, Snowflake, Apache Spark, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL), Oxia, S3-compatible object storage, Kubernetes, MQTT, RabbitMQ, OPC UA, MTConnect, Modbus, NETCONF, SNMP and Sparkplug B — relational, document, key-value, wide-column, graph, vector, analytical, search, time-series, streaming and federated query. Twenty-seven more, such as MariaDB, TiDB, CockroachDB, Valkey and ScyllaDB, speak one of those wire protocols and connect through the same drivers, each measured against a live instance, so the drivers reach fifty-four named engines in all. LibreDB itself, the embedded store the playground runs on, is in the list on /databases but not in either count: those count the engines you point Studio at, not the one it carries.',
+    a: 'Forty-one engines: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, Firestore, ClickHouse, Apache Druid, Elasticsearch, OpenSearch, Trino, BigQuery, Databend, Snowflake, Apache Spark, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL), Oxia, S3-compatible object storage, Kubernetes, MQTT, RabbitMQ, OPC UA, MTConnect, Modbus, NETCONF, SNMP and Sparkplug B — relational, document, key-value, wide-column, graph, vector, analytical, search, time-series, streaming and federated query. Twenty-seven more, such as MariaDB, TiDB, CockroachDB, Valkey and ScyllaDB, speak one of those wire protocols and connect through the same drivers, each measured against a live instance, so the drivers reach sixty-eight named engines in all. LibreDB itself, the embedded store the playground runs on, is in the list on /databases but not in either count: those count the engines you point Studio at, not the one it carries.',
   },
   {
     q: 'Is anything held back from the open-source build?',
@@ -30,7 +30,7 @@ export const faq = [
   },
   {
     q: 'What does the database agent do?',
-    a: 'You state an objective; the agent runs read-only, budgeted SQL and writes a report where every claim cites a result. It runs statements on PostgreSQL, SQLite, DuckDB and SQL Server; plan mode, which runs nothing, opens on every connection.',
+    a: 'You state an objective; the agent runs read-only, budgeted queries and writes a report where every claim cites a result. It runs statements on PostgreSQL, MySQL (and MariaDB), SQLite, DuckDB, SQL Server, MongoDB and Kubernetes; plan mode, which runs nothing, and the Operate workflow open on every connection.',
   },
   {
     q: 'How is it secured for a team?',

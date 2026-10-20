@@ -348,7 +348,7 @@ export const features = [
     n: '06',
     icon: 'bot',
     t: 'The database agent',
-    d: 'State an objective; the agent runs read-only, budgeted SQL and writes a report where every claim cites a result.',
+    d: 'State an objective; the agent runs read-only, budgeted queries and writes a report where every claim cites a result.',
   },
 ] as const;
 

@@ -48,14 +48,15 @@ const BLURBS: Record<EngineCategory, string> = {
 
 // Every card is shown, but the counters count external engines only, so they
 // sum to the same externalEngines.length the heading and description state. An
-// embedded store in a group (LibreDB, in Key-value) is named beside the counter
+// embedded store in a group (LibreDB, in Key-value), and an engine that connects
+// through another engine's driver (MariaDB, in SQL), is named beside the counter
 // instead of being added to it.
 const groups = ORDER.map((cat) => ({
   cat,
   blurb: BLURBS[cat],
   items: engines.filter((e) => e.cat === cat),
   counted: externalEngines.filter((e) => e.cat === cat).length,
-  embedded: engines.filter((e) => e.cat === cat && e.embedded).map((e) => e.name),
+  embedded: engines.filter((e) => e.cat === cat && (e.embedded || e.via)).map((e) => e.name),
 })).filter((g) => g.items.length > 0);
 
 const schema = [
