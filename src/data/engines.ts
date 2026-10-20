@@ -44,6 +44,11 @@ export interface Engine {
   not: string;
   /** true only for the store the product carries; it is shown, but never counted as an engine */
   embedded?: true;
+  /**
+   * Set on an engine with no driver of its own: the id of the engine whose driver
+   * it connects through. Shown, but never counted, like the embedded store.
+   */
+  via?: string;
 }
 
 export const engines: Engine[] = [
@@ -61,9 +66,19 @@ export const engines: Engine[] = [
     name: 'MySQL',
     cat: 'SQL',
     logo: '/engines/mysql.svg',
-    desc: 'Pooled connections with information_schema introspection, EXPLAIN plans and performance_schema-backed monitoring.',
+    desc: 'Pooled connections with information_schema introspection, EXPLAIN plans, performance_schema-backed monitoring and agent mode under a principal verified to hold nothing past SELECT and SHOW VIEW.',
     tr: 'mysql2 pool · 3306',
-    not: 'Agent mode is unavailable, as on every engine but PostgreSQL, SQLite, DuckDB and SQL Server.',
+    not: 'A transaction a script leaves open is not ended when its pooled connection is released, so it holds its row locks until the connection is reused or the pool closes. The one reliable check reads performance_schema, which is off by default on MariaDB.',
+  },
+  {
+    id: 'mariadb',
+    name: 'MariaDB',
+    cat: 'SQL',
+    logo: '/engines/mariadb.svg',
+    via: 'mysql',
+    desc: "Connects through the MySQL driver and was measured against a live server. The overview shows MariaDB's own build string, EXPLAIN FORMAT=JSON plans are drawn as a tree, and agent mode runs under a principal verified to hold nothing past SELECT and SHOW VIEW.",
+    tr: 'mysql2 pool \u00b7 3306',
+    not: 'performance_schema is off by default on MariaDB, so cache hit ratio, queries per second and slow queries stay empty until the server runs with performance_schema=ON.',
   },
   {
     id: 'oracle',
@@ -81,7 +96,7 @@ export const engines: Engine[] = [
     logo: '/engines/sqlserver.svg',
     desc: 'Pooled connections with sys.* catalog introspection, DMV-backed monitoring and agent mode under a least-privilege read-only profile.',
     tr: 'mssql pool · 1433',
-    not: "The editor has no Explain action: SQL Server's estimated plan is a session mode that a statement prefix cannot express. Only agent mode reads a plan, to admit a statement.",
+    not: "The editor has no Explain action: SQL Server's estimated plan is a session mode that a statement prefix cannot express. Only agent mode reads an estimated plan, to admit a statement and as the plan it reports.",
   },
   {
     id: 'db2',
@@ -115,7 +130,7 @@ export const engines: Engine[] = [
     name: 'DuckDB',
     cat: 'Analytics',
     logo: '/engines/duckdb.svg',
-    desc: 'In-process analytics with full EXPLAIN support and agent mode. Admins can query Parquet and CSV files directly; every other role is confined to the database file.',
+    desc: 'In-process analytics with full EXPLAIN support and agent mode. Admins can query Parquet and CSV files on their own connections; every other role, and any seed a standard user can reach, is confined to the database file.',
     tr: 'file · embedded',
     not: 'Single-writer by design: no sessions to list, so health shows storage, not connections.',
   },
@@ -160,7 +175,7 @@ export const engines: Engine[] = [
     name: 'MongoDB',
     cat: 'Document',
     logo: '/engines/mongodb.svg',
-    desc: 'Document browsing, aggregation pipelines and index introspection over the native driver.',
+    desc: 'Document browsing, aggregation pipelines, index introspection and agent mode over the native driver, bounded by a user proven read-only at open.',
     tr: 'driver · 27017',
     not: 'No SQL translation layer is faked — queries here are MongoDB queries.',
   },
@@ -171,7 +186,7 @@ export const engines: Engine[] = [
     logo: '/engines/couchbase.svg',
     desc: 'SQL++ queries with bucket, scope and collection introspection over the documented REST surfaces.',
     tr: 'http · 8091',
-    not: 'Agent mode is unavailable, as on every engine but PostgreSQL, SQLite, DuckDB and SQL Server.',
+    not: 'No agent execution: agent mode sends statements only on PostgreSQL, MySQL (and MariaDB), SQLite, DuckDB, SQL Server, MongoDB and Kubernetes. Plan mode and Operate still open here.',
   },
   {
     id: 'redis',
@@ -253,7 +268,7 @@ export const engines: Engine[] = [
     logo: '/engines/elasticsearch.svg',
     desc: 'Elasticsearch SQL over indices, with mapping introspection and cluster health.',
     tr: 'http · 9200',
-    not: 'Search engines are query-and-browse: no row editing, no ER diagrams.',
+    not: 'Query-and-browse: no row editing and no EXPLAIN, and indices declare no foreign keys, so the ER diagram draws no relations.',
   },
   {
     id: 'opensearch',
@@ -262,7 +277,7 @@ export const engines: Engine[] = [
     logo: '/engines/opensearch.svg',
     desc: 'The same query-and-browse surface as Elasticsearch, against OpenSearch clusters.',
     tr: 'http · 9200',
-    not: 'Search engines are query-and-browse: no row editing, no ER diagrams.',
+    not: 'Query-and-browse: no row editing, no EXPLAIN and no foreign keys. DELETE is in the plugin grammar but off by default, and every other write is refused.',
   },
   {
     id: 'prometheus',
@@ -316,7 +331,7 @@ export const engines: Engine[] = [
     logo: '/engines/snowflake.svg',
     desc: 'The SQL API v2 with Studio\u2019s own client and no Snowflake driver: every statement is one asynchronous request, signed with a key-pair JWT or a programmatic access token.',
     tr: 'SQL API v2 \u00b7 https',
-    not: 'No driver, so driver-only features such as PUT and GET file transfer are absent.',
+    not: 'No driver and no bound parameters, and a transaction lives only inside one EXECUTE IMMEDIATE block.',
   },
   {
     id: 'spark',
@@ -405,17 +420,17 @@ export const engines: Engine[] = [
     cat: 'Network',
     logo: '/engines/snmp.svg',
     desc: 'A read-only view of SNMP agents, speaking SNMPv2c over UDP, with the MIB walk presented as a tree.',
-    tr: 'SNMPv2c over UDP',
-    not: 'It writes nothing, ever: no SET is implemented.',
+    tr: 'SNMPv2c over UDP \u00b7 161',
+    not: 'It writes nothing, ever: no command sends a Set, and the valve refuses one before the socket.',
   },
   {
     id: 'kubernetes',
     name: 'Kubernetes',
     cat: 'Platform',
     logo: '/engines/kubernetes.svg',
-    desc: 'A read-only browser and a kubectl-subset console for one cluster, over the API server\u2019s REST API and with no driver.',
+    desc: 'A read-only browser and a kubectl-subset console for one cluster, over the API server\u2019s REST API and with no driver. Agent mode runs every workflow as kubectl reads.',
     tr: 'API server REST \u00b7 6443',
-    not: 'Read-only whatever the connection says: no request it can send changes the cluster.',
+    not: 'Read-only whatever the connection says: no request it can send changes the cluster. No MCP.',
   },
   {
     id: 's3',
@@ -428,8 +443,11 @@ export const engines: Engine[] = [
   },
 ];
 
-/** The engines a user points Studio at: every entry but the embedded store. This is the published count. */
-export const externalEngines: Engine[] = engines.filter((e) => !e.embedded);
+/**
+ * The engines a user points Studio at: every entry but the embedded store and the
+ * engines that connect through another engine's driver. This is the published count.
+ */
+export const externalEngines: Engine[] = engines.filter((e) => !e.embedded && !e.via);
 
 export const defaultEngineId = 'postgresql';
 
@@ -438,11 +456,14 @@ export const defaultEngineId = 'postgresql';
  * the product name (docs/providers/README.md § Conventions). Two of our ids are
  * the product name instead, so they need mapping — without it the REFERENCE line
  * pointed at docs/providers/postgresql.md and sqlserver.md, neither of which
- * exists. Every other id already is the type-id.
+ * exists. MariaDB has no type-id at all: the MySQL provider serves it, and its
+ * doc is that provider's (docs/providers/mysql.md § 1.1). Every other id already
+ * is the type-id.
  */
 const TYPE_ID: Record<string, string> = {
   postgresql: 'postgres',
   sqlserver: 'mssql',
+  mariadb: 'mysql',
 };
 
 export const engineReference = (id: string) => `docs/providers/${TYPE_ID[id] ?? id}.md`;

@@ -85,7 +85,9 @@ describe('llms.txt', () => {
   });
 
   it('counts the engines the engine list actually holds', () => {
-    expect(full()).toContain(`## Supported engines (${externalEngines.length}, plus the embedded LibreDB store)`);
+    expect(full()).toContain(
+      `## Supported engines (${externalEngines.length}, plus the embedded LibreDB store and MariaDB through the MySQL driver)`,
+    );
     for (const e of engines) {
       expect(full(), `${e.name} is missing from llms-full.txt`).toContain(e.name);
     }

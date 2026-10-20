@@ -8,7 +8,7 @@
  * Source: libredb-studio README.md § "Key Features", docs/AGENT.md, docs/MCP.md
  * and the 0.18.x release notes, re-verified at 0.18.2. Every
  * `limit` is stated there too; none of them is softened here. Where the product
- * documents a boundary (agent mode's four engines, masking being client-side
+ * documents a boundary (agent mode's seven engines, masking being client-side
  * only, the toolkit being admin-only), the boundary is part of the feature.
  */
 export interface FeatureDetail {
@@ -92,7 +92,7 @@ export const featureDetails: FeatureDetail[] = [
     body: 'You state an objective and press Start. The run drafts SQL, reads what comes back, and composes a report in which every claim cites the result it came from. It never starts itself and never executes what it recommends. It stays out of your editor unless you opt in: an Analyze run opened with auto-execute, after a consent step, places its answer’s statement in your editor and runs it there, under the same database-enforced read-only boundary.',
     points: [
       'Five workflows: Investigate, Optimize, Assess, Analyze, which answers a question about the data rather than about the database, and Operate, which sends no SQL at all and reads the engine’s own reporting interface',
-      'Read-only enforced by the database, not by a parser: a read-only transaction on PostgreSQL, PRAGMA query_only re-asserted per statement on SQLite, a READ_ONLY handle plus an SQL guard on DuckDB, and on SQL Server a principal verified unable to write and a transaction always rolled back',
+      'Read-only enforced below the parser: a read-only transaction on PostgreSQL, PRAGMA query_only re-asserted per statement on SQLite, a READ_ONLY handle plus an SQL guard on DuckDB, on SQL Server a principal verified unable to write and a transaction always rolled back, on MySQL and MariaDB a principal verified to hold nothing past SELECT and SHOW VIEW behind START TRANSACTION READ ONLY, on MongoDB a user proven read-only at open plus a command fence, and on Kubernetes a request allowlist plus the identity\u2019s own RBAC',
       'Every statement passes a policy decision, an audit event and budget accounting before the driver is touched',
       'Bounded and metered on screen: 18 to 45 statements and a 6 to 15 minute deadline depending on workflow, 200 rows per read',
       'Evidence or nothing — a claim with no citation cannot be composed',
@@ -100,6 +100,6 @@ export const featureDetails: FeatureDetail[] = [
       'An MCP endpoint, off by default, lets an AI client of your own read schemas and run bounded read-only SQL through Studio while the credentials stay on the server',
     ],
     limit:
-      'Agent mode reads PostgreSQL, SQLite, DuckDB and SQL Server only, because the read-only profile is database-native and exists only where a provider implements it. On any other engine an agent run that sends statements is refused when it is started; the same four engines are the only ones where the MCP endpoint runs a query. Plan mode opens on every connection — it is toolless, runs nothing, and drafts a statement for you to run yourself. The embedded @libredb/studio package carries no agent surface at all.',
+      'Agent mode sends statements on PostgreSQL, MySQL (and MariaDB), SQLite, DuckDB, SQL Server, MongoDB and Kubernetes only, because each needs a read-only boundary its provider proves. On any other engine a run that sends statements is refused when it is started, and Operate still runs. The MCP endpoint runs queries on PostgreSQL, MySQL (and MariaDB), SQLite, DuckDB and SQL Server; MongoDB gets schema reads only, and Kubernetes is not offered. Plan mode opens on every connection: it is toolless, runs nothing, and drafts a statement for you to run yourself. The embedded @libredb/studio package carries no agent surface at all.',
   },
 ];
