@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "id": "org.libredb.studio",
+      "tagline": "开源自托管 SQL IDE。",
+      "title": "LibreDB Studio"
+    }
+  ]
+}

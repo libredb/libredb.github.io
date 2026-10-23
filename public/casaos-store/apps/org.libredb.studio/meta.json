@@ -1,0 +1,35 @@
+{
+  "architectures": [
+    "amd64",
+    "arm64"
+  ],
+  "author": "libredb",
+  "category": "Developer",
+  "description": "LibreDB Studio is an open-source (MIT), self-hosted SQL IDE. It provides a modern web-based interface to connect to forty-one database engines (PostgreSQL, MySQL, Oracle, Db2, SQL Server, MongoDB, Redis, ClickHouse, Cassandra, Elasticsearch, Prometheus, Apache Kafka, Neo4j, Qdrant, Milvus, InfluxDB, etcd and more), browse schemas, and write and run queries from any browser on your LAN. Some are read-only because their own SQL is. Druid, Elasticsearch and OpenSearch have no `UPDATE` and no `CREATE TABLE` at all. Several more are read-only by construction. Data is stored locally in a SQLite database, so everything stays under your control.",
+  "developer": "libredb",
+  "screenshot_link": [
+    "/apps/org.libredb.studio/assets/screenshot-1.webp",
+    "/apps/org.libredb.studio/assets/screenshot-2.webp",
+    "/apps/org.libredb.studio/assets/screenshot-3.webp"
+  ],
+  "tagline": "Open-source self-hosted SQL IDE.",
+  "thumbnail": "/apps/org.libredb.studio/assets/thumbnail.webp",
+  "update_at": "2026-10-18",
+  "website": "https://libredb.org",
+  "repo": "https://github.com/libredb/libredb-studio",
+  "support": "https://github.com/libredb/libredb-studio/issues",
+  "docs": "https://github.com/libredb/libredb-studio/tree/main/docs",
+  "title": "LibreDB Studio",
+  "release_note": "- Updates LibreDB Studio to 1.0.0, a major release. Twelve connection types join, taking the count to forty-one engines: BigQuery, MQTT, Firestore, RabbitMQ, Snowflake, OPC UA, Apache Spark, MTConnect, Modbus, Sparkplug B, NETCONF and SNMP.\n- It carries one security fix: a disconnect request now closes only the caller's own connections (GHSA-78jw-7pvp-64h3), so a server that several accounts share should be upgraded.\n- Studio can now run under a control plane that decides who may open which database with which credential. It stays off unless an operator sets `GOVERNANCE_SOURCE`, and an install without that variable behaves as 0.18.3 did.\n- Agent mode now executes statements on MySQL and MariaDB, MongoDB and Kubernetes.\n- For anyone calling the HTTP API: a refusal for a missing privilege answers 403 instead of 401, and a statement timeout 504 instead of 408.",
+  "base_url": "https://libredb.org/casaos-store",
+  "id": "org.libredb.studio",
+  "version": "1.0.0",
+  "categories": [
+    "developer"
+  ],
+  "min_memory": 268435456,
+  "min_image_size": {
+    "amd64": 232766629,
+    "arm64": 228910584
+  }
+}

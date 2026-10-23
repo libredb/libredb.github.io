@@ -31,3 +31,8 @@ cms/next-env.d.ts
 docs/superpowers/
 docs/designs/_ref
 libredb-org-redesign.md
+
+# The CasaOS store build writes an image-metadata cache next to its source; it is
+# a local artefact of a build, not part of the store, and the workflow regenerates
+# it on every run.
+casaos-store/.cache/

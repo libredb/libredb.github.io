@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "store_id": "libredb",
+  "name": {
+    "en_US": "LibreDB Store",
+    "tr_TR": "LibreDB Mağazası"
+  },
+  "description": {
+    "en_US": "LibreDB's own app store: the current release of LibreDB Studio, the self-hosted database IDE, published the day it ships.",
+    "tr_TR": "LibreDB'nin kendi uygulama mağazası: kendi sunucunuzda çalışan veritabanı IDE'si LibreDB Studio'nun güncel sürümü."
+  },
+  "maintainer": "libredb",
+  "url": "https://github.com/libredb/libredb.github.io"
+}
