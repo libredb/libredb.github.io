@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "store_id": "libredb",
+  "name": "LibreDB Store",
+  "description": "LibreDB's own app store: the current release of LibreDB Studio, the self-hosted database IDE, published the day it ships.",
+  "maintainer": "libredb",
+  "url": "https://github.com/libredb/libredb.github.io"
+}

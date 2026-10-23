@@ -1,0 +1,62 @@
+# Rebuilds the CasaOS / ZimaOS store the site serves at /casaos-store.
+#
+# WHY A WORKFLOW AND NOT A NOTE IN A README. The store's output has to follow the
+# release, and a regeneration step that only exists as an instruction is a step
+# nobody runs: the same week this store was written, six provider CI steps in the
+# product repository sat unused in files that asked a person to paste them, and
+# the AWS listing stayed five releases behind because its only documented path was
+# "do it in the portal". So the build runs here, on a push to the source and on
+# demand, and it commits the result.
+#
+# It is IceWhaleTech's own action, the one their third-party store guide names, so
+# the output follows their protocol rather than our reading of it.
+name: CasaOS Store
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'casaos-store/**'
+      - '.github/workflows/casaos-store.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: casaos-store
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and publish the store
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build the store
+        uses:
+          IceWhaleTech/build-appstore-action@c9bb47fad5b32d7928a07978fad68801f52e910f # v1.1.3 - `v1` is NOT a tag in that
+          # repository (its tags are v1.0.1 ... v1.1.3), and this repository pins every
+          # action by commit anyway.
+        with:
+          source: casaos-store
+          output: public/casaos-store
+          base-url: https://libredb.org/casaos-store
+
+      - name: Commit the output when it changed
+        # `git diff --quiet` decides, not a timestamp: the build rewrites every
+        # file each run, so committing unconditionally would add an empty-looking
+        # commit on every push and bury the runs that did change something.
+        run: |
+          if git diff --quiet -- public/casaos-store; then
+            echo "::notice::The generated store is unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/casaos-store
+          git commit -m "chore(casaos-store): rebuild the generated store"
+          git push

@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "updated_at": "2026-10-23T06:08:04Z",
+  "app_count": 1,
+  "base_url": "https://libredb.org/casaos-store",
+  "apps": [
+    {
+      "id": "org.libredb.studio",
+      "title": "LibreDB Studio",
+      "tagline": "Open-source self-hosted SQL IDE.",
+      "category": "Developer",
+      "categories": [
+        "developer"
+      ],
+      "author": "libredb",
+      "developer": "libredb",
+      "architectures": [
+        "amd64",
+        "arm64"
+      ],
+      "icon": "/apps/org.libredb.studio/assets/icon.svg",
+      "thumbnail": "/apps/org.libredb.studio/assets/thumbnail.webp",
+      "compose_url": "/apps/org.libredb.studio/docker-compose.yml",
+      "meta_url": "/apps/org.libredb.studio/meta.json",
+      "content_hash": "193f47ad",
+      "version": "1.0.0"
+    }
+  ]
+}
