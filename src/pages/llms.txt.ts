@@ -45,6 +45,7 @@ const DESCRIPTIONS: Record<string, string> = {
   '/faq': 'The questions asked before adopting it.',
   '/blog': 'Release notes and engineering writing.',
   '/privacy-policy': 'What is collected, by whom, and on what legal basis.',
+  '/mobile-privacy-policy': 'What the LibreDB Mobile Android app sends, keeps on the device, and how to delete it.',
 };
 
 /** Routes that are not pages a reader should be pointed at. */

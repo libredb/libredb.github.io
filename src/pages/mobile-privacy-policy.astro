@@ -1,0 +1,341 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { VENDOR, VENDOR_ADDRESS_FULL, vendorOrganizationSchema } from '../data/company';
+import { site } from '../lib/site';
+
+// The policy for the Android app, kept apart from /privacy-policy, which is the website's. Google Play requires a
+// policy that applies specifically to the app and discloses what the app itself collects; the website's cookie and
+// analytics policy does not do that. The wording here is the one the app ships with, in
+// libredb/libredb-mobile `docs/privacy-policy.md`, and the two are updated together.
+const UPDATED = '2026-10-27';
+const updatedLabel = new Date(UPDATED).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const registrationRows = [
+  { label: 'Registered company name', value: VENDOR.legalName },
+  { label: 'Trade name', value: VENDOR.tradeName },
+  { label: 'Registered office', value: VENDOR_ADDRESS_FULL },
+  { label: 'Tax office', value: VENDOR.taxOffice },
+  { label: 'Tax ID (VKN)', value: VENDOR.taxId },
+  { label: 'MERSIS No', value: VENDOR.mersisNo },
+  { label: 'Trade Registry No', value: VENDOR.tradeRegistryNo },
+];
+
+const schema = [
+  vendorOrganizationSchema,
+  {
+    '@type': 'WebPage',
+    name: 'LibreDB Mobile Privacy Policy',
+    url: `${site.url}/mobile-privacy-policy`,
+    dateModified: UPDATED,
+    publisher: { '@id': VENDOR.schemaId },
+  },
+];
+---
+
+<BaseLayout
+  path="/mobile-privacy-policy"
+  title="LibreDB Mobile Privacy Policy"
+  description="What the LibreDB Mobile Android app does with your data: the servers it talks to, what it keeps on the device, crash reports, and how to delete it all."
+  schema={schema}
+>
+  <section class="pp" aria-labelledby="pp-title">
+    <div class="u-wash pp__wash" aria-hidden="true"></div>
+    <div class="pp__inner u-container">
+      <p class="u-eyebrow">Legal</p>
+      <h1 class="pp__title" id="pp-title">
+        LibreDB Mobile <span class="u-grad-brand">Privacy Policy</span>
+      </h1>
+      <p class="pp__meta">
+        Last updated <time datetime={UPDATED}>{updatedLabel}</time>
+      </p>
+
+      <div class="pp__body prose">
+        <p>
+          This policy describes what LibreDB Mobile for Android does with your data. LibreDB Mobile is a client of
+          LibreDB Studio: it signs you in through Keycloak and shows the databases that Studio offers you. Questions
+          about this policy go to <a href="mailto:info@libredb.org">info@libredb.org</a>.
+        </p>
+        <p>
+          This policy covers the app. The policy for the website is a separate one, at
+          <a href="/privacy-policy/">libredb.org/privacy-policy</a>.
+        </p>
+
+        <h2 id="publisher">Who publishes the app</h2>
+        <p>
+          LibreDB Mobile is published on Google Play by {VENDOR.tradeName}, the trade name of {VENDOR.legalName}, a
+          limited liability company registered in Turkiye and the data controller responsible for the processing
+          described in this policy. The details below are matters of public record and can be verified independently.
+        </p>
+        <dl class="pp__reg">
+          {
+            registrationRows.map((row) => (
+              <div class="pp__reg-row">
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p>
+          Full company information is published at <a href={VENDOR.companyInfoUrl} target="_blank" rel="noreferrer"
+            >{VENDOR.url} ↗</a
+          >.
+        </p>
+
+        <h2 id="servers">The servers the app talks to</h2>
+        <p>The app talks to four kinds of servers, and to no others on its own:</p>
+        <ul>
+          <li>
+            <strong>Keycloak</strong>, the sign-in server of the LibreDB deployment the app was built for. You sign in
+            on Keycloak's own page, in the device's browser, so the app never sees your password. Keycloak gives the app
+            tokens that identify you.
+          </li>
+          <li>
+            <strong>LibreDB Studio</strong> of the same deployment. The app sends Studio your Keycloak access token with its
+            requests, so Studio knows who you are and what you may use. The access token carries what Keycloak puts into it,
+            such as your username, your e-mail address and your name. The app also sends Studio what you ask it to do: the
+            connection you open, the objects you look at and the statements you run.
+          </li>
+          <li>
+            <strong>LibreDB Platform</strong> of the same deployment, but only in a build that includes Platform mode, and
+            only after you pick the Platform entry on the sign-in page or switch to Platform in the profile. The app sends
+            Platform your Keycloak access token with its requests and receives your Platform identity: your Platform user
+            id, e-mail address, name and organisation. The app holds that identity in memory while you are signed in and never
+            stores it on the device. Platform's first answer to your account creates your Platform user record and takes one
+            of the license's admin seats. In Platform mode the app shows who holds access to a connection: their usernames
+            and e-mail addresses, and the name or e-mail address of the admin who granted it. It holds them in memory while
+            the page is open and never stores them on the device, and it sends Platform the removals of access you ask for.
+            When you search the directory to give someone access, the search text goes to Platform, which searches Keycloak,
+            and the app shows the usernames, names, e-mail addresses, enabled state and Studio role of the users found. It
+            keeps them in memory only while the screen is open, keeps no search history and stores none of it, and it sends
+            Platform the access you give or change: the user, the level and the expiry. In Platform mode the app also sends
+            Platform the enabling or disabling of a connection that you ask for, and nothing else about that connection. In
+            Platform mode the app shows the audit log of the governed queries: the users who ran them (their usernames and
+            Keycloak ids), the connections, the statement text, which can carry data from the databases, the database error
+            messages and the times. It holds them in memory while the audit page is open and never stores them on the device,
+            and it sends Platform the filters you set, the statement search text included.
+          </li>
+          <li>
+            <strong>Sentry</strong>, a crash reporting service, but only when the build was made with a Sentry project
+            key. See <a href="#crash">Crash reports</a> below.
+          </li>
+        </ul>
+        <p>
+          The organisation that runs the deployment operates Keycloak, Studio and Platform, and decides what they
+          record. For example, Studio can keep an audit log of sign-ins and sign-outs and, depending on its settings, a
+          record of the statements you run. That organisation's own privacy terms cover what those servers keep.
+        </p>
+        <p>The app reaches Keycloak, Studio, Platform and Sentry over HTTPS, which encrypts the traffic.</p>
+
+        <h2 id="not">What the app does not do</h2>
+        <ul>
+          <li>
+            The app holds no database password or other database credential: Studio keeps them and opens every database
+            connection.
+          </li>
+          <li>
+            The app shows no advertising, contains no advertising, third-party analytics or tracking SDK, and sends
+            nothing about how you use it beyond the crash reports, session records and timing information described
+            below.
+          </li>
+          <li>The app does not read your contacts, location, photos, files or other apps' data.</li>
+          <li>The app does not sell your data or share it with anyone for advertising.</li>
+        </ul>
+
+        <h2 id="device">What the app keeps on the device</h2>
+        <ul>
+          <li>
+            <strong>Your session tokens</strong>, in Android's secure storage, encrypted with a key held by the Android
+            Keystore. Signing out deletes them.
+          </li>
+          <li>
+            <strong>Your drafts and statement history</strong>: the editor's draft for each connection and the
+            statements you ran, encrypted on the device with a key for your account alone. They stay after you sign out,
+            so you find them again when you sign in with the same account, and another account on the device cannot read
+            them.
+          </li>
+          <li>
+            <strong>Your connection choices</strong>: the connections you starred or opened recently, the connection you
+            had open last and the database you last used on it, and the sections of the connection list you collapsed.
+          </li>
+          <li>
+            <strong>Device preferences</strong>: the language, the theme and whether results show as cards or as a
+            table.
+          </li>
+        </ul>
+        <p>
+          The app keeps no rows of query results after it closes. While it runs, it keeps the lists, counts and
+          descriptions of a connection's objects in memory for up to 10 minutes, so going back does not ask Studio
+          again. What you type into the object search goes only to Studio, and the app keeps no search history.
+          Android's cloud backup is turned off for the app, and its preferences, drafts and history are left out of
+          device-to-device transfers.
+        </p>
+
+        <h2 id="sharing">Sharing and copying</h2>
+        <p>
+          The app passes data to another app only when you ask it to. When you copy a value of a result, the app copies
+          what the screen shows, so a masked value is copied as its mask. When you share an object's source, such as a
+          view's definition, the system's share sheet sends it to the app you choose. A source longer than 100,000
+          characters is shared as a file, and that file can stay in the app's temporary storage until Android clears it
+          or you uninstall the app.
+        </p>
+
+        <h2 id="crash">Crash reports</h2>
+        <p>
+          A build made with a Sentry project key sends a report to Sentry when the app runs into an error. A report
+          holds the error and where in the app it happened, the app's version, technical details of the device such as
+          its model, Android version, language, free memory and battery level, a random identifier of the installation,
+          and a trail of the events before the error, such as the screens you opened and the app going to the
+          background. A build with a Sentry project key also sends a session record each time you use the app: when the
+          session started and ended, how long it lasted, whether it ended in a crash, and the installation identifier.
+          It also sends timing information for about one in five app starts and screen changes, to show where the app is
+          slow.
+        </p>
+        <p>
+          Before a report leaves the device, the app removes e-mail addresses, tokens, passwords and other credentials
+          from it. A report carries no screenshot, no layout of the screen, no request body and no screen recording of
+          the session. Sentry receives your device's IP address with each report, as with any connection to a server,
+          and derives an approximate location, such as a city and a country, from that address, unless the Sentry
+          project is set not to store IP addresses. A build made without a Sentry project key sends no reports.
+        </p>
+
+        <h2 id="protections">Protections on the device</h2>
+        <ul>
+          <li>
+            The screens that show query results, a row's detail, a key's value, an object's source, the audit log list
+            or an audit event's statement and error message are kept out of screenshots, screen recordings and the
+            recent apps view.
+          </li>
+          <li>Columns whose names look sensitive, such as e-mail, password or card number, are masked on screen.</li>
+          <li>The app signs you out after 15 minutes without input.</li>
+        </ul>
+
+        <h2 id="delete">Deleting your data</h2>
+        <ul>
+          <li>
+            <strong>Remove my data</strong>, in the Privacy section of Settings, deletes what the app keeps for the
+            signed-in account (the drafts, the history and the connection choices) and then signs you out. It keeps the
+            language, the theme and the result view preference, which belong to the device.
+          </li>
+          <li><strong>Uninstalling the app</strong> deletes everything it keeps on the device.</li>
+          <li>
+            Crash reports already sent stay in Sentry until they expire; write to
+            <a href="mailto:info@libredb.org">info@libredb.org</a> to have them deleted sooner.
+          </li>
+          <li>
+            Data that Keycloak or Studio keep about you is held by the organisation that runs them; ask that
+            organisation to delete it.
+          </li>
+        </ul>
+
+        <h2 id="children">Children</h2>
+        <p>The app is a tool for people who work with databases and is not directed at children.</p>
+
+        <h2 id="changes">Changes to this policy</h2>
+        <p>
+          When the app starts handling data in a new way, this policy is updated before that version is released, and
+          the date at the top changes.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pp {
+    position: relative;
+    overflow: hidden;
+  }
+  .pp__wash {
+    background: radial-gradient(
+      700px 420px at 50% -10%,
+      color-mix(in srgb, var(--primary-600) 10%, transparent),
+      transparent 70%
+    );
+  }
+  .pp__inner {
+    position: relative;
+    padding-block: clamp(var(--section-y-desktop), 10vh, 112px);
+  }
+  .pp__title {
+    margin-top: var(--stack-eyebrow-title);
+    max-width: var(--measure-long);
+    font-family: var(--font-heading);
+    font-weight: var(--weight-semibold);
+    font-size: clamp(var(--h1-size-mobile), 3.6vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .pp__meta {
+    margin-top: var(--space-04);
+    font: var(--weight-regular) var(--meta-size) / 1.4 var(--font-mono);
+    color: var(--text-tertiary);
+  }
+  .pp__body {
+    margin-top: clamp(var(--space-09), 5vw, var(--space-11));
+    padding-top: var(--space-08);
+    border-top: var(--border-width-1) solid var(--border);
+  }
+
+  /* Registration facts read as a reference table, not as prose. */
+  .pp__reg {
+    display: grid;
+    gap: var(--space-05) var(--space-08);
+    padding: var(--space-06);
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+    background: var(--background-subtle);
+  }
+  @media (min-width: 40rem) {
+    .pp__reg {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .pp__reg-row {
+    min-width: 0;
+  }
+  .pp__reg dt {
+    font: var(--weight-semibold) var(--overline-size) / 1.4 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .pp__reg dd {
+    margin: var(--space-02) 0 0;
+    font-size: var(--body-s-size);
+    line-height: 1.5;
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+  }
+
+  /* The cookie table has four columns and cannot reflow — scroll it, never the page. */
+  .pp__scroll {
+    overflow-x: auto;
+    border: var(--border-width-1) solid var(--border-subtle);
+    border-radius: var(--radius-l);
+  }
+  .pp__scroll table {
+    min-width: 34rem;
+  }
+  .pp__scroll :global(th),
+  .pp__scroll :global(td) {
+    white-space: nowrap;
+  }
+  .pp__scroll :global(tbody tr:last-child td) {
+    border-bottom: 0;
+  }
+
+  .pp__note {
+    font-size: var(--body-s-size);
+    color: var(--text-tertiary);
+  }
+  .pp__address {
+    font-style: normal;
+    line-height: var(--body-long-line);
+  }
+</style>
