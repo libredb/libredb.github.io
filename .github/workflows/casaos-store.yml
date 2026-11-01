@@ -22,6 +22,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: casaos-store
@@ -46,17 +47,35 @@ jobs:
           output: public/casaos-store
           base-url: https://libredb.org/casaos-store
 
-      - name: Commit the output when it changed
-        # `git diff --quiet` decides, not a timestamp: the build rewrites every
-        # file each run, so committing unconditionally would add an empty-looking
-        # commit on every push and bury the runs that did change something.
+      - name: Open a pull request with the output when it changed
+        # It opens a pull request rather than pushing. 1 Nov: the push step failed on
+        # every run with `GH013: Changes must be made through a pull request`, so the
+        # store the site served stayed at the version it was built with while
+        # casaos-store/ moved on. A workflow that cannot write its own output silently
+        # is worse than one that asks for a review.
+        #
+        # `git diff --quiet` still decides, so an unchanged build opens nothing: the
+        # build rewrites every file each run, and an unconditional pull request would
+        # open an empty-looking one on every push.
+        id: fark
         run: |
           if git diff --quiet -- public/casaos-store; then
             echo "::notice::The generated store is unchanged."
-            exit 0
+            echo "degisti=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "degisti=true" >> "$GITHUB_OUTPUT"
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/casaos-store
-          git commit -m "chore(casaos-store): rebuild the generated store"
-          git push
+
+      - name: Create the pull request
+        if: steps.fark.outputs.degisti == 'true'
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          add-paths: public/casaos-store
+          branch: casaos-store/rebuild
+          delete-branch: true
+          commit-message: "chore(casaos-store): rebuild the generated store"
+          title: "chore(casaos-store): rebuild the generated store"
+          body: |
+            The CasaOS Store workflow rebuilt `public/casaos-store` from `casaos-store/`.
+
+            Merging this publishes the rebuilt store the next time the site deploys.
