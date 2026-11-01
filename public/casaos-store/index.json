@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-10-23T06:08:04Z",
+  "updated_at": "2026-11-01T19:49:04Z",
   "app_count": 1,
   "base_url": "https://libredb.org/casaos-store",
   "apps": [
@@ -22,8 +22,8 @@
       "thumbnail": "/apps/org.libredb.studio/assets/thumbnail.webp",
       "compose_url": "/apps/org.libredb.studio/docker-compose.yml",
       "meta_url": "/apps/org.libredb.studio/meta.json",
-      "content_hash": "193f47ad",
-      "version": "1.0.0"
+      "content_hash": "2926e469",
+      "version": "1.2.0"
     }
   ]
 }
