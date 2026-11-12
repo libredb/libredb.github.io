@@ -159,6 +159,12 @@ export const composeGroups: ComposeGroup[] = [
         desc: 'Required for custom, and read by every provider: an Ollama that is not on localhost:11434, e.g. http://host:11434/v1, or a proxy or regional endpoint for gemini.',
         state: 'commented',
       },
+      {
+        name: 'LLM_MODEL_EFFORT',
+        def: '—',
+        desc: 'openai only: none, minimal, low, medium, high, xhigh or max. Other providers ignore it.',
+        state: 'commented',
+      },
     ],
   },
   {
@@ -261,8 +267,8 @@ docker compose up -d`;
  * re-apply only the corrections still needed, and update `tag` and `sha256`.
  */
 export const upstreamCompose = {
-  tag: '1.2.0',
-  sha256: '305c389ed153de7c9c1244fc62b1a3cf5d906bbab165f627a5ad006561963d85',
+  tag: '1.3.0',
+  sha256: 'f1be45587454e02991c18d03f7be67edd03eaa2f1ad781215f00cce7731cf62b',
   corrections: [
     {
       line: 14,
@@ -295,10 +301,10 @@ export const upstreamCompose = {
       why: '.env.example: "required for the custom provider, and read by every kind" (Gemini reads it for a proxy or regional endpoint).',
     },
     {
-      line: 129,
+      line: 132,
       upstream: "    # Image runs as node:24.16.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
-      site: "    # Image runs as node:26.10.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
-      why: 'The Dockerfile at 0.18.3 builds the runner FROM node:26.10.0-trixie-slim.',
+      site: "    # Image runs as node:26.13.0-trixie-slim (no curl/wget) — use Node's built-in fetch.",
+      why: 'The Dockerfile at 1.3.0 builds the runner FROM node:26.13.0-trixie-slim.',
     },
   ],
 } as const;
